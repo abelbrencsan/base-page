@@ -1,0 +1,59 @@
+/* Image component variables */
+div.image, a.image {
+	--image-lazy-load-transition: 1000ms ease;
+}
+
+/* Image component prototype */
+div.image, a.image {
+	background-color: var(--fg-light-color);
+	border-radius: var(--border-radius);
+	display: block;
+	margin-bottom: var(--element-margin);
+
+	img, canvas {
+		border-radius: var(--border-radius);
+		display: block;
+		height: auto;
+		max-width: 100%;
+		width: auto;
+
+		&[loading=lazy] {
+			opacity: 0;
+			transition: opacity var(--image-lazy-load-transition);
+
+			&.is-loaded {
+				opacity: 1;
+			}
+		}
+	}
+
+	&.image--fit {
+
+		img, canvas {
+			width: 100%;
+		}
+	}
+
+	&.image--center {
+
+		img, canvas {
+			margin: 0 auto;
+		}
+	}
+
+	&.image--left {
+		float: left;
+		margin: 0.25rem calc(var(--grid-gap) * 0.5) 0 0;
+		max-width: 40%;
+	}
+
+	&.image--right {
+		float: right;
+		margin: 0.25rem 0 0 calc(var(--grid-gap) * 0.5);
+		max-width: 40%;
+	}
+}
+
+/* Image component extensions */
+div.image, a.image {
+}

@@ -1,0 +1,246 @@
+/* Button component variables */
+a.button, button.button {	
+	--button-bg-color: color-mix(in srgb, var(--border-bg-color) 100%, var(--fg-color) 10%);
+	--button-bg-hover-color: color-mix(in srgb, var(--border-bg-color) 100%, var(--fg-color) 20%);
+	--button-fg-color: var(--fg-color);
+	--button-transition: var(--transition);
+}
+
+/* Button component prototype */
+a.button, button.button {	
+	align-items: center;
+	background-color: var(--button-bg-color);
+	border-radius: var(--border-radius);
+	color: var(--button-fg-color) !important;
+	display: inline-flex;
+	font-size: var(--normal-font-size);
+	font-weight: var(--bold-font-weight);
+	height: var(--element-height);
+	justify-content: center;
+	padding: 0 0.8em;
+	text-decoration: none;
+	transition: background-color var(--button-transition), opacity var(--button-transition);
+	white-space: nowrap;
+
+	body.no-touch &:hover, &:active {
+		background-color: var(--button-bg-hover-color);
+	}
+
+	&.keyboard-focus:focus {
+		box-shadow: inset 0 0 0 3px var(--focus-color);
+		outline: 0;
+	}
+}
+
+a.button {
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+button.button {
+	border: none;
+	cursor: pointer;
+
+	&[type="submit"]:disabled, &[type="button"]:disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+}
+
+/* Button component extensions */
+a.button, button.button {
+
+	&.button--icon {
+		padding: 0;
+		width: var(--element-height);
+	}
+
+	&.button--special {
+		--button-bg-color: var(--bg-color);
+		--button-bg-hover-color: var(--border-bg-color);
+		--button-fg-color: var(--fg-bold-color);
+
+		.scheme--dark & {
+			--button-bg-color: var(--scheme-dark-bg-color);
+			--button-bg-hover-color: var(--scheme-dark-border-bg-color);
+			--button-fg-color: var(--scheme-dark-fg-bold-color);
+		}
+	}
+
+	&.button--primary {
+		--button-bg-color: var(--palette-primary-bg-color);
+		--button-bg-hover-color: var(--palette-primary-bg-hover-color);
+		--button-fg-color: var(--palette-primary-fg-color);
+	}
+
+	&.button--secondary {
+		--button-bg-color: var(--palette-secondary-bg-color);
+		--button-bg-hover-color: var(--palette-secondary-bg-hover-color);
+		--button-fg-color: var(--palette-secondary-fg-color);
+	}
+}
+
+/* Button list component prototype */
+ul.button-list {
+	display: flex;
+	flex-flow: row wrap;
+	list-style: none;
+	margin-left: calc(var(--grid-gap) * -0.5);
+	margin-top: calc(var(--grid-gap) * -0.5);
+	padding-left: 0;
+
+	> li {
+		padding-left: calc(var(--grid-gap) * 0.5);
+		padding-top: calc(var(--grid-gap) * 0.5);
+	}
+}
+
+/* Button list component extensions */
+ul.button-list {
+
+	&.button-list--group {
+		margin-left: 0;
+		margin-top: 0;
+
+		> li {
+			padding-left: 1px;
+			padding-top: 0;
+
+			a.button, button.button {
+				border-radius: 0;
+			}
+
+			&:first-child {
+				padding-left: 0;
+
+				a.button, button.button {
+					border-radius: var(--border-radius) 0 0 var(--border-radius);
+				}
+			}
+
+			&:last-child {
+
+				a.button, button.button {
+					border-radius: 0 var(--border-radius) var(--border-radius) 0;
+				}
+			}
+
+			&:only-child {
+
+				a.button, button.button {
+					border-radius: var(--border-radius);
+				}
+			}
+		}
+	}
+}
+
+/* Button group component extensions */
+ul.button-group-list {
+}
+
+/* Button subnav component variables */
+div.button-subnav {
+	--button-subnav-transition: 200ms ease;
+	--button-subnav-z-index: 999;
+}
+
+/* Button subnav component prototype */
+div.button-subnav {
+	position: relative;
+
+	> ul {
+		background-color: var(--bg-color);
+		border-radius: var(--border-radius);
+		box-shadow: var(--bold-box-shadow);
+		left: 0;
+		list-style: none;
+		margin: 0;
+		opacity: 0;
+		padding-left: 0;
+		position: absolute;
+		text-align: left;
+		top: 100%;
+		transform: translate3d(0, 1rem, 0);
+		transition: visibility var(--button-subnav-transition), transform var(--button-subnav-transition), opacity var(--button-subnav-transition);
+		visibility: hidden;
+		z-index: var(--button-subnav-z-index);
+
+		> li {
+			padding: 0 var(--box-padding);
+
+			> a, > button {
+				color: inherit;
+				display: block;
+				padding: var(--block-margin);
+				text-decoration: none;
+				white-space: nowrap;
+
+				body.no-touch &:hover {
+					color: var(--link-color);
+				}
+			}
+
+			> button {
+				background-color: transparent;
+				border: none;
+				cursor: pointer;
+				text-align: left;
+				width: 100%;
+			}
+
+			&:first-child {
+				padding-top: var(--box-padding);
+			}
+
+			&:last-child {
+				padding-bottom: var(--box-padding);
+			}
+		}
+
+		&:before {
+			background-color: var(--bg-color);
+			bottom: 100%;
+			clip-path: polygon(50% 0, 0 100%, 100% 100%);
+			content: '';
+			height: var(--box-arrow);
+			left: var(--grid-gap);
+			position: absolute;
+			width: calc(var(--box-arrow) * 2);
+		}
+
+		&.is-opened {
+			opacity: 1;
+			transform: translate3d(0, 0, 0);
+			visibility: visible;
+		}
+	}
+}
+
+/* Button subnav component extensions */
+div.button-subnav {
+}
+
+/* Button link component prototype */
+button.button-link {
+	background-color: transparent;
+	border: none;
+	color: inherit;
+	cursor: pointer;
+	display: inline-block;
+	padding: 0;
+	text-align: left;
+
+	body.no-touch &:hover {
+		color: var(--link-color);
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}
+
+/* Button link component extensions */
+button.button-link {
+}

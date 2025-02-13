@@ -1,0 +1,12 @@
+/* Offline singleton */
+div.offline {
+	background-color: var(--warning-bg-color);
+	color: var(--warning-fg-color);
+	display: none;
+	padding: calc(var(--box-padding) * 0.5) var(--box-padding);
+	text-align: center;
+
+	body.is-offline & {
+		display: block;
+	}
+}

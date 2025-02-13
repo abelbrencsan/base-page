@@ -1,0 +1,9 @@
+/* Link typography */
+a {
+	color: var(--link-color);
+	text-decoration: underline;
+
+	body.no-touch &:hover {
+		text-decoration: none;
+	}
+}

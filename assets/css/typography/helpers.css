@@ -1,0 +1,67 @@
+/* Helpers typography */
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+.is-visually-hidden {
+	border: 0;
+	clip: rect(0,0,0,0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.is-hidden {
+	display: none;
+}
+
+.truncate {
+	display: block;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.top-element-margin {
+	margin-top: var(--element-margin);
+}
+
+.bottom-element-margin {
+	margin-bottom: var(--element-margin);
+}
+
+.top-block-margin {
+	margin-top: var(--block-margin);
+}
+
+.bottom-block-margin {
+	margin-bottom: var(--block-margin);
+}
+
+.top-gutter-margin {
+	margin-top: var(--grid-gap);
+}
+
+.bottom-gutter-margin {
+	margin-bottom: var(--grid-gap);
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-right {
+	text-align: right;
+}

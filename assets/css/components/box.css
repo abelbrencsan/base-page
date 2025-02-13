@@ -1,0 +1,18 @@
+/* Box component prototype */
+div.box {
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
+	display: block;
+	margin-bottom: var(--element-margin);
+	padding: var(--box-padding);
+
+	> :last-child,
+	> :last-child > :last-child,
+	> :last-child > :last-child > :last-child {
+		margin-bottom: 0;
+	}
+}
+
+/* Box component extensions */
+div.box {
+}

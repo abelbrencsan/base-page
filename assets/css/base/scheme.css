@@ -1,0 +1,23 @@
+/* Dark scheme */
+.scheme--dark {
+
+	/* Initial colors */
+	--bg-color: var(--scheme-dark-bg-color);
+	--border-bg-color: var(--scheme-dark-border-bg-color);
+	--border-color: var(--scheme-dark-border-color);
+	--fg-bold-color: var(--scheme-dark-fg-bold-color);
+	--fg-color: var(--scheme-dark-fg-color);
+	--fg-light-color: var(--scheme-dark-fg-light-color);
+	--link-color: var(--scheme-dark-link-color);
+
+	/* State colors */
+	--error-bg-color: #6b111b;
+	--error-fg-color: #f8d2d6;
+	--success-bg-color: #0f520e;
+	--success-fg-color: #caf6c9;
+	--warning-bg-color: #825000;
+	--warning-fg-color: #ffeccd;
+
+	/* Base */
+	color: var(--fg-color);
+}
