@@ -15,6 +15,7 @@
 @import url("./typography/paragraph.css");
 
 /* Component imports */
+@import url("./components/autocomplete.css");
 @import url("./components/box.css");
 @import url("./components/button.css");
 @import url("./components/container.css");

@@ -1,3 +1,4 @@
+import { Autocomplete } from "../js/autocomplete.js";
 import { CookieManager } from "../js/cookie-manager.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
@@ -55,6 +56,46 @@ class App {
 	 * @type {Reveal}
 	 */
 	reveal = new Reveal();
+
+	/**
+	 * Autocomplete for the search bar.
+	 * 
+	 * @type {Autocomplete}
+	 */
+	searchAutocomplete = new Autocomplete({
+		input: document.getElementById("query"),
+		getSuggestions: (term, callback) => {
+			const choices = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"];
+			let suggestions = [];
+			term = term.toLowerCase();
+			choices.forEach((choice) => {
+				if (~choice.toLowerCase().indexOf(term)) {
+					 suggestions.push(choice);
+				}
+			});
+			callback(suggestions);
+		},
+		renderItem: (suggestion, term) => suggestion,
+		renderInputValue: (suggestion) => suggestion
+	});
+
+	/**
+	 * Callback function that is called after routing
+	 * 
+	 * @type {function(Route,URL,RegExpMatchArray):void}
+	 */
+	routeCallback = (route, url, match) => {};
+
+	/**
+	 * Router for the application.
+	 * 
+	 * @type {Router}
+	 */
+	router = new Router({
+		routes: [],
+		triggers: Array.from(document.querySelectorAll("[data-route-trigger]")),
+		routeNotFoundCallback: () => {}
+	});
 
 	/**
 	 * List of gliders.
