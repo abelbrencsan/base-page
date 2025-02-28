@@ -143,49 +143,49 @@ class Dialog {
 	/**
 	 * Callback function that is called after the dialog has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called before the dialog has been opened.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	beforeOpenCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been opened.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	openCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been shown.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	showCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been closed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	closeCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been cancelled.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	cancelCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -240,13 +240,13 @@ class Dialog {
 	 * @param {string} options.isDialogLoadingClass
 	 * @param {string} options.isCloseableClass
 	 * @param {string} options.closeFormLabel
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.beforeOpenCallback
-	 * @param {function|null} options.openCallback
-	 * @param {function|null} options.showCallback
-	 * @param {function|null} options.closeCallback
-	 * @param {function|null} options.cancelCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.beforeOpenCallback
+	 * @param {function():void} options.openCallback
+	 * @param {function():void} options.showCallback
+	 * @param {function():void} options.closeCallback
+	 * @param {function():void} options.cancelCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {Dialog}
 	 */
 	constructor(options) {

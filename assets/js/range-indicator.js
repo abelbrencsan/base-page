@@ -24,28 +24,28 @@ class RangeIndicator {
 	/**
 	 * Function that is called to handle custom formatting of the value.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	formatter = null;
 
 	/**
 	 * Callback function that is called after the range input has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the range input value has changed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	isValueChangedCallback = null;
 
 	/**
 	 * Callback function that is called after the range indicator has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -62,10 +62,10 @@ class RangeIndicator {
 	 * @param {Object} options
 	 * @param {HTMLElement} options.input
 	 * @param {HTMLElement} options.indicator
-	 * @param {function|null} options.formatter
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.isValueChangedCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.formatter
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.isValueChangedCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {RangeIndicator}
 	 */
 	constructor(options) {

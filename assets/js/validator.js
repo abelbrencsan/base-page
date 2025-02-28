@@ -67,7 +67,7 @@ class Validator {
 	/**
 	 * Callback function that is called after the validator been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
@@ -88,7 +88,7 @@ class Validator {
 	/**
 	 * Callback function that is called after the validator has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -101,10 +101,10 @@ class Validator {
 	 * @param {string} options.validInputClass
 	 * @param {Object} options.messages
 	 * @param {Object} options.messageAttrs
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.invalidCallback
-	 * @param {function|null} options.validCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void} options.invalidCallback
+	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void} options.validCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {Validator}
 	 */
 	constructor(options) {

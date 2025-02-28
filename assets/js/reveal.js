@@ -38,14 +38,14 @@ class Reveal {
 	/**
 	 * Callback function that is called after the reveal has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the reveal has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -71,8 +71,8 @@ class Reveal {
 	 * @param {string} options.aboveViewportClass
 	 * @param {string} options.belowViewportClass
 	 * @param {string} options.inViewportClass
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {Reveal}
 	 */
 	constructor(options) {

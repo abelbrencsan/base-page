@@ -26,14 +26,14 @@ class Navbar {
 	/**
 	 * Callback function that is called after the navigation bar has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the navigation bar has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -57,8 +57,8 @@ class Navbar {
 	 * @param {Object} options
 	 * @param {string} options.hasOpenedSubnavClass
 	 * @param {string} options.isOffsetNavOpenedClass
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {Navbar}
 	 */
 	constructor(options) {

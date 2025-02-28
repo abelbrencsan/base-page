@@ -17,14 +17,14 @@ class IconManager {
 	/**
 	 * Callback function that is called after the icon manager has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the icon manager has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -57,8 +57,8 @@ class IconManager {
 	 * 
 	 * @param {Object} options
 	 * @param {string} options.symbolListClass
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {IconManager}
 	 */
 	constructor(options) {

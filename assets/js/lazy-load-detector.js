@@ -24,21 +24,21 @@ class LazyLoadDetector {
 	/**
 	 * Callback function that is called after the lazy load detector has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the element has been loaded.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	isLoadedCallback = null;
 
 	/**
 	 * Callback function that is called after the lazy load detector has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -48,9 +48,9 @@ class LazyLoadDetector {
 	 * @param {Object} options
 	 * @param {HTMLImageElement} options.element
 	 * @param {string} options.isLoadedclassName
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.isLoadedCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.isLoadedCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {LazyLoadDetector}
 	 */
 	constructor(options) {

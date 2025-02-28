@@ -17,14 +17,14 @@ class FocusTracker {
 	/**
 	 * Callback function that is called after the focus tracker been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the focus tracker has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -40,8 +40,8 @@ class FocusTracker {
 	 * 
 	 * @param {Object} options
 	 * @param {string} options.className
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {FocusTracker}
 	 */
 	constructor(options) {

@@ -31,21 +31,21 @@ class Notice {
 	/**
 	 * Callback function that is called after the notice has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the notice has been dismissed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	isDismissedCallback = null;
 
 	/**
 	 * Callback function that is called after the notice has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -56,9 +56,9 @@ class Notice {
 	 * @param {HTMLElement} options.element
 	 * @param {HTMLButtonElement} options.dismissButton
 	 * @param {string} options.isDismissingClass
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.isDismissedCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.isDismissedCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {Notice}
 	 */
 	constructor(options) {

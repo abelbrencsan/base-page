@@ -66,44 +66,44 @@ class Glider {
 	/**
 	 * Callback function that is called after the glider has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is invoked after the glider becomes scrollable.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	isScrollableCallback = null;
 
 	/**
 	 * Callback function that is called after the glider has started scrolling.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	isScrollStartedCallback = null;
 
 	/**
 	 * Callback function that is called after the glider scrolling has ended.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	isScrollEndedCallback = null;
 
 	/**
 	 * Callback function that is called after the glider has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
 	/**
-	 * Indicates whether the glider is initialized.
+	 * The ID of the timeout used to detect when scrolling has ended.
 	 * 
 	 * @type {null|number}
 	 */
-	scrollTimer = null;
+	timeoutId = null;
 
 	/**
 	 * Creates a glider.
@@ -117,11 +117,11 @@ class Glider {
 	 * @param {boolean} options.hasRewind
 	 * @param {string} options.isScrollableClass
 	 * @param {string} options.isScrollingClass
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.isScrollableCallback
-	 * @param {function|null} options.isScrollStartedCallback
-	 * @param {function|null} options.isScrollEndedCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.isScrollableCallback
+	 * @param {function():void} options.isScrollStartedCallback
+	 * @param {function():void} options.isScrollEndedCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {Glider}
 	 */
 	constructor(options) {
@@ -280,7 +280,7 @@ class Glider {
 	 * @returns {void}
 	 */
 	#isScrollEnded() {
-		this.scrollTimer = null;
+		this.timeoutId = null;
 		this.wrapper.classList.remove(this.isScrollingClass);
 		if (typeof(this.isScrollEndedCallback) == "function") this.isScrollEndedCallback();
 	}
@@ -324,12 +324,12 @@ class Glider {
 				}
 				break;
 			case "scroll":
-				if (this.scrollTimer === null) {
+				if (this.timeoutId === null) {
 					this.#isScrollStarted();
 				} else {
-					clearTimeout(this.scrollTimer);
+					clearTimeout(this.timeoutId);
 				}
-				this.scrollTimer = setTimeout(() => {
+				this.timeoutId = setTimeout(() => {
 					this.#isScrollEnded();
 				}, 300);
 				break;

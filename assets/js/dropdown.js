@@ -52,28 +52,28 @@ class Dropdown {
 	/**
 	 * Callback function that is called after the dropdown has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the dropdown has been opened.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	openCallback = null;
 
 	/**
 	 * Callback function that is called after the dropdown has been closed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	closeCallback = null;
 
 	/**
 	 * Callback function that is called after the dropdown has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -108,10 +108,10 @@ class Dropdown {
 	 * @param {string} options.isOpenedClass
 	 * @param {string} options.isActiveClass
 	 * @param {string} options.hasOpenedDropdownClass
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.openCallback
-	 * @param {function|null} options.closeCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.openCallback
+	 * @param {function():void} options.closeCallback
+	 * @param {function():void} options.destroyCallback
 	 * @returns {Dropdown}
 	 */
 	constructor(options) {

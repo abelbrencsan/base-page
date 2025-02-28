@@ -30,6 +30,13 @@ class Page {
 	 * @returns {void}
 	 */
 	onBreakpointChange(_event) {}
+
+	/**
+	 * Destroys the page.
+	 * 
+	 * @returns {void}
+	 */
+	destroy() {}
 }
 
 export { Page };

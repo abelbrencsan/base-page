@@ -52,14 +52,14 @@ class Tab {
 	/**
 	 * Callback function that is called after the tab has been initialized.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the tab has been destroyed.
 	 * 
-	 * @type {function|null}
+	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
@@ -73,8 +73,8 @@ class Tab {
 	 * @param {number} options.index
 	 * @param {string} options.isActiveClass
 	 * @param {string} options.isInitializedClass
-	 * @param {function|null} options.initCallback
-	 * @param {function|null} options.destroyCallback
+	 * @param {function():void} options.initCallback
+	 * @param {function():void} options.destroyCallback
 	 * 
 	 * @returns {Tab}
 	 */
