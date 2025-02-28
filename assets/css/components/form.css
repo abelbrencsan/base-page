@@ -323,12 +323,17 @@ fieldset.form-fieldset {
 
 /* Form group component prototype */
 ul.form-group-list.grid {
+	align-items: end;
 
 	> li.grid-col {
 
 		input.form-input, select.form-input, textarea.form-input {
 			border-radius: 0;
 			position: relative;
+		}
+
+		button.button {
+			width: 100%;
 		}
 
 		&:first-child {
