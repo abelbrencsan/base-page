@@ -10,6 +10,7 @@ import { Navbar } from "../js/navbar.js";
 import { Notice } from "../js/notice.js";
 import { RangeIndicator } from "../js/range-indicator.js";
 import { Reveal } from "../js/reveal.js";
+import { Router, Route } from "../js/router.js";
 import { Tab } from "../js/tab.js";
 import { Validator } from "../js/validator.js";
 
