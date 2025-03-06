@@ -1,0 +1,105 @@
+/* Step list component variables */
+ul.step-list {
+	--step-list-indicator-size: 2rem;
+	--step-list-line-width: 0.25rem;
+	--step-list-item-width: 8rem;
+}
+
+/* Step list component prototype */
+ul.step-list {
+	counter-reset: step-list;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	list-style: none;
+	margin-bottom: var(--element-margin);
+	padding-left: 0;
+
+	> li {
+		counter-increment: step-list;
+		padding-left: 0;
+		position: relative;
+		width: var(--step-list-item-width);
+
+		span.step-list-item-label {
+			display: block;
+			font-size: var(--small-font-size);
+			font-weight: var(--bold-font-weight);
+			margin-top: calc(var(--step-list-indicator-size) + (var(--grid-gap) * 0.5));
+			text-align: center;
+		}
+
+		&:before, &:after {
+			background-color: var(--border-bg-color);
+			position: absolute;
+		}
+
+		&:before {
+			content: '';
+			height: var(--step-list-line-width);
+			left: 50%;
+			margin-left: calc(var(--step-list-indicator-size) * 0.5);
+			top: calc((var(--step-list-indicator-size) * 0.5) - (var(--step-list-line-width) * 0.5));
+			width: calc((var(--step-list-item-width) * 0.5) + var(--step-list-indicator-size));
+		}
+
+		&:after {
+			border-radius: 50%;
+			content: counter(step-list);
+			font-weight: var(--bold-font-weight);
+			height: var(--step-list-indicator-size);
+			left: 50%;
+			line-height: var(--step-list-indicator-size);
+			margin-left: calc(var(--step-list-indicator-size) * -0.5);
+			text-align: center;
+			top: 0;
+			width: var(--step-list-indicator-size);
+		}
+
+		&:last-child {
+
+			&:before {
+				display: none;
+			}
+		}
+
+		&.is-completed, &.is-active {
+
+			&:after {
+				background-color: var(--link-color);
+				color: var(--bg-color);
+			}
+		}
+
+		&.is-completed {
+
+			&:before {
+				background-color: var(--link-color);
+			}
+
+			&:after {
+				content: '✓';
+			}
+		}
+	}
+
+	@media (max-width: 47em) {
+		height: var(--step-list-indicator-size);
+
+		> li {
+			width: calc(var(--step-list-indicator-size) * 2);
+
+			&:before {
+				width: var(--step-list-indicator-size);
+			}
+
+			span.step-list-item-label {
+				display: none;
+			}
+		}
+	}
+}
+
+/* Step list component extensions */
+ul.step-list {
+}
