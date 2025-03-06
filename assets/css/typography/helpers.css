@@ -10,10 +10,6 @@
 	width: 1px;
 }
 
-.is-hidden, [hidden] {
-	display: none;
-}
-
 .truncate {
 	display: block;
 	max-width: 100%;
