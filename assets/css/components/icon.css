@@ -1,0 +1,16 @@
+/* Icon component prototype */
+svg.icon {
+	display: inline-block;
+	fill: currentColor;
+	height: 24px;
+	line-height: 1;
+	overflow: hidden;
+	pointer-events: none;
+	position: relative;
+	transform: translateX(0);
+	width: 24px;
+}
+
+/* Icon component extensions */
+svg.icon {
+}

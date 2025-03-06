@@ -1,0 +1,73 @@
+/* Authentication singleton */
+main.authentication {
+	align-items: center;
+	background-color: var(--border-bg-color);
+	display: flex;
+	min-height: 100vh;
+	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
+
+	header.header {
+		margin-bottom: calc(var(--element-margin) * 0.5);
+		text-align: center;
+
+		h1, h2, h3, h4, h5, h6 {
+			font-size: var(--heading-2-font-size);
+		}
+
+		p {
+			font-size: var(--subheading-2-font-size);
+		}
+	}
+
+	div.box {
+		background-color: var(--bg-color);
+	}
+
+	a.button, button.button {
+		padding: 0 1.6em;
+	}
+
+	ul.authentication-link-list {
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: center;
+		list-style: none;
+		padding-left: 0;
+
+		> li {
+			padding-left: calc(var(--grid-gap) * 0.5);
+
+			> a, > button {
+				align-items: center;
+				color: inherit;
+				display: flex;
+
+				svg.icon {
+					margin-right: 0.25rem;
+				}
+
+				body.no-touch &:hover {
+					color: var(--link-color);
+				}
+			}
+
+			> a {
+				-webkit-user-select: none;
+				text-decoration: none;
+				user-select: none;
+			}
+
+			> button {
+				background-color: transparent;
+				border: none;
+				cursor: pointer;
+				font-size: inherit;
+				padding: 0;
+			}
+
+			&:first-child {
+				padding-left: 0;
+			}
+		}
+	}
+}

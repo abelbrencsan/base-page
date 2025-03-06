@@ -1,0 +1,33 @@
+/* Hero singleton */
+div.hero {
+	background-color: var(--border-bg-color);
+	padding: calc(var(--section-padding) * 2) 0 calc((var(--section-padding) * 2) - var(--element-margin)) 0;
+	text-align: center;
+
+	h1, h2, h3, h4, h5, h6 {
+		font-size: var(--heading-1-font-size);
+	}
+
+	p {
+		font-size: var(--subheading-1-font-size);
+	}
+
+	ul.hero-button-list.button-list {
+		justify-content: center;
+
+		> li {
+
+			a.button, button.button {
+				width: 7rem;
+			}
+		}
+	}
+
+	@media (max-width: 62em) {
+		padding: calc(var(--section-padding) * 1.5) 0 calc((var(--section-padding) * 1.5) - var(--element-margin)) 0;
+	}
+
+	@media (max-width: 47em) {
+		padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
+	}
+}

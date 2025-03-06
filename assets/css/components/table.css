@@ -1,0 +1,50 @@
+/* Table component prototype */
+table.table {
+	border-collapse: collapse;
+	width: 100%;
+
+	caption {
+		font-size: var(--small-font-size);
+		margin-bottom: var(--block-margin);
+		text-align: center;
+	}
+
+	th {
+		color: var(--fg-bold-color);
+		font-family: var(--heading-font-family);
+		font-weight: var(--heading-font-weight);
+		letter-spacing: var(--heading-letter-spacing);
+		line-height: var(--heading-line-height);
+	}
+
+	td, th {
+		padding: 0.75rem;
+		text-align: left;
+	}
+
+	thead th {
+		border-bottom: 2px solid var(--border-color);
+	}
+
+	tbody tr:nth-of-type(odd) {
+		background: var(--border-bg-color);
+	}
+
+	tfoot td {
+		font-weight: var(--bold-font-weight);
+	}
+}
+
+/* Table component extensions */
+table.table {
+}
+
+/* Table wrapper component */
+div.table-wrapper {
+	margin: 0 0 var(--element-margin) 0;
+	overflow-x: auto;
+}
+
+/* Table wrapper extensions */
+div.table-wrapper {
+}

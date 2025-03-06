@@ -1,0 +1,7 @@
+/* Noscript singleton */
+div.noscript {
+	background-color: var(--error-bg-color);
+	color: var(--error-fg-color);
+	padding: calc(var(--box-padding) * 0.5) var(--box-padding);
+	text-align: center;
+}

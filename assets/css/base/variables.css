@@ -1,0 +1,143 @@
+:root {
+
+	/* Size variables */
+	--block-margin: 0.5rem;
+	--border-radius: 6px;
+	--box-arrow: 10px;
+	--box-padding: 1.5rem;
+	--container-width: 60rem;
+	--element-height: 2.5em;
+	--element-margin: 2.5rem;
+	--grid-gap: 1.5rem;
+	--navbar-height: 4rem;
+	--section-padding: 4rem;
+
+	/* Font size variables */
+	--base-font-size: 18px;
+	--small-font-size: 0.8rem;
+	--normal-font-size: 1rem;
+	--large-font-size: 1.2rem;
+
+	/* Heading font size variables */
+	--heading-1-font-size: 2rem;
+	--heading-2-font-size: 1.5rem;
+	--heading-3-font-size: 1.2rem;
+	--heading-4-font-size: 1.1rem;
+	--heading-5-font-size: 1.0rem;
+	--heading-6-font-size: 0.9rem;
+
+	/* Subheading font size variables */
+	--subheading-1-font-size: 1.6rem;
+	--subheading-2-font-size: 1.2rem;
+	--subheading-3-font-size: 1rem;
+	--subheading-4-font-size: 0.9rem;
+	--subheading-5-font-size: 0.8rem;
+	--subheading-6-font-size: 0.7rem;
+
+	/* Font weight variables */
+	--light-font-weight: 300;
+	--normal-font-weight: 400;
+	--bold-font-weight: 700;
+
+	/* Font families */
+	--base-font-family: 'Source Sans Pro', sans-serif;
+	--fixed-font-family: 'Source Code Pro', monospace;
+	--heading-font-family: 'Source Sans Pro', sans-serif;
+	--nav-font-family: 'Source Sans Pro', sans-serif;
+
+	/* Font weights */
+	--base-font-weight: --normal-font-weight;
+	--fixed-font-weight: --normal-font-weight;
+	--heading-font-weight: --bold-font-weight;
+	--nav-font-weight: --bold-font-weight;
+
+	/* Font line heights */
+	--base-line-height: 1.5;
+	--fixed-line-height: 1.5;
+	--heading-line-height: 1.5;
+	--nav-line-height: 1.5;
+
+	/* Font letter spacing */
+	--base-letter-spacing: 0;
+	--fixed-letter-spacing: 0;
+	--heading-letter-spacing: 0;
+	--nav-letter-spacing: 0;
+
+	/* Box shadows */
+	--bold-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.05), 0px 0px 20px rgba(0, 0, 0, 0.025);
+	--box-shadow: 0 0 4px rgba(0, 0, 0, 0.075);
+
+	/* Transitions */
+	--transition-duration: 200ms;
+	--transition: var(--transition-duration) ease;
+
+	/* Initial colors */
+	--bg-color: #ffffff;
+	--body-bg-color: #ffffff;
+	--border-bg-color: #f5f7fb;
+	--border-color: #e3e9f4;
+	--fg-bold-color: #0a1019;
+	--fg-color: #121d2d;
+	--fg-light-color: #1a2a42;
+	--focus-color: #fba026;
+	--link-color: #007CB6;
+
+	/* State colors */
+	--error-bg-color: #f8d2d6;
+	--error-fg-color: #6b111b;
+	--success-bg-color: #caf6c9;
+	--success-fg-color: #0f520e;
+	--warning-bg-color: #ffeccd;
+	--warning-fg-color: #825000;
+
+	/* Dark scheme */
+	--scheme-dark-bg-color: #0a1019;
+	--scheme-dark-border-bg-color: #152133;
+	--scheme-dark-border-color: #1c2d47;
+	--scheme-dark-fg-bold-color: #ffffff;
+	--scheme-dark-fg-color: #e7e7e8;
+	--scheme-dark-fg-light-color: #b6b8ba;
+	--scheme-dark-link-color: #65ceff;
+
+	/* Primary palette */
+	--palette-primary-bg-color: #007CB6;
+	--palette-primary-bg-hover-color: #0092d7;
+	--palette-primary-fg-color: #ffffff;
+
+	/* Secondary palette */
+	--palette-secondary-bg-color: #18273d;
+	--palette-secondary-bg-hover-color: #243b5b;
+	--palette-secondary-fg-color: #ffffff;
+
+	/* Variables on medium breakpoint */
+	@media (max-width: 62em) {
+
+		/* Size variables */
+		--navbar-height: 3rem;
+
+		/* Font size variables */
+		--base-font-size: 17px;
+	}
+
+	/* Variables on small breakpoint */
+	@media (max-width: 47em) {
+
+		/* Font size variables */
+		--base-font-size: 16px;
+
+		/* Heading font size variables */
+		--heading-1-font-size: 1.6rem;
+		--heading-2-font-size: 1.4rem;
+
+		/* Subheading font size variables */
+		--subheading-1-font-size: 1.3rem;
+		--subheading-2-font-size: 1.1rem;
+	}
+
+	/* Variables on xsmall breakpoint */
+	@media (max-width: 32em) {
+
+		/* Font size variables */
+		--box-padding: 1rem;
+	}
+}

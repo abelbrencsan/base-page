@@ -1,0 +1,407 @@
+/* Form component prototype */
+form.form {
+	margin-bottom: var(--element-margin);
+}
+
+/* Form component extensions */
+form.form {
+}
+
+/* Form input component prototype */
+input.form-input, select.form-input, textarea.form-input {
+	background-color: transparent;
+	border-radius: var(--border-radius);
+	border: 1px solid var(--border-color);
+	display: block;
+	height: var(--element-height);
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	vertical-align: middle;
+	width: 100%;
+
+	&:placeholder {
+		color: inherit;
+		opacity: 0.5;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+
+	&:focus {
+		border-color: var(--link-color);
+	}
+
+	&.keyboard-focus:focus {
+		border-color: var(--focus-color);
+		box-shadow: inset 0 0 0 2px var(--focus-color);
+		outline: 0;
+	}
+
+	&.is-invalid {
+		border-color: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+	}
+}
+
+select.form-input {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+
+	&.form-input--select {
+		background-image: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\"><path fill=\"%23000000cc\" d=\"M25 32.4l-9.7-9.7 1.4-1.4 8.3 8.3 8.3-8.3 1.4 1.4z\"/></svg>");
+		background-position: right 0% top 50%;
+		background-repeat: no-repeat;
+		background-size: 1.5em 1.5em;
+		padding-right: 1.5em;
+	}
+}
+
+textarea.form-input {
+
+	&.form-input--textarea {
+		height: auto;
+		padding: 0.5em;
+		resize: vertical;
+	}
+}
+
+/* Form input component extensions */
+input.form-input, select.form-input, textarea.form-input {
+}
+
+select.form-input {
+
+	&.form-input--select {
+
+		.scheme--dark & { 
+			background-image: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\"><path fill=\"%23ffffffcc\" d=\"M25 32.4l-9.7-9.7 1.4-1.4 8.3 8.3 8.3-8.3 1.4 1.4z\"/></svg>");
+		}
+	}
+}
+
+/* Form control component variable */
+label.form-control {
+	--form-control-switch-transition: 200ms ease;
+}
+
+/* Form control component prototype */
+label.form-control {
+	display: inline-flex;
+
+	input {
+		border: 0;
+		clip: rect(0,0,0,0);
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		padding: 0;
+		position: absolute;
+		width: 1px;
+	}
+
+	span.form-control-indicator {
+		cursor: pointer;
+		display: block;
+		margin-right: 0.5rem;
+
+		input:disabled + & {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
+	}
+
+	&.form-control--checkbox, &.form-control--radio {
+
+		span.form-control-indicator {
+			background-color: var(--bg-color);
+			border-radius: var(--border-radius);
+			border: 1px solid var(--border-color);
+			height: 1.5rem;
+			width: 1.5rem;
+
+			input:checked + & {
+				background-color: var(--link-color);
+				background-image: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\"><path fill=\"%23ffffff\" d=\"M 21.82243,36.550935 8,22.728505 10.224299,20.504206 21.82243,32.102336 39.775701,14.149065 42,16.373364 Z\"/></svg>");
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+				border-color: var(--link-color);
+			}
+
+			input.keyboard-focus:focus + & {
+				border-color: var(--focus-color);
+				box-shadow: inset 0 0 0 2px var(--focus-color);
+			}
+
+			input.keyboard-focus:checked:focus + & {
+				border-color: var(--focus-color);
+			}
+
+			input.is-invalid + & {
+				border-color: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+			}
+		}
+	}
+
+	&.form-control--radio {
+
+		span.form-control-indicator {
+			border-radius: 50%;
+		}
+	}
+
+	&.form-control--switch {
+
+		span.form-control-indicator {
+			background-color: var(--border-color);
+			border-radius: 0.75rem;
+			height: 1.5rem;
+			position: relative;
+			transition: background-color var(--form-control-switch-transition), opacity var(--form-control-switch-transition);
+			width: 3rem;
+
+			&:before {
+				background-color: var(--bg-color);
+				border-radius: 50%;
+				content: "";
+				height: 1.1rem;
+				left: 0.2rem;
+				position: absolute;
+				top: 0.2rem;
+				transition: transform var(--form-control-switch-transition);
+				width: 1.1rem;
+			}
+
+			input:checked + & {
+				background-color: var(--link-color);
+
+				&:before {
+					transform: translate3d(1.5rem, 0, 0);
+				}
+			}
+
+			input.keyboard-focus:focus + & {
+				box-shadow: inset 0 0 0 3px var(--focus-color);
+			}
+
+			input.is-invalid + & {
+				box-shadow: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+			}
+		}
+	}
+}
+
+/* Form control component extensions */
+label.form-control {
+}
+
+/* Form range component prototype */
+input.form-range {
+	-webkit-appearance: none;
+	background-color: transparent;
+	display: block;
+	height: var(--element-height);
+	padding: 0;
+	width: 100%;
+
+	&:focus {
+		outline: none;
+	}
+
+	&.keyboard-focus:focus {
+
+		&::-webkit-slider-thumb {
+			box-shadow: inset 0 0 0 3px var(--focus-color);
+		}
+
+		&::-moz-range-thumb {
+			box-shadow: inset 0 0 0 3px var(--focus-color);
+		}
+	}
+
+	span.form-hint + & {
+		margin-top: calc(var(--block-margin) * -1);
+	}
+}
+
+/* Form range component range track styles */
+input.form-range::-webkit-slider-runnable-track {
+	background-color: var(--border-color);
+	height: 0.5em;
+}
+
+input.form-range::-moz-range-track {
+	background-color: var(--border-color);
+	height: 0.5em;
+}
+
+/* Form range component range thumb styles */
+input.form-range::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	background-color: var(--link-color);
+	border-radius: 50%;
+	border: 0;
+	box-shadow: none;
+	cursor: pointer;
+	height: 1.5em;
+	margin-top: -0.5em;
+	width: 1.5em;
+}
+
+input.form-range::-moz-range-thumb {
+	background-color: var(--link-color);
+	border-radius: 50%;
+	border: 0;
+	cursor: pointer;
+	height: 1.5em;
+	width: 1.5em;
+}
+
+/* Form range component extensions */
+input.form-range {
+}
+
+/* Form label component prototype */
+label.form-label, span.form-label {
+	color: var(--fg-bold-color);
+	display: block;
+	font-size: var(--small-font-size);
+	font-weight: var(--bold-font-weight);
+	margin-bottom: var(--block-margin);
+}
+
+/* Form label component extensions */
+label.form-label, span.form-label {
+}
+
+/* Form hint component prototype */
+span.form-hint {
+	color: var(--fg-light-color);
+	display: block;
+	font-size: var(--small-font-size);
+
+	label.form-label + &, span.form-label + & {
+		margin-bottom: var(--block-margin);
+		margin-top: calc(var(--block-margin) * -1);
+	}
+}
+
+/* Form hint component extensions */
+span.form-hint {
+}
+
+/* Form fieldset component prototype */
+fieldset.form-fieldset {
+	border-radius: var(--border-radius);
+	border: 1px solid var(--border-color);
+	padding: var(--box-padding);
+
+	legend.form-fieldset-legend {
+		font-weight: var(--bold-font-weight);
+		margin-left: calc(var(--box-padding) * -0.5);
+		padding: 0 calc(var(--box-padding) * 0.5);
+	}
+
+	span.form-fieldset-hint {
+		display: block;
+		font-size: var(--small-font-size);
+		margin-bottom: var(--box-padding);
+		margin-top: calc((var(--box-padding) * -1) + var(--block-margin));
+	}
+
+	> :last-child,
+	> :last-child > :last-child,
+	> :last-child > :last-child > :last-child {
+		margin-bottom: 0;
+	}
+}
+
+/* Form fieldset component extensions */
+fieldset.form-fieldset {
+}
+
+/* Form group component prototype */
+ul.form-group-list.grid {
+	align-items: end;
+
+	> li.grid-col {
+
+		input.form-input, select.form-input, textarea.form-input {
+			border-radius: 0;
+			position: relative;
+		}
+
+		button.button {
+			width: 100%;
+		}
+
+		&:first-child {
+
+			input.form-input, select.form-input, textarea.form-input, a.button, button.button {
+				border-radius: var(--border-radius) 0 0 var(--border-radius);
+			}
+		}
+
+		&:last-child {
+
+			input.form-input, select.form-input, textarea.form-input, a.button, button.button {
+				border-radius: 0 var(--border-radius) var(--border-radius) 0;
+				left: -1px;
+			}
+		}
+
+		&:not(:last-child) {
+
+			input.form-input, select.form-input, textarea.form-input {
+
+				&:focus, &.is-invalid {
+					z-index: 1;
+				}
+			}
+		}
+	}
+}
+
+/* Form group component extensions */
+ul.form-group-list.grid {
+}
+
+/* Form item component prototype */
+div.form-item {
+	position: relative;
+
+	&[data-label]:after {
+		content: attr(data-label);
+		display: block;
+		font-size: var(--small-font-size);
+		pointer-events: none;
+		position: absolute;
+		right: 0;
+		top: calc(100% + calc(var(--block-margin) * 0.5));
+	}
+
+	&[data-label=""]:after {
+		display: none;
+	}
+
+	&.is-required {
+		
+		> label.form-label:after, > span.form-label:after, > fieldset.form-fieldset > legend.form-fieldset-legend:after {
+			content: "*";
+			color: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+			margin-left: 0.25em;
+		}
+	}
+
+	&.has-invalid-field {
+
+		&[data-label]:after {
+			color: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+		}
+	}
+}
+
+/* Form item component extensions */
+div.form-item {
+}

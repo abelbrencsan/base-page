@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<title>Base Page</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body class="no-js no-touch">
+<div class="app">
+
+	<!-- Network is not available -->
+	<div class="offline">You are offline! Please connect to a network!</div>
+
+	<!-- JavaScript is disabled -->
+	<noscript>
+		<div class="noscript">Please enable JavaScript in your browser!</div>
+	</noscript>
+
+	<!-- Navbar -->
+	<header class="navbar" data-offset-nav>
+		<div class="container">
+			<div class="navbar-wrapper">
+				<a href="#" class="navbar-logo">My Company</a>
+				<div class="navbar-menu">
+					<button type="button" data-offset-nav-trigger aria-label="Navigation" title="Navigation">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-menu"></use>
+						</svg>
+					</button>
+				</div>
+				<nav class="navbar-nav" data-offset-nav-element>
+					<ul class="navbar-nav-link-list">
+						<li>
+							<a href="#">Home</a>
+						</li>
+						<li data-navbar-subnav>
+							<button type="button" data-navbar-subnav-trigger>Services</button>
+							<ul data-navbar-subnav-element>
+								<li>
+									<a href="#">Mattis ultrices</a>
+								</li>
+								<li>
+									<a href="#">Integer magna</a>
+								</li>
+								<li>
+									<a href="#">Viverra convallis</a>
+								</li>
+							</ul>
+						</li>
+						<li data-navbar-subnav>
+							<button type="button" data-navbar-subnav-trigger>Products</button>
+							<ul data-navbar-subnav-element>
+								<li>
+									<a href="#">Morbi ornare</a>
+								</li>
+								<li>
+									<a href="#">Pretium sapien</a>
+								</li>
+								<li>
+									<a href="#">Quisque egestas</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#">Blog</a>
+						</li>
+						<li>
+							<a href="#">Contact</a>
+						</li>
+					</ul>
+					<button type="button" class="navbar-nav-close" aria-label="Close navigation" title="Close navigation" data-offset-nav-close>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-close"></use>
+						</svg>
+					</button>
+				</nav>
+			</div>
+		</div>
+	</header>
+
+	<!-- Hero -->
+	<div class="hero">
+		<div class="container">
+			<h1>Lorem ipsum dolor amet</h1>
+			<p>Nulla tempus lacus eget sodales venenatis metus</p>
+			<ul class="hero-button-list button-list button-list--group">
+				<li>
+					<a href="#" class="button button--primary" role="button">Simple</a>
+				</li>
+				<li>
+					<div class="button-subnav" data-button-subnav>
+						<button type="button" class="button button--secondary" data-button-subnav-trigger>Dropdown</button>
+						<ul data-button-subnav-element>
+							<li>
+								<a href="#">Download</a>
+							</li>
+							<li>
+								<button type="button">Contact Us</button>
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Error page -->
+	<main class="error-page" hidden>
+		<div class="container container--half">
+			<h1>404 - Page not found</h1>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
+		</div>
+	</main>
+
+	<!-- Authentication -->
+	<main class="authentication" hidden>
+		<div class="container container--half">
+			<header class="header">
+				<h1>Sign in to website</h1>
+				<p>Dolores reiciendis molestias optio quos</p>
+			</header>
+			<div class="box">
+				<form class="form" method="post" action="#" data-validator>
+					<ul class="grid grid--gap">
+						<li class="grid-col grid-col--6">
+							<div class="form-item">
+								<label class="form-label" for="email">E-mail</label>
+								<input type="email" name="email" id="email" class="form-input" required>
+							</div>
+						</li>
+						<li class="grid-col grid-col--6">
+							<div class="form-item">
+								<label class="form-label" for="password">Password</label>
+								<input type="password" name="password" id="password" class="form-input" required minlength="8">
+							</div>
+						<li class="grid-col grid-col--6 grid-col--center">
+							<button class="button button--primary" type="submit">Sign in</button>
+						</li>
+					</div>
+				</form>
+				<ul class="authentication-link-list">
+					<li>
+						<a href="#">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-lock-closed"></use>
+							</svg> Forgot password
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-person-add"></use>
+							</svg> Create account
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</main>
+
+	<!-- Layout section -->
+	<section class="section">
+		<div class="container">
+
+			<!-- Layout -->
+			<div class="layout">
+
+				<!-- Layout aside -->
+				<aside class="layout-aside">
+					<div class="layout-aside-sticky">
+						<div class="box">
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat porta turpis a ultricies. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+						</div>
+					</div>
+				</aside>
+
+				<!-- Layout main -->
+				<main class="layout-main">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque. In ut posuere leo. Morbi eleifend consequat quam, nec laoreet enim facilisis a. Quisque sed felis non arcu pretium vehicula. Vestibulum ut convallis nisi. Duis vel enim placerat urna faucibus pretium sit amet at risus. Pellentesque scelerisque sapien metus, molestie congue turpis sollicitudin sed. Mauris et nibh at dolor iaculis sagittis. Etiam ac feugiat ex. Ut sollicitudin nibh at rutrum tincidunt.</p>
+					<p>Phasellus vehicula nunc et tortor lobortis hendrerit. Quisque in risus massa. Donec eu ipsum at velit euismod dictum. Cras vel metus finibus mauris pretium scelerisque maximus a metus. Pellentesque risus ipsum, dictum sed enim eu, dignissim aliquet felis. Quisque ultrices ante lacus, vel rutrum quam iaculis ac. Fusce sed turpis nunc. Morbi sit amet condimentum nunc, at dapibus urna. Integer lobortis quam tortor, id lacinia enim tristique in. Nam eu lectus dolor. Aliquam nec nisl sit amet turpis aliquet commodo eu ut ligula. Nam sollicitudin tempus venenatis. Proin lectus nisi, ullamcorper vitae justo nec, faucibus sollicitudin justo.</p>
+					<p>Aliquam erat volutpat. Integer volutpat tempus odio, quis accumsan odio. Cras sapien metus, consequat non massa quis, fermentum tempor nisl. Aliquam rhoncus sollicitudin porta. Nunc libero felis, rhoncus et rhoncus at, suscipit sed risus. Proin dignissim orci vitae sem scelerisque, ut vehicula erat egestas. Curabitur sit amet ante quis tellus posuere aliquet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam vestibulum sem mauris, vitae tempus nulla feugiat et. Mauris sed erat ac lacus vulputate consequat. Aenean lacinia odio ac fermentum pretium. Curabitur rhoncus porttitor commodo. Proin eget dui aliquet, ornare lectus nec, posuere augue.</p>
+				</main>
+
+			</div>
+		</div>
+	</section>
+
+	<!-- Sample content -->
+	<section class="section">
+
+		<div class="container container--narrow">
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Autocomplete</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Form -->
+			<form class="form" method="get" action="#" data-validator>
+				<ul class="form-group-list grid">
+					<li class="grid-col grid-col--5 grid-col--small--4">
+						<div class="form-item is-required">
+							<label class="form-label" for="query">Search query</label>
+							<input type="search" name="query" id="query" class="form-input" required>
+						</div>
+					</li>
+					<li class="grid-col grid-col--1 grid-col--small--2">
+						<button class="button button--primary" type="submit">Search</button>
+					</li>
+				</ul>
+			</form>
+			
+		</div>
+
+		<div class="container">
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Tab</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<div class="tab" data-tab>
+				<div class="tab-triggers" role="tablist">
+					<button aria-controls="tab-1" role="tab" data-tab-trigger>First tab</button>
+					<button aria-controls="tab-2" role="tab" data-tab-trigger>Second tab</button>
+					<button aria-controls="tab-3" role="tab" data-tab-trigger>Third tab</button>
+				</div>
+				<div id="tab-1" class="tab-panel" role="tabpanel" data-tab-panel>
+					<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
+				</div>
+				<div id="tab-2" class="tab-panel" role="tabpanel" data-tab-panel>
+					<p>Nunc ullamcorper gravida leo, ac dapibus orci blandit ac. Vivamus vulputate libero dui, sed tempor risus condimentum id. Pellentesque dapibus porttitor auctor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+				</div>
+				<div id="tab-3" class="tab-panel" role="tabpanel" data-tab-panel>
+					<p>Aenean dictum eget ex eget varius. Phasellus dignissim luctus risus eu elementum. Pellentesque in viverra nisl. Vivamus in molestie quam, vel dapibus mauris. Morbi venenatis, dolor quis luctus iaculis, sapien urna dignissim justo, et elementum tellus sapien eget tortor. Etiam eget sem vel nibh pretium tincidunt in vel risus.</p>
+				</div>
+			</div>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Details</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Details -->
+			<details class="details" data-reveal>
+				<summary>Lorem ipsum dolor sit amet</summary>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus accumsan convallis. Proin et venenatis mi. Suspendisse varius mi enim, id semper erat sollicitudin id. Nullam auctor auctor sapien. Nam id justo nec nibh gravida suscipit. Mauris vel dignissim neque. Curabitur ultricies, tellus sit amet viverra tincidunt, velit est finibus odio, nec facilisis purus leo in odio. Integer finibus, neque sit amet accumsan condimentum, nisi tortor malesuada orci, nec condimentum purus nulla sit amet sem. </p>
+			</details>
+			<details class="details" data-reveal>
+				<summary>In non pulvinar nunc</summary>
+				<p>Aenean elementum eros faucibus leo posuere auctor. Donec quis ipsum auctor, faucibus diam nec, tempor nibh. Curabitur imperdiet vulputate facilisis. Curabitur risus mi, sodales sit amet tristique eu, rutrum vitae nisi. Aliquam fringilla a purus quis vehicula. In semper, ipsum a vulputate vehicula, risus neque mollis sapien, non vehicula arcu sapien vel tellus. Curabitur fermentum, turpis a viverra eleifend, justo felis consectetur ipsum, non auctor felis augue id augue. Duis justo diam, semper in ornare gravida, mollis ac elit. Ut scelerisque ipsum ut urna gravida laoreet. Vestibulum vitae nisi eu nibh varius interdum. Mauris id finibus odio. Pellentesque ultrices magna a nisl mattis, eu semper ipsum dapibus. </p>
+			</details>
+			<details class="details" data-reveal>
+				<summary>Vestibulum varius sagittis</summary>
+				<p>Vestibulum varius sagittis neque, nec volutpat ligula rhoncus at. Fusce rhoncus velit et orci molestie, vitae aliquet velit pulvinar. In hac habitasse platea dictumst. Donec pretium metus sit amet libero tristique, ac vestibulum ante porta. In vulputate nulla vel nibh rhoncus condimentum. Curabitur ipsum ipsum, dignissim non leo eget, pellentesque rutrum ipsum. Nam nec justo feugiat, laoreet leo vel, ornare nulla. Mauris consequat nulla id mi fringilla viverra. Aenean vel dolor vitae orci dapibus laoreet.</p>
+			</details>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Form</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Notices -->
+			<ul class="notice-list">
+				<li class="notice-list-item" data-notice>
+					<p>This is a default notice.</p>
+					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-close"></use>
+						</svg>	
+					</button>
+				</li>
+				<li class="notice-list-item notice-list-item--error" data-notice>
+					<p>This is an error notice.</p>
+					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-close"></use>
+						</svg>	
+					</button>
+				</li>
+				<li class="notice-list-item notice-list-item--success" data-notice>
+					<p>This is a success notice.</p>
+					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-close"></use>
+						</svg>	
+					</button>
+				</li>
+				<li class="notice-list-item notice-list-item--warning" data-notice>
+					<p>This is a warning notice.</p>
+					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-close"></use>
+						</svg>	
+					</button>
+				</li>
+			</ul>
+
+			<!-- Form -->
+			<form class="form" method="get" action="#" data-validator>
+				<ul class="grid grid--gap">
+					<li class="grid-col grid-col--3 grid-col--small--6">
+						<div class="form-item is-required">
+							<label class="form-label" for="fullName">Full name</label>
+							<input type="text" name="fullName" id="fullName" class="form-input" required>
+						</div>
+					</li>
+					<li class="grid-col grid-col--3 grid-col--small--6">
+						<div class="form-item is-required">
+							<label class="form-label" for="email">Email</label>
+							<input type="email" name="email" id="email" class="form-input" required>
+						</div>
+					</li>
+					<li class="grid-col grid-col--3 grid-col--small--6">
+						<ul class="form-group-list grid">
+							<li class="grid-col grid-col--3">
+								<div class="form-item is-required">
+									<label class="form-label" for="zip">ZIP</label>
+									<input name="zip" id="zip" class="form-input" type="number" required min="1000" max="9999">
+								</div>
+							</li>
+							<li class="grid-col grid-col--3">
+								<div class="form-item is-required">
+									<label class="form-label" for="city">City</label>
+									<input name="city" id="city" class="form-input" type="text" required>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li class="grid-col grid-col--3 grid-col--small--6">
+						<div class="form-item is-required">
+							<label class="form-label" for="category">Category</label>
+							<select name="category" id="category" class="form-input form-input--select" required>
+								<option value="">Choose category</option>
+								<option value="manufacturing">Manufacturing</option>
+								<option value="shipping">Shipping</option>
+								<option value="administration">Administration</option>
+								<option value="human-resources">Human Resources</option>
+							</select>
+						</div>
+					</li>
+					<li class="grid-col grid-col--6">
+						<div class="form-item is-required">
+							<label class="form-label" for="message">Message</label>
+							<textarea name="message" id="message" class="form-input form-input--textarea" required></textarea>
+						</div>
+					</li>
+					<li class="grid-col grid-col--3">
+						<div class="form-item" data-range>
+							<label class="form-label" for="minPrice">Min. price</label>
+							<span class="form-hint">
+								<span data-range-indicator>-</span>€
+							</span>
+							<input name="minPrice" id="minPrice" class="form-range" type="range">
+						</div>
+					</li>
+					<li class="grid-col grid-col--3">
+						<div class="form-item" data-range>
+							<label class="form-label" for="maxPrice">Max. price</label>
+							<span class="form-hint">
+								<span data-range-indicator>-</span>€
+							</span>
+							<input name="maxPrice" id="maxPrice" class="form-range" type="range">
+						</div>
+					</li>
+					<li class="grid-col grid-col--6">
+						<div class="form-item is-required">
+							<fieldset class="form-fieldset">
+								<legend class="form-fieldset-legend">Radios</legend>
+								<span class="form-fieldset-hint">Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</span>
+								<ul class="flex flex--gap flex--uniform">
+									<li class="flex-col">
+										<label class="form-control form-control--radio">
+											<input name="radioItem" id="radioItem1" type="radio" value="1" required>
+											<span class="form-control-indicator"></span> Item 1
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--radio">
+											<input name="radioItem" id="radioItem2" type="radio" value="2" required>
+											<span class="form-control-indicator"></span> Item 2
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--radio">
+											<input name="radioItem" id="radioItem3" type="radio" value="3" required>
+											<span class="form-control-indicator"></span> Item 3
+										</label>
+									</li>
+								</ul>
+							</fieldset>
+						</div>
+					</li>
+					<li class="grid-col grid-col--6">
+						<div class="form-item">
+							<fieldset class="form-fieldset">
+								<legend class="form-fieldset-legend">Checkboxes</legend>
+								<ul class="flex flex--gap flex--uniform">
+									<li class="flex-col">
+										<label class="form-control form-control--checkbox">
+											<input name="checkboxItem" id="checkboxItem1" type="checkbox" value="1">
+											<span class="form-control-indicator"></span> Item 1
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--checkbox">
+											<input name="checkboxItem" id="checkboxItem2" type="checkbox" value="2">
+											<span class="form-control-indicator"></span> Item 2
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--checkbox">
+											<input name="checkboxItem" id="checkboxItem3" type="checkbox" value="3">
+											<span class="form-control-indicator"></span> Item 3
+										</label>
+									</li>
+								</ul>
+							</fieldset>
+						</div>
+					</li>
+					<li class="grid-col grid-col--6">
+						<div class="form-item">
+							<fieldset class="form-fieldset">
+								<legend class="form-fieldset-legend">Switches</legend>
+								<ul class="flex flex--gap flex--uniform">
+									<li class="flex-col">
+										<label class="form-control form-control--switch">
+											<input name="switchItem" id="switchItem1" type="checkbox" value="1">
+											<span class="form-control-indicator"></span> Item 1
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--switch">
+											<input name="switchItem" id="switchItem2" type="checkbox" value="2">
+											<span class="form-control-indicator"></span> Item 2
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--switch">
+											<input name="switchItem" id="switchItem3" type="checkbox" value="3">
+											<span class="form-control-indicator"></span> Item 3
+										</label>
+									</li>
+								</ul>
+							</fieldset>
+						</div>
+					</li>
+					<li class="grid-col grid-col--6 grid-col--center">
+						<button class="button button--primary" type="submit">Submit</button>
+					</li>
+				</ul>
+			</form>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Table</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Table -->
+			<div class="table-wrapper">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Author</th>
+							<th>ISBN</th>
+							<th>Condition</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Animal Farm</td>
+							<td>George Orwell</td>
+							<td>0452277507</td>
+							<td>Very Good</td>
+							<td>$5.69</td>
+						</tr>
+						<tr>
+							<td>Of Mice and Men</td>
+							<td>John Steinbeck</td>
+							<td>0141038424</td>
+							<td>Like New</td>
+							<td>$8.59</td>
+						</tr>
+						<tr>
+							<td>Goodnight Moon</td>
+							<td>Margaret Wise Brown</td>
+							<td>0064430170</td>
+							<td>Very Good</td>
+							<td>$4.69</td>
+						</tr>
+						<tr>
+							<td>Green Eggs and Ham</td>
+							<td>Dr. Seuss</td>
+							<td>0394892208</td>
+							<td>Good</td>
+							<td>$6.79</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="4">Price total</td>
+							<td>$25.76</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+
+			<!-- Glider -->
+			<div class="glider" data-glider>
+
+				<!-- Section header -->
+				<header class="header header--section">
+					<h2>Sample gliders</h2>
+					<p>Lorem ipsum dolor amet si</p>
+				</header>
+
+				<!-- Glider viewport -->
+				<div class="glider-viewport" data-glider-viewport>
+					<ul class="glider-list glider-list--1of2 glider-list--small--full" data-glider-list>
+						<li>
+							<div class="box glider-list-item" data-glider-list-item>
+								<header class="header">
+									<h3>Lorem ipsum dolor 1</h3>
+									<p>Nunc lacinia ante nunc ac lobortis</p>
+								</header>
+								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+							</div>
+						</li>
+						<li>
+							<div class="box glider-list-item" data-glider-list-item>
+								<header class="header">
+									<h3>Lorem ipsum dolor 2</h3>
+									<p>Nunc lacinia ante nunc ac lobortis</p>
+								</header>
+								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+							</div>
+						</li>
+						<li>
+							<div class="box glider-list-item" data-glider-list-item>
+								<header class="header">
+									<h3>Lorem ipsum dolor 3</h3>
+									<p>Nunc lacinia ante nunc ac lobortis</p>
+								</header>
+								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+							</div>
+						</li>
+						<li>
+							<div class="box glider-list-item" data-glider-list-item>
+								<header class="header">
+									<h3>Lorem ipsum dolor 4</h3>
+									<p>Nunc lacinia ante nunc ac lobortis</p>
+								</header>
+								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+							</div>
+						</li>
+						<li>
+							<div class="box glider-list-item" data-glider-list-item>
+								<header class="header">
+									<h3>Lorem ipsum dolor 5</h3>
+									<p>Nunc lacinia ante nunc ac lobortis</p>
+								</header>
+								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+							</div>
+						</li>
+						<li>
+							<div class="box glider-list-item" data-glider-list-item>
+								<header class="header">
+									<h3>Lorem ipsum dolor 6</h3>
+									<p>Nunc lacinia ante nunc ac lobortis</p>
+								</header>
+								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+							</div>
+						</li>
+						<li>
+							<div class="box glider-list-item" data-glider-list-item>
+								<header class="header">
+									<h3>Lorem ipsum dolor 7</h3>
+									<p>Nunc lacinia ante nunc ac lobortis</p>
+								</header>
+								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<ul class="glider-action-list button-list">
+					<li>
+						<button type="button" class="button button--special button--icon" aria-label="Previous item" title="Previous item" data-glider-prev-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-chevron-back"></use>
+							</svg>
+						</button>
+					</li>
+					<li>
+						<button type="button" class="button button--special button--icon" aria-label="Next item" title="Next item" data-glider-next-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-chevron-forward"></use>
+							</svg>
+						</button>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Sample boxes</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<div class="flex flex--gap">
+				<div class="flex-col flex-col--1of3 flex-col--small--full">
+					<div class="box">
+						<a href="./images/gallery/01.jpg" class="image image--fit" data-dialog="image">
+							<picture>
+								<img src="./images/gallery/01-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</a>
+						<header class="header">
+							<h3>Lorem ipsum dolor</h3>
+							<p>Nunc lacinia ante nunc ac lobortis</p>
+						</header>
+						<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+					</div>
+				</div>
+				<div class="flex-col flex-col--1of3 flex-col--small--full">
+					<div class="box">
+						<a href="./images/gallery/02.jpg" class="image image--fit" data-dialog="image">
+							<picture>
+								<img src="./images/gallery/02-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</a>
+						<header class="header">
+							<h3>Lorem ipsum dolor</h3>
+							<p>Nunc lacinia ante nunc ac lobortis</p>
+						</header>
+						<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+					</div>
+				</div>
+				<div class="flex-col flex-col--1of3 flex-col--small--full">
+					<div class="box">
+						<a href="./images/gallery/03.jpg" class="image image--fit" data-dialog="image">
+							<picture>
+								<img src="./images/gallery/03-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</a>
+						<header class="header">
+							<h3>Lorem ipsum dolor</h3>
+							<p>Nunc lacinia ante nunc ac lobortis</p>
+						</header>
+						<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-summary">
+				<div class="footer-summary-about">
+					<h2>About company</h2>
+					<p>Ornare interdum nascetur enim lobortis nunc amet placerat pellentesque nascetur in adipiscing. Interdum amet accumsan placerat commodo ut amet aliquam blandit nunc tempor lobortis nunc non. Mi accumsan. Justo aliquet massa adipiscing cubilia eu accumsan id. Arcu accumsan faucibus vis ultricies adipiscing ornare ut. Mi accumsan. rnare interdum nascetur enim lobortis nunc amet placerat pellentesque. Interdum amet placerat commodo ut amet aliquam blandit nunc tempor lobortis nunc non.</p>
+				</div>
+				<div class="footer-summary-nav">
+					<h2>Navigation</h2>
+					<ul class="footer-summary-link-list">
+						<li>
+							<a href="#">Home</a>
+						</li>
+						<li>
+							<a href="#">Services</a>
+						</li>
+						<li>
+							<a href="#">Products</a>
+						</li>
+						<li>
+							<a href="#">Blog</a>
+						</li>
+						<li>
+							<a href="#">Contact</a>
+						</li>
+					</ul>
+				</div>
+				<div class="footer-summary-links">
+					<h2>Help center</h2>
+					<ul class="footer-summary-link-list">
+						<li>
+							<a href="#">Ornare interdum</a>
+						</li>
+						<li>
+							<a href="#">Nascetur enim</a>
+						</li>
+						<li>
+							<a href="#">massa amet</a>
+						</li>
+						<li>
+							<a href="#">Nascetur nunc</a>
+						</li>
+						<li>
+							<a href="#">Nascetur nunc</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="footer-info">
+				<div class="footer-info-legal">
+					&copy; 2025 My Company. All rights reserved.
+					<ul class="footer-info-legal-link-list">
+						<li>
+							<a href="#">Terms of service</a>
+						</li>
+						<li>
+							<a href="#">Privacy policy</a>
+						</li>
+						<li>
+							<a href="#">Contact Us</a>
+						</li>
+					</ul>
+				</div>
+				<ul class="footer-info-social-list">
+					<li>
+						<a href="#" aria-label="Email" title="Email" target="_blank" rel="noopener">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-mail"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a href="#" aria-label="Facebook" title="Facebook" target="_blank" rel="noopener">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#logo-facebook"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a href="#" aria-label="YouTube" title="YouTube" target="_blank" rel="noopener">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#logo-youtube"></use>
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+	<!-- Sample dialog -->
+	<dialog id="sample-dialog">
+		<h2 class="heading-block">What's included</h2>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+	</dialog>
+
+	<!-- Scripts -->
+	<script type="module" src="assets/js/app.js"></script>
+	<script type="module">
+
+		import { IndexPage } from "./assets/js/page/index-page.js";
+		import { App } from "./assets/js/app.js";
+
+		// Initialize page and application
+		window.page = new IndexPage();
+		window.app = new App();
+		window.app.pages.push(page);
+
+	</script>
+
+</div>
+</body>
+</html>

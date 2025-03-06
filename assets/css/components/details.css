@@ -1,0 +1,73 @@
+/* Details component prototype */
+details.details {
+	margin-bottom: var(--element-margin);
+	padding: 0 var(--box-padding);
+
+	> summary {
+		-webkit-user-select: none;
+		background-color: var(--border-bg-color);
+		border-radius: var(--border-radius);
+		color: var(--fg-bold-color);
+		cursor: pointer;
+		display: block;
+		font-weight: var(--bold-font-weight);
+		margin: 0 calc(var(--box-padding) * -1) var(--block-margin) calc(var(--box-padding) * -1);
+		padding: calc(var(--box-padding) * 0.75) calc(var(--box-padding) * 2) calc(var(--box-padding) * 0.75) var(--box-padding);
+		position: relative;
+		user-select: none;
+
+		&:after {
+			content: '+';
+			display: block;
+			font-size: 1.5rem;
+			position: absolute;
+			right: var(--box-padding);
+			top: 50%;
+			transform: translate3d(0, -50%, 0);
+		}
+
+		body.no-touch &:hover {
+			color: var(--link-color);
+		}
+	}
+
+	> :last-child,
+	> :last-child > :last-child,
+	> :last-child > :last-child > :last-child {
+		margin-bottom: calc(var(--element-margin) * 0.75);
+	}
+
+	&:not(:last-of-type) {
+		margin-bottom: 0;
+	}
+
+	&[open] > summary {
+		margin-bottom: calc(var(--element-margin) * 0.75);
+
+		&:after {
+			content: '-';
+		}
+
+		~ * {
+			animation: details-sweep 300ms ease-out;
+		}
+	}
+}
+
+/* Details component animations */
+@keyframes details-sweep {
+
+	0% {
+		opacity: 0;
+		transform: translate3d(-0.5rem, 0, 0);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+/* Details component extensions */
+details.details {
+}
