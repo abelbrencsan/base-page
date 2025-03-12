@@ -19,7 +19,7 @@ input.form-input, select.form-input, textarea.form-input {
 	vertical-align: middle;
 	width: 100%;
 
-	&:placeholder {
+	&::placeholder {
 		color: inherit;
 		opacity: 0.5;
 	}
