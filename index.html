@@ -129,19 +129,19 @@
 					<ul class="grid grid--gap">
 						<li class="grid-col grid-col--6">
 							<div class="form-item">
-								<label class="form-label" for="email">E-mail</label>
-								<input type="email" name="email" id="email" class="form-input" required>
+								<label class="form-label" for="authEmail">E-mail</label>
+								<input type="email" name="authEmail" id="authEmail" class="form-input" autocomplete="username" required>
 							</div>
 						</li>
 						<li class="grid-col grid-col--6">
 							<div class="form-item">
-								<label class="form-label" for="password">Password</label>
-								<input type="password" name="password" id="password" class="form-input" required minlength="8">
+								<label class="form-label" for="authPass">Password</label>
+								<input type="password" name="authPass" id="authPass" class="form-input" autocomplete="current-password" required minlength="8">
 							</div>
 						<li class="grid-col grid-col--6 grid-col--center">
 							<button class="button button--primary" type="submit">Sign in</button>
 						</li>
-					</div>
+					</ul>
 				</form>
 				<ul class="authentication-link-list">
 					<li>
@@ -164,7 +164,7 @@
 	</main>
 
 	<!-- Layout section -->
-	<section class="section">
+	<div class="section">
 		<div class="container">
 
 			<!-- Layout -->
@@ -207,7 +207,7 @@
 
 			</div>
 		</div>
-	</section>
+	</div>
 
 	<!-- Sample content -->
 	<section class="section">

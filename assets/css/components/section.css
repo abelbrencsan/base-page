@@ -1,10 +1,10 @@
 /* Section component */
-section.section {
+section.section, div.section {
 	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
 }
 
 /* Section component extensions */
-section.section {
+section.section, div.section {
 
 	&.section--dark {
 		background-color: var(--scheme-dark-bg-color);
