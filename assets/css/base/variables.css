@@ -80,7 +80,7 @@
 	--fg-color: #121d2d;
 	--fg-light-color: #1a2a42;
 	--focus-color: #fba026;
-	--link-color: #007CB6;
+	--link-color: #0076ad;
 
 	/* State colors */
 	--error-bg-color: #f8d2d6;
@@ -100,8 +100,8 @@
 	--scheme-dark-link-color: #65ceff;
 
 	/* Primary palette */
-	--palette-primary-bg-color: #007CB6;
-	--palette-primary-bg-hover-color: #0092d7;
+	--palette-primary-bg-color: #0076ad;
+	--palette-primary-bg-hover-color: #008dcf;
 	--palette-primary-fg-color: #ffffff;
 
 	/* Secondary palette */
