@@ -68,6 +68,7 @@ dl {
 
 		dt {
 			font-size: var(--small-font-size);
+			font-weight: var(--bold-font-weight);
 			padding-left: calc(var(--box-padding) * 0.5);
 		}
 
