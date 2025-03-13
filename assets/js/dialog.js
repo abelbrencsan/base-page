@@ -396,7 +396,6 @@ class Dialog {
 				this.dialog = document.createElement("dialog");
 				this.dialog.classList.add(this.dialogClass);
 				this.dialog.classList.add(this.dialogImageClass);
-				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.dialog.appendChild(image);
 				document.body.appendChild(this.dialog);
 				this.#addDialogEvents();
@@ -426,7 +425,6 @@ class Dialog {
 				this.dialog = document.createElement("dialog");
 				this.dialog.classList.add(this.dialogClass);
 				this.dialog.classList.add(this.dialogVideoClass);
-				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.dialog.appendChild(video);
 				document.body.appendChild(this.dialog);
 				this.#addDialogEvents();
@@ -462,7 +460,6 @@ class Dialog {
 				this.dialog = document.createElement("dialog");
 				this.dialog.classList.add(this.dialogClass);
 				this.dialog.classList.add(this.dialogYouTubeClass);
-				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.dialog.appendChild(iframe);
 				document.body.appendChild(this.dialog);
 				this.#addDialogEvents();
@@ -489,7 +486,6 @@ class Dialog {
 			this.dialog = document.createElement("dialog");
 			this.dialog.classList.add(this.dialogClass);
 			this.dialog.classList.add(this.dialogIframeClass);
-			this.dialog.setAttribute('data-dialog-uid', this.source);
 			this.dialog.appendChild(iframe);
 			document.body.appendChild(this.dialog);
 			this.#addDialogEvents();
@@ -520,7 +516,6 @@ class Dialog {
 					this.dialog.classList.add(this.dialogClass);
 					this.dialog.classList.add(this.dialogAjaxClass);
 					this.dialog.innerHTML = html;
-					this.dialog.setAttribute('data-dialog-uid', this.source);
 					document.body.appendChild(this.dialog);
 					this.#addDialogEvents();
 					this.#show();
@@ -543,7 +538,6 @@ class Dialog {
 			this.dialog = document.querySelector(this.source);
 			if (this.dialog) {
 				this.dialog.classList.add(this.dialogClass);
-				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.#addDialogEvents();
 				this.#show();
 			} else {
