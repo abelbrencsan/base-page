@@ -22,11 +22,11 @@ class Dialog {
 	source;
 
 	/**
-	 * Represents the trigger element that opens the dialog on click.
+	 * Represents an array of trigger elements that open the dialog on click.
 	 * 
-	 * @type {HTMLElement|null}
+	 * @type {Array<HTMLElement>}
 	 */
-	trigger = null;
+	triggers = [];
 
 	/**
 	 * The alternate text description added to the image.
@@ -223,7 +223,7 @@ class Dialog {
 	 * @param {Object} options
 	 * @param {string} options.type
 	 * @param {string} options.source
-	 * @param {HTMLElement} options.trigger
+	 * @param {Array<HTMLElement>} options.triggers
 	 * @param {string} options.description
 	 * @param {boolean} options.isCancellable
 	 * @param {boolean} options.isCloseable
@@ -273,10 +273,10 @@ class Dialog {
 		this.handleEvent = function(event) {
 			this.#handleEvents(event);
 		};
-		if (this.trigger) {
-			this.trigger.classList.add(this.triggerClass);
-			this.trigger.addEventListener("click", this);
-		}
+		this.triggers.forEach((trigger) => {
+			trigger.classList.add(this.triggerClass);
+			trigger.addEventListener("click", this);
+		});
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}
 
@@ -290,9 +290,9 @@ class Dialog {
 		if (typeof(this.beforeOpenCallback) == "function") this.beforeOpenCallback();
 		Dialog.closeActiveInstance();
 		Dialog.activeInstance = this;
-		if (this.trigger) {
-			this.trigger.classList.add(this.isDialogLoadingClass);
-		}
+		this.triggers.forEach((trigger) => {
+			trigger.classList.add(this.isDialogLoadingClass);
+		});
 		switch(this.type) {
 			case "image":
 				this.#openImage();
@@ -324,6 +324,18 @@ class Dialog {
 	close() {
 		if (!this.dialog) return;
 		this.dialog.close();
+	}
+
+	/**
+	 * Adds the specified element as a trigger.
+	 * 
+	 * @param {HTMLElement} elem
+	 * @returns {void}
+	 */
+	addTrigger(elem) {
+		elem.classList.add(this.triggerClass);
+		elem.addEventListener("click", this);
+		this.triggers.push(elem);
 	}
 
 	/**
@@ -361,10 +373,10 @@ class Dialog {
 			this.dialog = null;
 			this.closeForm = null;
 		}
-		if (this.trigger) {
-			this.trigger.classList.remove(this.triggerClass);
-			this.trigger.removeEventListener("click", this);
-		}
+		this.triggers.forEach((trigger) => {
+			trigger.classList.remove(this.triggerClass);
+			trigger.removeEventListener("click", this);
+		});
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
@@ -384,10 +396,10 @@ class Dialog {
 				this.dialog = document.createElement("dialog");
 				this.dialog.classList.add(this.dialogClass);
 				this.dialog.classList.add(this.dialogImageClass);
+				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.dialog.appendChild(image);
 				document.body.appendChild(this.dialog);
 				this.#addDialogEvents();
-				this.#addCustomClasses();
 				this.#show();
 			};
 			image.onerror = () => {
@@ -414,10 +426,10 @@ class Dialog {
 				this.dialog = document.createElement("dialog");
 				this.dialog.classList.add(this.dialogClass);
 				this.dialog.classList.add(this.dialogVideoClass);
+				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.dialog.appendChild(video);
 				document.body.appendChild(this.dialog);
 				this.#addDialogEvents();
-				this.#addCustomClasses();
 				video.play();
 				this.#show();
 			};
@@ -450,10 +462,10 @@ class Dialog {
 				this.dialog = document.createElement("dialog");
 				this.dialog.classList.add(this.dialogClass);
 				this.dialog.classList.add(this.dialogYouTubeClass);
+				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.dialog.appendChild(iframe);
 				document.body.appendChild(this.dialog);
 				this.#addDialogEvents();
-				this.#addCustomClasses();
 				this.#show();
 			} else {
 				this.#hasOpenError();
@@ -477,10 +489,10 @@ class Dialog {
 			this.dialog = document.createElement("dialog");
 			this.dialog.classList.add(this.dialogClass);
 			this.dialog.classList.add(this.dialogIframeClass);
+			this.dialog.setAttribute('data-dialog-uid', this.source);
 			this.dialog.appendChild(iframe);
 			document.body.appendChild(this.dialog);
 			this.#addDialogEvents();
-			this.#addCustomClasses();
 			this.#show();
 		} else {
 			this.#show();
@@ -508,9 +520,9 @@ class Dialog {
 					this.dialog.classList.add(this.dialogClass);
 					this.dialog.classList.add(this.dialogAjaxClass);
 					this.dialog.innerHTML = html;
+					this.dialog.setAttribute('data-dialog-uid', this.source);
 					document.body.appendChild(this.dialog);
 					this.#addDialogEvents();
-					this.#addCustomClasses();
 					this.#show();
 				})
 				.catch(() => {
@@ -522,7 +534,7 @@ class Dialog {
 	}
 
 	/**
-	 * Opens the dialog when the type is set to ajax.
+	 * Opens the dialog when the type is set to dialog.
 	 * 
 	 * @returns {void}
 	 */
@@ -531,8 +543,8 @@ class Dialog {
 			this.dialog = document.querySelector(this.source);
 			if (this.dialog) {
 				this.dialog.classList.add(this.dialogClass);
+				this.dialog.setAttribute('data-dialog-uid', this.source);
 				this.#addDialogEvents();
-				this.#addCustomClasses();
 				this.#show();
 			} else {
 				this.#hasOpenError();
@@ -553,9 +565,10 @@ class Dialog {
 			this.#createCloseForm();
 			this.dialog.classList.add(this.isCloseableClass);
 		}
-		if (this.trigger) {
-			this.trigger.classList.remove(this.isDialogLoadingClass);
-		}
+		this.triggers.forEach((trigger) => {
+			trigger.classList.remove(this.isDialogLoadingClass);
+		});
+		this.#addCustomClasses();
 		if (this == Dialog.activeInstance) {
 			this.dialog.showModal();
 			if (typeof(this.showCallback) == "function") this.showCallback();
@@ -578,9 +591,9 @@ class Dialog {
 	 * @returns {void}
 	 */
 	#hasOpenError() {
-		if (this.trigger) {
-			this.trigger.classList.remove(this.isDialogLoadingClass);
-		}
+		this.triggers.forEach((trigger) => {
+			trigger.classList.remove(this.isDialogLoadingClass);
+		});
 		throw "Dialog could not be opened.";
 	}
 
@@ -592,6 +605,7 @@ class Dialog {
 	#isClosed() {
 		if (!this.dialog) return;
 		this.dialog.classList.remove(this.isOpenedClass);
+		this.#removeCustomClasses();
 		Dialog.activeInstance = null;
 		switch(this.type) {
 			case "image":
@@ -813,7 +827,6 @@ class Dialog {
 	#destroyDialog() {
 		if (!this.dialog) return;
 		this.dialog.classList.remove(this.dialogClass);
-		this.#removeCustomClasses();
 		if (this.closeForm) {
 			this.closeForm.remove();
 			this.dialog.classList.remove(this.isCloseableClass);
@@ -853,10 +866,12 @@ class Dialog {
 	#handleEvents(event) {
 		switch (event.type) {
 			case "click":
-				if (this.trigger && this.trigger.contains(event.target)) {
-					event.preventDefault();
-					this.open();
-				}
+				this.triggers.forEach((trigger) => {
+					if (trigger.contains(event.target)) {
+						event.preventDefault();
+						this.open();
+					}
+				});
 				break;
 			case "cancel":
 				if (this.dialog && event.target == this.dialog) {
@@ -890,6 +905,18 @@ class Dialog {
 		if (activeInstance && activeInstance.dialog && activeInstance.dialog.open) {
 			activeInstance.close();
 		}
+	}
+
+	/**
+	 * Parse classes from the attribute of the specified element.
+	 * 
+	 * @param {HTMLElement} elem
+	 * @param {string} attribute
+	 * @returns {Array<string>}
+	 */
+	static parseCustomClasses(elem, attribute) {
+		let customclassesStr = elem.getAttribute(attribute);
+		return customclassesStr ? customclassesStr.split(" ") : [];
 	}
 
 	/**

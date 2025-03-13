@@ -275,15 +275,37 @@ class App {
 	 */
 	#initDialogs() {
 		let elems = document.querySelectorAll("[data-dialog]");
+		let triggerElems = document.querySelectorAll("[data-dialog-trigger]");
 		elems.forEach((elem) => {
-			let customclassesStr = elem.getAttribute("data-dialog-classes");
-			let customClasses = customclassesStr ? customclassesStr.split(" ") : [];
 			this.dialogs.push(new Dialog({
 				type: elem.getAttribute("data-dialog"),
 				source:elem.getAttribute("data-dialog-source") || elem.getAttribute("href"),
-				trigger: elem,
+				triggers: [elem],
 				description: elem.getAttribute("data-dialog-description") || "",
-				customClasses: customClasses
+				customClasses: Dialog.parseCustomClasses(elem, "data-dialog-classes")
+			}));
+		});
+		triggerElems.forEach((triggerElem) => {
+			this.dialogs.forEach((dialog) => {
+				if (dialog.source == triggerElem.getAttribute('data-dialog-trigger')) {
+					dialog.addTrigger(triggerElem);
+				}
+			});
+		});
+	}
+
+	/**
+	 * Initialize slideshows.
+	 * 
+	 * @returns {void}
+	 */
+	#initSlideshows() {
+		let elems = document.querySelectorAll("[data-slideshow]");
+		elems.forEach((elem) => {
+			this.slideshows.push(new Slideshow({
+				source:elem.getAttribute("data-slideshow"),
+				trigger: elem,
+				customClasses: Dialog.parseCustomClasses(elem, "data-slideshow-classes")
 			}));
 		});
 	}
