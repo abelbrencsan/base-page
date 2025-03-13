@@ -250,6 +250,21 @@ class Glider {
 	}
 
 	/**
+	 * Scrolls the glider to the item with the specified index.
+	 * 
+	 * @param {number} index
+	 * @param {behavior} string
+	 * @returns {void}
+	 */
+	scrollTo(index, behavior = "smooth") {
+		let pos = this.getPositionByIndex(index);
+		this.viewport.scrollTo({
+			left: pos,
+			behavior: behavior,
+		});
+	}
+
+	/**
 	 * Detect whether the glider is currently scrollable.
 	 * 
 	 * @returns {void}
