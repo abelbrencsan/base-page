@@ -1,3 +1,8 @@
+/* Details component variables */
+details.details {
+	--details-transition: var(--transition);
+}
+
 /* Details component prototype */
 details.details {
 	margin-bottom: var(--element-margin);
@@ -29,6 +34,10 @@ details.details {
 		body.no-touch &:hover {
 			color: var(--link-color);
 		}
+
+		&::-webkit-details-marker {
+			display:none;
+		}
 	}
 
 	> :last-child,
@@ -49,7 +58,7 @@ details.details {
 		}
 
 		~ * {
-			animation: details-sweep 300ms ease-out;
+			animation: details-sweep var(--details-transition);
 		}
 	}
 }

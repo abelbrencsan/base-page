@@ -1,0 +1,127 @@
+/* Quickview component variables */
+div.quickview[popover] {
+	--quickview-close-button-bg-color: var(--palette-secondary-bg-color);
+	--quickview-close-button-bg-hover-color: var(--palette-secondary-bg-hover-color);
+	--quickview-close-button-fg-color: var(--palette-secondary-fg-color);
+	--quickview-toggle-transition: var(--toggle-transition);
+	--quickview-transition: var(--transition);
+}
+
+/* Quickview component prototype */
+div.quickview[popover]:popover-open {
+	background-color: var(--bg-color);
+	border-radius: var(--border-radius);
+	border: none;
+	bottom: var(--grid-gap);
+	box-shadow: var(--bold-box-shadow);
+	display: grid;
+	grid-gap: var(--grid-gap);
+	grid-template-areas: "image text";
+	grid-template-columns: 1fr 1fr;
+	max-height: calc(100% - (var(--grid-gap) * 2));
+	max-width: var(--container-width);
+	opacity: 1;
+	padding: 0;
+	top: auto;
+	transform: translate3d(0, 0, 0);
+	transition: transform var(--quickview-toggle-transition), opacity var(--quickview-toggle-transition);
+	width: 90%;
+
+	div.quickview-image.image {
+		border-radius: 0;
+		grid-area: image;
+		margin-bottom: 0;
+
+		img, canvas {
+			border-radius: 0;
+			height: 100%;
+			object-fit: cover;
+			width: 100%;
+		}
+	}
+
+	div.quickview-text {
+		align-self: center;
+		grid-area: text;
+		padding: var(--box-padding);
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	> button.quickview-close {
+		-webkit-user-select: none;
+		align-items: center;
+		background-color: var(--quickview-close-button-bg-color);
+		border-radius: var(--border-radius);
+		border: none;
+		color: var(--quickview-close-button-fg-color);
+		cursor: pointer;
+		display: flex;
+		height: calc(var(--element-height) * 0.75);
+		justify-content: center;
+		padding: 0;
+		position: absolute;
+		right: calc(var(--grid-gap) * 0.5);
+		top: calc(var(--grid-gap) * 0.5);
+		transition: background-color var(--quickview-transition);
+		user-select: none;
+		width: calc(var(--element-height) * 0.75);
+
+		body.no-touch &:hover, &:active {
+			background-color: var(--quickview-close-button-bg-hover-color);
+		}
+
+		&.keyboard-focus:focus {
+			box-shadow: inset 0 0 0 3px var(--focus-color);
+			outline: 0;
+		}
+	}
+
+	&::backdrop {
+		backdrop-filter: blur(2px);
+		background-color: var(--popover-backdrop-color);
+	}
+
+	@media (max-width: 47em) {
+		display: block;
+		padding: var(--box-padding);
+		text-align: center;
+
+		div.quickview-image.image {
+			border-radius: var(--border-radius);
+			margin: 0 auto var(--grid-gap) auto;
+			max-width: 16rem;
+
+			img, canvas {
+				border-radius: var(--border-radius);
+			}
+		}
+
+		div.quickview-text {
+			padding: 0;
+		}
+	}
+
+	@media (max-width: 32em) {
+		border-radius: var(--border-radius) var(--border-radius) 0 0;
+		bottom: 0;
+		width: 100%;
+		
+		div.quickview-image.image {
+			max-width: 12rem;
+		}
+	}
+
+	@starting-style {
+		opacity: 0;
+		transform: translate3d(0, 3rem, 0);
+	}
+}
+
+/* Quickview component extensions */
+div.quickview[popover]:popover-open {
+}

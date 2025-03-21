@@ -8,7 +8,7 @@
 class Router {
 
 	/**
-	 * An array of all routes.
+	 * List of all routes.
 	 * 
 	 * @type {Array<Route>}
 	 */
@@ -78,9 +78,7 @@ class Router {
 		}
 
 		// Initialize the router
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}

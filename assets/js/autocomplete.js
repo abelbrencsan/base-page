@@ -15,6 +15,13 @@ class Autocomplete {
 	input;
 
 	/**
+	 * The ID of the list element to which suggestions are appended.
+	 * 
+	 * @type {string}
+	 */
+	id;
+
+	/**
 	 * A function that is called to retrieve the available suggestions.
 	 * 
 	 * @type {function(string,function(Array<string>)):void}
@@ -57,7 +64,7 @@ class Autocomplete {
 	maxSuggestions = null;
 
 	/**
-	 * Classes added to the list element where suggestions are appended.
+	 * Classes added to the list element to which suggestions are appended.
 	 * 
 	 * @type {Array<string>}
 	 */
@@ -127,7 +134,7 @@ class Autocomplete {
 	destroyCallback = null;
 
 	/**
-	 * Represents an HTML list where the suggestions are appended to.
+	 * Represents an HTML list to which suggestions are appended.
 	 * 
 	 * @type {HTMLUListElement|null}
 	 */
@@ -189,6 +196,9 @@ class Autocomplete {
 		if (!(options.input instanceof HTMLInputElement)) {
 			throw "Autocomplete \"input\" must be an `HTMLInputElement`";
 		}
+		if (typeof options.id !== "string") {
+			throw "Autocomplete \"id\" must be a string";
+		}
 		if (!(options.getSuggestions instanceof Function)) {
 			throw "Autocomplete \"getSuggestions\" must be a `Function`";
 		}
@@ -207,9 +217,7 @@ class Autocomplete {
 		}
 
 		// Initialize the autocomplete
-		this.handleEvent = (event) => {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#createList();
 		this.#initInputAttributes();
 		this.#addEvents();
@@ -251,7 +259,12 @@ class Autocomplete {
 							suggestions = suggestions.splice(0,this.maxSuggestions);
 						}
 						this.#createItems(suggestions);
-						this.#open();
+						if (this.suggestions.length) {
+							this.#open();
+						} else {
+							this.#hide();
+						}
+
 					}
 				});
 			}, this.delay);
@@ -277,12 +290,15 @@ class Autocomplete {
 	#createItems(suggestions) {
 		this.#removeItems();
 		this.suggestions = suggestions;
-		this.highlightIndex = null;
 		if (this.input.value.length >= this.minChars) {
-			suggestions.forEach((suggestion) => {
+			suggestions.forEach((suggestion, index) => {
 				if (this.list) {
 					let item = document.createElement("li");
+					item.id = `${this.id}-option-${index + 1}`;
 					item.classList.add(...this.itemClasses);
+					item.setAttribute("tabindex", "-1");
+					item.setAttribute("aria-selected", "false");
+					item.setAttribute("role", "option");
 					item.innerHTML = this.renderItem(suggestion, this.input.value);
 					this.list.appendChild(item);
 				}
@@ -300,6 +316,8 @@ class Autocomplete {
 		while (this.list.lastChild) {
 			this.list.removeChild(this.list.lastChild);
 		}
+		this.highlightIndex = null;
+		this.input.removeAttribute("aria-activedescendant");
 		this.suggestions = [];
 	}
 
@@ -312,6 +330,7 @@ class Autocomplete {
 		if (!this.list) return;
 		this.list.classList.add(this.isOpenClass);
 		this.input.classList.add(this.hasOpenAutocompleteClass);
+		this.input.setAttribute("aria-expanded", "true");
 		this.isOpen = true;
 		if (this.openCallback) this.openCallback.call(this);
 	}
@@ -325,6 +344,7 @@ class Autocomplete {
 		if (!this.list) return;
 		this.list.classList.remove(this.isOpenClass);
 		this.input.classList.remove(this.hasOpenAutocompleteClass);
+		this.input.setAttribute("aria-expanded", "false");
 		this.isOpen = false;
 		if (this.closeCallback) this.closeCallback.call(this);
 	}
@@ -395,10 +415,14 @@ class Autocomplete {
 	 */
 	#updateHighlights() {
 		if (!this.list) return;
+		this.input.removeAttribute("aria-activedescendant");
 		this.list.childNodes.forEach((item, index) => {
 			item.classList.remove(this.isHighlightedClass);
+			item.setAttribute("aria-selected", "false");
 			if (this.highlightIndex == index) {
 				item.classList.add(this.isHighlightedClass);
+				item.setAttribute("aria-selected", "true");
+				this.input.setAttribute("aria-activedescendant", item.id);
 			}
 		});
 	}
@@ -425,19 +449,20 @@ class Autocomplete {
 	}
 
 	/**
-	 * Creates the list to which the suggestions are appended.
+	 * Creates the list to which suggestions are appended.
 	 * 
 	 * @returns {void}
 	 */
 	#createList() {
-		this.list = document.createElement("ul");		
-		this.list.setAttribute("tabindex", -1);
+		this.list = document.createElement("ul");
+		this.list.id = this.id;
 		this.list.classList.add(...this.listClasses);
+		this.list.setAttribute("role", "listbox");
 		this.input.parentNode.appendChild(this.list);
 	}
 
 	/**
-	 * Destroys the list to which the suggestions are appended.
+	 * Destroys the list to which suggestions are appended.
 	 * 
 	 * @returns {void}
 	 */
@@ -455,6 +480,10 @@ class Autocomplete {
 		this.input.setAttribute("autocomplete", "off");
 		this.input.setAttribute("autocorrect", "off");
 		this.input.setAttribute("autocapitalize", "off");
+		this.input.setAttribute("aria-expanded", "false");
+		this.input.setAttribute("aria-controls", this.id);
+		this.input.setAttribute("role", "combobox");
+		this.input.setAttribute("aria-autocomplete", "both");
 	}
 
 	/**
@@ -466,6 +495,10 @@ class Autocomplete {
 		this.input.removeAttribute("autocomplete");
 		this.input.removeAttribute("autocorrect");
 		this.input.removeAttribute("autocapitalize");
+		this.input.removeAttribute("aria-expanded");
+		this.input.removeAttribute("aria-controls");
+		this.input.removeAttribute("role");
+		this.input.removeAttribute("aria-autocomplete");
 	}
 
 	/**
@@ -481,6 +514,7 @@ class Autocomplete {
 		this.input.addEventListener("blur", this);
 		this.input.addEventListener("input", this);
 		this.input.addEventListener("keydown", this);
+		this.input.addEventListener("keyup", this);
 	}
 
 	/**
@@ -496,6 +530,7 @@ class Autocomplete {
 		this.input.removeEventListener("blur", this);
 		this.input.removeEventListener("input", this);
 		this.input.removeEventListener("keydown", this);
+		this.input.removeEventListener("keyup", this);
 	}
 
 	/**
@@ -530,6 +565,11 @@ class Autocomplete {
 				if (event.key == "Enter" && this.highlightIndex !== null) {
 					event.preventDefault();
 					this.#selectHighlightedItem();
+				}
+				break;
+			case "keyup":
+				if (event.key == 'Escape') {
+					this.#hide();
 				}
 				break;
 		}

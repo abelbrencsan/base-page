@@ -8,7 +8,11 @@
 	<meta name="description" content="">
 	<meta name="keywords" content="">
 	<meta name="author" content="">
-	<link rel="stylesheet" href="assets/css/app.css">
+	<link rel="stylesheet" href="assets/css/app.css?v=1">
+	<link rel="icon" href="favicon.ico" sizes="32x32">
+	<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+	<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body class="no-js no-touch">
 <div class="app">
@@ -21,19 +25,22 @@
 		<div class="noscript">Please enable JavaScript in your browser!</div>
 	</noscript>
 
+	<!-- Alerts -->
+	<div class="alert-wrapper" data-alert-container></div>
+
 	<!-- Navbar -->
-	<header class="navbar" data-offset-nav>
+	<header class="navbar">
 		<div class="container">
 			<div class="navbar-wrapper">
 				<a href="#" class="navbar-logo">My Company</a>
 				<div class="navbar-menu">
-					<button type="button" data-offset-nav-trigger aria-label="Navigation" title="Navigation">
+					<button type="button" aria-label="Toggle navigation" title="Toggle navigation" popovertarget="navbar-nav" popvertargetaction="toggle">
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-menu"></use>
 						</svg>
 					</button>
 				</div>
-				<nav class="navbar-nav" data-offset-nav-element>
+				<nav id="navbar-nav" class="navbar-nav">
 					<ul class="navbar-nav-link-list">
 						<li>
 							<a href="#">Home</a>
@@ -73,12 +80,39 @@
 							<a href="#">Contact</a>
 						</li>
 					</ul>
-					<button type="button" class="navbar-nav-close" aria-label="Close navigation" title="Close navigation" data-offset-nav-close>
+					<button type="button" class="navbar-nav-close" aria-label="Close navigation" title="Close navigation" popovertarget="navbar-nav" popvertargetaction="close">
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-close"></use>
 						</svg>
 					</button>
 				</nav>
+				<ul class="navbar-account-list">
+					<li>
+						<button type="button" popovertarget="cart-side-panel" popovertargetaction="toggle" aria-label="Cart" title="Cart">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-cart"></use>
+							</svg>
+						</button>
+					</li>
+					<li data-navbar-subnav>
+						<button type="button" aria-label="Account" title="Account" data-navbar-subnav-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-person"></use>
+							</svg>
+						</button>
+						<ul data-navbar-subnav-element>
+							<li>
+								<a href="#">Edit profile</a>
+							</li>
+							<li>
+								<a href="#">Account settings</a>
+							</li>
+							<li>
+								<a href="#">Sign out</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</header>
@@ -90,20 +124,10 @@
 			<p>Nulla tempus lacus eget sodales venenatis metus</p>
 			<ul class="hero-button-list button-list button-list--group">
 				<li>
-					<a href="#" class="button button--primary" role="button">Simple</a>
+					<button type="button" class="button button--primary" data-dialog="dialog" data-dialog-source="#sample-dialog">Dialog</button>
 				</li>
 				<li>
-					<div class="button-subnav" data-button-subnav>
-						<button type="button" class="button button--secondary" data-button-subnav-trigger>Dropdown</button>
-						<ul data-button-subnav-element>
-							<li>
-								<a href="#">Download</a>
-							</li>
-							<li>
-								<button type="button">Contact Us</button>
-							</li>
-						</ul>
-					</div>
+					<button type="button" class="button button--secondary" popovertarget="demo-quickview" popovertargetaction="toggle">Quickview</button>
 				</li>
 			</ul>
 		</div>
@@ -629,16 +653,16 @@
 						</li>
 					</ul>
 				</div>
-				<ul class="glider-action-list button-list">
+				<ul class="glider-action-list button-list button-list--group">
 					<li>
-						<button type="button" class="button button--special button--icon" aria-label="Previous item" title="Previous item" data-glider-prev-trigger>
+						<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-glider-prev-trigger>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-chevron-back"></use>
 							</svg>
 						</button>
 					</li>
 					<li>
-						<button type="button" class="button button--special button--icon" aria-label="Next item" title="Next item" data-glider-next-trigger>
+						<button type="button" class="button button--icon" aria-label="Next item" title="Next item" data-glider-next-trigger>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-chevron-forward"></use>
 							</svg>
@@ -656,7 +680,7 @@
 			<div class="flex flex--gap">
 				<div class="flex-col flex-col--1of3 flex-col--small--full">
 					<div class="box">
-						<a href="./images/gallery/01.jpg" class="image image--fit" data-dialog="image">
+						<a href="./images/gallery/01.jpg" class="image image--fit" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="0">
 							<picture>
 								<img src="./images/gallery/01-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
@@ -670,7 +694,7 @@
 				</div>
 				<div class="flex-col flex-col--1of3 flex-col--small--full">
 					<div class="box">
-						<a href="./images/gallery/02.jpg" class="image image--fit" data-dialog="image">
+						<a href="./images/gallery/02.jpg" class="image image--fit" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="1">
 							<picture>
 								<img src="./images/gallery/02-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
@@ -684,7 +708,7 @@
 				</div>
 				<div class="flex-col flex-col--1of3 flex-col--small--full">
 					<div class="box">
-						<a href="./images/gallery/03.jpg" class="image image--fit" data-dialog="image">
+						<a href="./images/gallery/03.jpg" class="image image--fit" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="2">
 							<picture>
 								<img src="./images/gallery/03-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
@@ -793,16 +817,92 @@
 
 	<!-- Sample dialog -->
 	<dialog id="sample-dialog">
-		<h2 class="heading-block">What's included</h2>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
-		<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+		<h2 class="heading-block">Quisque in risus massa</h2>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque. In ut posuere leo. Morbi eleifend consequat quam, nec laoreet enim facilisis a. Quisque sed felis non arcu pretium vehicula. Vestibulum ut convallis nisi. Duis vel enim placerat urna faucibus pretium sit amet at risus. Pellentesque scelerisque sapien metus, molestie congue turpis sollicitudin sed. Mauris et nibh at dolor iaculis sagittis. Etiam ac feugiat ex. Ut sollicitudin nibh at rutrum tincidunt.</p>
+		<p>Phasellus vehicula nunc et tortor lobortis hendrerit. Quisque in risus massa. Donec eu ipsum at velit euismod dictum. Cras vel metus finibus mauris pretium scelerisque maximus a metus. Pellentesque risus ipsum, dictum sed enim eu, dignissim aliquet felis. Quisque ultrices ante lacus, vel rutrum quam iaculis ac. Fusce sed turpis nunc. Morbi sit amet condimentum nunc, at dapibus urna. Integer lobortis quam tortor, id lacinia enim tristique in. Nam eu lectus dolor. Aliquam nec nisl sit amet turpis aliquet commodo eu ut ligula. Nam sollicitudin tempus venenatis. Proin lectus nisi, ullamcorper vitae justo nec, faucibus sollicitudin justo.</p>
 	</dialog>
+
+	<!-- Sample slideshow -->
+	<dialog id="sample-slideshow" class="slideshow" data-slideshow>
+		<div class="slideshow-glider glider" data-slideshow-glider>
+			<div class="glider-viewport" data-slideshow-glider-viewport>
+				<ul class="glider-list glider-list--full" data-slideshow-glider-list>
+					<li>
+						<div class="glider-list-item" data-slideshow-glider-list-item>
+							<picture>
+								<img src="./images/gallery/01.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</div>
+					</li>
+					<li>
+						<div class="glider-list-item" data-slideshow-glider-list-item>
+							<picture>
+								<img src="./images/gallery/02.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</div>
+					</li>
+					<li>
+						<div class="glider-list-item" data-slideshow-glider-list-item>
+							<picture>
+								<img src="./images/gallery/03.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<ul class="glider-action-list button-list button-list--group">
+				<li>
+					<button type="button" class="button button--primary button--icon" aria-label="Previous photo" title="Previous photo" data-slideshow-glider-prev-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-chevron-back"></use>
+						</svg>
+					</button>
+				</li>
+				<li>
+					<button type="button" class="button button--primary button--icon" aria-label="Next photo" title="Next photo" data-slideshow-glider-next-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-chevron-forward"></use>
+						</svg>
+					</button>
+				</li>
+			</ul>
+		</div>
+	</dialog>
+
+	<!-- Demo quickview -->
+	<div id="demo-quickview" class="quickview" popover>
+		<div class="quickview-image image">
+			<picture>
+				<img src="./images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+			</picture>
+		</div>
+		<div class="quickview-text">
+			<h2>Lorem ipsum dolor</h2>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
+		</div>
+		<button type="button" class="quickview-close" popovertarget="demo-quickview" popovertargetaction="hide" title="Close" aria-label="Close">
+			<svg class="icon" aria-hidden="true">
+				<use xlink:href="#icon-close"></use>
+			</svg>
+		</button>
+	</div>
+
+	<!-- Cart side panel -->
+	<aside id="cart-side-panel" class="side-panel" popover>
+		<h2>My cart</h2>
+		<div class="side-panel-empty-state">
+			<svg class="icon" aria-hidden="true">
+				<use xlink:href="#icon-cart"></use>
+			</svg>
+			<span class="heading">Empty cart</span>
+			<p>Maiores quaerat exercitationem provident et tempora</p>
+		</div>
+		<button type="button" class="side-panel-close" popovertarget="cart-side-panel" popovertargetaction="hide" title="Close" aria-label="Close">
+			<svg class="icon" aria-hidden="true">
+				<use xlink:href="#icon-close"></use>
+			</svg>
+		</button>
+	</aside>
 
 	<!-- Scripts -->
 	<script type="module" src="assets/js/app.js"></script>

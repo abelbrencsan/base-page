@@ -151,9 +151,7 @@ class Glider {
 		}
 
 		// Initialize the glider
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.detectIsScrollable.call(this);
 		if (typeof(this.initCallback) == "function") this.initCallback();
@@ -165,6 +163,8 @@ class Glider {
 	 * @returns {void}
 	 */
 	destroy() {
+		this.wrapper.classList.remove(this.isScrollableClass);
+		this.wrapper.classList.remove(this.isScrollingClass);
 		this.#removeEvents();
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
@@ -172,10 +172,10 @@ class Glider {
 	/**
 	 * Retrieves the index of the currently active item in the glider.
 	 * 
-	 * @returns {number}
+	 * @returns {number|null}
 	 */
 	getActiveIndex() {
-		const offset = this.viewport.scrollLeft;
+		const offset = Math.floor(this.viewport.scrollLeft);
 		for (let i = 0; i < this.items.length; i++) {
 			if (this.items[i].offsetLeft >= offset) {
 				return i;
@@ -186,10 +186,10 @@ class Glider {
 	/**
 	 * Retrieves the last possible active index in the glider.
 	 * 
-	 * @returns {number}
+	 * @returns {number|null}
 	 */
 	getLastActiveIndex() {
-		const maxOffsetWidth = this.viewport.scrollWidth - this.viewport.offsetWidth - 1;
+		const maxOffsetWidth = this.viewport.scrollWidth - this.viewport.offsetWidth;
 		for (let i = 0; i < this.items.length; i++) {
 			if (this.items[i].offsetLeft >= maxOffsetWidth) {
 				return i;
@@ -200,10 +200,11 @@ class Glider {
 	/**
 	 * Retrieves the scroll position of the item at the specified index in the glider.
 	 * 
-	 * @param {number} index
+	 * @param {number|null} index
 	 * @returns {number}
 	 */
 	getPositionByIndex(index) {
+		if (index === null) return 0;
 		if (index < 0) {
 			index = 0;
 			if (this.hasRewind) {
@@ -341,6 +342,7 @@ class Glider {
 			case "scroll":
 				if (this.timeoutId === null) {
 					this.#isScrollStarted();
+
 				} else {
 					clearTimeout(this.timeoutId);
 				}

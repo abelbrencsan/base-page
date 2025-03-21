@@ -1,7 +1,6 @@
 /* Dialog component variables */
 dialog.dialog {
 	--dialog-animation: 300ms ease-in-out;
-	--dialog-backdrop-bg-color: var(--scheme-dark-bg-color);
 	--dialog-close-button-bg-color: var(--palette-secondary-bg-color);
 	--dialog-close-button-bg-hover-color: var(--palette-secondary-bg-hover-color);
 	--dialog-close-button-fg-color: var(--palette-secondary-fg-color);
@@ -40,13 +39,10 @@ dialog.dialog {
 			display: flex;
 			height: calc(var(--element-height) * 0.75);
 			justify-content: center;
+			padding: 0;
 			transition: background-color var(--dialog-transition);
 			user-select: none;
 			width: calc(var(--element-height) * 0.75);
-
-			&:before {
-				content: '✕';
-			}
 
 			body.no-touch &:hover, &:active {
 				background-color: var(--dialog-close-button-bg-hover-color);
@@ -64,8 +60,8 @@ dialog.dialog {
 	}
 
 	&::backdrop {
-		background-color: var(--dialog-backdrop-bg-color);
-		opacity: 0.95;
+		background-color: var(--dialog-backdrop-color);
+		backdrop-filter: blur(5px);
 	}
 
 	&.is-opened {
@@ -105,9 +101,10 @@ dialog.dialog {
 		display: flex;
 		height: auto;
 		justify-content: center;
-		max-width: 90%;
-		overflow: visible;
+		max-height: 100%;
+		max-width: 100%;
 		padding: 0;
+		width: 100%;
 		width: auto;
 
 		img {
@@ -115,8 +112,9 @@ dialog.dialog {
 			box-shadow: var(--bold-box-shadow);
 			display: block;
 			height: auto;
-			max-height: 100%;
-			max-width: 100%;
+			max-height: 90vh;
+			max-width: 90vw;
+			object-fit: contain;
 			width: auto;
 		}
 

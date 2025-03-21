@@ -1,3 +1,4 @@
+import { AlertManager } from "../js/alert-manager.js";
 import { Autocomplete } from "../js/autocomplete.js";
 import { CookieManager } from "../js/cookie-manager.js";
 import { Dialog } from "../js/dialog.js";
@@ -6,11 +7,11 @@ import { FocusTracker } from "../js/focus-tracker.js";
 import { Glider } from "../js/glider.js";
 import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
-import { Navbar } from "../js/navbar.js";
 import { Notice } from "../js/notice.js";
 import { RangeIndicator } from "../js/range-indicator.js";
 import { Reveal } from "../js/reveal.js";
 import { Router, Route } from "../js/router.js";
+import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { Tab } from "../js/tab.js";
 import { Validator } from "../js/validator.js";
 
@@ -45,13 +46,6 @@ class App {
 	cookieManager = new CookieManager();
 
 	/**
-	 * Navigation bar
-	 * 
-	 * @type {Navbar|null}
-	 */
-	navbar = null;
-
-	/**
 	 * Reveal to detect elements that are above, below, or in the viewport.
 	 * 
 	 * @type {Reveal}
@@ -65,6 +59,7 @@ class App {
 	 */
 	searchAutocomplete = new Autocomplete({
 		input: document.getElementById("query"),
+		id: "query-autcomplete",
 		getSuggestions: (term, callback) => {
 			const choices = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"];
 			let suggestions = [];
@@ -99,6 +94,16 @@ class App {
 	});
 
 	/**
+	 * Alert manager for the apllication.
+	 * 
+	 * @type {AlertManager}
+	 */
+	alertManager = new AlertManager({
+		container: document.querySelector("[data-alert-container]"),
+		closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>"
+	});
+
+	/**
 	 * List of gliders.
 	 * 
 	 * @type {Array<Glider>}
@@ -106,7 +111,14 @@ class App {
 	gliders = [];
 
 	/**
-	 * List of button subnavigations.
+	 * List of navigation bar sub-navigations.
+	 * 
+	 * @type {Array<Dropdown>}
+	 */
+	navbarSubnavs = [];
+
+	/**
+	 * List of button sub-navigations.
 	 * 
 	 * @type {Array<Dropdown>}
 	 */
@@ -125,6 +137,13 @@ class App {
 	 * @type {Array<Dialog>}
 	 */
 	dialogs = [];
+
+	/**
+	 * List of slideshows.
+	 * 
+	 * @type {Array<Slideshow>}
+	 */
+	slideshows = [];
 
 	/**
 	 * List of range indicators.
@@ -198,11 +217,12 @@ class App {
 		};
 		document.body.classList.remove("no-js");
 		window.addEventListener("touchstart", this);
-		this.#initNavbar();
 		this.#initGliders();
+		this.#initNavbarSubnavs();
 		this.#initButtonSubnavs();
 		this.#initLazyLoadDetectors();
 		this.#initDialogs();
+		this.#initSlideshows();
 		this.#initRangeIndicators();
 		this.#initValidators();
 		this.#initNotices();
@@ -210,15 +230,6 @@ class App {
 		this.#addElemsToReveal();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
-	}
-
-	/**
-	 * Initialize the navigation bar.
-	 * 
-	 * @returns {void}
-	 */
-	#initNavbar() {
-		this.navbar = new Navbar();
 	}
 
 	/**
@@ -240,7 +251,22 @@ class App {
 	}
 
 	/**
-	 * Initialize button subnavigations.
+	 * Initialize navigation bar sub-navigations.
+	 * 
+	 * @returns {void}
+	 */
+	#initNavbarSubnavs() {
+		let elems = document.querySelectorAll("[data-navbar-subnav]");
+		elems.forEach((elem) => {
+			this.navbarSubnavs.push(new Dropdown({
+				element: elem.querySelector("[data-navbar-subnav-element]"),
+				trigger: elem.querySelector("[data-navbar-subnav-trigger]")
+			}));
+		});
+	}
+
+	/**
+	 * Initialize button sub-navigations.
 	 * 
 	 * @returns {void}
 	 */
@@ -275,16 +301,26 @@ class App {
 	 */
 	#initDialogs() {
 		let elems = document.querySelectorAll("[data-dialog]");
-		let triggerElems = document.querySelectorAll("[data-dialog-trigger]");
 		elems.forEach((elem) => {
 			this.dialogs.push(new Dialog({
 				type: elem.getAttribute("data-dialog"),
-				source:elem.getAttribute("data-dialog-source") || elem.getAttribute("href"),
+				source: elem.getAttribute("data-dialog-source") || elem.getAttribute("href"),
 				triggers: [elem],
 				description: elem.getAttribute("data-dialog-description") || "",
-				customClasses: Dialog.parseCustomClasses(elem, "data-dialog-classes")
+				customClasses: Dialog.parseCustomClasses(elem, "data-dialog-classes"),
+				closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>"
 			}));
 		});
+		this.#addDialogAdditionalTriggers();
+	}
+
+	/**
+	 * Adds additional triggers to the dialogs.
+	 * 
+	 * @returns {void}
+	 */
+	#addDialogAdditionalTriggers() {
+		let triggerElems = document.querySelectorAll("[data-dialog-trigger]");
 		triggerElems.forEach((triggerElem) => {
 			this.dialogs.forEach((dialog) => {
 				if (dialog.source == triggerElem.getAttribute('data-dialog-trigger')) {
@@ -303,10 +339,34 @@ class App {
 		let elems = document.querySelectorAll("[data-slideshow]");
 		elems.forEach((elem) => {
 			this.slideshows.push(new Slideshow({
-				source:elem.getAttribute("data-slideshow"),
-				trigger: elem,
-				customClasses: Dialog.parseCustomClasses(elem, "data-slideshow-classes")
+				source: `#${elem.id}`,
+				closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>",
+				gliderWrapper: elem.querySelector("[data-slideshow-glider]"),
+				gliderViewport: elem.querySelector("[data-slideshow-glider-viewport]"),
+				gliderItems: elem.querySelectorAll("[data-slideshow-glider-list-item]"),
+				gliderPrevTrigger: elem.querySelector("[data-slideshow-glider-prev-trigger]"),
+				gliderNextTrigger: elem.querySelector("[data-slideshow-glider-next-trigger]")
 			}));
+		});
+		this.#addSlideshowAdditionalTriggers();
+	}
+
+	/**
+	 * Adds additional triggers to the sideshows.
+	 * 
+	 * @returns {void}
+	 */
+	#addSlideshowAdditionalTriggers() {
+		let triggerElems = document.querySelectorAll("[data-slideshow-trigger]");
+		triggerElems.forEach((triggerElem) => {
+			this.slideshows.forEach((slideshow) => {
+				if (slideshow.source == triggerElem.getAttribute('data-slideshow-trigger')) {
+					slideshow.addTrigger(new SlideshowTrigger({
+						elem: triggerElem,
+						index: parseInt(triggerElem.getAttribute("data-slideshow-trigger-index")) || 0
+					}));
+				}
+			});
 		});
 	}
 
@@ -347,6 +407,7 @@ class App {
 						formItem.classList.add("has-invalid-field");
 						formItem.classList.remove("has-valid-field");
 					}
+					
 				},
 				validCallback: (input) => {
 					let formItem = input.closest("div.form-item");
@@ -356,6 +417,9 @@ class App {
 						formItem.classList.add("has-valid-field");
 					}
 				},
+				hasInvalidCallback: (elems) => {
+					this.alertManager.addAlert("One or more fields are invalid!", "error");
+				}
 			}));
 		});
 	}
@@ -442,12 +506,14 @@ class App {
 	 * @returns {void}
 	 */
 	#switchNavbarType(mql) {
-		if (!this.navbar) return;
 		if (mql.media == App.breakpoints.medium) {
-			if (mql.matches) {
-				this.navbar.switchToOffsetNav();
-			} else {
-				this.navbar.switchToFullNav();
+			const navbarNav = document.getElementById('navbar-nav');
+			if (navbarNav) {
+				if (mql.matches) {
+					navbarNav.popover = "auto";
+				} else {
+					navbarNav.removeAttribute("popover");
+				}
 			}
 		}
 	}
@@ -460,8 +526,12 @@ class App {
 	 */
 	#onBreakpointChange(event) {
 		this.#switchNavbarType(event.target);
+		this.alertManager.updatePositions();
 		this.gliders.forEach((glider) => {
 			glider.detectIsScrollable();
+		});
+		this.slideshows.forEach((slideshow) => {
+			if (slideshow.glider) slideshow.glider.detectIsScrollable();
 		});
 		this.pages.forEach((page) => {
 			page.onBreakpointChange(event);

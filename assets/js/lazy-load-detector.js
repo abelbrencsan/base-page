@@ -68,9 +68,7 @@ class LazyLoadDetector {
 		}
 
 		// Initialize the lazy load detector
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		if (this.element.complete) {
 			this.#isLoaded();
 		} else {

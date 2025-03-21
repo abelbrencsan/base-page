@@ -8,21 +8,21 @@
 class Dialog {
 
 	/**
-	 * Represents the type of the dialog.
+	 * The type of the dialog.
 	 * 
 	 * @type {string}
 	 */
 	type;
 
 	/**
-	 * Represents the source of the dialog that is loaded.
+	 * The source of the dialog that is loaded.
 	 * 
 	 * @type {string}
 	 */
 	source;
 
 	/**
-	 * Represents an array of trigger elements that open the dialog on click.
+	 * List of trigger elements that open the dialog on click.
 	 * 
 	 * @type {Array<HTMLElement>}
 	 */
@@ -50,95 +50,102 @@ class Dialog {
 	isCloseable = true;
 
 	/**
-	 * Custom classes added to the dialog.
+	 * Custom classes to be added to the dialog.
 	 * 
 	 * @type {Array<string>}
 	 */
 	customClasses = [];
 
 	/**
-	 * The class added to the dialog.
+	 * The class that is added to the dialog.
 	 * 
 	 * @type {string}
 	 */
 	dialogClass = "dialog";
 
 	/**
-	 * The class added to the trigger.
+	 * The class that is added to the trigger.
 	 * 
 	 * @type {string}
 	 */
 	triggerClass = "dialog-trigger";
 
 	/**
-	 * The class added to the dialog when its type is image.
+	 * The class that is added to the dialog when its type is image.
 	 * 
 	 * @type {string}
 	 */
 	dialogImageClass = "dialog--image";
 
 	/**
-	 * The class added to the dialog when its type is video.
+	 * The class that is added to the dialog when its type is video.
 	 * 
 	 * @type {string}
 	 */
 	dialogVideoClass = "dialog--video";
 
 	/**
-	 * The class added to the dialog when its type is YouTube.
+	 * The class that is added to the dialog when its type is YouTube.
 	 * 
 	 * @type {string}
 	 */
 	dialogYouTubeClass = "dialog--youtube";
 
 	/**
-	 * The class added to the dialog when its type is iframe.
+	 * The class that is added to the dialog when its type is iframe.
 	 * 
 	 * @type {string}
 	 */
 	dialogIframeClass = "dialog--iframe";
 
 	/**
-	 * The class added to the dialog when its type is ajax.
+	 * The class that is added to the dialog when its type is ajax.
 	 * 
 	 * @type {string}
 	 */
 	dialogAjaxClass = "dialog--ajax";
 
 	/**
-	 * The class added to the close form.
+	 * The class that is added to the close form.
 	 * 
 	 * @type {string}
 	 */
 	closeFormClass = "dialog-close-form";
 
 	/**
-	 * The class added to the dialog after it is opened.
+	 * The class that is added to the dialog after it is opened.
 	 * 
 	 * @type {string}
 	 */
 	isOpenedClass = "is-opened";
 
 	/**
-	 * The class added to the trigger while the dialog is loading.
+	 * The class that is added to the trigger while the dialog is loading.
 	 * 
 	 * @type {string}
 	 */
 	isDialogLoadingClass = "is-dialog-loading";
 
 	/**
-	 * The class added to the dialog if it is closeable.
+	 * The class that is added to the dialog if it is closeable.
 	 * 
 	 * @type {string}
 	 */
 	isCloseableClass = "is-closeable";
 
 	/**
-	 * The label added to the close form.
+	 * The HTML content that is appended to the close button.
 	 * 
 	 * @type {string}
 	 */
-	closeFormLabel = "Close";
+	closeButtonHTML = "";
+
+	/**
+	 * The label that is added to the close button.
+	 * 
+	 * @type {string|null}
+	 */
+	closeButtonLabel = "Close";
 
 	/**
 	 * Callback function that is called after the dialog has been initialized.
@@ -190,14 +197,14 @@ class Dialog {
 	destroyCallback = null;
 
 	/**
-	 * The dialog element.
+	 * Represents the dialog element.
 	 * 
 	 * @type {HTMLDialogElement|null}
 	 */
 	dialog = null;
 
 	/**
-	 * Form element that handles closing the dialog manually.
+	 * Represents the form element used to manually close the dialog.
 	 * 
 	 * @type {HTMLFormElement|null}
 	 */
@@ -208,7 +215,7 @@ class Dialog {
 	 * 
 	 * @type {Array<string>}
 	 */
-	static dialogTypes = ["image", "video", "youtube", "iframe", "ajax", "dialog"];
+	static types = ["image", "video", "youtube", "iframe", "ajax", "dialog"];
 
 	/**
 	 * The currently opened dialog instance.
@@ -239,7 +246,8 @@ class Dialog {
 	 * @param {string} options.isOpenedClass
 	 * @param {string} options.isDialogLoadingClass
 	 * @param {string} options.isCloseableClass
-	 * @param {string} options.closeFormLabel
+	 * @param {string} options.closeButtonHTML
+	 * @param {string|null} options.closeButtonLabel
 	 * @param {function():void} options.initCallback
 	 * @param {function():void} options.beforeOpenCallback
 	 * @param {function():void} options.openCallback
@@ -258,7 +266,7 @@ class Dialog {
 		if (typeof options.source !== "string") {
 			throw "Dialog \"source\" option must be a string";
 		}
-		if (Dialog.dialogTypes.indexOf(options.type) === -1) {
+		if (Dialog.types.indexOf(options.type) === -1) {
 			throw "Dialog type is not supported";
 		}
 
@@ -270,9 +278,7 @@ class Dialog {
 		}
 
 		// Initialize the dialog
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.triggers.forEach((trigger) => {
 			trigger.classList.add(this.triggerClass);
 			trigger.addEventListener("click", this);
@@ -734,10 +740,13 @@ class Dialog {
 	#createCloseForm() {
 		if (!this.dialog) return;
 		let closeButton = document.createElement("button");
+		closeButton.innerHTML = this.closeButtonHTML;
+		if (this.closeButtonLabel) {
+			closeButton.setAttribute("aria-label", this.closeButtonLabel);
+			closeButton.setAttribute("title", this.closeButtonLabel);
+		}
 		this.closeForm = document.createElement("form");
 		this.closeForm.setAttribute("method", "dialog");
-		this.closeForm.setAttribute("aria-label", this.closeFormLabel);
-		this.closeForm.setAttribute("title", this.closeFormLabel);
 		this.closeForm.classList.add(this.closeFormClass);
 		this.closeForm.appendChild(closeButton);
 		this.dialog.appendChild(this.closeForm);

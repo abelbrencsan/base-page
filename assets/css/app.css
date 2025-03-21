@@ -15,6 +15,7 @@
 @import url("./typography/paragraph.css");
 
 /* Component imports */
+@import url("./components/alert.css");
 @import url("./components/autocomplete.css");
 @import url("./components/box.css");
 @import url("./components/button.css");
@@ -30,7 +31,10 @@
 @import url("./components/image.css");
 @import url("./components/layout.css");
 @import url("./components/notice-list.css");
+@import url("./components/quickview.css");
 @import url("./components/section.css");
+@import url("./components/side-panel.css");
+@import url("./components/slideshow.css");
 @import url("./components/step-list.css");
 @import url("./components/tab.css");
 @import url("./components/table.css");

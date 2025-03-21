@@ -1,0 +1,82 @@
+/* Alert component variables */
+div.alert[popover] {	
+	--alert-bg-color: var(--link-color);
+	--alert-fg-color: var(--bg-color);
+	--alert-transition: var(--transition);
+}
+
+/* Alert component prototype */
+div.alert[popover]:popover-open {
+	align-items: center;
+	background-color: var(--alert-bg-color);
+	border-radius: var(--border-radius);
+	border: none;
+	bottom: var(--grid-gap);
+	box-shadow: var(--bold-box-shadow);
+	color: var(--alert-fg-color);
+	display: flex;
+	justify-content: space-between;
+	left: auto;
+	padding: calc(var(--box-padding) * 0.5) calc(var(--box-padding) - 12px) calc(var(--box-padding) * 0.5) var(--box-padding);
+	position: fixed;
+	right: var(--grid-gap);
+	top: auto;
+	transform: translate3d(3rem, 0, 0);
+	transition: transform var(--alert-transition);
+	width: 20rem;
+
+	p {
+		margin-bottom: 0;
+	}
+
+	button {
+		align-items: center;
+		background-color: transparent;
+		border: none;
+		color: color-mix(in srgb, var(--alert-fg-color), var(--alert-bg-color));
+		cursor: pointer;
+		display: flex;
+		flex: 0 1 auto;
+		height: 2rem;
+		justify-content: center;
+		margin-left: calc(var(--grid-gap) * 0.5);
+		padding: 0;
+		width: 2rem;
+
+		body.no-touch &:hover, &.keyboard-focus:focus {
+			color: var(--alert-fg-color);
+		}
+	}
+
+	@media (max-width: 32em) {
+		right: 5%;
+		width: 90%;
+	}
+}
+
+/* Alert component extensions */
+div.alert[popover] {
+
+	&.alert--success {
+		--alert-bg-color: var(--success-bg-color);
+		--alert-fg-color: var(--success-fg-color);
+	}
+
+	&.alert--warning {
+		--alert-bg-color: var(--warning-bg-color);
+		--alert-fg-color: var(--warning-fg-color);
+	}
+
+	&.alert--error {
+		--alert-bg-color: var(--error-bg-color);
+		--alert-fg-color: var(--error-fg-color);
+	}
+}
+
+/* Alert wrapper component prototype */
+div.alert-wrapper {
+}
+
+/* Alert wrapper component extensions */
+div.alert-wrapper {
+}

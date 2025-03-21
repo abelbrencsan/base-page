@@ -89,9 +89,7 @@ class RangeIndicator {
 		}
 
 		// Initialize the range indicator
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#initialInnerHTML = this.indicator.innerHTML;
 		this.#addEvents();
 		this.updateIndicator();

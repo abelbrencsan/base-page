@@ -54,9 +54,7 @@ class FocusTracker {
 		}
 
 		// Initialize the focus tracker
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}

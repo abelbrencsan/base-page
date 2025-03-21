@@ -86,6 +86,13 @@ class Validator {
 	validCallback = null;
 
 	/**
+	 * Callback function that is called when all input fields are validated and one or more of them are invalid.
+	 * 
+	 * @type {function(Array<Element>):void|null}
+	 */
+	hasInvalidCallback = null;
+
+	/**
 	 * Callback function that is called after the validator has been destroyed.
 	 * 
 	 * @type {function():void|null}
@@ -104,6 +111,7 @@ class Validator {
 	 * @param {function():void} options.initCallback
 	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void} options.invalidCallback
 	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void} options.validCallback
+	 * @param {function(function(Array<Element>):void} options.hasInvalidCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {Validator}
 	 */
@@ -122,9 +130,7 @@ class Validator {
 		}
 
 		// Initialize the validator
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.form.setAttribute("novalidate", "novalidate");
 		if (typeof(this.initCallback) == "function") this.initCallback();
@@ -169,6 +175,7 @@ class Validator {
 		});
 		if (invalidInputs.length) {
 			invalidInputs[0].focus();
+			if (typeof(this.hasInvalidCallback) == "function") this.hasInvalidCallback(invalidInputs);
 		}
 		return !invalidInputs.length;
 	}

@@ -85,7 +85,7 @@ class Dropdown {
 	isOpened = false;
 
 	/**
-	 * All opened dropdown items.
+	 * List of opened dropdown items.
 	 * 
 	 * @type {Array<Dropdown>}
 	 */
@@ -132,7 +132,11 @@ class Dropdown {
 		}
 
 		// Initialize the dropdown
-		this.#init();
+		this.handleEvent = (event) => this.#handleEvents(event);
+		this.#addEvents();
+		this.#setClosedAttributes();
+		if (typeof(this.initCallback) == "function") this.initCallback();
+		Dropdown.itemCount++;
 	}
 
 	/**
@@ -182,25 +186,11 @@ class Dropdown {
 	 * @returns {void}
 	 */
 	destroy() {
+		this.close();
 		this.#removeAttributes();
 		this.#removeEvents();
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 		Dropdown.itemCount--;
-	}
-
-	/**
-	 * Initializes the dropdown.
-	 * 
-	 * @returns {void}
-	 */
-	#init() {
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
-		this.#addEvents();
-		this.#setClosedAttributes();
-		if (typeof(this.initCallback) == "function") this.initCallback();
-		Dropdown.itemCount++;
 	}
 
 	/**

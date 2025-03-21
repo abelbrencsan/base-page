@@ -79,9 +79,7 @@ class Notice {
 		}
 
 		// Initialize the notice
-		this.handleEvent = (event) => {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}

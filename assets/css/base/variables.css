@@ -68,6 +68,7 @@
 	--box-shadow: 0 0 4px rgba(0, 0, 0, 0.075);
 
 	/* Transitions */
+	--toggle-transition: 300ms ease;
 	--transition-duration: 200ms;
 	--transition: var(--transition-duration) ease;
 
@@ -81,6 +82,8 @@
 	--fg-light-color: #1a2a42;
 	--focus-color: #fba026;
 	--link-color: #0076ad;
+	--dialog-backdrop-color: rgba(10, 16, 25, 0.9);
+	--popover-backdrop-color: rgba(227, 233, 244, 0.5);
 
 	/* State colors */
 	--error-bg-color: #f8d2d6;
@@ -109,11 +112,13 @@
 	--palette-secondary-bg-hover-color: #243b5b;
 	--palette-secondary-fg-color: #ffffff;
 
+	/* Variables on extra large breakpoint */
+	@media (min-width: 150em) {
+		--base-font-size: 20px;
+	}
+
 	/* Variables on medium breakpoint */
 	@media (max-width: 62em) {
-
-		/* Size variables */
-		--navbar-height: 3rem;
 
 		/* Font size variables */
 		--base-font-size: 17px;

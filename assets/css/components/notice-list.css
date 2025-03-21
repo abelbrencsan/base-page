@@ -18,7 +18,7 @@ ul.notice-list {
 		justify-content: space-between;
 		margin-bottom: var(--block-margin);
 		opacity: 1;
-		padding: calc(var(--box-padding) * 0.5) var(--box-padding);
+		padding: calc(var(--box-padding) * 0.5) calc(var(--box-padding) - 12px) calc(var(--box-padding) * 0.5) var(--box-padding);
 		transform: translate3d(0, 0, 0);
 		transition: opacity var(--notice-list-transition), transform var(--notice-list-transition);
 
@@ -29,19 +29,19 @@ ul.notice-list {
 		button {
 			align-items: center;
 			background-color: transparent;
-			border-radius: 50%;
 			border: none;
-			color: inherit;
+			color: color-mix(in srgb, var(--fg-color), var(--border-bg-color));
 			cursor: pointer;
 			display: flex;
 			flex: 0 1 auto;
+			height: 2rem;
 			justify-content: center;
 			margin-left: calc(var(--grid-gap) * 0.5);
-			opacity: 0.6;
-			padding: 0.25rem;
+			padding: 0;
+			width: 2rem;
 
 			body.no-touch &:hover {
-				opacity: 1;
+				color: var(--fg-color);
 			}
 		}
 

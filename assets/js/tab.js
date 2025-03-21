@@ -102,9 +102,7 @@ class Tab {
 		}
 
 		// Initialize the tab
-		this.handleEvent = (event) => {
-			this.#handleEvents(event);
-		};
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.select(this.index);
 		this.wrapper.classList.add(this.isInitializedClass);
