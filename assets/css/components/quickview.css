@@ -1,3 +1,9 @@
+/*!
+ * Quickview CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Quickview component variables */
 div.quickview[popover] {
 	--quickview-close-button-bg-color: var(--palette-secondary-bg-color);

@@ -1,3 +1,9 @@
+/*!
+ * Authentication CSS singleton
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Authentication singleton */
 main.authentication {
 	align-items: center;
@@ -5,6 +11,10 @@ main.authentication {
 	display: flex;
 	min-height: 100vh;
 	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
+
+	div.container {
+		max-width: calc(var(--container-width) * 0.5);
+	}
 
 	header.header {
 		margin-bottom: calc(var(--element-margin) * 0.5);

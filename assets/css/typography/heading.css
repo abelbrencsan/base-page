@@ -1,3 +1,9 @@
+/*!
+ * Heading CSS typography
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Heading typography */
 h1, h2, h3, h4, h5, h6, .heading {
 	color: var(--fg-bold-color);

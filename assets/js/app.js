@@ -1,6 +1,5 @@
 import { AlertManager } from "../js/alert-manager.js";
 import { Autocomplete } from "../js/autocomplete.js";
-import { CookieManager } from "../js/cookie-manager.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
 import { FocusTracker } from "../js/focus-tracker.js";
@@ -37,13 +36,6 @@ class App {
 	 * @type {IconManager}
 	 */
 	iconManager = new IconManager();
-
-	/**
-	 * Cookie manager for the apllication.
-	 * 
-	 * @type {CookieManager}
-	 */
-	cookieManager = new CookieManager();
 
 	/**
 	 * Reveal to detect elements that are above, below, or in the viewport.
@@ -186,8 +178,8 @@ class App {
 	 * @param {Object} breakpoints
 	 * @param {string} breakpoints.large - The breakpoint for large devices.
 	 * @param {string} breakpoints.medium - The breakpoint for medium devices.
-	 * @param {string} breakpoints.small - The breakpoint for small devices
-	 * @param {string} breakpoints.xsmall - The breakpoint for xsmall devices
+	 * @param {string} breakpoints.small - The breakpoint for small devices.
+	 * @param {string} breakpoints.xsmall - The breakpoint for xsmall devices.
 	 */
 	static breakpoints = {
 		large: "(max-width: 82em)",
@@ -475,10 +467,10 @@ class App {
 	#detectBreakpointChange() {
 		Object.entries(App.breakpoints).forEach(([, query]) => {
 			let mql = window.matchMedia(query);
+			this.#switchNavbarType(mql);
 			mql.addEventListener("change", (event) => {
 				this.#onBreakpointChange(event);
 			});
-			this.#switchNavbarType(mql);
 		});
 	}
 
@@ -493,9 +485,11 @@ class App {
 		}
 		window.addEventListener("offline", () => {
 			document.body.classList.add("is-offline");
+			this.alertManager.addAlert("You are offline!", "error");
 		});
 		window.addEventListener("online", () => {
 			document.body.classList.remove("is-offline");
+			this.alertManager.addAlert("You are online!", "success");
 		});
 	}
 

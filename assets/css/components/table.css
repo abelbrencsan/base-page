@@ -1,3 +1,9 @@
+/*!
+ * Table CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Table component prototype */
 table.table {
 	border-collapse: collapse;

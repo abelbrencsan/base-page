@@ -1,0 +1,75 @@
+/*!
+ * Feature CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Feature component variables */
+div.feature {
+	--feature-offset: -3rem;
+}
+
+/* Feature component extensions */
+div.feature {
+	align-items: center;
+	display: grid;
+	grid-gap: calc(var(--grid-gap) * 2);
+	grid-template-areas: "image text";
+	grid-template-columns: repeat(2, 1fr);
+	margin-bottom: var(--element-margin);
+
+	div.feature-image.image, a.feature-image.image {
+		grid-area: image;
+		margin-bottom: 0;
+
+		img, canvas {
+			width: 100%;
+		}
+	}
+
+	div.feature-text {
+		grid-area: text;
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@media (max-width: 62em) {
+		grid-gap: normal;
+		grid-template-areas: "image" "text";
+		grid-template-columns: none;
+
+		div.feature-text {
+			background-color: var(--bg-color);
+			margin-top: var(--feature-offset);
+			padding: var(--box-padding) var(--box-padding) 0 0;
+			position: relative;
+			width: 90%;
+		}
+	}
+
+	@media (max-width: 32em) {
+
+		div.feature-text {
+			background-color: transparent;
+			margin-top: var(--grid-gap);
+			padding: 0;
+			width: 100%;
+		}
+	}
+}
+
+/* Feature component extensions */
+div.feature {
+
+	&.feature--reverse {
+		grid-template-areas: "text image";
+
+		@media (max-width: 62em) {
+			grid-template-areas: "image" "text";
+		}
+	}
+}

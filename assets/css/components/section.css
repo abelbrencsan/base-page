@@ -1,3 +1,9 @@
+/*!
+ * Section CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Section component */
 section.section, div.section {
 	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;

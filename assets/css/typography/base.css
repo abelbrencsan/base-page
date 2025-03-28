@@ -1,3 +1,9 @@
+/*!
+ * Base CSS typography
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Base typography */
 html {
 	font-size: var(--base-font-size);

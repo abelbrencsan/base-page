@@ -1,3 +1,9 @@
+/*!
+ * Navbar CSS singleton
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Navbar singleton variables */
 header.navbar {
 	--navbar-offset-bg-color: var(--scheme-dark-bg-color);
@@ -37,6 +43,10 @@ header.navbar {
 		display: flex;
 		flex: 1;
 		justify-content: flex-end;
+
+		&[popover] {
+			display: none;
+		}
 	}
 
 	ul.navbar-nav-link-list, ul.navbar-account-list {
@@ -119,7 +129,7 @@ header.navbar {
 					background-color: var(--bg-color);
 					bottom: 100%;
 					clip-path: polygon(50% 0, 0 100%, 100% 100%);
-					content: '';
+					content: "";
 					height: var(--box-arrow);
 					position: absolute;
 					width: calc(var(--box-arrow) * 2);
@@ -142,7 +152,7 @@ header.navbar {
 			> a, > button {
 
 				&:not(:only-child):after {
-					content: '\02039';
+					content: "\02039";
 					display: inline-block;
 					margin-left: 0.25rem;
 					position: relative;
@@ -264,7 +274,7 @@ header.navbar {
 						padding: 0;
 
 						> a:before, > button:before {
-							content: '- ';
+							content: "- ";
 						}
 
 						&:first-child {

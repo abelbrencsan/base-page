@@ -1,3 +1,9 @@
+/*!
+ * Link CSS typography
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Link typography */
 a {
 	color: var(--link-color);

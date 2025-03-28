@@ -1,3 +1,9 @@
+/*!
+ * App-level CSS
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Base imports */
 @import url("./base/variables.css");
 @import url("./base/resets.css");
@@ -19,9 +25,11 @@
 @import url("./components/autocomplete.css");
 @import url("./components/box.css");
 @import url("./components/button.css");
+@import url("./components/column.css");
 @import url("./components/container.css");
 @import url("./components/details.css");
 @import url("./components/dialog.css");
+@import url("./components/feature.css");
 @import url("./components/flex.css");
 @import url("./components/form.css");
 @import url("./components/glider.css");

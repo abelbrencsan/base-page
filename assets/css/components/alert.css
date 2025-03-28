@@ -1,3 +1,9 @@
+/*!
+ * Alert CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Alert component variables */
 div.alert[popover] {	
 	--alert-bg-color: var(--link-color);

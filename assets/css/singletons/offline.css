@@ -1,3 +1,9 @@
+/*!
+ * Offline CSS singleton
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Offline singleton */
 div.offline {
 	background-color: var(--warning-bg-color);

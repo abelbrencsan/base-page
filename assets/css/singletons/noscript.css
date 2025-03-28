@@ -1,7 +1,43 @@
+/*!
+ * Noscript CSS singleton
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Noscript singleton variables */
+div.noscript {
+	--noscript-z-index: 1001;
+}
+
 /* Noscript singleton */
 div.noscript {
-	background-color: var(--error-bg-color);
-	color: var(--error-fg-color);
-	padding: calc(var(--box-padding) * 0.5) var(--box-padding);
+	align-items: center;
+	backdrop-filter: blur(5px);
+	background-color: var(--dialog-backdrop-color);
+	color: var(--bg-color);
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	left: 0;
+	position: fixed;
 	text-align: center;
+	top: 0;
+	width: 100%;
+	z-index: var(--noscript-z-index);
+
+	div.noscript-text {
+		max-width: var(--container-width);
+		width: 90%;
+
+		h1, h2, h3, h4, h5, h6, .heading {
+			color: var(--bg-color);
+			font-size: var(--heading-2-font-size);
+		}
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
 }

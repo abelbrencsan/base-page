@@ -1,3 +1,9 @@
+/*!
+ * Step list CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Step list component variables */
 ul.step-list {
 	--step-list-indicator-size: 2rem;
@@ -22,11 +28,13 @@ ul.step-list {
 		width: var(--step-list-item-width);
 
 		span.step-list-item-label {
+			-webkit-user-select: none;
 			display: block;
 			font-size: var(--small-font-size);
 			font-weight: var(--bold-font-weight);
 			margin-top: calc(var(--step-list-indicator-size) + (var(--grid-gap) * 0.5));
 			text-align: center;
+			user-select: none;
 		}
 
 		&:before, &:after {
@@ -35,7 +43,7 @@ ul.step-list {
 		}
 
 		&:before {
-			content: '';
+			content: "";
 			height: var(--step-list-line-width);
 			left: 50%;
 			margin-left: calc(var(--step-list-indicator-size) * 0.5);
@@ -78,7 +86,11 @@ ul.step-list {
 			}
 
 			&:after {
-				content: '✓';
+				background-image: url('data:image/svg+xml,<svg version="1.1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m413.55 112.19a16 16 0 0 0-9.5898 5.2754l-212.74 243.13-83.908-83.908a16 16 0 0 0-22.629 0 16 16 0 0 0 0 22.629l96 96a16.002 16.002 0 0 0 23.355-0.77929l224-256a16 16 0 0 0-1.5059-22.576 16 16 0 0 0-7.4316-3.6543 16 16 0 0 0-5.5547-0.11524z" fill="%23ffffff"/></svg>');
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+				background-size: calc(var(--step-list-indicator-size) * 0.65);
+				content: "";
 			}
 		}
 	}

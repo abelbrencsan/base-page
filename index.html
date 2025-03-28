@@ -8,21 +8,26 @@
 	<meta name="description" content="">
 	<meta name="keywords" content="">
 	<meta name="author" content="">
-	<link rel="stylesheet" href="assets/css/app.css?v=1">
-	<link rel="icon" href="favicon.ico" sizes="32x32">
-	<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
-	<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-	<link rel="manifest" href="manifest.webmanifest">
+	<link rel="stylesheet" href="/assets/css/app.css?v=1">
+	<link rel="icon" href="/favicon.ico" sizes="32x32">
+	<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+	<link rel="manifest" href="/manifest.webmanifest">
 </head>
 <body class="no-js no-touch">
 <div class="app">
 
-	<!-- Network is not available -->
+	<!-- Offline warning -->
 	<div class="offline">You are offline! Please connect to a network!</div>
 
 	<!-- JavaScript is disabled -->
 	<noscript>
-		<div class="noscript">Please enable JavaScript in your browser!</div>
+		<div class="noscript">
+			<div class="noscript-text">
+				<span class="heading">JavaScript is disabled in your browser!</span>
+				<p>To view this page properly, please enable JavaScript and reload the page.</p>
+			</div>
+		</div>
 	</noscript>
 
 	<!-- Alerts -->
@@ -135,7 +140,7 @@
 
 	<!-- Error page -->
 	<main class="error-page" hidden>
-		<div class="container container--half">
+		<div class="container">
 			<h1>404 - Page not found</h1>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
 		</div>
@@ -143,7 +148,7 @@
 
 	<!-- Authentication -->
 	<main class="authentication" hidden>
-		<div class="container container--half">
+		<div class="container">
 			<header class="header">
 				<h1>Sign in to website</h1>
 				<p>Dolores reiciendis molestias optio quos</p>
@@ -265,15 +270,93 @@
 
 			<!-- Section header -->
 			<header class="header header--section">
+				<h2>Feature</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Feature -->
+			<div class="feature">
+				<a href="https://www.youtube.com/watch?v=aqz-KE-bpKQ" class="feature-image image image--cover image--cover--video" data-dialog="youtube">
+					<picture>
+						<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+					</picture>
+				</a>
+				<div class="feature-text">
+					<h3>Lorem ipsum dolor</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien.</p>
+				</div>
+			</div>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Columns</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Columns -->
+			<ul class="column-list">
+				<li class="column-list-item">
+					<article class="column-item">
+						<a href="/images/gallery/01.jpg" class="column-item-image image image--cover" data-dialog="image">
+							<picture>
+								<img src="/images/gallery/01-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</a>
+						<div class="column-item-text">
+							<header class="header">
+								<h3>Lorem ipsum dolor</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</article>
+				</li>
+				<li class="column-list-item">
+					<article class="column-item">
+						<a href="/images/gallery/02.jpg" class="column-item-image image image--cover" data-dialog="image">
+							<picture>
+								<img src="/images/gallery/02-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</a>
+						<div class="column-item-text">
+							<header class="header">
+								<h3>Lorem ipsum dolor</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</article>
+				</li>
+				<li class="column-list-item">
+					<article class="column-item">
+						<a href="/images/gallery/03.jpg" class="column-item-image image image--cover" data-dialog="image">
+							<picture>
+								<img src="/images/gallery/03-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							</picture>
+						</a>
+						<div class="column-item-text">
+							<header class="header">
+								<h3>Lorem ipsum dolor</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</article>
+				</li>
+			</ul>
+
+			<!-- Section header -->
+			<header class="header header--section">
 				<h2>Tab</h2>
 				<p>Lorem ipsum dolor amet si</p>
 			</header>
 
+			<!-- Tab -->
 			<div class="tab" data-tab>
 				<div class="tab-triggers" role="tablist">
-					<button aria-controls="tab-1" role="tab" data-tab-trigger>First tab</button>
-					<button aria-controls="tab-2" role="tab" data-tab-trigger>Second tab</button>
-					<button aria-controls="tab-3" role="tab" data-tab-trigger>Third tab</button>
+					<button aria-controls="tab-1" role="tab" data-tab-trigger>Tab 1</button>
+					<button aria-controls="tab-2" role="tab" data-tab-trigger>Tab 2</button>
+					<button aria-controls="tab-3" role="tab" data-tab-trigger>Tab 3</button>
 				</div>
 				<div id="tab-1" class="tab-panel" role="tabpanel" data-tab-panel>
 					<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
@@ -293,15 +376,15 @@
 			</header>
 
 			<!-- Details -->
-			<details class="details" data-reveal>
+			<details class="details" name="demo-details">
 				<summary>Lorem ipsum dolor sit amet</summary>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus accumsan convallis. Proin et venenatis mi. Suspendisse varius mi enim, id semper erat sollicitudin id. Nullam auctor auctor sapien. Nam id justo nec nibh gravida suscipit. Mauris vel dignissim neque. Curabitur ultricies, tellus sit amet viverra tincidunt, velit est finibus odio, nec facilisis purus leo in odio. Integer finibus, neque sit amet accumsan condimentum, nisi tortor malesuada orci, nec condimentum purus nulla sit amet sem. </p>
 			</details>
-			<details class="details" data-reveal>
+			<details class="details" name="demo-details">
 				<summary>In non pulvinar nunc</summary>
 				<p>Aenean elementum eros faucibus leo posuere auctor. Donec quis ipsum auctor, faucibus diam nec, tempor nibh. Curabitur imperdiet vulputate facilisis. Curabitur risus mi, sodales sit amet tristique eu, rutrum vitae nisi. Aliquam fringilla a purus quis vehicula. In semper, ipsum a vulputate vehicula, risus neque mollis sapien, non vehicula arcu sapien vel tellus. Curabitur fermentum, turpis a viverra eleifend, justo felis consectetur ipsum, non auctor felis augue id augue. Duis justo diam, semper in ornare gravida, mollis ac elit. Ut scelerisque ipsum ut urna gravida laoreet. Vestibulum vitae nisi eu nibh varius interdum. Mauris id finibus odio. Pellentesque ultrices magna a nisl mattis, eu semper ipsum dapibus. </p>
 			</details>
-			<details class="details" data-reveal>
+			<details class="details" name="demo-details">
 				<summary>Vestibulum varius sagittis</summary>
 				<p>Vestibulum varius sagittis neque, nec volutpat ligula rhoncus at. Fusce rhoncus velit et orci molestie, vitae aliquet velit pulvinar. In hac habitasse platea dictumst. Donec pretium metus sit amet libero tristique, ac vestibulum ante porta. In vulputate nulla vel nibh rhoncus condimentum. Curabitur ipsum ipsum, dignissim non leo eget, pellentesque rutrum ipsum. Nam nec justo feugiat, laoreet leo vel, ornare nulla. Mauris consequat nulla id mi fringilla viverra. Aenean vel dolor vitae orci dapibus laoreet.</p>
 			</details>
@@ -677,12 +760,12 @@
 				<p>Lorem ipsum dolor amet si</p>
 			</header>
 
-			<div class="flex flex--gap">
-				<div class="flex-col flex-col--1of3 flex-col--small--full">
+			<div class="grid grid--gap">
+				<div class="grid-col grid-col--2 grid-col--small--6">
 					<div class="box">
-						<a href="./images/gallery/01.jpg" class="image image--fit" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="0">
+						<a href="/images/gallery/01.jpg" class="image image--fit image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="0">
 							<picture>
-								<img src="./images/gallery/01-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+								<img src="/images/gallery/01-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
 						</a>
 						<header class="header">
@@ -692,11 +775,11 @@
 						<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
 					</div>
 				</div>
-				<div class="flex-col flex-col--1of3 flex-col--small--full">
+				<div class="grid-col grid-col--2 grid-col--small--6">
 					<div class="box">
-						<a href="./images/gallery/02.jpg" class="image image--fit" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="1">
+						<a href="/images/gallery/02.jpg" class="image image--fit image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="1">
 							<picture>
-								<img src="./images/gallery/02-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+								<img src="/images/gallery/02-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
 						</a>
 						<header class="header">
@@ -706,11 +789,11 @@
 						<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
 					</div>
 				</div>
-				<div class="flex-col flex-col--1of3 flex-col--small--full">
+				<div class="grid-col grid-col--2 grid-col--small--6">
 					<div class="box">
-						<a href="./images/gallery/03.jpg" class="image image--fit" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="2">
+						<a href="/images/gallery/03.jpg" class="image image--fit image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="2">
 							<picture>
-								<img src="./images/gallery/03-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+								<img src="/images/gallery/03-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
 						</a>
 						<header class="header">
@@ -830,21 +913,21 @@
 					<li>
 						<div class="glider-list-item" data-slideshow-glider-list-item>
 							<picture>
-								<img src="./images/gallery/01.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+								<img src="/images/gallery/01.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
 						</div>
 					</li>
 					<li>
 						<div class="glider-list-item" data-slideshow-glider-list-item>
 							<picture>
-								<img src="./images/gallery/02.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+								<img src="/images/gallery/02.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
 						</div>
 					</li>
 					<li>
 						<div class="glider-list-item" data-slideshow-glider-list-item>
 							<picture>
-								<img src="./images/gallery/03.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+								<img src="/images/gallery/03.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
 						</div>
 					</li>
@@ -873,7 +956,7 @@
 	<div id="demo-quickview" class="quickview" popover>
 		<div class="quickview-image image">
 			<picture>
-				<img src="./images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+				<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 			</picture>
 		</div>
 		<div class="quickview-text">
@@ -905,11 +988,11 @@
 	</aside>
 
 	<!-- Scripts -->
-	<script type="module" src="assets/js/app.js"></script>
+	<script type="module" src="/assets/js/app.js"></script>
 	<script type="module">
 
-		import { IndexPage } from "./assets/js/page/index-page.js";
-		import { App } from "./assets/js/app.js";
+		import { IndexPage } from "/assets/js/page/index-page.js";
+		import { App } from "/assets/js/app.js";
 
 		// Initialize page and application
 		window.page = new IndexPage();

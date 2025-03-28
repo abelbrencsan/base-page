@@ -1,3 +1,9 @@
+/*!
+ * Hero CSS singleton
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Hero singleton */
 div.hero {
 	background-color: var(--border-bg-color);

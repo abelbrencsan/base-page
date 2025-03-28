@@ -1,3 +1,9 @@
+/*!
+ * Autocomplete CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Autocomplete component prototype */
 ul.autocomplete {
 	background-color: var(--bg-color);

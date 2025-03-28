@@ -1,3 +1,9 @@
+/*!
+ * Box CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Box component prototype */
 div.box {
 	background-color: var(--border-bg-color);

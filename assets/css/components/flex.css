@@ -1,3 +1,9 @@
+/*!
+ * Flex CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Flex component prototype */
 .flex {
 	display: flex;

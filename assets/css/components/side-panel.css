@@ -1,3 +1,9 @@
+/*!
+ * Side panel CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Side panel component variables */
 aside.side-panel[popover] {
 	--side-panel-toggle-transition: var(--toggle-transition);
@@ -78,7 +84,7 @@ aside.side-panel[popover]:popover-open {
 
 	&:before {
 		background-color: var(--border-color);
-		content: '';
+		content: "";
 		height: 1px;
 		left: 0;
 		position: absolute;

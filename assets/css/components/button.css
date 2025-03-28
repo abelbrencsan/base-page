@@ -1,3 +1,9 @@
+/*!
+ * Button CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Button component variables */
 a.button, button.button {	
 	--button-bg-color: color-mix(in srgb, var(--border-bg-color) 100%, var(--fg-color) 10%);
@@ -17,7 +23,7 @@ a.button, button.button {
 	font-weight: var(--bold-font-weight);
 	height: var(--element-height);
 	justify-content: center;
-	padding: 0 0.8em;
+	padding: 0 1.2em;
 	text-decoration: none;
 	transition: background-color var(--button-transition), opacity var(--button-transition);
 	white-space: nowrap;
@@ -202,7 +208,7 @@ div.button-subnav {
 			background-color: var(--bg-color);
 			bottom: 100%;
 			clip-path: polygon(50% 0, 0 100%, 100% 100%);
-			content: '';
+			content: "";
 			height: var(--box-arrow);
 			left: var(--grid-gap);
 			position: absolute;

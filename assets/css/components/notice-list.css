@@ -1,3 +1,9 @@
+/*!
+ * Notice list CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Notice list component prototype */
 ul.notice-list {
 	--notice-list-transition: 300ms ease;

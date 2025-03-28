@@ -1,3 +1,9 @@
+/*!
+ * Layout CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Layout component prototype */
 div.layout {
 	display: grid;

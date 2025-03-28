@@ -1,38 +1,11 @@
 /**
  * Cookie Manager
- * This class is designed to easily create, add, and remove cookies.
+ * This class is designed to easily set, get and remove cookies.
  * 
  * @author Abel Brencsan
  * @license MIT License
  */
 class CookieManager {
-
-	/**
-	 * Created cookie manager instance.
-	 * 
-	 * @type {CookieManager|null}
-	 */
-	static #instance = null;
-
-	/**
-	 * Creates a new instance of the cookie manager or returns an existing one.
-	 * 
-	 * @param {Object} options
-	 * @returns {CookieManager}
-	 */
-	constructor(options) {
-
-		// Handle singleton pattern
-		if (CookieManager.#instance) return CookieManager.#instance;
-		CookieManager.#instance = this;
-
-		// Set fields from options
-		if (typeof(options) == "object") {
-			Object.entries(options).forEach(([key, value]) => {
-				this[key] = value;
-			});
-		}
-	}
 
 	/**
 	 * Creates a new cookie with the specified name, value, and expiration time in minutes.
@@ -42,7 +15,7 @@ class CookieManager {
 	 * @param {number} minutes
 	 * @returns {void}
 	 */
-	create(name, value, minutes = 0) {
+	static set(name, value, minutes = 0) {
 		let expires = "";
 		if (minutes) {
 			let date = new Date();
@@ -58,7 +31,7 @@ class CookieManager {
 	 * @param {string} name
 	 * @returns {string}
 	 */
-	get(name) {
+	static get(name) {
 		let row = document.cookie.split("; ").find((row) => {
 			return row.startsWith(`${name}=`);
 		});
@@ -74,8 +47,8 @@ class CookieManager {
 	 * @param {string} name
 	 * @returns {void}
 	 */
-	remove(name) {
-		this.create(name, "", -1);
+	static remove(name) {
+		CookieManager.set(name, "", -1);
 	}
 }
 

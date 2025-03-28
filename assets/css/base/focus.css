@@ -1,3 +1,9 @@
+/*!
+ * CSS focus
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Focus */
 *:focus {
 	outline: 0;

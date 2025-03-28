@@ -1,6 +1,13 @@
+/*!
+ * Dialog CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Dialog component variables */
 dialog.dialog {
 	--dialog-animation: 300ms ease-in-out;
+	--dialog-close-button-transition: var(--transition);
 	--dialog-close-button-bg-color: var(--palette-secondary-bg-color);
 	--dialog-close-button-bg-hover-color: var(--palette-secondary-bg-hover-color);
 	--dialog-close-button-fg-color: var(--palette-secondary-fg-color);
@@ -21,12 +28,10 @@ dialog.dialog {
 	width: 90%;
 
 	form.dialog-close-form {
-		opacity: 0;
+		display: none;
 		position: absolute;
 		right: calc(var(--grid-gap) * 0.5);
 		top: calc(var(--grid-gap) * 0.5);
-		transition: opacity var(--dialog-transition), visibility var(--dialog-transition);
-		visibility: hidden;
 
 		> button {
 			-webkit-user-select: none;
@@ -57,19 +62,24 @@ dialog.dialog {
 
 	&[open] {
 		animation: dialog-show var(--dialog-animation);
-	}
 
-	&::backdrop {
-		background-color: var(--dialog-backdrop-color);
-		backdrop-filter: blur(5px);
+		form.dialog-close-form {
+			display: block;
+			opacity: 0;
+			transition: opacity var(--dialog-close-button-transition);
+		}
 	}
 
 	&.is-opened {
 
 		form.dialog-close-form {
 			opacity: 1;
-			visibility: visible;
 		}
+	}
+
+	&::backdrop {
+		backdrop-filter: blur(5px);
+		background-color: var(--dialog-backdrop-color);
 	}
 
 	&.is-closeable {
@@ -104,7 +114,6 @@ dialog.dialog {
 		max-height: 100%;
 		max-width: 100%;
 		padding: 0;
-		width: 100%;
 		width: auto;
 
 		img {
@@ -235,7 +244,7 @@ dialog.dialog {
 			animation: dialog-trigger-spinner var(--dialog-trigger-animation);
 			background-color: var(--bg-color);
 			border-radius: 50%;
-			content: '';
+			content: "";
 			height: 4rem;
 			left: 50%;
 			margin-left: -2rem;

@@ -1,3 +1,9 @@
+/*!
+ * Details CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Details component variables */
 details.details {
 	--details-transition: var(--transition);
@@ -22,7 +28,7 @@ details.details {
 		user-select: none;
 
 		&:after {
-			content: '+';
+			content: "+";
 			display: block;
 			font-size: 1.5rem;
 			position: absolute;
@@ -54,7 +60,7 @@ details.details {
 		margin-bottom: calc(var(--element-margin) * 0.75);
 
 		&:after {
-			content: '-';
+			content: "-";
 		}
 
 		~ * {

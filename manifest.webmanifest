@@ -1,0 +1,30 @@
+{
+	"name": "Base Page",
+	"short_name": "BP",
+	"description": "Lorem ipsum dolor sit amet consectetur adipiscing",
+	"lang": "en",
+	"id": ".",
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#0076ad",
+	"background_color": "#f5f7fb",
+	"orientation": "any",
+	"icons": [
+		{
+			"src": "/assets/icons/icon-192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/assets/icons/icon-512-maskable.png",
+			"type": "image/png",
+			"sizes": "512x512",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/assets/icons/icon-512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	]
+}

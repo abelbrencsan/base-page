@@ -1,3 +1,9 @@
+/*!
+ * Error page CSS singleton
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Error page singleton */
 main.error-page {
 	align-items: center;
@@ -6,4 +12,8 @@ main.error-page {
 	min-height: calc(100vh - var(--navbar-height));
 	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
 	text-align: center;
+
+	div.container {
+		max-width: calc(var(--container-width) * 0.5);
+	}
 }

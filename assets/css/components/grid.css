@@ -1,3 +1,9 @@
+/*!
+ * Grid CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Grid component prototype */
 .grid {
 	display: grid;

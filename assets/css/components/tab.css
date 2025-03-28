@@ -1,3 +1,9 @@
+/*!
+ * Tab CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Tab component prototype */
 div.tab {
 	margin-bottom: var(--element-margin);
@@ -53,17 +59,6 @@ div.tab {
 
 		> div.tab-panel:nth-of-type(2) {
 			display: block;
-		}
-	}
-
-	@media (max-width: 32em) {
-
-		> div.tab-triggers {
-
-			> button {
-				flex: 0 0 100%;
-				max-width: 100%;
-			}
 		}
 	}
 }

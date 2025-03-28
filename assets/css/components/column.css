@@ -1,0 +1,79 @@
+/*!
+ * Column CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Column list component prototype */
+ul.column-list {
+	display: grid;
+	grid-gap: var(--grid-gap);
+	grid-template-columns: repeat(3, 1fr);
+	list-style: none;
+	padding-left: 0;
+
+	> li.column-list-item {
+		padding-left: 0;
+	}
+
+	&.column-list--wide {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	&.column-list--narrow {
+		grid-template-columns: repeat(4, 1fr);
+	}
+
+	@media (max-width: 62em) {
+		grid-template-columns: none;
+
+		&.column-list--wide {
+			grid-template-columns: none;
+		}
+
+		&.column-list--narrow {
+			grid-template-columns: none;
+		}
+	}
+}
+
+/* Column list component extensions */
+ul.column-list {
+}
+
+/* Column item component extensions */
+article.column-item {
+	align-items: start;
+	display: grid;
+	grid-gap: var(--grid-gap);
+	grid-template-areas: "image" "text";
+
+	div.column-item-image.image, a.column-item-image.image {
+		grid-area: image;
+		margin-bottom: 0;
+
+		img, canvas {
+			width: 100%;
+		}
+	}
+
+	div.column-item-text {
+		grid-area: text;
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@media (max-width: 62em) {
+		grid-template-areas: "image text";
+		grid-template-columns: 1fr 2fr;
+	}
+
+	@media (max-width: 32em) {
+		grid-template-areas: "image" "text";
+		grid-template-columns: none;
+	}
+}

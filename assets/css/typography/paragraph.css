@@ -1,3 +1,9 @@
+/*!
+ * Paragraph CSS typography
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Paragraph typography */
 p {
 	margin: 0 0 var(--element-margin) 0;

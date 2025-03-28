@@ -1,6 +1,13 @@
+/*!
+ * Image CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
 /* Image component variables */
 div.image, a.image {
 	--image-lazy-load-transition: 1000ms ease;
+	--image-cover-transition: var(--transition);
 }
 
 /* Image component prototype */
@@ -56,4 +63,53 @@ div.image, a.image {
 
 /* Image component extensions */
 div.image, a.image {
+
+	&.image--cover {
+		position: relative;
+
+		&:before {
+			background-color: var(--bg-color);
+			content: "";
+			display: block;
+			height: 100%;
+			left: 0;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+			transition: opacity var(--image-cover-transition);
+			width: 100%;
+			z-index: 1;
+		}
+
+		body.no-touch &:hover, &:active {
+
+			&:before {
+				opacity: 0.1;
+			}
+		}
+
+		&.image--cover--video {
+
+			&:after {
+				background-image: url("data:image/svg+xml,<svg version=\"1.1\" viewBox=\"0 0 512 512\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m256 48c-114.69 0-208 93.31-208 208s93.31 208 208 208 208-93.31 208-208-93.31-208-208-208zm-45.105 128.03a10.78 10.78 0 0 1 5.4258 1.5332l114.45 69.139a10.89 10.89 0 0 1 0 18.602l-114.45 69.139a10.78 10.78 0 0 1-16.32-9.3086v-138.26a10.78 10.78 0 0 1 10.895-10.842z\" fill=\"%23ffffff\"/></svg>");
+				background-size: contain;
+				content: "";
+				height: 48px;
+				left: 50%;
+				position: absolute;
+				top: 50%;
+				transform-origin: 50% 50%;
+				transform: translate3d(-50%, -50%, 0);
+				transition: transform var(--image-cover-transition);
+				width: 48px;
+			}
+
+			body.no-touch &:hover, &:active {
+
+				&:after {
+					transform: translate3d(-50%, -50%, 0) scale3d(1.1, 1.1, 1.0);
+				}
+			}
+		}
+	}
 }
