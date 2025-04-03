@@ -58,7 +58,7 @@ class App {
 			term = term.toLowerCase();
 			choices.forEach((choice) => {
 				if (~choice.toLowerCase().indexOf(term)) {
-					 suggestions.push(choice);
+					suggestions.push(choice);
 				}
 			});
 			callback(suggestions);

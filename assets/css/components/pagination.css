@@ -1,0 +1,77 @@
+/*!
+ * Pagination CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Pagination component variables */
+ul.pagination {
+	--pagination-bg-hover-color: color-mix(in srgb, var(--border-bg-color) 100%, var(--fg-color) 10%);
+	--pagination-transition: var(--transition);
+}
+
+/* Pagination component prototype */
+ul.pagination {
+	align-items: center;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	list-style: none;
+	padding-left: 0;
+
+	> li {
+		padding-left: calc(var(--grid-gap) * 0.125);
+
+		> a, > span {
+			-webkit-user-select: none;
+			align-items: center;
+			border-radius: var(--border-radius);
+			display: inline-flex;
+			font-size: var(--small-font-size);
+			font-weight: var(--bold-font-weight);
+			height: var(--element-height);
+			justify-content: center;
+			user-select: none;
+			width: var(--element-height);
+		}
+
+		> a {
+			color: inherit;
+			text-decoration: none;
+			transition: background-color var(--pagination-transition);
+
+			svg.icon {
+				height: 16px;
+				width: 16px;
+			}
+
+			body.no-touch &:hover, &:active {
+				background-color: var(--pagination-bg-hover-color);
+			}
+
+			&.is-active {
+				background-color: var(--link-color);
+				color: var(--bg-color);
+
+				body.no-touch &:hover, &:active {
+					background-color: var(--link-color);
+				}
+			}
+		}
+
+		> span {
+
+			&:before {
+				content: '⋯';
+			}
+		}
+
+		&:first-child {
+			padding-left: 0;
+		}
+	}
+}
+
+/* Pagination component extensions */
+ul.pagination {
+}
