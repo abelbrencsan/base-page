@@ -6,8 +6,8 @@
 
 /* Button component variables */
 a.button, button.button {	
-	--button-bg-color: color-mix(in srgb, var(--border-bg-color) 100%, var(--fg-color) 10%);
-	--button-bg-hover-color: color-mix(in srgb, var(--border-bg-color) 100%, var(--fg-color) 20%);
+	--button-bg-color: var(--border-color);
+	--button-bg-hover-color: var(--border-hover-color);
 	--button-fg-color: var(--fg-color);
 	--button-transition: var(--transition);
 }

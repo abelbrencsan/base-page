@@ -7,8 +7,8 @@
 /* Step list component variables */
 ul.step-list {
 	--step-list-indicator-size: 2rem;
-	--step-list-line-width: 0.25rem;
 	--step-list-item-width: 8rem;
+	--step-list-line-width: 0.25rem;
 }
 
 /* Step list component prototype */
@@ -38,7 +38,7 @@ ul.step-list {
 		}
 
 		&:before, &:after {
-			background-color: var(--border-bg-color);
+			background-color: var(--border-color);
 			position: absolute;
 		}
 

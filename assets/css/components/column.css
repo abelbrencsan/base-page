@@ -39,6 +39,50 @@ ul.column-list {
 
 /* Column list component extensions */
 ul.column-list {
+
+	&.column-list--reveal {
+
+		> li.column-list-item {
+			
+			article.column-item {
+				animation-name: column-list-reveal;
+				animation-timeline: view(block 90% 0%);
+			}
+		}
+
+		@media (max-width: 62em) {
+
+			> li.column-list-item {
+			
+				article.column-item {
+					animation: none;
+				}
+			}
+		}
+
+		@media (prefers-reduced-motion) {
+
+			> li.column-list-item {
+			
+				article.column-item {
+					animation: none;
+				}
+			}
+		}
+	}
+}
+
+/* Column list component animations */
+@keyframes column-list-reveal {
+	0% {
+		opacity: 0;
+		transform: scale3d(0.925, 0.925, 1);
+	}
+
+	100% {
+		opacity: 1;
+		transform: scale3d(1, 1, 1);
+	}
 }
 
 /* Column item component extensions */

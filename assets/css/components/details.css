@@ -65,6 +65,10 @@ details.details {
 
 		~ * {
 			animation: details-sweep var(--details-transition);
+
+			@media (prefers-reduced-motion) {
+				animation: none;
+			}
 		}
 	}
 }

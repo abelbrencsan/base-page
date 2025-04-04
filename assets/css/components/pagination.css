@@ -6,7 +6,7 @@
 
 /* Pagination component variables */
 ul.pagination {
-	--pagination-bg-hover-color: color-mix(in srgb, var(--border-bg-color) 100%, var(--fg-color) 10%);
+	--pagination-button-bg-hover-color: var(--border-hover-color);
 	--pagination-transition: var(--transition);
 }
 
@@ -46,7 +46,7 @@ ul.pagination {
 			}
 
 			body.no-touch &:hover, &:active {
-				background-color: var(--pagination-bg-hover-color);
+				background-color: var(--pagination-button-bg-hover-color);
 			}
 
 			&.is-active {

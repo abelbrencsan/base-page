@@ -140,6 +140,10 @@ header.navbar {
 					transform: translate3d(0, 0, 0);
 					transition: visibility var(--navbar-subnav-transition), transform var(--navbar-subnav-transition), opacity var(--navbar-subnav-transition);
 					visibility: visible;
+
+					@media (prefers-reduced-motion) {
+						transition: none;
+					}
 				}
 			}
 		}
@@ -223,6 +227,10 @@ header.navbar {
 					background-color: var(--popover-backdrop-color);
 				}
 
+				@media (prefers-reduced-motion) {
+					transition: none;
+				}
+
 				@starting-style {
 					opacity: 0;
 					transform: translate3d(3rem, 0, 0);
@@ -296,6 +304,10 @@ header.navbar {
 
 						> li {
 							animation: navbar-subnav-sweep var(--navbar-subnav-transition);
+
+							@media (prefers-reduced-motion) {
+								animation: none;
+							}
 						}
 					}
 				}

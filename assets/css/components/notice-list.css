@@ -59,6 +59,14 @@ ul.notice-list {
 		&:last-child {
 			margin-bottom: calc(var(--element-margin) * 0.5);
 		}
+
+		@media (prefers-reduced-motion) {
+			transition: opacity var(--notice-list-transition);
+
+			&.is-dismissing {
+				transform: none;
+			}
+		}
 	}
 }
 

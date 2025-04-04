@@ -92,6 +92,10 @@ aside.side-panel[popover]:popover-open {
 		width: 100%;
 	}
 
+	@media (prefers-reduced-motion) {
+		transition: none;
+	}
+
 	@starting-style {
 		opacity: 0;
 		transform: translate3d(3rem, 0, 0);

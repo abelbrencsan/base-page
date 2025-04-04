@@ -8,7 +8,6 @@ import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
 import { Notice } from "../js/notice.js";
 import { RangeIndicator } from "../js/range-indicator.js";
-import { Reveal } from "../js/reveal.js";
 import { Router, Route } from "../js/router.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { Tab } from "../js/tab.js";
@@ -36,13 +35,6 @@ class App {
 	 * @type {IconManager}
 	 */
 	iconManager = new IconManager();
-
-	/**
-	 * Reveal to detect elements that are above, below, or in the viewport.
-	 * 
-	 * @type {Reveal}
-	 */
-	reveal = new Reveal();
 
 	/**
 	 * Autocomplete for the search bar.
@@ -219,7 +211,6 @@ class App {
 		this.#initValidators();
 		this.#initNotices();
 		this.#initTabs();
-		this.#addElemsToReveal();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
 	}
@@ -444,18 +435,6 @@ class App {
 				triggers: elem.querySelectorAll("[data-tab-trigger]"),
 				panels: elem.querySelectorAll("[data-tab-panel]")
 			}));
-		});
-	}
-
-	/**
-	 * Add elements to reveal.
-	 * 
-	 * @returns {void}
-	 */
-	#addElemsToReveal() {
-		let elems = document.querySelectorAll("[data-reveal]");
-		elems.forEach((elem) => {
-			this.reveal.add(elem);
 		});
 	}
 

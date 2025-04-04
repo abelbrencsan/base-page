@@ -122,6 +122,10 @@ div.quickview[popover]:popover-open {
 		}
 	}
 
+	@media (prefers-reduced-motion) {
+		transition: none;
+	}
+
 	@starting-style {
 		opacity: 0;
 		transform: translate3d(0, 3rem, 0);

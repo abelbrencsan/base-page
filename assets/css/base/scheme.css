@@ -11,6 +11,7 @@
 	--bg-color: var(--scheme-dark-bg-color);
 	--border-bg-color: var(--scheme-dark-border-bg-color);
 	--border-color: var(--scheme-dark-border-color);
+	--border-hover-color: var(--scheme-dark-border-hover-color);
 	--fg-bold-color: var(--scheme-dark-fg-bold-color);
 	--fg-color: var(--scheme-dark-fg-color);
 	--fg-light-color: var(--scheme-dark-fg-light-color);

@@ -72,4 +72,69 @@ div.feature {
 			grid-template-areas: "image" "text";
 		}
 	}
+
+	&.feature--reveal {
+
+		div.feature-image.image, a.feature-image.image, div.feature-text {
+			animation-timeline: view(block 80% 0%);
+		}
+
+		div.feature-image.image, a.feature-image.image {
+			animation-name: feature-left-reveal;
+		}
+
+		div.feature-text {
+			animation-name: feature-right-reveal;
+		}
+
+		&.feature--reverse {
+
+			div.feature-image.image, a.feature-image.image {
+				animation-name: feature-right-reveal;
+			}
+
+			div.feature-text {
+				animation-name: feature-left-reveal;
+			}
+		}
+
+		@media (max-width: 62em) {
+
+			div.feature-image.image, a.feature-image.image, div.feature-text {
+				animation: none;
+			}
+		}
+
+		@media (prefers-reduced-motion) {
+
+			div.feature-image.image, a.feature-image.image, div.feature-text {
+				animation: none;
+			}
+		}
+	}
+}
+
+/* Feature component animations */
+@keyframes feature-left-reveal {
+	0% {
+		opacity: 0;
+		transform: translate3d(-1.5rem, 0, 0);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes feature-right-reveal {
+	0% {
+		opacity: 0;
+		transform: translate3d(1.5rem, 0, 0);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
 }

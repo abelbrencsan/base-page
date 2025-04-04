@@ -84,6 +84,7 @@
 	--body-bg-color: #ffffff;
 	--border-bg-color: #f5f7fb;
 	--border-color: #e3e9f4;
+	--border-hover-color: #dadfea;
 	--fg-bold-color: #0a1019;
 	--fg-color: #121d2d;
 	--fg-light-color: #1a2a42;
@@ -104,6 +105,7 @@
 	--scheme-dark-bg-color: #0a1019;
 	--scheme-dark-border-bg-color: #152133;
 	--scheme-dark-border-color: #1c2d47;
+	--scheme-dark-border-hover-color: #284064;
 	--scheme-dark-fg-bold-color: #ffffff;
 	--scheme-dark-fg-color: #e7e7e8;
 	--scheme-dark-fg-light-color: #b6b8ba;

@@ -58,6 +58,10 @@ div.alert[popover]:popover-open {
 		right: 5%;
 		width: 90%;
 	}
+
+	@media (prefers-reduced-motion) {
+		transition: none;
+	}
 }
 
 /* Alert component extensions */

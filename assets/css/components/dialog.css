@@ -68,6 +68,14 @@ dialog.dialog {
 			opacity: 0;
 			transition: opacity var(--dialog-close-button-transition);
 		}
+
+		@media (prefers-reduced-motion) {
+			animation: none;
+
+			form.dialog-close-form {
+				opacity: 1;
+			}
+		}
 	}
 
 	&.is-opened {
