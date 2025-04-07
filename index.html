@@ -13,6 +13,7 @@
 	<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
 	<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 	<link rel="manifest" href="/manifest.webmanifest">
+	<script src="/assets/js/page-reveal.js"></script>
 </head>
 <body class="no-js no-touch">
 <div class="app">
@@ -37,7 +38,7 @@
 	<header class="navbar">
 		<div class="container">
 			<div class="navbar-wrapper">
-				<a href="#" class="navbar-logo">My Company</a>
+				<a href="/" class="navbar-logo">My Company</a>
 				<div class="navbar-menu">
 					<button type="button" aria-label="Toggle navigation" title="Toggle navigation" popovertarget="navbar-nav" popvertargetaction="toggle">
 						<svg class="icon" aria-hidden="true">
@@ -48,7 +49,7 @@
 				<nav id="navbar-nav" class="navbar-nav">
 					<ul class="navbar-nav-link-list">
 						<li>
-							<a href="#">Home</a>
+							<a href="/">Home</a>
 						</li>
 						<li data-navbar-subnav>
 							<button type="button" data-navbar-subnav-trigger>Services</button>
@@ -99,23 +100,12 @@
 							</svg>
 						</button>
 					</li>
-					<li data-navbar-subnav>
-						<button type="button" aria-label="Account" title="Account" data-navbar-subnav-trigger>
+					<li>
+						<a href="/sign-in.html" aria-label="Account" title="Account" data-navbar-subnav-trigger>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-person"></use>
 							</svg>
-						</button>
-						<ul data-navbar-subnav-element>
-							<li>
-								<a href="#">Edit profile</a>
-							</li>
-							<li>
-								<a href="#">Account settings</a>
-							</li>
-							<li>
-								<a href="#">Sign out</a>
-							</li>
-						</ul>
+						</a>
 					</li>
 				</ul>
 			</div>
@@ -137,60 +127,6 @@
 			</ul>
 		</div>
 	</div>
-
-	<!-- Error page -->
-	<main class="error-page" hidden>
-		<div class="container">
-			<h1>404 - Page not found</h1>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
-		</div>
-	</main>
-
-	<!-- Authentication -->
-	<main class="authentication" hidden>
-		<div class="container">
-			<header class="header">
-				<h1>Sign in to website</h1>
-				<p>Dolores reiciendis molestias optio quos</p>
-			</header>
-			<div class="box">
-				<form class="form" method="post" action="#" data-validator>
-					<ul class="grid grid--gap">
-						<li class="grid-col grid-col--6">
-							<div class="form-item">
-								<label class="form-label" for="authEmail">E-mail</label>
-								<input type="email" name="authEmail" id="authEmail" class="form-input" autocomplete="username" required>
-							</div>
-						</li>
-						<li class="grid-col grid-col--6">
-							<div class="form-item">
-								<label class="form-label" for="authPass">Password</label>
-								<input type="password" name="authPass" id="authPass" class="form-input" autocomplete="current-password" required minlength="8">
-							</div>
-						<li class="grid-col grid-col--6 grid-col--center">
-							<button class="button button--primary" type="submit">Sign in</button>
-						</li>
-					</ul>
-				</form>
-				<ul class="authentication-link-list">
-					<li>
-						<a href="#">
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-lock-closed"></use>
-							</svg> Forgot password
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-person-add"></use>
-							</svg> Create account
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</main>
 
 	<!-- Layout section -->
 	<div class="section">
@@ -276,7 +212,7 @@
 			</header>
 
 			<!-- Feature -->
-			<div class="feature feature--reveal feature--reverse2">
+			<div class="feature feature--reveal feature--reverse">
 				<a href="https://www.youtube.com/watch?v=aqz-KE-bpKQ" class="feature-image image image--cover image--cover--video" data-dialog="youtube">
 					<picture>
 						<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">

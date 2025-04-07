@@ -10,6 +10,7 @@
 @import url("./base/fonts.css");
 @import url("./base/focus.css");
 @import url("./base/scheme.css");
+@import url("./base/page-reveal.css");
 
 /* Typography imports */
 @import url("./typography/base.css");

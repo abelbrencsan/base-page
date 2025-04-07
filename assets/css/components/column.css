@@ -46,21 +46,15 @@ ul.column-list {
 			
 			article.column-item {
 				animation-name: column-list-reveal;
-				animation-timeline: view(block 90% 0%);
-			}
-		}
+				animation-timeline: view(block 70% 0%);
 
-		@media (max-width: 62em) {
-
-			> li.column-list-item {
-			
-				article.column-item {
+				@media (prefers-reduced-motion) {
 					animation: none;
 				}
 			}
 		}
 
-		@media (prefers-reduced-motion) {
+		@media (max-width: 62em) {
 
 			> li.column-list-item {
 			
@@ -76,12 +70,12 @@ ul.column-list {
 @keyframes column-list-reveal {
 	0% {
 		opacity: 0;
-		transform: scale3d(0.925, 0.925, 1);
+		transform: translate3d(0, 3rem, 0) scale3d(0.9, 0.9, 1);
 	}
 
 	100% {
 		opacity: 1;
-		transform: scale3d(1, 1, 1);
+		transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
 	}
 }
 

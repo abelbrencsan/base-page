@@ -10,7 +10,8 @@ main.authentication {
 	background-color: var(--border-bg-color);
 	display: flex;
 	min-height: 100vh;
-	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
+	padding: var(--section-padding) 0;
+	text-align: center;
 
 	div.container {
 		max-width: calc(var(--container-width) * 0.5);
@@ -18,7 +19,7 @@ main.authentication {
 
 	header.header {
 		margin-bottom: calc(var(--element-margin) * 0.5);
-		text-align: center;
+		
 
 		h1, h2, h3, h4, h5, h6 {
 			font-size: var(--heading-2-font-size);
@@ -31,6 +32,8 @@ main.authentication {
 
 	div.box {
 		background-color: var(--bg-color);
+		margin-bottom: 0;
+		text-align: left;
 	}
 
 	a.button, button.button {
@@ -78,6 +81,24 @@ main.authentication {
 			&:first-child {
 				padding-left: 0;
 			}
+		}
+	}
+
+	a.authentication-back {
+		-webkit-user-select: none;
+		align-items: center;
+		color: inherit;
+		display: inline-flex;
+		margin-top: calc(var(--element-margin) * 0.5);
+		text-decoration: none;
+		user-select: none;
+
+		svg.icon {
+			margin-right: 0.25rem;
+		}
+
+		body.no-touch &:hover {
+			color: var(--link-color);
 		}
 	}
 }

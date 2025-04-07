@@ -1,3 +1,4 @@
+import { Autocomplete } from "../autocomplete.js";
 import { Page } from "../page.js";
 
 /**
@@ -18,6 +19,29 @@ class IndexPage extends Page {
 	constructor(options) {
 		super(options);
 	}
+
+	/**
+	 * Autocomplete for the search bar.
+	 * 
+	 * @type {Autocomplete}
+	 */
+	searchAutocomplete = new Autocomplete({
+		input: document.getElementById("query"),
+		id: "query-autcomplete",
+		getSuggestions: (term, callback) => {
+			const choices = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"];
+			let suggestions = [];
+			term = term.toLowerCase();
+			choices.forEach((choice) => {
+				if (~choice.toLowerCase().indexOf(term)) {
+					suggestions.push(choice);
+				}
+			});
+			callback(suggestions);
+		},
+		renderItem: (suggestion, term) => suggestion,
+		renderInputValue: (suggestion) => suggestion
+	});
 
 	/**
 	 * Event handler that is triggered when the breakpoint has changed.

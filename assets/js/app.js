@@ -1,5 +1,4 @@
 import { AlertManager } from "../js/alert-manager.js";
-import { Autocomplete } from "../js/autocomplete.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
 import { FocusTracker } from "../js/focus-tracker.js";
@@ -35,29 +34,6 @@ class App {
 	 * @type {IconManager}
 	 */
 	iconManager = new IconManager();
-
-	/**
-	 * Autocomplete for the search bar.
-	 * 
-	 * @type {Autocomplete}
-	 */
-	searchAutocomplete = new Autocomplete({
-		input: document.getElementById("query"),
-		id: "query-autcomplete",
-		getSuggestions: (term, callback) => {
-			const choices = ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"];
-			let suggestions = [];
-			term = term.toLowerCase();
-			choices.forEach((choice) => {
-				if (~choice.toLowerCase().indexOf(term)) {
-					suggestions.push(choice);
-				}
-			});
-			callback(suggestions);
-		},
-		renderItem: (suggestion, term) => suggestion,
-		renderInputValue: (suggestion) => suggestion
-	});
 
 	/**
 	 * Callback function that is called after routing
@@ -188,6 +164,8 @@ class App {
 	 */
 	constructor(options) {
 
+		this.#detectViewTransitionType();
+
 		// Set fields from options
 		if (typeof(options) == "object") {
 			Object.entries(options).forEach(([key, value]) => {
@@ -213,7 +191,10 @@ class App {
 		this.#initTabs();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
+		
 	}
+
+	#detectViewTransitionType() {}
 
 	/**
 	 * Initialize gliders.

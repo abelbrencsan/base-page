@@ -76,7 +76,11 @@ div.feature {
 	&.feature--reveal {
 
 		div.feature-image.image, a.feature-image.image, div.feature-text {
-			animation-timeline: view(block 80% 0%);
+			animation-timeline: view(block 70% 0%);
+
+			@media (prefers-reduced-motion) {
+				animation: none;
+			}
 		}
 
 		div.feature-image.image, a.feature-image.image {
@@ -99,13 +103,6 @@ div.feature {
 		}
 
 		@media (max-width: 62em) {
-
-			div.feature-image.image, a.feature-image.image, div.feature-text {
-				animation: none;
-			}
-		}
-
-		@media (prefers-reduced-motion) {
 
 			div.feature-image.image, a.feature-image.image, div.feature-text {
 				animation: none;

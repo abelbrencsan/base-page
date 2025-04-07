@@ -121,19 +121,18 @@
 	--palette-secondary-bg-hover-color: #243b5b;
 	--palette-secondary-fg-color: #ffffff;
 
-	/* Variables on extra large breakpoint */
 	@media (min-width: 150em) {
+
+		/* Font size variables */
 		--base-font-size: 20px;
 	}
 
-	/* Variables on medium breakpoint */
 	@media (max-width: 62em) {
 
 		/* Font size variables */
 		--base-font-size: 17px;
 	}
 
-	/* Variables on small breakpoint */
 	@media (max-width: 47em) {
 
 		/* Font size variables */
@@ -148,7 +147,6 @@
 		--subheading-2-font-size: 1.1rem;
 	}
 
-	/* Variables on xsmall breakpoint */
 	@media (max-width: 32em) {
 
 		/* Font size variables */
