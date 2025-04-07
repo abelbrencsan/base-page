@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<title>Base Page</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" href="/assets/css/app.css">
+	<link rel="icon" href="/favicon.ico" sizes="32x32">
+	<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+	<link rel="manifest" href="/manifest.webmanifest">
+	<script src="/assets/js/page-reveal.js"></script>
+</head>
+<body class="no-js no-touch">
+<div class="app">
+
+	<!-- Offline warning -->
+	<div class="offline">You are offline! Please connect to a network!</div>
+
+	<!-- JavaScript is disabled -->
+	<noscript>
+		<div class="noscript">
+			<div class="noscript-text">
+				<span class="heading">JavaScript is disabled in your browser!</span>
+				<p>To view this page properly, please enable JavaScript and reload the page.</p>
+			</div>
+		</div>
+	</noscript>
+
+	<!-- Alerts -->
+	<div class="alert-wrapper" data-alert-container></div>
+
+	<!-- Navbar -->
+	<header class="navbar">
+		<div class="container">
+			<div class="navbar-wrapper">
+				<a href="/" class="navbar-logo">My Company</a>
+				<div class="navbar-menu">
+					<button type="button" aria-label="Toggle navigation" title="Toggle navigation" popovertarget="navbar-nav" popvertargetaction="toggle">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-menu"></use>
+						</svg>
+					</button>
+				</div>
+				<nav id="navbar-nav" class="navbar-nav">
+					<ul class="navbar-nav-link-list">
+						<li>
+							<a href="/">Home</a>
+						</li>
+						<li data-navbar-subnav>
+							<button type="button" data-navbar-subnav-trigger>Services</button>
+							<ul data-navbar-subnav-element>
+								<li>
+									<a href="#">Mattis ultrices</a>
+								</li>
+								<li>
+									<a href="#">Integer magna</a>
+								</li>
+								<li>
+									<a href="#">Viverra convallis</a>
+								</li>
+							</ul>
+						</li>
+						<li data-navbar-subnav>
+							<button type="button" data-navbar-subnav-trigger>Products</button>
+							<ul data-navbar-subnav-element>
+								<li>
+									<a href="#">Morbi ornare</a>
+								</li>
+								<li>
+									<a href="#">Pretium sapien</a>
+								</li>
+								<li>
+									<a href="#">Quisque egestas</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#">Blog</a>
+						</li>
+						<li>
+							<a href="#">Contact</a>
+						</li>
+					</ul>
+					<button type="button" class="navbar-nav-close" aria-label="Close navigation" title="Close navigation" popovertarget="navbar-nav" popvertargetaction="close">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-close"></use>
+						</svg>
+					</button>
+				</nav>
+				<ul class="navbar-account-list">
+					<li>
+						<button type="button" popovertarget="cart-side-panel" popovertargetaction="toggle" aria-label="Cart" title="Cart">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-cart"></use>
+							</svg>
+						</button>
+					</li>
+					<li>
+						<a href="/sign-in.html" aria-label="Account" title="Account" data-navbar-subnav-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-person"></use>
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	<!-- Error page -->
+	<main class="error-page">
+		<div class="container">
+			<h1>404 - Page not found</h1>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
+		</div>
+	</main>
+
+	<!-- Footer -->
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-summary">
+				<div class="footer-summary-about">
+					<h2>About company</h2>
+					<p>Ornare interdum nascetur enim lobortis nunc amet placerat pellentesque nascetur in adipiscing. Interdum amet accumsan placerat commodo ut amet aliquam blandit nunc tempor lobortis nunc non. Mi accumsan. Justo aliquet massa adipiscing cubilia eu accumsan id. Arcu accumsan faucibus vis ultricies adipiscing ornare ut. Mi accumsan. rnare interdum nascetur enim lobortis nunc amet placerat pellentesque. Interdum amet placerat commodo ut amet aliquam blandit nunc tempor lobortis nunc non.</p>
+				</div>
+				<div class="footer-summary-nav">
+					<h2>Navigation</h2>
+					<ul class="footer-summary-link-list">
+						<li>
+							<a href="#">Home</a>
+						</li>
+						<li>
+							<a href="#">Services</a>
+						</li>
+						<li>
+							<a href="#">Products</a>
+						</li>
+						<li>
+							<a href="#">Blog</a>
+						</li>
+						<li>
+							<a href="#">Contact</a>
+						</li>
+					</ul>
+				</div>
+				<div class="footer-summary-links">
+					<h2>Help center</h2>
+					<ul class="footer-summary-link-list">
+						<li>
+							<a href="#">Ornare interdum</a>
+						</li>
+						<li>
+							<a href="#">Nascetur enim</a>
+						</li>
+						<li>
+							<a href="#">massa amet</a>
+						</li>
+						<li>
+							<a href="#">Nascetur nunc</a>
+						</li>
+						<li>
+							<a href="#">Nascetur nunc</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="footer-info">
+				<div class="footer-info-legal">
+					&copy; 2025 My Company. All rights reserved.
+					<ul class="footer-info-legal-link-list">
+						<li>
+							<a href="#">Terms of service</a>
+						</li>
+						<li>
+							<a href="#">Privacy policy</a>
+						</li>
+						<li>
+							<a href="#">Contact Us</a>
+						</li>
+					</ul>
+				</div>
+				<ul class="footer-info-social-list">
+					<li>
+						<a href="#" aria-label="Email" title="Email" target="_blank" rel="noopener">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-mail"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a href="#" aria-label="Facebook" title="Facebook" target="_blank" rel="noopener">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#logo-facebook"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a href="#" aria-label="YouTube" title="YouTube" target="_blank" rel="noopener">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#logo-youtube"></use>
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+
+	<!-- Scripts -->
+	<script type="module" src="/assets/js/app.js"></script>
+	<script type="module">
+
+		import { App } from "/assets/js/app.js";
+
+		// Initialize page and application
+		window.app = new App();
+
+	</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<title>Base Page</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" href="/assets/css/app.css">
+	<link rel="icon" href="/favicon.ico" sizes="32x32">
+	<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+	<link rel="manifest" href="/manifest.webmanifest">
+	<script src="/assets/js/page-reveal.js"></script>
+</head>
+<body class="no-js no-touch">
+<div class="app">
+
+	<!-- Offline warning -->
+	<div class="offline">You are offline! Please connect to a network!</div>
+
+	<!-- JavaScript is disabled -->
+	<noscript>
+		<div class="noscript">
+			<div class="noscript-text">
+				<span class="heading">JavaScript is disabled in your browser!</span>
+				<p>To view this page properly, please enable JavaScript and reload the page.</p>
+			</div>
+		</div>
+	</noscript>
+
+	<!-- Alerts -->
+	<div class="alert-wrapper" data-alert-container></div>
+
+	<!-- Authentication -->
+	<main class="authentication">
+		<div class="container">
+			<header class="header">
+				<h1>Sign in to website</h1>
+				<p>Dolores reiciendis molestias optio quos</p>
+			</header>
+			<div class="box">
+				<form class="form" method="post" action="#" data-validator>
+					<ul class="grid grid--gap">
+						<li class="grid-col grid-col--6">
+							<div class="form-item">
+								<label class="form-label" for="authEmail">E-mail</label>
+								<input type="email" name="authEmail" id="authEmail" class="form-input" autocomplete="username" required>
+							</div>
+						</li>
+						<li class="grid-col grid-col--6">
+							<div class="form-item">
+								<label class="form-label" for="authPass">Password</label>
+								<input type="password" name="authPass" id="authPass" class="form-input" autocomplete="current-password" required minlength="8">
+							</div>
+						<li class="grid-col grid-col--6 grid-col--center">
+							<button class="button button--primary" type="submit">Sign in</button>
+						</li>
+					</ul>
+				</form>
+				<ul class="authentication-link-list">
+					<li>
+						<a href="#">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-lock-closed"></use>
+							</svg> Forgot password
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-person-add"></use>
+							</svg> Create account
+						</a>
+					</li>
+				</ul>
+			</div>
+			<a href="/" class="authentication-back">
+				<svg class="icon" aria-hidden="true">
+					<use xlink:href="#icon-chevron-back"></use>
+				</svg> Go back to home
+			</a>
+		</div>
+	</main>
+
+	<!-- Scripts -->
+	<script type="module" src="/assets/js/app.js"></script>
+	<script type="module">
+
+		import { App } from "/assets/js/app.js";
+
+		// Initialize page and application
+		window.app = new App();
+
+	</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+/*!
+ * Page reveal CSS
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Page reveal */
+@view-transition {
+	navigation: auto;
+}
+
+:root[data-page-reveal-type="sign-in-open"],
+:root[data-page-reveal-type="sign-in-close"] {
+
+	&::view-transition-old(root) {
+		animation-duration: 300ms;
+	}
+
+	&::view-transition-new(root) {
+		animation-duration: 300ms;
+	}
+}
+
+:root[data-page-reveal-type="sign-in-open"] {
+	background-color: var(--border-bg-color);
+
+	&::view-transition-old(root) {
+		animation-name: fade-out;
+	}
+
+	&::view-transition-new(root) {
+		animation-name: fade-in, slide-in-from-right;
+	}
+}
+
+:root[data-page-reveal-type="sign-in-close"] {
+	background-color: var(--border-bg-color);
+
+	&::view-transition-old(root) {
+		animation-name: fade-out, slide-out-to-right;
+		z-index: 1;
+	}
+
+	&::view-transition-new(root) {
+		animation-name: fade-in;
+	}
+}
+
+@media (prefers-reduced-motion) {
+
+	@view-transition {
+		navigation: none;
+	}
+}
+
+/* Page reveal animations */
+@keyframes slide-in-from-left {
+	0% {
+		translate: -100% 0;
+	}
+}
+
+@keyframes slide-in-from-right {
+	0% {
+		translate: 100% 0;
+	}
+}
+
+@keyframes slide-out-to-left {
+	100% {
+		translate: -100% 0;
+	}
+}
+
+@keyframes slide-out-to-right {
+	100% {
+		translate: 100% 0;
+	}
+}
+
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+	}
+}
+
+@keyframes fade-out {
+	100% {
+		opacity: 0;
+	}
+}
