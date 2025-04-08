@@ -1,0 +1,145 @@
+/*!
+ * Spotlight CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Spotlight component variables */
+div.spotlight {
+	--spotlight-gap: 4rem;
+	--spotlight-image-lazy-load-transition: 1000ms ease;
+}
+
+/* Spotlight component extensions */
+div.spotlight {
+	background-color: var(--fg-light-color);
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	margin: 0 auto var(--element-margin) auto;
+	max-width: calc(var(--container-width) * 2.5);
+	padding: 0 var(--spotlight-gap);
+	position: relative;
+	width: calc(100% - (var(--spotlight-gap) * 2));
+
+	div.spotlight-image {
+		height: 100%;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+			
+		img, canvas {
+			height: 100%;
+			object-fit: cover;
+			width: 100%;
+
+			&[loading=lazy] {
+				opacity: 0;
+				transition: opacity var(--spotlight-image-lazy-load-transition);
+
+				&.is-loaded {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	div.spotlight-text {
+		backdrop-filter: blur(10px);
+		background-color: var(--translucent-bg-color);
+		border-radius: var(--border-radius);
+		color: var(--fg-color);
+		margin: 15rem 0 var(--spotlight-gap) 0;
+		padding: calc(var(--box-padding) * 2);
+		position: relative;
+		width: calc(var(--container-width) * 0.75);
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	+ div.spotlight {
+		margin-top: calc(var(--element-margin) * -1);
+	}
+
+	@media (max-width: 82em) {
+		padding: 0 calc(var(--spotlight-gap) * 0.5);
+		width: 100%;
+
+		div.spotlight-text {
+			margin: 15rem 0 calc(var(--spotlight-gap) * 0.5) 0;
+		}
+	}
+
+	@media (max-width: 62em) {
+		background-color: var(--border-bg-color);
+		display: block;
+		padding: 0;
+		width: 100%;
+
+		div.spotlight-image {
+			position: relative;
+		}
+
+		div.spotlight-text {
+			backdrop-filter: none;
+			background-color: var(--border-bg-color);
+			border-radius: 0;
+			margin: 0 auto;
+			padding: var(--element-margin) 0;
+			width: 90%;
+		}
+	}
+}
+
+/* Spotlight component extensions */
+div.spotlight {
+
+	&.spotlight--reverse {
+		justify-content: flex-end;
+	}
+
+	&.spotlight--center {
+		justify-content: center;
+	}
+
+	&.spotlight--top {
+		align-items: start;
+	}
+
+	&.spotlight--reveal {
+
+		div.spotlight-text {
+			animation-name: spotlight-text-reveal;
+			animation-timeline: view(block 70% 0%);
+
+			@media (prefers-reduced-motion) {
+				animation: none;
+			}
+		}
+
+		@media (max-width: 62em) {
+
+			div.spotlight-text {
+				animation: none;
+			}
+		}
+	}
+}
+
+/* Spotlight component animations */
+@keyframes spotlight-text-reveal {
+	0% {
+		opacity: 0;
+		transform: translate3d(0, 10rem, 0);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}

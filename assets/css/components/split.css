@@ -13,12 +13,11 @@ div.split {
 div.split {
 	align-items: center;
 	background-color: var(--border-bg-color);
-	border: var(--split-gap) solid var(--bg-color);
 	display: grid;
 	grid-template-areas: "image text";
 	grid-template-columns: repeat(2, 1fr);
 	margin: 0 auto var(--element-margin) auto;
-	max-width: calc(var(--container-width) * 2.5);
+	width: calc(100% - (var(--split-gap) * 2));
 
 	div.split-image.image, a.split-image.image {
 		border-radius: 0;
@@ -50,8 +49,12 @@ div.split {
 		}
 	}
 
+	+ div.split {
+		margin-top: calc(var(--element-margin) * -1);
+	}
+
 	@media (max-width: 82em) {
-		border: none;
+		width: 100%;
 
 		div.split-text {
 			padding: var(--split-gap) calc(var(--split-gap) * 0.5);
@@ -81,20 +84,13 @@ div.split {
 	}
 
 	&.split--transparent {
-		background-color: transparent;
-		
-		&:not(.split--reverse) {
-			border-right-width: 0;
-		}
-
-		&.split--reverse {
-			border-left-width: 0;
-		}
+		background-color: var(--bg-color);
 	}
 
 	&.split--reveal {
 
-		div.split-image.image, a.split-image.image, div.split-text {
+		div.split-text {
+			animation-name: split-text-reveal;
 			animation-timeline: view(block 70% 0%);
 
 			@media (prefers-reduced-motion) {
@@ -102,17 +98,9 @@ div.split {
 			}
 		}
 
-		div.split-image.image, a.split-image.image {
-			animation-name: split-image-reveal;
-		}
-
-		div.split-text {
-			animation-name: split-text-reveal;
-		}
-
 		@media (max-width: 62em) {
 
-			div.split-image.image, a.split-image.image, div.split-text {
+			div.split-text {
 				animation: none;
 			}
 		}
@@ -120,20 +108,10 @@ div.split {
 }
 
 /* Split component animations */
-@keyframes split-image-reveal {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-}
-
 @keyframes split-text-reveal {
 	0% {
 		opacity: 0;
-		transform: translate3d(0, 9rem, 0);
+		transform: translate3d(0, 10rem, 0);
 	}
 
 	100% {

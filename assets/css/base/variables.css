@@ -90,9 +90,10 @@
 	--fg-light-color: #1a2a42;
 	--focus-color: #fba026;
 	--link-color: #0076ad;
+	--translucent-bg-color: rgba(255, 255, 255, 0.5);
 	--dialog-backdrop-color: rgba(10, 16, 25, 0.9);
-	--popover-backdrop-color: rgba(227, 233, 244, 0.5);
-
+	--popover-backdrop-color: rgba(227, 233, 244, 0.75);
+	
 	/* State colors */
 	--error-bg-color: #f8d2d6;
 	--error-fg-color: #6b111b;
@@ -110,6 +111,7 @@
 	--scheme-dark-fg-color: #e7e7e8;
 	--scheme-dark-fg-light-color: #b6b8ba;
 	--scheme-dark-link-color: #65ceff;
+	--scheme-dark-translucent-bg-color: rgba(10, 16, 25, 0.75);
 
 	/* Primary palette */
 	--palette-primary-bg-color: #0076ad;
