@@ -1,0 +1,143 @@
+/*!
+ * Split CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Split component variables */
+div.split {
+	--split-gap: 4rem;
+}
+
+/* Split component extensions */
+div.split {
+	align-items: center;
+	background-color: var(--border-bg-color);
+	border: var(--split-gap) solid var(--bg-color);
+	display: grid;
+	grid-template-areas: "image text";
+	grid-template-columns: repeat(2, 1fr);
+	margin: 0 auto var(--element-margin) auto;
+	max-width: calc(var(--container-width) * 2.5);
+
+	div.split-image.image, a.split-image.image {
+		border-radius: 0;
+		grid-area: image;
+		height: 100%;
+		margin-bottom: 0;
+
+		img, canvas {
+			border-radius: 0;
+			height: 100%;
+			object-fit: cover;
+			width: 100%;
+		}
+	}
+
+	div.split-text {
+		grid-area: text;
+		justify-self: center;
+		padding: var(--split-gap);
+
+		header.header {
+			margin-bottom: calc(var(--element-margin) * 0.5);
+		}
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@media (max-width: 82em) {
+		border: none;
+
+		div.split-text {
+			padding: var(--split-gap) calc(var(--split-gap) * 0.5);
+		}
+	}
+
+	@media (max-width: 62em) {
+		grid-template-areas: "image" "text";
+		grid-template-columns: none;
+
+		div.split-text {
+			padding: var(--element-margin) 0;
+			width: 90%;
+		}
+	}
+}
+
+/* Split component extensions */
+div.split {
+
+	&.split--reverse {
+		grid-template-areas: "text image";
+
+		@media (max-width: 62em) {
+			grid-template-areas: "image" "text";
+		}
+	}
+
+	&.split--transparent {
+		background-color: transparent;
+		
+		&:not(.split--reverse) {
+			border-right-width: 0;
+		}
+
+		&.split--reverse {
+			border-left-width: 0;
+		}
+	}
+
+	&.split--reveal {
+
+		div.split-image.image, a.split-image.image, div.split-text {
+			animation-timeline: view(block 70% 0%);
+
+			@media (prefers-reduced-motion) {
+				animation: none;
+			}
+		}
+
+		div.split-image.image, a.split-image.image {
+			animation-name: split-image-reveal;
+		}
+
+		div.split-text {
+			animation-name: split-text-reveal;
+		}
+
+		@media (max-width: 62em) {
+
+			div.split-image.image, a.split-image.image, div.split-text {
+				animation: none;
+			}
+		}
+	}
+}
+
+/* Split component animations */
+@keyframes split-image-reveal {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes split-text-reveal {
+	0% {
+		opacity: 0;
+		transform: translate3d(0, 9rem, 0);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
