@@ -17,6 +17,7 @@ div.split {
 	grid-template-areas: "image text";
 	grid-template-columns: repeat(2, 1fr);
 	margin: 0 auto var(--element-margin) auto;
+	max-width: calc(var(--container-width) * 2.5);
 	width: calc(100% - (var(--split-gap) * 2));
 
 	div.split-image.image, a.split-image.image {
