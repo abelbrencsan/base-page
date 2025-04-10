@@ -160,7 +160,7 @@ class RangeIndicator {
 	}
 
 	/**
-	 * Handle events.
+	 * Handles events.
 	 * 
 	 * @param {Event} event
 	 * @returns {void}

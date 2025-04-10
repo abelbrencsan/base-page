@@ -861,7 +861,7 @@ class Dialog {
 	}
 
 	/**
-	 * Handle events.
+	 * Handles events.
 	 * 
 	 * @param {Event} event
 	 * @returns {void}

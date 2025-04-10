@@ -136,7 +136,7 @@ class Notice {
 	}
 
 	/**
-	 * Handle events.
+	 * Handles events.
 	 * 
 	 * @param {Event} event
 	 * @returns {void}

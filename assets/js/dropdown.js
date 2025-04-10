@@ -281,7 +281,7 @@ class Dropdown {
 	}
 
 	/**
-	 * Handle events.
+	 * Handles events.
 	 * 
 	 * @param {Event} event
 	 * @returns {void}

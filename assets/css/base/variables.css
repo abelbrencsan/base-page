@@ -9,6 +9,7 @@
 
 	/* Size variables */
 	--block-margin: 0.5rem;
+	--heading-margin: 1rem;
 	--border-radius: 6px;
 	--box-arrow: 10px;
 	--box-padding: 1.5rem;

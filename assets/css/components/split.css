@@ -39,10 +39,6 @@ div.split {
 		justify-self: center;
 		padding: var(--split-gap);
 
-		header.header {
-			margin-bottom: calc(var(--element-margin) * 0.5);
-		}
-
 		> :last-child,
 		> :last-child > :last-child,
 		> :last-child > :last-child > :last-child {

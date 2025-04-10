@@ -12,7 +12,11 @@ h1, h2, h3, h4, h5, h6, .heading {
 	font-weight: var(--heading-font-weight);
 	letter-spacing: var(--heading-letter-spacing);
 	line-height: var(--heading-line-height);
-	margin: 0 0 var(--block-margin) 0;
+	margin: 0 0 var(--heading-margin) 0;
+}
+
+h3, h4, h5, h6, .h3, .h4, .h5, .h6 {
+	--heading-margin: var(--block-margin);
 }
 
 h1, .h1 {

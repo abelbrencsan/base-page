@@ -9,7 +9,14 @@ header.header {
 
 	p {
 		color: var(--fg-bold-color);
-		margin: calc(var(--block-margin) * -1) 0 var(--block-margin) 0;
+		margin: calc(var(--heading-margin) * -1) 0 var(--heading-margin) 0;
+	}
+
+	h3, h4, h5, h6, .h3, .h4, .h5, .h6 {
+
+		+ p {
+			--heading-margin: var(--block-margin);
+		}
 	}
 
 	h1 + p, .h1 + p {

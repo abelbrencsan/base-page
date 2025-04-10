@@ -164,8 +164,6 @@ class App {
 	 */
 	constructor(options) {
 
-		this.#detectViewTransitionType();
-
 		// Set fields from options
 		if (typeof(options) == "object") {
 			Object.entries(options).forEach(([key, value]) => {
@@ -194,10 +192,8 @@ class App {
 		
 	}
 
-	#detectViewTransitionType() {}
-
 	/**
-	 * Initialize gliders.
+	 * Initializes the gliders.
 	 * 
 	 * @returns {void}
 	 */
@@ -215,7 +211,7 @@ class App {
 	}
 
 	/**
-	 * Initialize navigation bar sub-navigations.
+	 * Initializes the navigation bar sub-navigations.
 	 * 
 	 * @returns {void}
 	 */
@@ -230,7 +226,7 @@ class App {
 	}
 
 	/**
-	 * Initialize button sub-navigations.
+	 * Initializes the button sub-navigations.
 	 * 
 	 * @returns {void}
 	 */
@@ -245,7 +241,7 @@ class App {
 	}
 
 	/**
-	 * Initialize lazy load detectors.
+	 * Initializes the lazy load detectors.
 	 * 
 	 * @returns {void}
 	 */
@@ -259,7 +255,7 @@ class App {
 	}
 
 	/**
-	 * Initialize dialogs.
+	 * Initializes the dialogs.
 	 * 
 	 * @returns {void}
 	 */
@@ -295,7 +291,7 @@ class App {
 	}
 
 	/**
-	 * Initialize slideshows.
+	 * Initializes the slideshows.
 	 * 
 	 * @returns {void}
 	 */
@@ -335,7 +331,7 @@ class App {
 	}
 
 	/**
-	 * Initialize range indicators.
+	 * Initializes the range indicators.
 	 * 
 	 * @returns {void}
 	 */
@@ -355,7 +351,7 @@ class App {
 	}
 
 	/**
-	 * Initialize validators.
+	 * Initializes the validators.
 	 * 
 	 * @returns {void}
 	 */
@@ -389,7 +385,7 @@ class App {
 	}
 
 	/**
-	 * Initialize notices.
+	 * Initializes the notices.
 	 * 
 	 * @returns {void}
 	 */
@@ -404,7 +400,7 @@ class App {
 	}
 
 	/**
-	 * Initialize tabs.
+	 * Initializes the tabs.
 	 * 
 	 * @returns {void}
 	 */
@@ -420,15 +416,15 @@ class App {
 	}
 
 	/**
-	 * Detect immediate and event-driven changes in breakpoints.
+	 * Detects immediate and event-driven changes in breakpoints.
 	 * 
 	 * @returns {void}
 	 */
 	#detectBreakpointChange() {
 		Object.entries(App.breakpoints).forEach(([, query]) => {
-			let mql = window.matchMedia(query);
-			this.#switchNavbarType(mql);
-			mql.addEventListener("change", (event) => {
+			let mediaQueryList = window.matchMedia(query);
+			this.#switchNavbarType(mediaQueryList);
+			mediaQueryList.addEventListener("change", (event) => {
 				this.#onBreakpointChange(event);
 			});
 		});
@@ -454,16 +450,16 @@ class App {
 	}
 
 	/**
-	 * Switch between offset and full navigation bar on medium breakpoint.
+	 * Switches between the offset and full navigation bar at the medium breakpoint.
 	 * 
-	 * @param {MediaQueryList} mql
+	 * @param {MediaQueryList} mediaQueryList
 	 * @returns {void}
 	 */
-	#switchNavbarType(mql) {
-		if (mql.media == App.breakpoints.medium) {
+	#switchNavbarType(mediaQueryList) {
+		if (mediaQueryList.media == App.breakpoints.medium) {
 			const navbarNav = document.getElementById('navbar-nav');
 			if (navbarNav) {
-				if (mql.matches) {
+				if (mediaQueryList.matches) {
 					navbarNav.popover = "auto";
 				} else {
 					navbarNav.removeAttribute("popover");
@@ -473,7 +469,7 @@ class App {
 	}
 
 	/**
-	 * Event handler that is triggered when the breakpoint has changed.
+	 * Executes after the breakpoint has changed.
 	 * 
 	 * @param {MediaQueryListEvent} event
 	 * @returns {void}
@@ -503,7 +499,7 @@ class App {
 	}
 
 	/**
-	 * Handle events.
+	 * Handles events.
 	 * 
 	 * @param {Event} event
 	 * @returns {void}

@@ -26,15 +26,15 @@ class Page {
 	/**
 	 * Event handler that is triggered when the breakpoint has changed.
 	 * 
-	 * @param {MediaQueryListEvent} _event
+	 * @param {MediaQueryListEvent} event
 	 * @returns {void}
 	 */
-	onBreakpointChange(_event) {}
+	onBreakpointChange(event) {}
 
 	/**
 	 * Destroys the page.
 	 * 
-	 * @returns {void}
+	 * @returnsrns {void}
 	 */
 	destroy() {}
 }

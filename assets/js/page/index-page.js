@@ -46,10 +46,10 @@ class IndexPage extends Page {
 	/**
 	 * Event handler that is triggered when the breakpoint has changed.
 	 * 
-	 * @param {MediaQueryListEvent} _event
+	 * @param {MediaQueryListEvent} event
 	 * @returns {void}
 	 */
-	onBreakpointChange(_event) {}
+	onBreakpointChange(event) {}
 }
 
 export { IndexPage };
