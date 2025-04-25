@@ -9,6 +9,7 @@ header.header {
 
 	p {
 		color: var(--fg-bold-color);
+		font-weight: var(--subheading-font-weight);
 		margin: calc(var(--heading-margin) * -1) 0 var(--heading-margin) 0;
 	}
 

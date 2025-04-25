@@ -54,10 +54,11 @@
 	--nav-font-family: "Source Sans Pro", sans-serif;
 
 	/* Font weights */
-	--base-font-weight: --normal-font-weight;
-	--fixed-font-weight: --normal-font-weight;
-	--heading-font-weight: --bold-font-weight;
-	--nav-font-weight: --bold-font-weight;
+	--base-font-weight: var(--normal-font-weight);
+	--fixed-font-weight: var(--normal-font-weight);
+	--heading-font-weight: var(--normal-font-weight);
+	--subheading-font-weight: var(--normal-font-weight);
+	--nav-font-weight: var(--bold-font-weight);
 
 	/* Font line heights */
 	--base-line-height: 1.5;
