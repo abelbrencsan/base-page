@@ -7,6 +7,7 @@ import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
 import { Notice } from "../js/notice.js";
 import { RangeIndicator } from "../js/range-indicator.js";
+import { Roll } from "../js/roll.js";
 import { Router, Route } from "../js/router.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { Tab } from "../js/tab.js";
@@ -69,6 +70,13 @@ class App {
 	 * @type {Array<Glider>}
 	 */
 	gliders = [];
+
+	/**
+	 * List of rolls.
+	 * 
+	 * @type {Array<Roll>}
+	 */
+	rolls = [];
 
 	/**
 	 * List of navigation bar sub-navigations.
@@ -178,6 +186,7 @@ class App {
 		document.body.classList.remove("no-js");
 		window.addEventListener("touchstart", this);
 		this.#initGliders();
+		this.#initRolls();
 		this.#initNavbarSubnavs();
 		this.#initButtonSubnavs();
 		this.#initLazyLoadDetectors();
@@ -189,7 +198,6 @@ class App {
 		this.#initTabs();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
-		
 	}
 
 	/**
@@ -206,6 +214,24 @@ class App {
 				items: elem.querySelectorAll("[data-glider-list-item]"),
 				prevTrigger: elem.querySelector("[data-glider-prev-trigger]"),
 				nextTrigger: elem.querySelector("[data-glider-next-trigger]")
+			}));
+		});
+	}
+
+	/**
+	 * Initializes the rolls.
+	 * 
+	 * @returns {void}
+	 */
+	#initRolls() {
+		let elems = document.querySelectorAll("[data-roll]");
+		elems.forEach((elem) => {
+			this.rolls.push(new Roll({
+				wrapper: elem,
+				viewport: elem.querySelector("[data-roll-viewport]"),
+				items: elem.querySelectorAll("[data-roll-list-item]"),
+				prevTrigger: elem.querySelector("[data-roll-prev-trigger]"),
+				nextTrigger: elem.querySelector("[data-roll-next-trigger]")
 			}));
 		});
 	}

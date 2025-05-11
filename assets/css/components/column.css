@@ -46,7 +46,7 @@ ul.column-list {
 			
 			article.column-item {
 				animation-name: column-list-reveal;
-				animation-timeline: view(block 70% 0%);
+				animation-timeline: view(block 60% 0%);
 
 				@media (prefers-reduced-motion) {
 					animation: none;

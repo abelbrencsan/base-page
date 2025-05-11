@@ -76,7 +76,7 @@ div.feature {
 	&.feature--reveal {
 
 		div.feature-image.image, a.feature-image.image, div.feature-text {
-			animation-timeline: view(block 70% 0%);
+			animation-timeline: view(block 60% 0%);
 
 			@media (prefers-reduced-motion) {
 				animation: none;

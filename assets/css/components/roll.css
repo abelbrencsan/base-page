@@ -1,0 +1,180 @@
+/*!
+ * Roll CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Roll component prototype */
+div.roll {
+	margin-bottom: var(--element-margin);
+	view-timeline-inset: 100% 100%;
+	view-timeline-name: --roll-timeline;
+
+	div.roll-viewport {
+		align-items: center;
+		display: flex;
+		height: 100vh;
+		left: 0;
+		max-width: 100%;
+		overflow-x: hidden;
+		position: sticky;
+		top: 0;
+		width: 100vw;
+	}
+
+	ul.roll-list {
+		align-items: stretch;
+		animation-fill-mode: forwards;
+		animation-name: roll-move;
+		animation-timeline: --roll-timeline;
+		animation-timing-function: linear;
+		display: flex;
+		flex-flow: row nowrap;
+		height: 100%;
+		list-style: none;
+		margin-bottom: 0;
+		max-height: 36rem;
+		padding-left: 0;
+
+		> li {
+			flex: 0 0 40vw;
+			padding-left: 0;
+			width: 40vw;
+
+			div.roll-item {
+				height: 100%;
+			}
+		}
+	}
+
+	ul.roll-action-list.button-list {
+		display: none;
+	}
+
+	@media (max-width: 62em) {
+
+		ul.roll-list {
+
+			> li {
+				flex: 0 0 60vw;
+				width: 60vw;
+			}
+		}
+	}
+
+	@media (max-width: 47em) {
+
+		ul.roll-list {
+			max-height: 28rem;
+			
+			> li {
+				flex: 0 0 100vw;
+				width: 100vw;
+			}
+		}
+	}
+
+	@supports not (animation-timeline: view()) {
+		height: auto !important;
+		position: relative;
+
+		div.roll-viewport {
+			overflow-x: scroll;
+			position: relative;
+			scrollbar-width: none;
+		}
+
+		ul.roll-list {
+			animation: none;
+		}
+
+		ul.roll-action-list.button-list {
+			display: flex;
+			position: absolute;
+			right: var(--grid-gap);
+			top: 50%;
+			transform: translate3d(0, calc(min(18rem, 50vh) - var(--element-height) - var(--grid-gap)), 0);
+			z-index: 1;
+		}
+
+		@media (max-width: 47em) {
+
+			ul.roll-action-list.button-list {
+				right: 50%;
+				transform: translate3d(50%, calc(min(14rem, 50vh) - (var(--element-height) * 0.5)), 0);
+			}
+		}
+	}
+}
+
+/* Roll component extensions */
+div.roll {
+
+	&.roll-reverse {
+
+		ul.roll-list {
+			animation-direction: reverse;
+			transform: translate3d(calc(-100% + 100vw), 0, 0);
+		}
+
+		@supports not (animation-timeline: view()) {
+
+			ul.roll-list {
+				transform: none;
+			}
+		}
+	}
+}
+
+/* Roll component animations */
+@keyframes roll-move {
+	0% {
+		transform: translate3d(0, 0, 0);
+	}
+	100% {
+		transform: translate3d(calc(-100% + 100vw), 0, 0);
+	}
+}
+
+/* Roll item component prototype */
+div.roll-item {
+	
+	&.roll-item--box {
+		align-items: center;
+		background-color: var(--border-bg-color);
+		display: flex;
+		flex-flow: row wrap;
+		overflow: auto;
+		padding: calc(var(--box-padding) * 2);
+
+		> div.roll-item-text {
+			
+			> :last-child,
+			> :last-child > :last-child,
+			> :last-child > :last-child > :last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	&.roll-item--image {
+
+		div.image, a.image {
+			border-radius: 0;
+			height: 100%;
+			margin-bottom: 0;
+			width: 100%;
+
+			img, canvas {
+				border-radius: 0;
+				height: 100%;
+				object-fit: cover;
+				width: 100%;
+			}
+		}
+	}
+}
+
+/* Roll item component extensions */
+div.roll-item {
+}

@@ -24,12 +24,10 @@
 :root[data-page-reveal-type="sign-in-open"] {
 	background-color: var(--border-bg-color);
 
-	&::view-transition-old(root) {
-		animation-name: fade-out;
-	}
+	&::view-transition-old(root) {}
 
 	&::view-transition-new(root) {
-		animation-name: fade-in, slide-in-from-right;
+		animation-name: page-reveal-slide-in-from-right;
 	}
 }
 
@@ -37,13 +35,11 @@
 	background-color: var(--border-bg-color);
 
 	&::view-transition-old(root) {
-		animation-name: fade-out, slide-out-to-right;
+		animation-name: page-reveal-slide-out-to-right;
 		z-index: 1;
 	}
 
-	&::view-transition-new(root) {
-		animation-name: fade-in;
-	}
+	&::view-transition-new(root) {}
 }
 
 @media (prefers-reduced-motion) {
@@ -54,37 +50,37 @@
 }
 
 /* Page reveal animations */
-@keyframes slide-in-from-left {
+@keyframes page-reveal-slide-in-from-left {
 	0% {
 		translate: -100% 0;
 	}
 }
 
-@keyframes slide-in-from-right {
+@keyframes page-reveal-slide-in-from-right {
 	0% {
 		translate: 100% 0;
 	}
 }
 
-@keyframes slide-out-to-left {
+@keyframes page-reveal-slide-out-to-left {
 	100% {
 		translate: -100% 0;
 	}
 }
 
-@keyframes slide-out-to-right {
+@keyframes page-reveal-slide-out-to-right {
 	100% {
 		translate: 100% 0;
 	}
 }
 
-@keyframes fade-in {
+@keyframes page-reveal-fade-in {
 	0% {
 		opacity: 0;
 	}
 }
 
-@keyframes fade-out {
+@keyframes page-reveal-fade-out {
 	100% {
 		opacity: 0;
 	}

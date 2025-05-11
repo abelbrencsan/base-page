@@ -158,18 +158,6 @@ class Glider {
 	}
 
 	/**
-	 * Destroys the glider.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.wrapper.classList.remove(this.isScrollableClass);
-		this.wrapper.classList.remove(this.isScrollingClass);
-		this.#removeEvents();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
 	 * Retrieves the index of the currently active item in the glider.
 	 * 
 	 * @returns {number|null}
@@ -278,6 +266,18 @@ class Glider {
 			this.wrapper.classList.add(this.isScrollableClass);
 		}
 		if (typeof(this.isScrollableCallback) == "function") this.isScrollableCallback(isScrollable);
+	}
+
+	/**
+	 * Destroys the glider.
+	 * 
+	 * @returns {void}
+	 */
+	destroy() {
+		this.wrapper.classList.remove(this.isScrollableClass);
+		this.wrapper.classList.remove(this.isScrollingClass);
+		this.#removeEvents();
+		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**

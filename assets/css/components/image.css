@@ -8,11 +8,12 @@
 div.image, a.image {
 	--image-lazy-load-transition: 1000ms ease;
 	--image-cover-transition: var(--transition);
+	--image-bg-color: #333333;
 }
 
 /* Image component prototype */
 div.image, a.image {
-	background-color: var(--fg-light-color);
+	background-color: var(--image-bg-color);
 	border-radius: var(--border-radius);
 	display: block;
 	margin-bottom: var(--element-margin);

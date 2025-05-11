@@ -12,7 +12,7 @@ div.container {
 	width: 90%;
 
 	&.container--narrow {
-		max-width: calc((var(--container-width) * 0.666) - var(--grid-gap));
+		max-width: calc(var(--container-width) * 0.666);
 	}
 }
 
