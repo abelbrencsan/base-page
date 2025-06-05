@@ -64,6 +64,14 @@ div.glider {
 				max-width: calc(100% / 4);
 			}
 		}
+
+		&.glider-list--1of10 {
+				
+			> li {
+				flex: 0 0 calc(100% / 10);
+				max-width: calc(100% / 10);
+			}
+		}
 	}
 
 	ul.glider-action-list.button-list {

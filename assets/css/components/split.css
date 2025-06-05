@@ -86,19 +86,22 @@ div.split {
 
 	&.split--reveal {
 
-		div.split-text {
-			animation-name: split-text-reveal;
-			animation-timeline: view(block 60% 0%);
-
-			@media (prefers-reduced-motion) {
-				animation: none;
-			}
-		}
-
-		@media (max-width: 62em) {
+		@supports (animation-timeline: view()) {
 
 			div.split-text {
-				animation: none;
+				animation-name: split-text-reveal;
+				animation-timeline: view(block 60% 0%);
+
+				@media (prefers-reduced-motion) {
+					animation: none;
+				}
+			}
+
+			@media (max-width: 62em) {
+
+				div.split-text {
+					animation: none;
+				}
 			}
 		}
 	}

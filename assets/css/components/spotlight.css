@@ -113,19 +113,22 @@ div.spotlight {
 
 	&.spotlight--reveal {
 
-		div.spotlight-text {
-			animation-name: spotlight-text-reveal;
-			animation-timeline: view(block 60% 0%);
-
-			@media (prefers-reduced-motion) {
-				animation: none;
-			}
-		}
-
-		@media (max-width: 62em) {
+		@supports (animation-timeline: view()) {
 
 			div.spotlight-text {
-				animation: none;
+				animation-name: spotlight-text-reveal;
+				animation-timeline: view(block 60% 0%);
+
+				@media (prefers-reduced-motion) {
+					animation: none;
+				}
+			}
+
+			@media (max-width: 62em) {
+
+				div.spotlight-text {
+					animation: none;
+				}
 			}
 		}
 	}

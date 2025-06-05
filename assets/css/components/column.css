@@ -42,24 +42,27 @@ ul.column-list {
 
 	&.column-list--reveal {
 
-		> li.column-list-item {
-			
-			article.column-item {
-				animation-name: column-list-reveal;
-				animation-timeline: view(block 60% 0%);
-
-				@media (prefers-reduced-motion) {
-					animation: none;
-				}
-			}
-		}
-
-		@media (max-width: 62em) {
+		@supports (animation-timeline: view()) {
 
 			> li.column-list-item {
-			
+				
 				article.column-item {
-					animation: none;
+					animation-name: column-list-reveal;
+					animation-timeline: view(block 60% 0%);
+
+					@media (prefers-reduced-motion) {
+						animation: none;
+					}
+				}
+			}
+
+			@media (max-width: 62em) {
+
+				> li.column-list-item {
+				
+					article.column-item {
+						animation: none;
+					}
 				}
 			}
 		}

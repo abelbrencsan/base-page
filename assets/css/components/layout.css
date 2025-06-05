@@ -9,7 +9,7 @@ div.layout {
 	display: grid;
 	grid-column-gap: calc(var(--grid-gap) * 2);
 	grid-template-areas: "aside main";
-	grid-template-columns: calc(var(--container-width) * 0.333) 1fr;
+	grid-template-columns: calc(var(--container-width) * 0.333) minmax(0, 1fr);
 
 	> aside.layout-aside {
 		grid-area: aside;

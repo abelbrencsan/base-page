@@ -4,36 +4,41 @@
  * Licensed under the MIT license
  */
 
+/* Roll component variables */
+div.roll {
+	--roll-max-height: 36rem;
+
+	@media (max-width: 47em) {
+		--roll-max-height: 32rem;
+	}
+}
+
 /* Roll component prototype */
 div.roll {
 	margin-bottom: var(--element-margin);
-	view-timeline-inset: 100% 100%;
-	view-timeline-name: --roll-timeline;
+	position: relative;
 
 	div.roll-viewport {
 		align-items: center;
 		display: flex;
 		height: 100vh;
 		left: 0;
+		max-height: var(--roll-max-height);
 		max-width: 100%;
-		overflow-x: hidden;
-		position: sticky;
+		overflow-x: scroll;
+		position: relative;
+		scrollbar-width: none;
 		top: 0;
 		width: 100vw;
 	}
 
 	ul.roll-list {
 		align-items: stretch;
-		animation-fill-mode: forwards;
-		animation-name: roll-move;
-		animation-timeline: --roll-timeline;
-		animation-timing-function: linear;
 		display: flex;
 		flex-flow: row nowrap;
 		height: 100%;
 		list-style: none;
 		margin-bottom: 0;
-		max-height: 36rem;
 		padding-left: 0;
 
 		> li {
@@ -48,7 +53,11 @@ div.roll {
 	}
 
 	ul.roll-action-list.button-list {
-		display: none;
+		display: flex;
+		position: absolute;
+		right: var(--grid-gap);
+		top: calc(50% + min(var(--roll-max-height) * 0.5, 50vh) - var(--element-height) - var(--grid-gap));
+		z-index: 1;
 	}
 
 	@media (max-width: 62em) {
@@ -65,44 +74,38 @@ div.roll {
 	@media (max-width: 47em) {
 
 		ul.roll-list {
-			max-height: 28rem;
 			
 			> li {
 				flex: 0 0 100vw;
 				width: 100vw;
 			}
 		}
+
+		ul.roll-action-list.button-list {
+			right: calc(50% - var(--element-height));
+		}
 	}
 
-	@supports not (animation-timeline: view()) {
-		height: auto !important;
-		position: relative;
+	@supports (animation-timeline: view()) {
+		height: inherit;
+		view-timeline-inset: 100% 100%;
+		view-timeline-name: --roll-timeline;
 
 		div.roll-viewport {
-			overflow-x: scroll;
-			position: relative;
-			scrollbar-width: none;
+			overflow-x: hidden;
+			position: sticky;
+			top: calc(50% - min(var(--roll-max-height) * 0.5, 50vh));
 		}
 
 		ul.roll-list {
-			animation: none;
+			animation-fill-mode: forwards;
+			animation-name: roll-move;
+			animation-timeline: --roll-timeline;
+			animation-timing-function: linear;
 		}
 
 		ul.roll-action-list.button-list {
-			display: flex;
-			position: absolute;
-			right: var(--grid-gap);
-			top: 50%;
-			transform: translate3d(0, calc(min(18rem, 50vh) - var(--element-height) - var(--grid-gap)), 0);
-			z-index: 1;
-		}
-
-		@media (max-width: 47em) {
-
-			ul.roll-action-list.button-list {
-				right: 50%;
-				transform: translate3d(50%, calc(min(14rem, 50vh) - (var(--element-height) * 0.5)), 0);
-			}
+			display: none;
 		}
 	}
 }
@@ -152,7 +155,19 @@ div.roll-item {
 			> :last-child,
 			> :last-child > :last-child,
 			> :last-child > :last-child > :last-child {
-				margin-bottom: 0;
+				margin-bottom: calc(var(--element-height) + var(--box-padding));
+			}
+		}
+
+		@supports (animation-timeline: view()) {
+
+			> div.roll-item-text {
+		
+				> :last-child,
+				> :last-child > :last-child,
+				> :last-child > :last-child > :last-child {
+					margin-bottom: 0;
+				}
 			}
 		}
 	}

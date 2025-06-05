@@ -155,7 +155,9 @@ class Roll {
 	 * @returns {void}
 	 */
 	#setWrapperHeight() {
-		this.wrapper.style.height = this.#getWrapperHeight();
+		if (CSS.supports("animation-timeline: view()")) {
+			this.wrapper.style.height = this.#getWrapperHeight();
+		}
 	}
 
 	/**
@@ -174,7 +176,7 @@ class Roll {
 	 */
 	#getWrapperHeight() {
 		if (this.items.length > 1) {
-			return `${this.items.length * 100}vh`;
+			return `${this.items.length * 80}vh`;
 		} else {
 			return '100vh';
 		}

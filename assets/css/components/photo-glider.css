@@ -1,0 +1,67 @@
+/*!
+ * Photo glider CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Photo glider component prototype */
+div.photo-glider.glider {
+	
+	ul.glider-list {
+
+		> li {
+
+			div.glider-list-item.image, a.glider-list-item.image {
+				border-radius: 0;
+				width: 100%;
+
+				img, canvas {
+					aspect-ratio: 5 / 4;
+					border-radius: 0;
+					height: 100%;
+					object-fit: cover;
+					object-position: 50% 50%;
+					width: 100%;
+				}
+			}
+		}
+	}
+
+	@supports (animation-timeline: view()) {
+
+		ul.glider-list {
+
+			> li {
+
+				div.glider-list-item.image, a.glider-list-item.image {
+
+					img, canvas {
+						animation-fill-mode: both;
+						animation-name: photo-glider-reveal;
+						animation-timeline: view(x);
+						animation-timing-function: linear;
+
+						@media (prefers-reduced-motion) {
+							animation: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/* Photo glider component extensions */
+div.photo-glider.glider {
+}
+
+/* Photo glider component animations */
+@keyframes photo-glider-reveal {
+	0% {
+		object-position: 100% 50%;
+	}
+
+	100% {
+		object-position: 0% 50%;
+	}
+}

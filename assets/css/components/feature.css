@@ -75,37 +75,40 @@ div.feature {
 
 	&.feature--reveal {
 
-		div.feature-image.image, a.feature-image.image, div.feature-text {
-			animation-timeline: view(block 60% 0%);
+		@supports (animation-timeline: view()) {
 
-			@media (prefers-reduced-motion) {
-				animation: none;
+			div.feature-image.image, a.feature-image.image, div.feature-text {
+				animation-timeline: view(block 60% 0%);
+
+				@media (prefers-reduced-motion) {
+					animation: none;
+				}
 			}
-		}
-
-		div.feature-image.image, a.feature-image.image {
-			animation-name: feature-left-reveal;
-		}
-
-		div.feature-text {
-			animation-name: feature-right-reveal;
-		}
-
-		&.feature--reverse {
 
 			div.feature-image.image, a.feature-image.image {
-				animation-name: feature-right-reveal;
+				animation-name: feature-left-reveal;
 			}
 
 			div.feature-text {
-				animation-name: feature-left-reveal;
+				animation-name: feature-right-reveal;
 			}
-		}
 
-		@media (max-width: 62em) {
+			&.feature--reverse {
 
-			div.feature-image.image, a.feature-image.image, div.feature-text {
-				animation: none;
+				div.feature-image.image, a.feature-image.image {
+					animation-name: feature-right-reveal;
+				}
+
+				div.feature-text {
+					animation-name: feature-left-reveal;
+				}
+			}
+
+			@media (max-width: 62em) {
+
+				div.feature-image.image, a.feature-image.image, div.feature-text {
+					animation: none;
+				}
 			}
 		}
 	}
