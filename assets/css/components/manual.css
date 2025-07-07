@@ -1,0 +1,147 @@
+/*!
+ * Manual CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Manual component prototype */
+div.manual {
+	display: grid;
+	grid-gap: calc(var(--grid-gap) * 2);
+	grid-template-areas: "cover steps";
+	grid-template-columns: repeat(2, 1fr);
+	margin-bottom: var(--element-margin);
+
+	div.manual-cover {
+		display: flex;
+		flex-flow: column nowrap;
+		grid-area: cover;
+		height: 100vh;
+		justify-content: center;
+		position: sticky;
+		top: 0;
+
+		h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+			font-size: var(--heading-2-font-size);
+		}
+
+		p {
+			font-size: var(--subheading-2-font-size);
+		}
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	ul.manual-step-list {
+		counter-reset: step-list;
+		grid-area: steps;
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			counter-increment: step-list;
+			padding-left: 0;
+
+			article.manual-step-item {
+				position: relative;
+
+				&:after {
+					align-items: center;
+					backdrop-filter: blur(10px);
+					background-color: var(--translucent-bg-color);
+					border-radius: var(--border-radius);
+					color: var(--fg-color);
+					content: counter(step-list);
+					display: inline-flex;
+					font-size: 2rem;
+					height: 1.25em;
+					justify-content: center;
+					left: 0.5rem;
+					position: absolute;
+					top: 0.5rem;
+					width: 1.75em;
+				}
+			}
+
+			&:last-child {
+				
+				article.manual-step-item {
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 62em) {
+		grid-gap: var(--element-margin);
+		grid-template-areas: "cover" "steps";
+		grid-template-columns: none;
+
+		div.manual-cover {
+			height: auto;
+			position: relative;
+			text-align: center;
+
+			ul.manual-cover-button-list.button-list {
+				justify-content: center;
+			}
+		}
+	}
+}
+
+/* Manual component extensions */
+div.manual {
+}
+
+/* Manual item component prototype */
+article.manual-step-item {
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
+	display: grid;
+	grid-template-areas: "image" "text";
+	margin-bottom: var(--element-margin);
+	overflow: hidden;
+
+	div.manual-step-item-image.image, a.manual-step-item-image.image {
+		border-radius: 0;
+		grid-area: image;
+		margin-bottom: 0;
+
+		img, canvas {
+			border-radius: 0;
+			height: 100%;
+			object-fit: cover;
+			width: 100%;
+		}
+	}
+
+	div.manual-step-item-text {
+		grid-area: text;
+		padding: var(--box-padding);
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@media (max-width: 62em) {
+		grid-template-areas: "image text";
+		grid-template-columns: 1fr 2fr;
+	}
+
+	@media (max-width: 32em) {
+		grid-template-areas: "image" "text";
+		grid-template-columns: none;
+	}
+}
+
+/* Manual item component extensions */
+article.manual-step-item {
+}

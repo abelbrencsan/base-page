@@ -1,0 +1,129 @@
+/*!
+ * Listing CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Listing component variables */
+ul.listing {
+	--listing-item-meta-list-width: 15rem;
+}
+
+/* Listing component prototype */
+ul.listing {
+	list-style: none;
+	padding-left: 0;
+
+	> li.listing-item {
+		align-items: center;
+		border-radius: var(--border-radius);
+		display: grid;
+		grid-column-gap: calc(var(--grid-gap) * 0.5);
+		grid-template-areas: "control heading meta actions" "control subheading meta actions";
+		grid-template-columns: auto 1fr var(--listing-item-meta-list-width) auto;
+		padding: calc(var(--box-padding) * 0.5);
+
+		div.image, a.image, div.listing-item-sort-trigger {
+			grid-area: control;
+		}
+
+		div.image, a.image {
+			margin-bottom: 0;
+
+			img, canvas {
+				width: var(--element-height);
+			}
+		}
+
+		div.listing-item-sort-trigger {
+			-webkit-user-select: none;
+			align-items: center;
+			background-color: transparent;
+			border-radius: var(--border-radius);
+			cursor: grabbing;
+			display: flex;
+			height: var(--element-height);
+			justify-content: center;
+			user-select: none;
+			width: var(--element-height);
+		}
+
+		h1, h2, h3, h4, h5, h6, .heading, p {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		h1, h2, h3, h4, h5, h6, .heading {
+			grid-area: heading;
+			margin-bottom: 0;
+		}
+
+		h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+			font-size: var(--normal-font-size);
+		}
+
+		p {
+			font-size: var(--small-font-size);
+			grid-area: subheading;
+			margin-bottom: 0;
+		}
+
+		dl.listing-item-meta-list {
+			display: grid;
+			grid-area: meta;
+			grid-column-gap: calc(var(--grid-gap) * 0.5);
+			grid-template-columns: repeat(3, 1fr);
+			margin-bottom: 0;
+
+			dt, dd {
+				font-size: var(--small-font-size);
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			dt {
+				grid-row: 1 / 2;
+				margin-bottom: 0;
+			}
+
+			dd {
+				grid-row: 2 / 3;
+			}
+		}
+
+		ul.button-list {
+			grid-area: actions;
+		}
+
+		&:nth-child(odd) {
+			background-color: var(--border-bg-color);
+		}
+	}
+
+	@media (max-width: 47em) {
+
+		> li.listing-item {
+			grid-template-areas: "heading actions control" "subheading actions control" "meta meta meta";
+			grid-template-columns: 1fr auto auto;
+			padding: var(--box-padding);
+
+			div.image, a.image, div.listing-item-sort-trigger {
+				margin-left: calc(var(--grid-gap) * -0.333);
+			}
+
+			div.listing-item-sort-trigger {
+				background-color: var(--border-color);
+			}
+
+			dl.listing-item-meta-list {
+				margin-top: calc(var(--grid-gap) * 0.5);
+			}
+		}
+	}
+}
+
+/* Listing component extensions */
+ul.listing {
+}

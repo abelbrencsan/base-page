@@ -10,6 +10,7 @@ import { RangeIndicator } from "../js/range-indicator.js";
 import { Roll } from "../js/roll.js";
 import { Router, Route } from "../js/router.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
+import { SortableList } from "../js/sortable-list.js";
 import { Tab } from "../js/tab.js";
 import { Validator } from "../js/validator.js";
 
@@ -142,6 +143,13 @@ class App {
 	tabs = [];
 
 	/**
+	 * List of sortable lists.
+	 * 
+	 * @type {Array<SortableList>}
+	 */
+	sortableLists = [];
+
+	/**
 	 * List of pages.
 	 * 
 	 * @type {Array<Page>}
@@ -196,6 +204,8 @@ class App {
 		this.#initValidators();
 		this.#initNotices();
 		this.#initTabs();
+		this.#initSortableLists();
+		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
 	}
@@ -438,6 +448,40 @@ class App {
 				triggers: elem.querySelectorAll("[data-tab-trigger]"),
 				panels: elem.querySelectorAll("[data-tab-panel]")
 			}));
+		});
+	}
+
+	/**
+	 * Initializes the sortables lists.
+	 * 
+	 * @returns {void}
+	 */
+	#initSortableLists() {
+		let elems = document.querySelectorAll("[data-sortable-list]");
+		elems.forEach((elem) => {
+			this.sortableLists.push(new SortableList({
+				wrapper: elem
+			}));
+		});
+	}
+
+	/**
+	 * Initializes the smooth scrolls.
+	 * 
+	 * @returns {void}
+	 */
+	#initSmoothScrolls() {
+		let elems = document.querySelectorAll('[data-smooth-scroll]');
+		elems.forEach((elem) => {
+			elem.addEventListener("click", (event) => {
+				event.preventDefault();
+				let target = document.querySelector(elem.getAttribute('href'));
+				if (target) {
+					target.scrollIntoView({
+						behavior: 'smooth'
+					});
+				}
+			});
 		});
 	}
 

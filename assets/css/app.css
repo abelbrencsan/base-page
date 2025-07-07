@@ -31,6 +31,7 @@
 @import url("./components/details.css");
 @import url("./components/dialog.css");
 @import url("./components/feature.css");
+@import url("./components/filmstrip.css");
 @import url("./components/flex.css");
 @import url("./components/form.css");
 @import url("./components/glider.css");
@@ -39,6 +40,8 @@
 @import url("./components/icon.css");
 @import url("./components/image.css");
 @import url("./components/layout.css");
+@import url("./components/listing.css");
+@import url("./components/manual.css");
 @import url("./components/notice-list.css");
 @import url("./components/pagination.css");
 @import url("./components/photo-glider.css");
@@ -47,6 +50,7 @@
 @import url("./components/section.css");
 @import url("./components/side-panel.css");
 @import url("./components/slideshow.css");
+@import url("./components/sortable-list.css");
 @import url("./components/split.css");
 @import url("./components/spotlight.css");
 @import url("./components/step-list.css");

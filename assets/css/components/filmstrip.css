@@ -1,0 +1,104 @@
+/*!
+ * Filmstrip CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Filmstrip component prototype */
+div.filmstrip {
+	display: grid;
+	grid-gap: calc(var(--grid-gap) * 2);
+	grid-template-areas: "cover frames";
+	grid-template-columns: repeat(2, 1fr);
+	margin-bottom: var(--element-margin);
+
+	div.filmstrip-cover {
+		display: flex;
+		flex-flow: column nowrap;
+		grid-area: cover;
+		height: 100vh;
+		justify-content: center;
+		position: sticky;
+		top: 0;
+
+		h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+			font-size: var(--heading-2-font-size);
+		}
+
+		p {
+			font-size: var(--subheading-2-font-size);
+		}
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	ul.filmstrip-frame-list {
+		grid-area: frames;
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			display: flex;
+			justify-content: center;
+			padding-left: 0;
+
+			div.image, a.image {
+				width: 100%;
+
+				img, canvas {
+					width: 100%;
+				}
+			}
+
+			&:last-child {
+
+				div.image, a.image {
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 62em) {
+		grid-gap: var(--element-margin);
+		grid-template-areas: "cover" "frames";
+		grid-template-columns: none;
+
+		div.filmstrip-cover {
+			height: auto;
+			position: relative;
+			text-align: center;
+
+			ul.filmstrip-cover-button-list.button-list {
+				justify-content: center;
+			}
+		}
+
+		ul.filmstrip-frame-list {
+
+			> li {
+
+				div.image, a.image {
+					max-width: 28rem;
+				}
+			}
+		}
+	}
+}
+
+/* Filmstrip component extensions */
+div.filmstrip {
+
+	&.filmstrip--reverse {
+		grid-template-areas: "frames cover";
+
+		@media (max-width: 62em) {
+			grid-template-areas: "cover" "frames";
+		}
+	}
+}

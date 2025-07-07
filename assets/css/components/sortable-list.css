@@ -1,0 +1,75 @@
+/*!
+ * Sortable list CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Sortable list component variables */
+ul.sortable-list {
+	--sortable-transition: var(--transition);
+}
+
+/* Sortable list component prototype */
+ul.sortable-list {
+
+	> li {
+		position: relative;
+
+		&:before {
+			background-color: var(--link-color);
+			content: '';
+			height: 4px;
+			left: 0;
+			position: absolute;
+			visibility: hidden;
+			width: 100%;
+			z-index: 1;
+		}
+
+		&.is-above, &.is-below {
+
+			> * {
+				pointer-events: none;
+			}
+
+			&:before {
+				visibility: visible;
+			}
+		}
+
+		&.is-above {
+
+			&:before {
+				top: -2px;
+			}
+		}
+
+		&.is-below {
+
+			&:before {
+				bottom: -2px;
+			}
+		}
+
+		&.is-dragging {
+
+			> * {
+				opacity: 0.25;
+			}	
+		}
+	}
+
+	&.has-dragging {
+
+		> li {
+
+			> * {
+				transition: var(--sortable-transition);
+			}
+		}
+	}
+}
+
+/* Sortable list component extensions */
+ul.sortable-list {
+}
