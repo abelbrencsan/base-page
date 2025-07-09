@@ -94,10 +94,10 @@ class Reveal {
 	 * Handles the reveals.
 	 * 
 	 * @param {Array<IntersectionObserverEntry>} entries
-	 * @param {IntersectionObserver} _observer
+	 * @param {IntersectionObserver} observer
 	 * @returns {void}
 	 */
-	reveal(entries, _observer) {
+	reveal(entries, observer) {
 		entries.forEach((entry) => {
 			this.#resetElem(entry.target);
 			if (entry.intersectionRatio > this.threshold) {

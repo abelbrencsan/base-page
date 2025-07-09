@@ -168,7 +168,7 @@ class SortableList {
 			event.dataTransfer.setDragImage(this.draggedItem, x, y);
 			this.wrapper.classList.add(this.hasDraggingClass);
 			this.draggedItem.classList.add(this.isDraggingClass);
-			if ("vibrate" in navigator) navigator.vibrate(200);
+			if ("vibrate" in navigator) navigator.vibrate(100);
 			if (typeof(this.dragStartCallback) == "function") this.dragStartCallback();
 		}
 	}

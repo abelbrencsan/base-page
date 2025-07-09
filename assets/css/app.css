@@ -56,6 +56,7 @@
 @import url("./components/step-list.css");
 @import url("./components/tab.css");
 @import url("./components/table.css");
+@import url("./components/timelapse.css");
 
 /* Singleton imports */
 @import url("./singletons/authentication.css");

@@ -117,7 +117,7 @@ class Tab {
 	 */
 	select(index) {
 		this.index = this.#getValidIndex(index);		
-		this.triggers.forEach((_trigger, index) => {
+		this.triggers.forEach((trigger, index) => {
 			if (index !== this.index) {
 				this.#setInactive(index);
 			}
@@ -132,7 +132,7 @@ class Tab {
 	 */
 	destroy() {
 		this.#removeEvents();
-		this.triggers.forEach((_trigger, index) => {
+		this.triggers.forEach((trigger, index) => {
 			this.#reset(index);
 		});
 		this.wrapper.classList.remove(this.isInitializedClass);

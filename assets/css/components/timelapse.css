@@ -1,0 +1,116 @@
+/*!
+ * Timelapse CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Timelapse component prototype */
+div.timelapse {
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
+	display: grid;
+	grid-gap: calc(var(--grid-gap) * 2);
+	grid-template-areas: "captions frames";
+	grid-template-columns: repeat(2, 1fr);
+	margin-bottom: var(--element-margin);
+	padding: calc(var(--box-padding) * 2);
+
+	ul.timelapse-caption-list, ul.timelapse-frame-list {
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			display: flex;
+			flex-flow: column wrap;
+			height: 100vh;
+			justify-content: center;
+			min-height: 30rem;
+			padding-left: 0;
+		}
+	}
+
+	ul.timelapse-caption-list {
+		grid-area: captions;
+
+		> li {
+
+			> :last-child,
+			> :last-child > :last-child,
+			> :last-child > :last-child > :last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	ul.timelapse-frame-list {
+		grid-area: frames;
+		margin-top: -1px;
+		position: relative;
+
+		> li {
+			position: sticky;
+			top: 0;
+
+			div.image, a.image {
+				margin-bottom: 0;
+
+				img, canvas {
+					width: 100%;
+				}
+			}
+		}
+
+		@supports (container-type: scroll-state) {
+
+			> li {
+				container-type: scroll-state;
+
+				div.image, a.image {
+					opacity: 0;
+
+					@container scroll-state(stuck: top) {
+						opacity: 1;
+					}
+				}
+
+				&:first-child {
+
+					div.image, a.image {
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+
+	@media (max-width: 62em) {
+		grid-template-areas: "captions";
+		grid-template-columns: 1fr;
+
+		ul.timelapse-caption-list {
+
+			> li {
+				height: auto;
+				margin-bottom: var(--element-margin);
+				min-height: auto;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		ul.timelapse-frame-list {
+			display: none;
+		}
+	}
+
+	@media (max-width: 32em) {
+		padding: var(--box-padding);
+	}
+}
+
+/* Timelapse component extensions */
+div.timelapse {
+}

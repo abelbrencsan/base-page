@@ -46,6 +46,8 @@ div.filmstrip {
 			display: flex;
 			justify-content: center;
 			padding-left: 0;
+			position: sticky;
+			top: var(--grid-gap);
 
 			div.image, a.image {
 				width: 100%;
@@ -100,5 +102,47 @@ div.filmstrip {
 		@media (max-width: 62em) {
 			grid-template-areas: "cover" "frames";
 		}
+	}
+
+	&.filmstrip--reveal {
+
+		@supports (animation-timeline: view()) {
+			view-timeline-inset: 50% 100%;
+			view-timeline-name: --filmstrip-timeline;
+
+			div.filmstrip-cover {
+				animation-fill-mode: both;
+				animation-name: filmstrip-cover-reveal;
+				animation-timeline: --filmstrip-timeline;
+				animation-timing-function: linear;
+
+				@media (prefers-reduced-motion) {
+					animation: none;
+				}
+			}
+		}
+
+		@media (max-width: 62em) {
+
+			div.filmstrip-cover {
+				animation: none;
+			}
+		}
+	}
+}
+
+/* Filmstrip component animations */
+@keyframes filmstrip-cover-reveal {
+	0% {
+		transform: translate3d(0, 10rem, 0);
+	}
+
+	75% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
 	}
 }

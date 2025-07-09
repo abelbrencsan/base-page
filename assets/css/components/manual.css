@@ -46,6 +46,8 @@ div.manual {
 		> li {
 			counter-increment: step-list;
 			padding-left: 0;
+			position: sticky;
+			top: var(--grid-gap);
 
 			article.manual-step-item {
 				position: relative;
@@ -96,6 +98,48 @@ div.manual {
 
 /* Manual component extensions */
 div.manual {
+
+	&.manual--reveal {
+
+		@supports (animation-timeline: view()) {
+			view-timeline-inset: 50% 100%;
+			view-timeline-name: --manual-timeline;
+
+			div.manual-cover {
+				animation-fill-mode: both;
+				animation-name: manual-cover-reveal;
+				animation-timeline: --manual-timeline;
+				animation-timing-function: linear;
+
+				@media (prefers-reduced-motion) {
+					animation: none;
+				}
+			}
+		}
+
+		@media (max-width: 62em) {
+
+			div.manual-cover {
+				animation: none;
+			}
+		}
+	}
+}
+
+/* Manual component animations */
+@keyframes manual-cover-reveal {
+	0% {
+		transform: translate3d(0, 10rem, 0);
+	}
+
+	75% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
 }
 
 /* Manual item component prototype */

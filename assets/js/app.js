@@ -471,14 +471,14 @@ class App {
 	 * @returns {void}
 	 */
 	#initSmoothScrolls() {
-		let elems = document.querySelectorAll('[data-smooth-scroll]');
+		let elems = document.querySelectorAll("[data-smooth-scroll]");
 		elems.forEach((elem) => {
 			elem.addEventListener("click", (event) => {
 				event.preventDefault();
-				let target = document.querySelector(elem.getAttribute('href'));
+				let target = document.querySelector(elem.getAttribute("href"));
 				if (target) {
 					target.scrollIntoView({
-						behavior: 'smooth'
+						behavior: "smooth"
 					});
 				}
 			});
