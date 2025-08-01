@@ -12,7 +12,7 @@ footer.footer {
 	--footer-link-color: var(--scheme-dark-link-color);
 }
 
-/* Footer singleton */
+/* Footer singleton prototype */
 footer.footer {
 	background-color: var(--footer-bg-color);
 	color: var(--footer-fg-color);
@@ -52,8 +52,11 @@ footer.footer {
 					color: inherit;
 					display: inline-block;
 
-					body.no-touch &:hover {
-						color: var(--footer-link-color);
+					@media (hover: hover) {
+
+						&:hover, &:active {
+							color: var(--footer-link-color);
+						}
 					}
 				}
 
@@ -101,8 +104,11 @@ footer.footer {
 				> a, > button {
 					color: inherit;
 
-					body.no-touch &:hover {
-						color: var(--footer-link-color);
+					@media (hover: hover) {
+
+						&:hover, &:active {
+							color: var(--footer-link-color);
+						}
 					}
 				}
 
@@ -188,4 +194,8 @@ footer.footer {
 			grid-template-columns: 1fr;
 		}
 	}
+}
+
+/* Footer singleton extensions */
+footer.footer {
 }

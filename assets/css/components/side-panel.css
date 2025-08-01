@@ -72,8 +72,11 @@ aside.side-panel[popover]:popover-open {
 		text-align: left;
 		top: 0;
 
-		body.no-touch &:hover {
-			color: var(--link-color);
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				color: var(--link-color);
+			}
 		}
 	}
 

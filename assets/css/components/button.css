@@ -28,13 +28,16 @@ a.button, button.button {
 	transition: background-color var(--button-transition), opacity var(--button-transition);
 	white-space: nowrap;
 
-	body.no-touch &:hover, &:active {
-		background-color: var(--button-bg-hover-color);
-	}
-
-	&.keyboard-focus:focus {
+	&:focus-visible {
 		box-shadow: inset 0 0 0 3px var(--focus-color);
 		outline: 0;
+	}
+
+	@media (hover: hover) {
+
+		&:hover, &:active {
+			background-color: var(--button-bg-hover-color);
+		}
 	}
 }
 
@@ -182,8 +185,11 @@ div.button-subnav {
 				text-decoration: none;
 				white-space: nowrap;
 
-				body.no-touch &:hover {
-					color: var(--link-color);
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						color: var(--link-color);
+					}
 				}
 			}
 
@@ -237,13 +243,16 @@ button.button-link {
 	padding: 0;
 	text-align: left;
 
-	body.no-touch &:hover {
-		color: var(--link-color);
-	}
-
 	&:disabled {
 		cursor: not-allowed;
 		opacity: 0.5;
+	}
+
+	@media (hover: hover) {
+
+		&:hover, &:active {
+			color: var(--link-color);
+		}
 	}
 }
 

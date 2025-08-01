@@ -82,13 +82,6 @@ div.image, a.image {
 			z-index: 1;
 		}
 
-		body.no-touch &:hover, &:active {
-
-			&:before {
-				opacity: 0.1;
-			}
-		}
-
 		&.image--cover--video {
 
 			&:after {
@@ -104,11 +97,21 @@ div.image, a.image {
 				transition: transform var(--image-cover-transition);
 				width: 64px;
 			}
+		}
 
-			body.no-touch &:hover, &:active {
+		@media (hover: hover) {
 
-				&:after {
-					transform: translate3d(-50%, -50%, 0) scale3d(1.1, 1.1, 1.0);
+			&:hover, &:active {
+
+				&:before {
+					opacity: 0.1;
+				}
+
+				&.image--cover--video {
+					
+					&:after {
+						transform: translate3d(-50%, -50%, 0) scale3d(1.1, 1.1, 1.0);
+					}
 				}
 			}
 		}

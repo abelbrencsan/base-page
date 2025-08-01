@@ -39,9 +39,7 @@ input.form-input, select.form-input, textarea.form-input {
 		border-color: var(--link-color);
 	}
 
-	&.keyboard-focus:focus {
-		border-color: var(--focus-color);
-		box-shadow: inset 0 0 0 2px var(--focus-color);
+	&:focus-visible {
 		outline: 0;
 	}
 
@@ -135,12 +133,12 @@ label.form-control {
 				border-color: var(--link-color);
 			}
 
-			input.keyboard-focus:focus + & {
+			input:focus-visible + & {
 				border-color: var(--focus-color);
 				box-shadow: inset 0 0 0 2px var(--focus-color);
 			}
 
-			input.keyboard-focus:checked:focus + & {
+			input:focus-visible:checked + & {
 				border-color: var(--focus-color);
 			}
 
@@ -187,7 +185,7 @@ label.form-control {
 				}
 			}
 
-			input.keyboard-focus:focus + & {
+			input:focus-visible + & {
 				box-shadow: inset 0 0 0 3px var(--focus-color);
 			}
 
@@ -215,7 +213,7 @@ input.form-range {
 		outline: none;
 	}
 
-	&.keyboard-focus:focus {
+	&:focus-visible {
 
 		&::-webkit-slider-thumb {
 			box-shadow: inset 0 0 0 3px var(--focus-color);
@@ -404,6 +402,67 @@ div.form-item {
 
 		&[data-label]:after {
 			color: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+		}
+	}
+
+	&.form-item--stepper {
+		display: grid;
+		grid-template-areas: "label label label" "input substract add";
+		grid-template-columns: 1fr repeat(2, var(--element-height));
+
+		label.form-label, span.form-label {
+			grid-area: label;
+		}
+
+		input:not(.form-item-stepper-indicator) {
+			border: 0;
+			clip: rect(0,0,0,0);
+			grid-area: input;
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+			width: 1px;
+		}
+
+		div.form-item-stepper-indicator {
+			align-items: center;
+			border-radius: var(--border-radius) 0 0 var(--border-radius);
+			border: 1px solid var(--border-color);
+			background-color: var(--border-bg-color);
+			display: flex;
+			grid-area: input;
+			height: var(--element-height);
+			padding-left: 0.5em;
+			padding-right: 0.5em;
+
+			&:focus {
+				border-color: var(--link-color);
+			}
+
+			&:focus-visible {
+				outline: 0;
+			}
+		}
+
+		a.button, button.button {
+			width: 100%;
+
+			&:first-of-type {
+				border-radius: 0;
+				grid-area: substract;
+			}
+
+			&:last-of-type {
+				border-bottom-left-radius: 0;
+				border-top-left-radius: 0;
+				grid-area: add;
+			}
+		}
+
+		&[data-label]:after {
+			top: 0;
 		}
 	}
 }

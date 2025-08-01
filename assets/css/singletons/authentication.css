@@ -4,7 +4,7 @@
  * Licensed under the MIT license
  */
 
-/* Authentication singleton */
+/* Authentication singleton prototype */
 main.authentication {
 	align-items: center;
 	background-color: var(--border-bg-color);
@@ -59,8 +59,11 @@ main.authentication {
 					margin-right: 0.25rem;
 				}
 
-				body.no-touch &:hover {
-					color: var(--link-color);
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						color: var(--link-color);
+					}
 				}
 			}
 
@@ -97,8 +100,15 @@ main.authentication {
 			margin-right: 0.25rem;
 		}
 
-		body.no-touch &:hover {
-			color: var(--link-color);
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				color: var(--link-color);
+			}
 		}
 	}
+}
+
+/* Authentication singleton extensions */
+main.authentication {
 }

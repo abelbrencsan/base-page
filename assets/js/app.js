@@ -1,7 +1,6 @@
 import { AlertManager } from "../js/alert-manager.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
-import { FocusTracker } from "../js/focus-tracker.js";
 import { Glider } from "../js/glider.js";
 import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
@@ -10,7 +9,8 @@ import { RangeIndicator } from "../js/range-indicator.js";
 import { Roll } from "../js/roll.js";
 import { Router, Route } from "../js/router.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
-import { SortableList } from "../js/sortable-list.js";
+import { SortableTree } from "../js/sortable-tree.js";
+import { Stepper } from "../js/stepper.js";
 import { Tab } from "../js/tab.js";
 import { Validator } from "../js/validator.js";
 
@@ -22,13 +22,6 @@ import { Validator } from "../js/validator.js";
  * @license MIT License
  */
 class App {
-
-	/**
-	 * Focus tracker for the aplication.
-	 * 
-	 * @type {FocusTracker}
-	 */
-	focusTracker = new FocusTracker();
 
 	/**
 	 * Icon manager for the apllication.
@@ -143,11 +136,18 @@ class App {
 	tabs = [];
 
 	/**
-	 * List of sortable lists.
+	 * List of sortable tres.
 	 * 
-	 * @type {Array<SortableList>}
+	 * @type {Array<sortableTree>}
 	 */
-	sortableLists = [];
+	sortableTrees = [];
+
+	/**
+	 * List of steppers.
+	 * 
+	 * @type {Array<Stepper>}
+	 */
+	steppers = [];
 
 	/**
 	 * List of pages.
@@ -188,11 +188,6 @@ class App {
 		}
 
 		// Initialize the application
-		this.handleEvent = function(event) {
-			this.#handleEvents(event);
-		};
-		document.body.classList.remove("no-js");
-		window.addEventListener("touchstart", this);
 		this.#initGliders();
 		this.#initRolls();
 		this.#initNavbarSubnavs();
@@ -204,7 +199,8 @@ class App {
 		this.#initValidators();
 		this.#initNotices();
 		this.#initTabs();
-		this.#initSortableLists();
+		this.#initSortableTrees();
+		this.#initSteppers();
 		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
@@ -452,15 +448,38 @@ class App {
 	}
 
 	/**
-	 * Initializes the sortables lists.
+	 * Initializes the sortables tees.
 	 * 
 	 * @returns {void}
 	 */
-	#initSortableLists() {
-		let elems = document.querySelectorAll("[data-sortable-list]");
+	#initSortableTrees() {
+		let elems = document.querySelectorAll("[data-sortable-tree]");
 		elems.forEach((elem) => {
-			this.sortableLists.push(new SortableList({
-				wrapper: elem
+			this.sortableTrees.push(new SortableTree({
+				wrapper: elem,
+				nodeSelector: "[data-sortable-tree-node]",
+				subtreeSelector: "[data-sortable-tree-subtree]",
+				collapseTriggerSelector: "[draggable]"
+			}));
+		});
+	}
+
+	/**
+	 * Initializes the steppers.
+	 * 
+	 * @returns {void}
+	 */
+	#initSteppers() {
+		let elems = document.querySelectorAll("[data-stepper]");
+		elems.forEach((elem) => {
+			this.steppers.push(new Stepper({
+				input: elem.querySelector("[data-stepper-input]"),
+				stepUpTrigger: elem.querySelector("[data-stepper-step-up-trigger]"),
+				stepDownTrigger: elem.querySelector("[data-stepper-step-down-trigger]"),
+				indicator: elem.querySelector("[data-stepper-indicator]"),
+				formatter: (value) => {
+					return `${value.toLocaleString("en-US")}`;
+				}
 			}));
 		});
 	}
@@ -556,30 +575,6 @@ class App {
 		this.pages.forEach((page) => {
 			page.onBreakpointChange(event);
 		});
-	}
-
-	/**
-	 * Handles actions when the user is using the application on a touch-capable device.
-	 * 
-	 * @returns {void}
-	 */
-	#isTouchDetected() {
-		document.body.classList.remove("no-touch");
-		window.removeEventListener("touchstart", this);
-	}
-
-	/**
-	 * Handles events.
-	 * 
-	 * @param {Event} event
-	 * @returns {void}
-	 */
-	#handleEvents(event) {
-		switch (event.type) {
-			case "touchstart":
-				this.#isTouchDetected();
-				break;
-		}
 	}
 }
 

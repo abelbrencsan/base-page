@@ -60,34 +60,8 @@ div.roll {
 		z-index: 1;
 	}
 
-	@media (max-width: 62em) {
-
-		ul.roll-list {
-
-			> li {
-				flex: 0 0 60vw;
-				width: 60vw;
-			}
-		}
-	}
-
-	@media (max-width: 47em) {
-
-		ul.roll-list {
-			
-			> li {
-				flex: 0 0 100vw;
-				width: 100vw;
-			}
-		}
-
-		ul.roll-action-list.button-list {
-			right: calc(50% - var(--element-height));
-		}
-	}
-
-	@supports (animation-timeline: view()) {
-		height: inherit;
+	@supports (animation-timeline: view()) and (x: attr(x type(<number>))) {
+		height: calc(40vw * attr(data-roll type(<number>)));
 		view-timeline-inset: 100% 100%;
 		view-timeline-name: --roll-timeline;
 
@@ -108,19 +82,53 @@ div.roll {
 			display: none;
 		}
 	}
+
+	@media (max-width: 62em) {
+
+		ul.roll-list {
+
+			> li {
+				flex: 0 0 60vw;
+				width: 60vw;
+			}
+		}
+
+		@supports (animation-timeline: view()) and (x: attr(x type(<number>))) {
+			height: calc(60vw * attr(data-roll type(<number>)));
+		}
+	}
+
+	@media (max-width: 47em) {
+
+		ul.roll-list {
+			
+			> li {
+				flex: 0 0 100vw;
+				width: 100vw;
+			}
+		}
+
+		ul.roll-action-list.button-list {
+			right: calc(50% - var(--element-height));
+		}
+
+		@supports (animation-timeline: view()) and (x: attr(x type(<number>))) {
+			height: calc(100vw * attr(data-roll type(<number>)));
+		}
+	}
 }
 
 /* Roll component extensions */
 div.roll {
 
-	&.roll-reverse {
+	&.roll--reverse {
 
 		ul.roll-list {
 			animation-direction: reverse;
 			transform: translate3d(calc(-100% + 100vw), 0, 0);
 		}
 
-		@supports not (animation-timeline: view()) {
+		@supports (animation-timeline: view()) and (x: attr(x type(<number>))) {
 
 			ul.roll-list {
 				transform: none;
@@ -159,7 +167,7 @@ div.roll-item {
 			}
 		}
 
-		@supports (animation-timeline: view()) {
+		@supports (animation-timeline: view()) and (x: attr(x type(<number>))) {
 
 			> div.roll-item-text {
 		

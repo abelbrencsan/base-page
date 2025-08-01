@@ -14,7 +14,7 @@ header.navbar {
 	--navbar-z-index: 1000;
 }
 
-/* Navbar singleton */
+/* Navbar singleton prototype */
 header.navbar {
 	align-items: center;
 	background-color: var(--border-bg-color);
@@ -34,8 +34,11 @@ header.navbar {
 		font-weight: var(--bold-font-weight);
 		text-decoration: none;
 
-		body.no-touch &:hover {
-			color: var(--link-color);
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				color: var(--link-color);
+			}
 		}
 	}
 
@@ -59,8 +62,11 @@ header.navbar {
 			color: inherit;
 			display: block;
 
-			body.no-touch &:hover {
-				color: var(--link-color);
+			@media (hover: hover) {
+
+				&:hover, &:active {
+					color: var(--link-color);
+				}
 			}
 		}
 
@@ -110,7 +116,7 @@ header.navbar {
 						padding: var(--block-margin);
 						white-space: nowrap;
 
-						&.keyboard-focus:focus {
+						&:focus-visible {
 							box-shadow: inset 0 0 0 3px var(--focus-color);
 							outline: 0;
 						}
@@ -246,13 +252,16 @@ header.navbar {
 				> a, > button {
 					padding: 0.5rem 0;
 
-					body.no-touch &:hover {
-						color: var(--navbar-offset-link-color);
-					}
-
-					&.keyboard-focus:focus {
+					&:focus-visible {
 						box-shadow: inset 0 0 0 3px var(--focus-color);
 						outline: 0;
+					}
+
+					@media (hover: hover) {
+
+						&:hover, &:active {
+							color: var(--navbar-offset-link-color);
+						}
 					}
 				}
 			}
@@ -345,8 +354,11 @@ header.navbar {
 					display: block;
 				}
 
-				body.no-touch &:hover {
-					color: var(--link-color);
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						color: var(--link-color);
+					}
 				}
 			}
 		}
@@ -361,8 +373,11 @@ header.navbar {
 			right: 0;
 			top: 0;
 
-			body.no-touch &:hover {
-				color: var(--navbar-offset-link-color);
+			@media (hover: hover) {
+
+				&:hover, &:active {
+					color: var(--navbar-offset-link-color);
+				}
 			}
 		}
 	}
@@ -380,4 +395,8 @@ header.navbar {
 		opacity: 1;
 		transform: translate3d(0, 0, 0);
 	}
+}
+
+/* Navbar singleton extensions */
+header.navbar {
 }

@@ -37,12 +37,15 @@ details.details {
 			transform: translate3d(0, -50%, 0);
 		}
 
-		body.no-touch &:hover {
-			color: var(--link-color);
-		}
-
 		&::-webkit-details-marker {
 			display:none;
+		}
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				color: var(--link-color);
+			}
 		}
 	}
 

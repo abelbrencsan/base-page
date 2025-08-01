@@ -4,7 +4,7 @@
  * Licensed under the MIT license
  */
 
-/* Offline singleton */
+/* Offline singleton prototype */
 div.offline {
 	background-color: var(--warning-bg-color);
 	color: var(--warning-fg-color);
@@ -15,4 +15,8 @@ div.offline {
 	body.is-offline & {
 		display: block;
 	}
+}
+
+/* Offline singleton extensions */
+div.offline {
 }

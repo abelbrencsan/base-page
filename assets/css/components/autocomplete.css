@@ -36,8 +36,15 @@ ul.autocomplete {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 
-		body.no-touch &:hover, &:active, &.is-highlighted {
+		&.is-highlighted {
 			background-color: var(--border-bg-color);
+		}
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				background-color: var(--border-bg-color);
+			}
 		}
 	}
 
@@ -49,4 +56,8 @@ ul.autocomplete {
 input.form-input.has-open-autocomplete {
 	border-bottom-left-radius: 0 !important;
 	border-bottom-right-radius: 0 !important;
+}
+
+/* Autocomplete component extensions */
+ul.autocomplete {
 }

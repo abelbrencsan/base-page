@@ -9,7 +9,10 @@ a {
 	color: var(--link-color);
 	text-decoration: underline;
 
-	body.no-touch &:hover {
-		text-decoration: none;
+	@media (hover: hover) {
+
+		&:hover, &:active {
+			text-decoration: none;
+		}
 	}
 }

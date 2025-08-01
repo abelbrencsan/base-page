@@ -45,16 +45,19 @@ ul.pagination {
 				width: 16px;
 			}
 
-			body.no-touch &:hover, &:active {
-				background-color: var(--pagination-button-bg-hover-color);
-			}
-
 			&.is-active {
 				background-color: var(--link-color);
 				color: var(--bg-color);
+			}
 
-				body.no-touch &:hover, &:active {
-					background-color: var(--link-color);
+			@media (hover: hover) {
+
+				&:hover, &:active {
+					background-color: var(--pagination-button-bg-hover-color);
+
+					&.is-active {
+						background-color: var(--link-color);
+					}
 				}
 			}
 		}

@@ -72,6 +72,14 @@ div.glider {
 				max-width: calc(100% / 10);
 			}
 		}
+
+		&.glider-list--no-gap {
+			margin-left: 0;
+
+			> li {
+				padding-left: 0;
+			}
+		}
 	}
 
 	ul.glider-action-list.button-list {

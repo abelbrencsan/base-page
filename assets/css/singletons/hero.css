@@ -4,7 +4,7 @@
  * Licensed under the MIT license
  */
 
-/* Hero singleton */
+/* Hero singleton prototype */
 div.hero {
 	background-color: var(--border-bg-color);
 	padding: calc(var(--section-padding) * 2) 0 calc((var(--section-padding) * 2) - var(--element-margin)) 0;
@@ -36,4 +36,8 @@ div.hero {
 	@media (max-width: 47em) {
 		padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
 	}
+}
+
+/* Hero singleton extensions */
+div.hero {
 }

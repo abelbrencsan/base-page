@@ -6,6 +6,8 @@
 
 /* Listing component variables */
 ul.listing {
+	--listing--sortable-indicator-size: 2px;
+	--listing--sortable-transition: var(--transition);
 	--listing-item-meta-list-width: 15rem;
 }
 
@@ -78,6 +80,7 @@ ul.listing {
 
 			dt, dd {
 				font-size: var(--small-font-size);
+				margin: 0;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
@@ -85,7 +88,6 @@ ul.listing {
 
 			dt {
 				grid-row: 1 / 2;
-				margin-bottom: 0;
 			}
 
 			dd {
@@ -126,4 +128,50 @@ ul.listing {
 
 /* Listing component extensions */
 ul.listing {
+
+	&.listing--sortable {
+
+		> li {
+			position: relative;
+
+			&:before {
+				background-color: var(--link-color);
+				content: '';
+				height: var(--listing--sortable-indicator-size);
+				left: 0;
+				position: absolute;
+				visibility: hidden;
+				width: 100%;
+				z-index: 1;
+			}
+
+			&.is-above, &.is-below {
+
+				&:before {
+					visibility: visible;
+				}
+			}
+
+			&.is-above {
+
+				&:before {
+					top: calc(var(--listing--sortable-indicator-size) * -0.5);
+				}
+			}
+
+			&.is-below {
+
+				&:before {
+					top: calc(100% + (var(--listing--sortable-indicator-size) * -0.5));
+				}
+			}
+
+			&.is-dragging {
+
+				> * {
+					opacity: 0.5;
+				}
+			}
+		}
+	}
 }

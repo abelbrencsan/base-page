@@ -49,8 +49,11 @@ div.alert[popover]:popover-open {
 		padding: 0;
 		width: 2rem;
 
-		body.no-touch &:hover, &.keyboard-focus:focus {
-			color: var(--alert-fg-color);
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				color: var(--alert-fg-color);
+			}
 		}
 	}
 

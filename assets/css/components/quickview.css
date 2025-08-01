@@ -77,13 +77,16 @@ div.quickview[popover]:popover-open {
 		user-select: none;
 		width: calc(var(--element-height) * 0.75);
 
-		body.no-touch &:hover, &:active {
-			background-color: var(--quickview-close-button-bg-hover-color);
-		}
-
-		&.keyboard-focus:focus {
+		&:focus-visible {
 			box-shadow: inset 0 0 0 3px var(--focus-color);
 			outline: 0;
+		}
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				background-color: var(--quickview-close-button-bg-hover-color);
+			}
 		}
 	}
 

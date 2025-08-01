@@ -98,7 +98,6 @@ class Roll {
 		// Initialize the roll
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		this.#setWrapperHeight();
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}
 
@@ -144,42 +143,8 @@ class Roll {
 	 * @returns {void}
 	 */
 	destroy() {
-		this.#resetWrapperHeight();
 		this.#removeEvents();
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
-	 * Sets the height of the wrapper based on the number of items.
-	 * 
-	 * @returns {void}
-	 */
-	#setWrapperHeight() {
-		if (CSS.supports("animation-timeline: view()")) {
-			this.wrapper.style.height = this.#getWrapperHeight();
-		}
-	}
-
-	/**
-	 * Resets the height of the wrapper.
-	 * 
-	 * @returns {void}
-	 */
-	#resetWrapperHeight() {
-		this.wrapper.style.height = "";
-	}
-
-	/**
-	 * Retrieves the height of the wrapper based on the number of items.
-	 * 
-	 * @returns {string}
-	 */
-	#getWrapperHeight() {
-		if (this.items.length > 1) {
-			return `${this.items.length * 80}vh`;
-		} else {
-			return '100vh';
-		}
 	}
 
 	/**

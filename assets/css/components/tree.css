@@ -1,0 +1,237 @@
+/*!
+ * Tree CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Tree list component variables */
+ul.tree-list {
+	--tree-list--sortable-indicator-size: 2px;
+	--tree-list-indent: 2rem;
+	--tree-list-margin: var(--block-margin);
+}
+
+/* Tree list component prototype */
+ul.tree-list {
+	list-style: none;
+	padding-left: 0;
+
+	> li {
+		padding-left: 0;
+		padding-top: var(--tree-list-margin);
+
+		> div.tree-node {
+			margin-bottom: 0;
+		}
+
+		> ul.tree-list {
+			margin-bottom: 0;
+			position: relative;
+
+			> li {
+				margin-left: var(--tree-list-indent);
+			}
+
+			&:after {
+				border-left: 2px dotted var(--border-color);
+				content: '';
+				height: calc(100% - var(--tree-list-margin));
+				left: calc(var(--tree-list-indent) * 0.25);
+				position: absolute;
+				top: var(--tree-list-margin);
+			}
+		}
+	}
+}
+
+/* Tree list component extensions */
+ul.tree-list {
+
+	&.tree-list--sortable {
+
+		> li {
+			position: relative;
+
+			&:before {
+				background-color: var(--link-color);
+				content: '';
+				height: var(--tree-list--sortable-indicator-size);
+				left: 0;
+				position: absolute;
+				visibility: hidden;
+				width: 100%;
+				z-index: 1;
+			}
+
+			&.is-above, &.is-below {
+
+				&.has-collapsed-subtree:not(.is-dragging) {
+
+					div.tree-node {
+
+						div.tree-node-sort-trigger {
+						}
+					}
+				}
+
+				&:before {
+					visibility: visible;
+				}
+			}
+
+			&.is-above {
+
+				&:before {
+					top: calc((var(--tree-list-margin) * 0.5) - (var(--tree-list--sortable-indicator-size) * 0.5));
+				}
+			}
+
+			&.is-below {
+
+				&:before {
+					top: calc(100% + (var(--tree-list-margin) * 0.5) - (var(--tree-list--sortable-indicator-size) * 0.5));
+				}
+			}
+
+			&.is-dragging {
+
+				div.tree-node {
+					opacity: 0.5;
+				}
+			}
+		}
+
+		&.is-above, &.is-below {
+			position: relative;
+
+			&:before {
+				background-color: var(--link-color);
+				content: '';
+				height: var(--tree-list--sortable-indicator-size);
+				left: var(--tree-list-indent);
+				position: absolute;
+				top: calc(100% + (var(--tree-list-margin) * 0.5) - (var(--tree-list--sortable-indicator-size) * 0.5));
+				width: calc(100% - var(--tree-list-indent));
+				z-index: 1;
+			}
+		}
+
+		&.is-collapsed {
+			display: none;
+		}
+	}
+}
+
+/* Tree node component variables */
+div.tree-node {
+	--tree-node-meta-list-width: 15rem;
+}
+
+/* Tree node component prototype */
+div.tree-node {
+	align-items: center;
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
+	display: grid;
+	grid-column-gap: calc(var(--grid-gap) * 0.5);
+	grid-template-areas: "control heading meta actions" "control subheading meta actions";
+	grid-template-columns: auto 1fr var(--tree-node-meta-list-width) auto;
+	margin-bottom: var(--element-margin);
+	padding: calc(var(--box-padding) * 0.5); 
+
+	div.image, a.image, div.tree-node-sort-trigger {
+		grid-area: control;
+	}
+
+	div.image, a.image {
+		margin-bottom: 0;
+
+		img, canvas {
+			width: var(--element-height);
+		}
+	}
+
+	div.tree-node-sort-trigger {
+		-webkit-user-select: none;
+		align-items: center;
+		background-color: transparent;
+		border-radius: var(--border-radius);
+		cursor: grabbing;
+		display: flex;
+		height: var(--element-height);
+		justify-content: center;
+		user-select: none;
+		width: var(--element-height);
+	}
+
+	h1, h2, h3, h4, h5, h6, .heading, p {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	h1, h2, h3, h4, h5, h6, .heading {
+		grid-area: heading;
+		margin-bottom: 0;
+	}
+
+	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+		font-size: var(--normal-font-size);
+	}
+
+	p {
+		font-size: var(--small-font-size);
+		grid-area: subheading;
+		margin-bottom: 0;
+	}
+
+	dl.tree-node-meta-list {
+		display: grid;
+		grid-area: meta;
+		grid-column-gap: calc(var(--grid-gap) * 0.5);
+		grid-template-columns: repeat(3, 1fr);
+		margin-bottom: 0;
+
+		dt, dd {
+			font-size: var(--small-font-size);
+			margin: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		dt {
+			grid-row: 1 / 2;
+		}
+
+		dd {
+			grid-row: 2 / 3;
+		}
+	}
+
+	ul.button-list {
+		grid-area: actions;
+	}
+
+	@media (max-width: 47em) {
+		grid-template-areas: "heading actions control" "subheading actions control" "meta meta meta";
+		grid-template-columns: 1fr auto auto;
+		padding: var(--box-padding);
+
+		div.image, a.image, div.tree-node-sort-trigger {
+			margin-left: calc(var(--grid-gap) * -0.333);
+		}
+
+		div.tree-node-sort-trigger {
+			background-color: var(--border-color);
+		}
+
+		dl.tree-node-meta-list {
+			margin-top: calc(var(--grid-gap) * 0.5);
+		}
+	}
+}
+
+/* Tree node component extensions */
+div.tree-node {
+}

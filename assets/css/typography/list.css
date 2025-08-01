@@ -32,7 +32,8 @@ dl {
 	}
 
 	dd {
-		margin-left: 0;
+		margin-bottom: calc(var(--element-margin) * 0.5);
+		margin-left: var(--box-padding);
 	}
 }
 

@@ -46,8 +46,11 @@ ul.notice-list {
 			padding: 0;
 			width: 2rem;
 
-			body.no-touch &:hover {
-				color: var(--fg-color);
+			@media (hover: hover) {
+
+				&:hover, &:active {
+					color: var(--fg-color);
+				}
 			}
 		}
 

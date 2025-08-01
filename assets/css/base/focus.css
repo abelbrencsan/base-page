@@ -9,6 +9,6 @@
 	outline: 0;
 }
 
-.keyboard-focus:focus {
+:focus-visible {
 	outline: 3px solid var(--focus-color);
 }

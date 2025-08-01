@@ -50,13 +50,13 @@
 @import url("./components/section.css");
 @import url("./components/side-panel.css");
 @import url("./components/slideshow.css");
-@import url("./components/sortable-list.css");
 @import url("./components/split.css");
 @import url("./components/spotlight.css");
 @import url("./components/step-list.css");
 @import url("./components/tab.css");
 @import url("./components/table.css");
 @import url("./components/timelapse.css");
+@import url("./components/tree.css");
 
 /* Singleton imports */
 @import url("./singletons/authentication.css");

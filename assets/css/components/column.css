@@ -12,7 +12,7 @@ ul.column-list {
 	list-style: none;
 	padding-left: 0;
 
-	> li.column-list-item {
+	> li {
 		padding-left: 0;
 	}
 
@@ -44,7 +44,7 @@ ul.column-list {
 
 		@supports (animation-timeline: view()) {
 
-			> li.column-list-item {
+			> li {
 				
 				article.column-item {
 					animation-name: column-list-reveal;
@@ -58,7 +58,7 @@ ul.column-list {
 
 			@media (max-width: 62em) {
 
-				> li.column-list-item {
+				> li {
 				
 					article.column-item {
 						animation: none;
@@ -82,7 +82,7 @@ ul.column-list {
 	}
 }
 
-/* Column item component extensions */
+/* Column item component prototype */
 article.column-item {
 	align-items: start;
 	display: grid;
@@ -117,4 +117,8 @@ article.column-item {
 		grid-template-areas: "image" "text";
 		grid-template-columns: none;
 	}
+}
+
+/* Column item component extensions */
+article.column-item {
 }

@@ -165,6 +165,7 @@ article.manual-step-item {
 	}
 
 	div.manual-step-item-text {
+		align-self: center;
 		grid-area: text;
 		padding: var(--box-padding);
 

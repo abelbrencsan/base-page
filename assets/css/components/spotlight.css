@@ -6,13 +6,14 @@
 
 /* Spotlight component variables */
 div.spotlight {
+	--spotlight-bg-color: #333333;
 	--spotlight-gap: 4rem;
 	--spotlight-image-lazy-load-transition: 1000ms ease;
 }
 
-/* Spotlight component extensions */
+/* Spotlight component prototype */
 div.spotlight {
-	background-color: var(--fg-light-color);
+	background-color: var(--spotlight-bg-color);
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: flex-start;
@@ -105,10 +106,6 @@ div.spotlight {
 
 	&.spotlight--center {
 		justify-content: center;
-	}
-
-	&.spotlight--top {
-		align-items: start;
 	}
 
 	&.spotlight--reveal {

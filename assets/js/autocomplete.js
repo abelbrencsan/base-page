@@ -38,7 +38,7 @@ class Autocomplete {
 	/**
 	 * Function that is called to handle how the selected suggestions appears in the input.
 	 * 
-	 * @type {function(any):string}
+	 * @type {function(any,string):string}
 	 */
 	renderInputValue;
 
@@ -175,7 +175,7 @@ class Autocomplete {
 	 * @param {HTMLInputElement} options.input
 	 * @param {function(string,function(Array<string>)):void} options.getSuggestions
 	 * @param {function(any,string):string} options.renderItem
-	 * @param {function(any):string} options.renderInputValue
+	 * @param {function(any,string):string} options.renderInputValue
 	 * @param {number} options.minChars
 	 * @param {number} options.delay
 	 * @param {number|null} options.maxSuggestions
@@ -319,6 +319,7 @@ class Autocomplete {
 		this.highlightIndex = null;
 		this.input.removeAttribute("aria-activedescendant");
 		this.suggestions = [];
+		this.#setScrollPositions();
 	}
 
 	/**
@@ -404,7 +405,7 @@ class Autocomplete {
 	 * @returns {void}
 	 */
 	#selectSuggestion(suggestion) {
-		this.input.value = this.renderInputValue(suggestion);
+		this.input.value = this.renderInputValue(suggestion, this.input.value);
 		if (typeof(this.selectCallback) == "function") this.selectCallback(suggestion);
 	}
 
