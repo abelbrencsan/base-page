@@ -175,3 +175,75 @@ ul.listing {
 		}
 	}
 }
+
+/* Listing block list component prototype */
+ul.listing-block-list {
+	display: flex;
+	justify-content: center;
+	list-style: none;
+	margin-left: calc(var(--grid-gap) * -0.5);
+	margin-top: calc(var(--grid-gap) * -0.5);
+	padding-left: 0;
+
+	> li {
+		padding-left: calc(var(--grid-gap) * 0.5);
+		padding-top: calc(var(--grid-gap) * 0.5);
+
+		&.is-dragging {
+
+			> button.listing-block-item {
+				opacity: 0.5;
+			}
+		}
+	}
+}
+
+/* Listing block list component extensions */
+ul.listing-block-list {
+}
+
+/* Listing block item component variables */
+button.listing-block-item {
+	--listing-block-item-transition: var(--transition);
+}
+
+/* Listing block item component prototype */
+button.listing-block-item {
+	background-color: transparent;
+	border: none;
+	cursor: grabbing;
+	padding: 0;
+	text-align: left;
+	width: 10rem;
+
+	span {
+		align-items: center;
+		background-color: var(--border-bg-color);
+		border-radius: var(--border-radius);
+		border: none;
+		display: flex;
+		font-weight: var(--bold-font-weight);
+		height: calc(var(--element-height) * 1.5);
+		justify-content: center;
+		padding: 0 1.2em;
+		transition: opacity var(--listing-block-item-transition), background-color var(--listing-block-item-transition);
+	}
+
+	svg.icon {
+		margin-right: 0.5rem;
+	}
+
+	@media (hover: hover) {
+
+		span {
+
+			&:hover, &:active {
+				background-color: var(--border-color);
+			}
+		}
+	}
+}
+
+/* Listing block item component extensions */
+button.listing-block-item {
+}

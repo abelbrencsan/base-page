@@ -50,7 +50,6 @@ div.spotlight {
 		backdrop-filter: blur(10px);
 		background-color: var(--translucent-bg-color);
 		border-radius: var(--border-radius);
-		color: var(--fg-color);
 		margin: 15rem 0 var(--spotlight-gap) 0;
 		padding: calc(var(--box-padding) * 2);
 		position: relative;

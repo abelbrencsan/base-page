@@ -1,0 +1,137 @@
+/*!
+ * Poster CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Poster flow component veriables */
+ul.poster-flow {
+	--poster-flow-gap: 4rem;
+}
+
+/* Poster flow component prototype */
+ul.poster-flow {
+	list-style: none;
+	margin: 0 auto var(--element-margin) auto;
+	max-width: calc(var(--container-width) * 2.5);
+	padding-left: 0;
+	width: calc(100% - (var(--poster-flow-gap) * 2));
+
+	> li {
+		padding-left: 0;
+		position: sticky;
+		top: var(--grid-gap);
+
+		div.poster-item {
+			margin-bottom: 0;
+
+			div.image, a.image {
+				height: calc(100vh - (var(--grid-gap) * 2));
+			}
+		}
+	}
+
+	@media (max-width: 82em) {
+		width: 100%;
+
+		> li {
+			top: 0;
+
+			div.poster-item {
+
+				div.image, a.image {
+					height: 100vh;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 62em) {
+		width: 90%;
+
+		> li {
+			position: relative;
+			top: 0;
+
+			div.poster-item {
+				margin-bottom: var(--element-margin);
+
+				div.image, a.image {
+					height: auto;
+				}
+			}
+		}
+	}
+}
+
+/* Poster flow component extensions */
+ul.poster-flow {
+}
+
+/* Poster item component prototype */
+div.poster-item {
+	margin-bottom: var(--element-margin);
+	position: relative;
+
+	div.image, a.image {
+		border-radius: 0;
+		margin-bottom: 0;
+
+		img, canvas {
+			border-radius: 0;
+			height: 100%;
+			object-fit: cover;
+			width: 100%;
+		}
+	}
+
+	div.poster-item-text {
+		backdrop-filter: blur(10px);
+		background-color: var(--translucent-bg-color);
+		border-radius: var(--border-radius);
+		left: var(--grid-gap);
+		max-width: calc(var(--container-width) * 0.666);
+		padding: calc(var(--box-padding) * 2);
+		position: absolute;
+		top: var(--grid-gap);
+		width: 90%;
+
+		> :last-child,
+		> :last-child > :last-child,
+		> :last-child > :last-child > :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@media (max-width: 62em) {
+
+		div.image, a.image {
+			border-radius: var(--border-radius) var(--border-radius) 0 0;
+			height: auto;
+
+			img, canvas {
+				border-radius: var(--border-radius) var(--border-radius) 0 0;
+				height: auto;
+			}
+		}
+
+		div.poster-item-text {
+			background-color: var(--border-bg-color);
+			border-radius: 0 0 var(--border-radius) var(--border-radius);
+			left: 0;
+			max-width: none;
+			padding: var(--box-padding);
+			position: relative;
+			top: 0;
+			width: auto;
+
+			ul.poster-item-text-button-list.button-list {
+				justify-content: center;
+			}
+		}
+	}
+}
+
+/* Poster item component extension */
+div.poster-item {
+}

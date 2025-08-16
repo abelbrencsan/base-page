@@ -412,38 +412,34 @@ div.form-item {
 
 		label.form-label, span.form-label {
 			grid-area: label;
+			justify-self: left;
 		}
 
-		input:not(.form-item-stepper-indicator) {
-			border: 0;
-			clip: rect(0,0,0,0);
+		input.form-input {
+			border-radius: var(--border-radius) 0 0 var(--border-radius);
 			grid-area: input;
-			height: 1px;
-			margin: -1px;
-			overflow: hidden;
-			padding: 0;
-			position: absolute;
-			width: 1px;
+			opacity: 0;
+
+			&:focus {
+				opacity: 1;
+
+				+ div.form-item-stepper-indicator {
+					display: none;
+				}
+			}
 		}
 
 		div.form-item-stepper-indicator {
+			-webkit-user-select: none;
 			align-items: center;
 			border-radius: var(--border-radius) 0 0 var(--border-radius);
 			border: 1px solid var(--border-color);
-			background-color: var(--border-bg-color);
 			display: flex;
 			grid-area: input;
 			height: var(--element-height);
 			padding-left: 0.5em;
 			padding-right: 0.5em;
-
-			&:focus {
-				border-color: var(--link-color);
-			}
-
-			&:focus-visible {
-				outline: 0;
-			}
+			user-select: none;
 		}
 
 		a.button, button.button {

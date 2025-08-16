@@ -459,7 +459,22 @@ class App {
 				wrapper: elem,
 				nodeSelector: "[data-sortable-tree-node]",
 				subtreeSelector: "[data-sortable-tree-subtree]",
-				collapseTriggerSelector: "[draggable]"
+				collapseTriggerSelector: "[draggable]",
+				blockSelector: "[data-sortable-tree-block]",
+				blocksWrapper: elem.parentElement.querySelector('[data-sortable-tree-blocks]'),
+				createNodeFromBlock: (option) => {
+					const templateId = option.getAttribute('data-sortable-tree-block');
+					if (templateId) {
+						const template = document.getElementById(templateId);
+						if (template instanceof HTMLTemplateElement) {
+							const targetElem = template.content.firstElementChild;
+							if (targetElem) {
+								return targetElem.cloneNode(true);
+							}
+						}
+					}
+					return null;
+				}
 			}));
 		});
 	}

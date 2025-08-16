@@ -36,6 +36,13 @@ class SortableTree {
 	collapseTriggerSelector = "";
 
 	/**
+	 * The CSS selector used to match blocks that can add new nodes to the wrapper.
+	 * 
+	 * @type {string}
+	 */
+	blockSelector = "";
+
+	/**
 	 * Indicates whether the subtrees are collapsible.
 	 * 
 	 * @type {boolean}
@@ -85,11 +92,25 @@ class SortableTree {
 	isBelowClass = "is-below";
 
 	/**
+	 * Represents the blocks wrapper element.
+	 * 
+	 * @type {HTMLElement|null}
+	 */
+	blocksWrapper = null;
+
+	/**
 	 * A function that is called to retrieve the transfer data of the dragged node.
 	 * 
 	 * @type {function(HTMLElement):string}
 	 */
-	getTransferData = () => "";
+	getTransferData = (node) => "";
+
+	/**
+	 * A function that is called to retrieve the node to be added to the tree as a new tree node.
+	 * 
+	 * @type {function(HTMLElement):Node|null}
+	 */
+	createNodeFromBlock = (block) => null;
 
 	/**
 	 * Callback function that is called after the sortable tree has been initialized.
@@ -155,6 +176,7 @@ class SortableTree {
 	 * @param {string} options.nodeSelector
 	 * @param {string} options.subtreeSelector
 	 * @param {string} options.collapseTriggerSelector
+	 * @param {string} options.blockSelector
 	 * @param {boolean} options.isCollapsible
 	 * @param {string} options.isCollapsedClass
 	 * @param {string} options.hasCollapsedSubtreeClass
@@ -163,6 +185,8 @@ class SortableTree {
 	 * @param {string} options.isAboveClass
 	 * @param {string} options.isBelowClass
 	 * @param {function(HTMLElement):string} options.getTransferData
+	 * @param {function(HTMLElement):Element|null} options.createNodeFromBlock
+	 * @param {HTMLElement|null} options.blocksWrapper
 	 * @param {function():void} options.initCallback
 	 * @param {function():void} options.isDraggingStartedCallback
 	 * @param {function(HTMLElement):void} options.isDraggedOverCallback
@@ -195,6 +219,16 @@ class SortableTree {
 	}
 
 	/**
+	 * Indicates whether the specified event target is a child of the blocks wrapper.
+	 * 
+	 * @param {EventTarget|null} eventTarget
+	 * @returns {boolean}
+	 */
+	isBlockTarget(eventTarget) {
+		return this.blocksWrapper && this.blocksWrapper.contains(eventTarget);
+	}
+
+	/**
 	 * Destroys the sortable tree.
 	 * 
 	 * @returns {void}
@@ -219,15 +253,20 @@ class SortableTree {
 	 * @returns {void}
 	 */
 	#isDraggingStarted(event) {
+		console.log(event.target);
 		if (!(event.target instanceof HTMLElement)) return;
 		if (!event.target.draggable) return;
-		this.draggedNode = this.#getNode(event.target);
+		this.draggedNode = this.#getNodeOrBlock(event.target);
+		console.log(this.draggedNode);
 		if (this.draggedNode) {
 			const transferData = this.getTransferData(this.draggedNode);
 			const {x, y} = this.#getDragOffsetPosition(event.clientX, event.clientY);
 			event.dataTransfer.setData("text/plain", transferData);
 			event.dataTransfer.setDragImage(this.draggedNode, x, y);
 			this.wrapper.classList.add(this.hasDraggingClass);
+			if (this.blocksWrapper) {
+				this.blocksWrapper.classList.add(this.hasDraggingClass);
+			}
 			this.draggedNode.classList.add(this.isDraggingClass);
 			if ("vibrate" in navigator) navigator.vibrate(100);
 			if (typeof(this.isDraggingStartedCallback) == "function") this.isDraggingStartedCallback();
@@ -260,7 +299,7 @@ class SortableTree {
 					this.isBelow = false;
 				}
 			}
-			if (typeof(this.isDraggedOverCallback) == "function") this.isDraggedOverCallback(targetItem);
+			if (typeof(this.isDraggedOverCallback) == "function") this.isDraggedOverCallback(dropTarget);
 		}
 	}
 
@@ -275,6 +314,9 @@ class SortableTree {
 		event.preventDefault();
 		this.#removeAllInsertionMarkers();
 		this.wrapper.classList.remove(this.hasDraggingClass);
+		if (this.blocksWrapper) {
+			this.blocksWrapper.classList.remove(this.hasDraggingClass);
+		}
 		this.draggedNode.classList.remove(this.isDraggingClass);
 		this.draggedNode = null;
 		this.isBelow = false;
@@ -305,14 +347,23 @@ class SortableTree {
 		event.preventDefault();
 		const dropTarget = this.#getDropTarget(event.target, event.clientX, event.clientY);
 		if (dropTarget) {
-			if (this.subtreeSelector && dropTarget.matches(this.subtreeSelector)) {
-				dropTarget.appendChild(this.draggedNode);
-			} else if (this.isBelow) {
-				dropTarget.parentNode.insertBefore(this.draggedNode, dropTarget.nextSibling);
-			} else {
-				dropTarget.parentNode.insertBefore(this.draggedNode, dropTarget);
+			let draggedNode = this.draggedNode;
+			if (this.isBlockTarget(this.draggedNode)) {
+				let createdNode = this.createNodeFromBlock(this.draggedNode);
+				if (createdNode) {
+					draggedNode = createdNode;
+				} else {
+					return;
+				}
 			}
-			if (typeof(this.isDroppedCallback) == "function") this.isDroppedCallback(targetItem);
+			if (this.subtreeSelector && dropTarget.matches(this.subtreeSelector)) {
+				dropTarget.appendChild(draggedNode);
+			} else if (this.isBelow) {
+				dropTarget.parentNode.insertBefore(draggedNode, dropTarget.nextSibling);
+			} else {
+				dropTarget.parentNode.insertBefore(draggedNode, dropTarget);
+			}
+			if (typeof(this.isDroppedCallback) == "function") this.isDroppedCallback(dropTarget);
 		}
 	}
 
@@ -325,12 +376,29 @@ class SortableTree {
 	#isClicked(event) {
 		if (!(event.target instanceof HTMLElement)) return;
 		if (!this.isCollapsible || !this.subtreeSelector) return;
-		if (this.collapseTriggerSelector && event.target.matches(this.collapseTriggerSelector)) {
+		if (this.subtreeSelector && this.collapseTriggerSelector && event.target.matches(this.collapseTriggerSelector)) {
 			const node = this.#getNode(event.target);
 			const subtree = node.querySelector(this.subtreeSelector);
 			if (subtree) {
 				node.classList.toggle(this.hasCollapsedSubtreeClass);
 				subtree.classList.toggle(this.isCollapsedClass);
+			}
+		}
+	}
+
+	/**
+	 * Executes after the block is clicked.
+	 * 
+	 * @param {PointerEvent} event
+	 * @returns {void}
+	 */
+	#isBlockClicked(event) {
+		if (!(event.target instanceof HTMLElement)) return;
+		let block = this.#getBlock(event.target);
+		if (block) {
+			let createdNode = this.createNodeFromBlock(block);
+			if (createdNode) {
+				this.wrapper.appendChild(createdNode);
 			}
 		}
 	}
@@ -344,6 +412,31 @@ class SortableTree {
 	#getNode(elem) {
 		if (elem.matches(this.nodeSelector)) return elem;
 		return elem.closest(this.nodeSelector);
+	}
+
+	/**
+	 * Retrieves the closest block that is equal to or a parent of the specified element.
+	 * 
+	 * @param {HTMLElement} elem
+	 * @returns {HTMLElement|null}
+	 */
+	#getBlock(elem) {
+		if (elem.matches(this.blockSelector)) return elem;
+		return elem.closest(this.blockSelector);
+	}
+
+	/**
+	 * Retrieves the closest node or block that is equal to or a parent of the specified element.
+	 * 
+	 * @param {HTMLElement} elem
+	 * @returns {HTMLElement|null}
+	 */
+	#getNodeOrBlock(elem) {
+		if (this.isBlockTarget(elem)) {
+			return this.#getBlock(elem);
+		} else {
+			return this.#getNode(elem);
+		}
 	}
 
 	/**
@@ -513,6 +606,11 @@ class SortableTree {
 		this.wrapper.addEventListener("dragleave", this);
 		this.wrapper.addEventListener("drop", this);
 		this.wrapper.addEventListener("click", this);
+		if (this.blocksWrapper) {
+			this.blocksWrapper.addEventListener("dragstart", this);
+			this.blocksWrapper.addEventListener("dragend", this);
+			this.blocksWrapper.addEventListener("click", this);
+		}
 	}
 
 	/**
@@ -527,6 +625,11 @@ class SortableTree {
 		this.wrapper.removeEventListener("dragleave", this);
 		this.wrapper.removeEventListener("drop", this);
 		this.wrapper.removeEventListener("click", this);
+		if (this.blocksWrapper) {
+			this.blocksWrapper.removeEventListener("dragstart", this);
+			this.blocksWrapper.removeEventListener("dragend", this);
+			this.blocksWrapper.removeEventListener("click", this);
+		}
 	}
 
 	/**
@@ -553,7 +656,11 @@ class SortableTree {
 				this.#isDropped(event);
 				break;
 			case "click":
-				this.#isClicked(event);
+				if (this.isBlockTarget(event.target)) {
+					this.#isBlockClicked(event);
+				} else {
+					this.#isClicked(event);
+				}
 				break;
 		}
 	}

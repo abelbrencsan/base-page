@@ -23,7 +23,7 @@ header.navbar {
 	position: relative;
 	z-index: var(--navbar-z-index);
 
-	div.navbar-wrapper {
+	div.navbar-container {
 		align-items: center;
 		display: flex;
 		justify-content: space-between;
