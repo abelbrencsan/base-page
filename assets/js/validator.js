@@ -153,11 +153,21 @@ class Validator {
 			this.#isInputInvalid(input);
 		}
 		if (checkSimilarControls && ["checkbox", "radio"].includes(input.type)) {
-			Array.from(this.form.elements).forEach((elem) => {
-				if (input != elem && input.name == elem.name) {
-					this.validateInput(elem, false);
-				}
-			});
+			const groupElems = Array.from(this.form.elements).filter((elem) => (elem.name == input.name));
+			const checkedElems = groupElems.filter((elem) => elem.checked);
+			const requiredElems = groupElems.filter((elem) => elem.required);
+			if (requiredElems.length) {
+				groupElems.forEach((elem) => {
+					if (elem instanceof HTMLInputElement) {
+						if (checkedElems.length == 0 || elem.checked) {
+							elem.setAttribute("required", "required");
+						} else {
+							elem.removeAttribute("required");
+						}
+						this.validateInput(elem, false);
+					}
+				});
+			}
 		}
 		return isValid;
 	}

@@ -1,11 +1,11 @@
 /*!
- * Table CSS component
+ * Table CSS typography
  * Author: Abel Brencsan
  * Licensed under the MIT license
  */
 
-/* Table component prototype */
-table.table {
+/* Table typography */
+table {
 	border-collapse: collapse;
 	width: 100%;
 
@@ -39,18 +39,4 @@ table.table {
 	tfoot td {
 		font-weight: var(--bold-font-weight);
 	}
-}
-
-/* Table component extensions */
-table.table {
-}
-
-/* Table wrapper component */
-div.table-wrapper {
-	margin: 0 0 var(--element-margin) 0;
-	overflow-x: auto;
-}
-
-/* Table wrapper extensions */
-div.table-wrapper {
 }

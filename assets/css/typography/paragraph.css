@@ -8,3 +8,16 @@
 p {
 	margin: 0 0 var(--element-margin) 0;
 }
+
+/* List typography extensions */
+p {
+	&.paragraph-pullquote {
+		border-color: var(--fg-bold-color);
+		border-style: solid;
+		border-width: 1px 0;
+		color: var(--fg-bold-color);
+		font-size: var(--large-font-size);
+		padding: calc(var(--element-margin) * 0.5) 0;
+		text-align: center;
+	}
+}

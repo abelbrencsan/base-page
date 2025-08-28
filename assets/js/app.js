@@ -393,15 +393,16 @@ class App {
 			this.validators.push(new Validator({
 				form: elem,
 				invalidCallback: (input, message) => {
+					if (input.type == "hidden") return;
 					let formItem = input.closest("div.form-item");
 					if (formItem) {
 						formItem.setAttribute("data-label", message);
 						formItem.classList.add("has-invalid-field");
 						formItem.classList.remove("has-valid-field");
 					}
-					
 				},
 				validCallback: (input) => {
+					if (input.type == "hidden") return;
 					let formItem = input.closest("div.form-item");
 					if (formItem) {
 						formItem.removeAttribute("data-label");

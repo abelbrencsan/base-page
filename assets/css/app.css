@@ -20,6 +20,7 @@
 @import url("./typography/link.css");
 @import url("./typography/list.css");
 @import url("./typography/paragraph.css");
+@import url("./typography/table.css");
 
 /* Component imports */
 @import url("./components/alert.css");
@@ -55,7 +56,7 @@
 @import url("./components/spotlight.css");
 @import url("./components/step-list.css");
 @import url("./components/tab.css");
-@import url("./components/table.css");
+@import url("./components/table-wrapper.css");
 @import url("./components/timelapse.css");
 @import url("./components/tree.css");
 

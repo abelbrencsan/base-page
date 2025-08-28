@@ -22,7 +22,7 @@ class CookieManager {
 			date.setMinutes(date.getMinutes() + minutes);
 			expires = `expires=${date.toUTCString()}`;
 		}
-		document.cookie = `${name}=${value}; ${expires}; sameSite=Lax; Secure`;
+		document.cookie = `${name}=${value}; ${expires}; sameSite=Lax; Secure; Path=/`;
 	}
 
 	/**

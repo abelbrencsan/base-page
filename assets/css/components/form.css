@@ -119,14 +119,12 @@ label.form-control {
 
 		span.form-control-indicator {
 			background-color: var(--bg-color);
-			border-radius: var(--border-radius);
 			border: 1px solid var(--border-color);
 			height: 1.5rem;
 			width: 1.5rem;
 
 			input:checked + & {
-				background-color: var(--link-color);
-				background-image: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\"><path fill=\"%23ffffff\" d=\"M 21.82243,36.550935 8,22.728505 10.224299,20.504206 21.82243,32.102336 39.775701,14.149065 42,16.373364 Z\"/></svg>");
+				background-image: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\"><path fill=\"%230076ad\" d=\"M 21.82243,36.550935 8,22.728505 10.224299,20.504206 21.82243,32.102336 39.775701,14.149065 42,16.373364 Z\"/></svg>");
 				background-position: 50% 50%;
 				background-repeat: no-repeat;
 				background-size: 100% 100%;
@@ -134,16 +132,15 @@ label.form-control {
 			}
 
 			input:focus-visible + & {
-				border-color: var(--focus-color);
-				box-shadow: inset 0 0 0 2px var(--focus-color);
-			}
-
-			input:focus-visible:checked + & {
-				border-color: var(--focus-color);
+				border-color: var(--link-color);
 			}
 
 			input.is-invalid + & {
 				border-color: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+			}
+
+			input.is-invalid:focus-visible + & {
+				border-color: var(--link-color);
 			}
 		}
 	}
@@ -186,18 +183,18 @@ label.form-control {
 			}
 
 			input:focus-visible + & {
-				box-shadow: inset 0 0 0 3px var(--focus-color);
+				box-shadow: inset 0 0 0 1px var(--link-color);
 			}
 
 			input.is-invalid + & {
-				box-shadow: color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+				box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--error-fg-color) 70%, var(--error-bg-color) 30%);
+			}
+
+			input.is-invalid:focus-visible + & {
+				box-shadow: inset 0 0 0 1px var(--link-color);
 			}
 		}
 	}
-}
-
-/* Form control component extensions */
-label.form-control {
 }
 
 /* Form range component prototype */

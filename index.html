@@ -34,6 +34,20 @@
 	<!-- Alerts -->
 	<div class="alert-wrapper" data-alert-container></div>
 
+	<!-- Full-size notices -->
+	<ul class="notice-list notice-list--full">
+		<li class="notice-list-item notice-list-item--success" data-notice>
+			<div class="notice-list-item-wrapper">
+				<p>This is a success notice.</p>
+				<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-close"></use>
+					</svg>
+				</button>
+			</div>
+		</li>
+	</ul>
+
 	<!-- Navbar -->
 	<header class="navbar">
 		<div class="container">
@@ -133,104 +147,333 @@
 
 		<div class="container">
 
+			<!-- Layout -->
+			<div class="layout">
+
+				<!-- Layout aside -->
+				<aside class="layout-aside">
+					<div class="layout-aside-sticky">
+						<div class="box">
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat porta turpis a ultricies. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+						</div>
+					</div>
+				</aside>
+
+				<!-- Layout main -->
+				<main class="layout-main">
+					
+					<p class="paragraph-pullquote">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque. In ut posuere leo. Morbi eleifend consequat quam, nec laoreet enim facilisis a. Quisque sed felis non arcu pretium vehicula. Vestibulum ut convallis nisi. Duis vel enim placerat urna faucibus pretium sit amet at risus. Pellentesque scelerisque sapien metus, molestie congue turpis sollicitudin sed. Mauris et nibh at dolor iaculis sagittis. Etiam ac feugiat ex. Ut sollicitudin nibh at rutrum tincidunt.</p>
+					<p>Phasellus vehicula nunc et tortor lobortis hendrerit. Quisque in risus massa. Donec eu ipsum at velit euismod dictum. Cras vel metus finibus mauris pretium scelerisque maximus a metus. Pellentesque risus ipsum, dictum sed enim eu, dignissim aliquet felis. Quisque ultrices ante lacus, vel rutrum quam iaculis ac. Fusce sed turpis nunc. Morbi sit amet condimentum nunc, at dapibus urna. Integer lobortis quam tortor, id lacinia enim tristique in. Nam eu lectus dolor. Aliquam nec nisl sit amet turpis aliquet commodo eu ut ligula. Nam sollicitudin tempus venenatis. Proin lectus nisi, ullamcorper vitae justo nec, faucibus sollicitudin justo.</p>
+					<p>Aliquam erat volutpat. Integer volutpat tempus odio, quis accumsan odio. Cras sapien metus, consequat non massa quis, fermentum tempor nisl. Aliquam rhoncus sollicitudin porta. Nunc libero felis, rhoncus et rhoncus at, suscipit sed risus. Proin dignissim orci vitae sem scelerisque, ut vehicula erat egestas. Curabitur sit amet ante quis tellus posuere aliquet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam vestibulum sem mauris, vitae tempus nulla feugiat et. Mauris sed erat ac lacus vulputate consequat. Aenean lacinia odio ac fermentum pretium. Curabitur rhoncus porttitor commodo. Proin eget dui aliquet, ornare lectus nec, posuere augue.</p>
+					<h2 class="heading-block">What's included</h2>
+					<ul class="list-special">
+						<li>Lorem ipsum dolor amet</li>
+						<li>Lorem ipsum dolor amet</li>
+						<li>Lorem ipsum dolor amet</li>
+						<li>Lorem ipsum dolor amet</li>
+						<li>Lorem ipsum dolor amet</li>
+					</ul>
+					<h2 class="heading-block">Basic information</h2>
+					<dl class="list-special">
+						<dt>Lorem ipsum</dt>
+						<dd>Lorem ipsum dolor amet</dd>
+						<dt>Lorem ipsum</dt>
+						<dd>Lorem ipsum dolor amet</dd>
+						<dt>Lorem ipsum</dt>
+						<dd>Lorem ipsum dolor amet</dd>
+						<dt>Lorem ipsum</dt>
+						<dd>Lorem ipsum dolor amet</dd>
+					</dl>
+				</main>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Sample content -->
+	<section class="section">
+
+		<!-- Photo glider -->
+		<div class="photo-glider glider" data-glider>
+
 			<!-- Section header -->
 			<header class="header header--section">
-				<h2>Sortable listing</h2>
+				<h2>Photo gliders</h2>
 				<p>Lorem ipsum dolor amet si</p>
 			</header>
 
-			<div class="listing-wrapper">
-				<ul class="listing listing--sortable" data-sortable-tree>
-					<li class="listing-item" data-sortable-tree-node>
-						<div class="listing-item-sort-trigger" draggable="true">
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-sortable"></use>
-							</svg>
-						</div>
-						<h3>List Item 1</h3>
-						<p>Lorem ipsum dolor amet</p>
-						<dl class="listing-item-meta-list">
-							<dt>ID</dt>
-							<dd>1230</dd>
-							<dt>Created</dt>
-							<dd>01/08/2022</dd>
-							<dt>Status</dt>
-							<dd>Active</dd>
-						</dl>
-						<ul class="button-list button-list--group">
-							<li>
-								<button type="button" class="button">Edit</button>
-							</li>
-						</ul>
+			<!-- Glider viewport -->
+			<div class="glider-viewport" data-glider-viewport>
+				<ul class="glider-list glider-list--1of3 glider-list--small--full" data-glider-list>
+					<li>
+						<a href="/images/gallery/01.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
+							<picture>
+								<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+							</picture>
+						</a>
 					</li>
-					<li class="listing-item" data-sortable-tree-node>
-						<div class="listing-item-sort-trigger" draggable="true">
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-sortable"></use>
-							</svg>
-						</div>
-						<h3>List Item 2</h3>
-						<p>Lorem ipsum dolor amet</p>
-						<dl class="listing-item-meta-list">
-							<dt>ID</dt>
-							<dd>1231</dd>
-							<dt>Created</dt>
-							<dd>01/09/2022</dd>
-							<dt>Status</dt>
-							<dd>Active</dd>
-						</dl>
-						<ul class="button-list button-list--group">
-							<li>
-								<button type="button" class="button">Edit</button>
-							</li>
-						</ul>
+					<li>
+						<a href="/images/gallery/02.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
+							<picture>
+								<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+							</picture>
+						</a>
 					</li>
-					<li class="listing-item" data-sortable-tree-node>
-						<div class="listing-item-sort-trigger" draggable="true">
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-sortable"></use>
-							</svg>
-						</div>
-						<h3>List Item 3</h3>
-						<p>Lorem ipsum dolor amet</p>
-						<dl class="listing-item-meta-list">
-							<dt>ID</dt>
-							<dd>1232</dd>
-							<dt>Created</dt>
-							<dd>01/10/2022</dd>
-							<dt>Status</dt>
-							<dd>Active</dd>
-						</dl>
-						<ul class="button-list button-list--group">
-							<li>
-								<button type="button" class="button">Edit</button>
-							</li>
-						</ul>
+					<li>
+						<a href="/images/gallery/03.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
+							<picture>
+								<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+							</picture>
+						</a>
 					</li>
-					<li class="listing-item" data-sortable-tree-node>
-						<div class="listing-item-sort-trigger" draggable="true">
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-sortable"></use>
-							</svg>
-						</div>
-						<h3>List Item 4</h3>
-						<p>Lorem ipsum dolor amet</p>
-						<dl class="listing-item-meta-list">
-							<dt>ID</dt>
-							<dd>1233</dd>
-							<dt>Created</dt>
-							<dd>01/11/2022</dd>
-							<dt>Status</dt>
-							<dd>Inactive</dd>
-						</dl>
-						<ul class="button-list button-list--group">
-							<li>
-								<button type="button" class="button">Edit</button>
-							</li>
-						</ul>
+					<li>
+						<a href="/images/gallery/04.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
+							<picture>
+								<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+							</picture>
+						</a>
+					</li>
+					<li>
+						<a href="/images/gallery/05.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
+							<picture>
+								<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+							</picture>
+						</a>
 					</li>
 				</ul>
 			</div>
+			<ul class="glider-action-list button-list button-list--group">
+				<li>
+					<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-glider-prev-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-chevron-back"></use>
+						</svg>
+					</button>
+				</li>
+				<li>
+					<button type="button" class="button button--icon" aria-label="Next item" title="Next item" data-glider-next-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-chevron-forward"></use>
+						</svg>
+					</button>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Roll -->
+		<div class="roll" data-roll="5">
+			<div class="roll-viewport" data-roll-viewport>
+				<ul class="roll-list" data-roll-list>
+					<li data-roll-list-item>
+						<div class="roll-item roll-item--box">
+							<div class="roll-item-text">
+								<h2>Ornare interdum nascetur</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices.</p>
+							</div>
+						</div>
+					</li>
+					<li data-roll-list-item>
+						<div class="roll-item roll-item--image">
+							<a href="/images/gallery/01.jpg" class="image image--cover" data-dialog="image">
+								<picture>
+									<img src="/images/gallery/01-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+								</picture>
+							</a>
+						</div>
+					</li>
+					<li data-roll-list-item>
+						<div class="roll-item roll-item--image">
+							<a href="/images/gallery/02.jpg" class="image image--cover" data-dialog="image">
+								<picture>
+									<img src="/images/gallery/02-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+								</picture>
+							</a>
+						</div>
+					</li>
+					<li data-roll-list-item>
+						<div class="roll-item roll-item--image">
+							<a href="/images/gallery/03.jpg" class="image image--cover" data-dialog="image">
+								<picture>
+									<img src="/images/gallery/03-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+								</picture>
+							</a>
+						</div>
+					</li>
+					<li data-roll-list-item>
+						<div class="roll-item roll-item--image">
+							<a href="/images/gallery/04.jpg" class="image image--cover" data-dialog="image">
+								<picture>
+									<img src="/images/gallery/04-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+								</picture>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<ul class="roll-action-list button-list button-list--group">
+				<li>
+					<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-roll-prev-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-chevron-back"></use>
+						</svg>
+					</button>
+				</li>
+				<li>
+					<button type="button" class="button button--icon" aria-label="Next item" title="Next item" data-roll-next-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-chevron-forward"></use>
+						</svg>
+					</button>
+				</li>
+			</ul>
+		</div>
+
+		<div class="container container--narrow">
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Autocomplete</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Form -->
+			<form class="form" method="get" action="#" data-validator>
+				<ul class="form-group-list grid">
+					<li class="grid-col grid-col--5 grid-col--small--4">
+						<div class="form-item is-required">
+							<label class="form-label" for="query">Search query</label>
+							<input type="search" name="query" id="query" class="form-input" required>
+						</div>
+					</li>
+					<li class="grid-col grid-col--1 grid-col--small--2">
+						<button class="button button--primary" type="submit">Search</button>
+					</li>
+				</ul>
+			</form>
+			
+		</div>
+
+		<!-- Section header -->
+		<header class="header header--section">
+			<h2>Poster flow</h2>
+			<p>Lorem ipsum dolor amet si</p>
+		</header>
+
+		<!-- Poster flow -->
+		<ul class="poster-flow">
+			<li>
+				<div class="poster-item">
+					<div class="image">
+						<picture>
+							<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</div>
+					<div class="poster-item-text">
+						<h3 class="heading--special">Lorem ipsum dolor sit amet consectetur</h3>
+						<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="poster-item">
+					<div class="image">
+						<picture>
+							<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</div>
+					<div class="poster-item-text">
+						<h3 class="heading--special">Lorem ipsum dolor sit amet consectetur</h3>
+						<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="poster-item">
+					<div class="image">
+						<picture>
+							<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</dib>
+					<div class="poster-item-text">
+						<h3 class="heading--special">Lorem ipsum dolor sit amet consectetur</h3>
+						<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
+					</div>
+				</div>
+			</li>
+		</ul>
+
+		<!-- Split -->
+		<div class="split split--transparent split--reveal">
+			<a href="/images/gallery/05.jpg" class="split-image image image--cover" data-dialog="image">
+				<picture>
+					<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+				</picture>
+			</a>
+			<div class="split-text">
+				<header class="header">
+					<h2>Ornare interdum nascetur</h2>
+					<p>Justo aliquet massa adipiscing cubilia</p>
+				</header>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
+				<p>Aenean pretium purus et nibh iaculis, nec pharetra mi lacinia. Nullam dictum egestas leo, at elementum lacus volutpat ac. Sed porta lobortis urna, non consequat est feugiat porttitor. Pellentesque molestie consequat mauris at mattis. Nam placerat vestibulum faucibus. Sed ac efficitur lacus, vel efficitur massa. Curabitur sit amet rhoncus justo.</p>
+			</div>
+		</div>
+
+		<!-- Reverse split -->
+		<div class="split split--reverse split--transparent split--reveal">
+			<a href="/images/gallery/06.jpg" class="split-image image image--cover" data-dialog="image">
+				<picture>
+					<img src="/images/gallery/06.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+				</picture>
+			</a>
+			<div class="split-text">
+				<header class="header">
+					<h2>Ornare interdum nascetur</h2>
+					<p>Justo aliquet massa adipiscing cubilia</p>
+				</header>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
+				<p>Aenean pretium purus et nibh iaculis, nec pharetra mi lacinia. Nullam dictum egestas leo, at elementum lacus volutpat ac. Sed porta lobortis urna, non consequat est feugiat porttitor. Pellentesque molestie consequat mauris at mattis. Nam placerat vestibulum faucibus. Sed ac efficitur lacus, vel efficitur massa. Curabitur sit amet rhoncus justo.</p>
+			</div>
+		</div>
+
+		<!-- Spotlight -->
+		<div class="spotlight spotlight--reveal">
+			<div class="spotlight-image">
+				<picture>
+					<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+				</picture>
+			</div>
+			<div class="spotlight-text">
+				<div>
+				<header class="header">
+					<h2>Ornare interdum nascetur</h2>
+					<p>Justo aliquet massa adipiscing cubilia</p>
+				</header>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
+			</div>
+			</div>
+		</div>
+
+		<!-- Reverse spotlight -->
+		<div class="spotlight spotlight--reverse spotlight--reveal">
+			<div class="spotlight-image">
+				<picture>
+					<img src="/images/gallery/06.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+				</picture>
+			</div>
+			<div class="spotlight-text">
+				<div>
+				<header class="header">
+					<h2>Ornare interdum nascetur</h2>
+					<p>Justo aliquet massa adipiscing cubilia</p>
+				</header>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
+			</div>
+			</div>
+		</div>
+
+		<div class="container">
 
 			<!-- Section header -->
 			<header class="header header--section">
@@ -567,333 +810,6 @@
 				</template>
 			</div>
 
-			<!-- Layout -->
-			<div class="layout">
-
-				<!-- Layout aside -->
-				<aside class="layout-aside">
-					<div class="layout-aside-sticky">
-						<div class="box">
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat porta turpis a ultricies. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-						</div>
-					</div>
-				</aside>
-
-				<!-- Layout main -->
-				<main class="layout-main">
-					
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque. In ut posuere leo. Morbi eleifend consequat quam, nec laoreet enim facilisis a. Quisque sed felis non arcu pretium vehicula. Vestibulum ut convallis nisi. Duis vel enim placerat urna faucibus pretium sit amet at risus. Pellentesque scelerisque sapien metus, molestie congue turpis sollicitudin sed. Mauris et nibh at dolor iaculis sagittis. Etiam ac feugiat ex. Ut sollicitudin nibh at rutrum tincidunt.</p>
-					<p>Phasellus vehicula nunc et tortor lobortis hendrerit. Quisque in risus massa. Donec eu ipsum at velit euismod dictum. Cras vel metus finibus mauris pretium scelerisque maximus a metus. Pellentesque risus ipsum, dictum sed enim eu, dignissim aliquet felis. Quisque ultrices ante lacus, vel rutrum quam iaculis ac. Fusce sed turpis nunc. Morbi sit amet condimentum nunc, at dapibus urna. Integer lobortis quam tortor, id lacinia enim tristique in. Nam eu lectus dolor. Aliquam nec nisl sit amet turpis aliquet commodo eu ut ligula. Nam sollicitudin tempus venenatis. Proin lectus nisi, ullamcorper vitae justo nec, faucibus sollicitudin justo.</p>
-					<p>Aliquam erat volutpat. Integer volutpat tempus odio, quis accumsan odio. Cras sapien metus, consequat non massa quis, fermentum tempor nisl. Aliquam rhoncus sollicitudin porta. Nunc libero felis, rhoncus et rhoncus at, suscipit sed risus. Proin dignissim orci vitae sem scelerisque, ut vehicula erat egestas. Curabitur sit amet ante quis tellus posuere aliquet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam vestibulum sem mauris, vitae tempus nulla feugiat et. Mauris sed erat ac lacus vulputate consequat. Aenean lacinia odio ac fermentum pretium. Curabitur rhoncus porttitor commodo. Proin eget dui aliquet, ornare lectus nec, posuere augue.</p>
-					<h2 class="heading-block">What's included</h2>
-					<ul class="list-special">
-						<li>Lorem ipsum dolor amet</li>
-						<li>Lorem ipsum dolor amet</li>
-						<li>Lorem ipsum dolor amet</li>
-						<li>Lorem ipsum dolor amet</li>
-						<li>Lorem ipsum dolor amet</li>
-					</ul>
-					<h2 class="heading-block">Basic information</h2>
-					<dl class="list-special">
-						<dt>Lorem ipsum</dt>
-						<dd>Lorem ipsum dolor amet</dd>
-						<dt>Lorem ipsum</dt>
-						<dd>Lorem ipsum dolor amet</dd>
-						<dt>Lorem ipsum</dt>
-						<dd>Lorem ipsum dolor amet</dd>
-						<dt>Lorem ipsum</dt>
-						<dd>Lorem ipsum dolor amet</dd>
-					</dl>
-				</main>
-
-			</div>
-		</div>
-	</div>
-
-	<!-- Sample content -->
-	<section class="section">
-
-		<!-- Photo glider -->
-		<div class="photo-glider glider" data-glider>
-
-			<!-- Section header -->
-			<header class="header header--section">
-				<h2>Photo gliders</h2>
-				<p>Lorem ipsum dolor amet si</p>
-			</header>
-
-			<!-- Glider viewport -->
-			<div class="glider-viewport" data-glider-viewport>
-				<ul class="glider-list glider-list--1of3 glider-list--small--full" data-glider-list>
-					<li>
-						<a href="/images/gallery/01.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/02.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/03.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/04.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/05.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-				</ul>
-			</div>
-			<ul class="glider-action-list button-list button-list--group">
-				<li>
-					<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-glider-prev-trigger>
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-chevron-back"></use>
-						</svg>
-					</button>
-				</li>
-				<li>
-					<button type="button" class="button button--icon" aria-label="Next item" title="Next item" data-glider-next-trigger>
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-chevron-forward"></use>
-						</svg>
-					</button>
-				</li>
-			</ul>
-		</div>
-
-		<!-- Roll -->
-		<div class="roll" data-roll="5">
-			<div class="roll-viewport" data-roll-viewport>
-				<ul class="roll-list" data-roll-list>
-					<li data-roll-list-item>
-						<div class="roll-item roll-item--box">
-							<div class="roll-item-text">
-								<h2>Ornare interdum nascetur</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices.</p>
-							</div>
-						</div>
-					</li>
-					<li data-roll-list-item>
-						<div class="roll-item roll-item--image">
-							<a href="/images/gallery/01.jpg" class="image image--cover" data-dialog="image">
-								<picture>
-									<img src="/images/gallery/01-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-								</picture>
-							</a>
-						</div>
-					</li>
-					<li data-roll-list-item>
-						<div class="roll-item roll-item--image">
-							<a href="/images/gallery/02.jpg" class="image image--cover" data-dialog="image">
-								<picture>
-									<img src="/images/gallery/02-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-								</picture>
-							</a>
-						</div>
-					</li>
-					<li data-roll-list-item>
-						<div class="roll-item roll-item--image">
-							<a href="/images/gallery/03.jpg" class="image image--cover" data-dialog="image">
-								<picture>
-									<img src="/images/gallery/03-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-								</picture>
-							</a>
-						</div>
-					</li>
-					<li data-roll-list-item>
-						<div class="roll-item roll-item--image">
-							<a href="/images/gallery/04.jpg" class="image image--cover" data-dialog="image">
-								<picture>
-									<img src="/images/gallery/04-square.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-								</picture>
-							</a>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<ul class="roll-action-list button-list button-list--group">
-				<li>
-					<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-roll-prev-trigger>
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-chevron-back"></use>
-						</svg>
-					</button>
-				</li>
-				<li>
-					<button type="button" class="button button--icon" aria-label="Next item" title="Next item" data-roll-next-trigger>
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-chevron-forward"></use>
-						</svg>
-					</button>
-				</li>
-			</ul>
-		</div>
-
-		<div class="container container--narrow">
-
-			<!-- Section header -->
-			<header class="header header--section">
-				<h2>Autocomplete</h2>
-				<p>Lorem ipsum dolor amet si</p>
-			</header>
-
-			<!-- Form -->
-			<form class="form" method="get" action="#" data-validator>
-				<ul class="form-group-list grid">
-					<li class="grid-col grid-col--5 grid-col--small--4">
-						<div class="form-item is-required">
-							<label class="form-label" for="query">Search query</label>
-							<input type="search" name="query" id="query" class="form-input" required>
-						</div>
-					</li>
-					<li class="grid-col grid-col--1 grid-col--small--2">
-						<button class="button button--primary" type="submit">Search</button>
-					</li>
-				</ul>
-			</form>
-			
-		</div>
-
-		<!-- Section header -->
-		<header class="header header--section">
-			<h2>Poster flow</h2>
-			<p>Lorem ipsum dolor amet si</p>
-		</header>
-
-		<!-- Poster flow -->
-		<ul class="poster-flow">
-			<li>
-				<div class="poster-item">
-					<div class="image">
-						<picture>
-							<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-						</picture>
-					</div>
-					<div class="poster-item-text">
-						<h3 class="heading--special">Lorem ipsum dolor sit amet consectetur</h3>
-						<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="poster-item">
-					<div class="image">
-						<picture>
-							<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-						</picture>
-					</div>
-					<div class="poster-item-text">
-						<h3 class="heading--special">Lorem ipsum dolor sit amet consectetur</h3>
-						<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="poster-item">
-					<div class="image">
-						<picture>
-							<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-						</picture>
-					</dib>
-					<div class="poster-item-text">
-						<h3 class="heading--special">Lorem ipsum dolor sit amet consectetur</h3>
-						<p>Phasellus lobortis lacus nec velit gravida finibus ac quis nisi. Etiam laoreet feugiat arcu a mollis. Donec sollicitudin hendrerit nunc ut ullamcorper. Maecenas in quam bibendum, facilisis orci quis, euismod lacus. Maecenas gravida nunc non nibh semper, egestas laoreet erat elementum.</p>
-					</div>
-				</div>
-			</li>
-		</ul>
-
-		<!-- Split -->
-		<div class="split split--transparent split--reveal">
-			<a href="/images/gallery/05.jpg" class="split-image image image--cover" data-dialog="image">
-				<picture>
-					<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-				</picture>
-			</a>
-			<div class="split-text">
-				<header class="header">
-					<h2>Ornare interdum nascetur</h2>
-					<p>Justo aliquet massa adipiscing cubilia</p>
-				</header>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
-				<p>Aenean pretium purus et nibh iaculis, nec pharetra mi lacinia. Nullam dictum egestas leo, at elementum lacus volutpat ac. Sed porta lobortis urna, non consequat est feugiat porttitor. Pellentesque molestie consequat mauris at mattis. Nam placerat vestibulum faucibus. Sed ac efficitur lacus, vel efficitur massa. Curabitur sit amet rhoncus justo.</p>
-			</div>
-		</div>
-
-		<!-- Reverse split -->
-		<div class="split split--reverse split--transparent split--reveal">
-			<a href="/images/gallery/06.jpg" class="split-image image image--cover" data-dialog="image">
-				<picture>
-					<img src="/images/gallery/06.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-				</picture>
-			</a>
-			<div class="split-text">
-				<header class="header">
-					<h2>Ornare interdum nascetur</h2>
-					<p>Justo aliquet massa adipiscing cubilia</p>
-				</header>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
-				<p>Aenean pretium purus et nibh iaculis, nec pharetra mi lacinia. Nullam dictum egestas leo, at elementum lacus volutpat ac. Sed porta lobortis urna, non consequat est feugiat porttitor. Pellentesque molestie consequat mauris at mattis. Nam placerat vestibulum faucibus. Sed ac efficitur lacus, vel efficitur massa. Curabitur sit amet rhoncus justo.</p>
-			</div>
-		</div>
-
-		<!-- Spotlight -->
-		<div class="spotlight spotlight--reveal">
-			<div class="spotlight-image">
-				<picture>
-					<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-				</picture>
-			</div>
-			<div class="spotlight-text">
-				<div>
-				<header class="header">
-					<h2>Ornare interdum nascetur</h2>
-					<p>Justo aliquet massa adipiscing cubilia</p>
-				</header>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
-			</div>
-			</div>
-		</div>
-
-		<!-- Reverse spotlight -->
-		<div class="spotlight spotlight--reverse spotlight--reveal">
-			<div class="spotlight-image">
-				<picture>
-					<img src="/images/gallery/06.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-				</picture>
-			</div>
-			<div class="spotlight-text">
-				<div>
-				<header class="header">
-					<h2>Ornare interdum nascetur</h2>
-					<p>Justo aliquet massa adipiscing cubilia</p>
-				</header>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu lorem malesuada, ultrices quam eleifend, ultrices libero. Maecenas feugiat elit dui, eu volutpat mauris ullamcorper nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dolor dui, malesuada sit amet felis ut, fermentum luctus purus. Quisque efficitur facilisis pretium. Integer elementum lorem ac massa sodales ultrices. Aenean scelerisque nisi nunc, quis mollis ex sollicitudin at. Curabitur suscipit nulla nibh, sed dapibus metus semper eget.</p>
-			</div>
-			</div>
-		</div>
-
-		<div class="container">
-
 			<!-- Section header -->
 			<header class="header header--section">
 				<h2>Timelapse</h2>
@@ -1188,36 +1104,44 @@
 			<!-- Notices -->
 			<ul class="notice-list">
 				<li class="notice-list-item" data-notice>
-					<p>This is a default notice.</p>
-					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-close"></use>
-						</svg>	
-					</button>
+					<div class="notice-list-item-wrapper">
+						<p>This is a default notice.</p>
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
 				</li>
 				<li class="notice-list-item notice-list-item--error" data-notice>
-					<p>This is an error notice.</p>
-					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-close"></use>
-						</svg>	
-					</button>
+					<div class="notice-list-item-wrapper">
+						<p>This is an error notice.</p>
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
 				</li>
 				<li class="notice-list-item notice-list-item--success" data-notice>
-					<p>This is a success notice.</p>
-					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-close"></use>
-						</svg>	
-					</button>
+					<div class="notice-list-item-wrapper">
+						<p>This is a success notice.</p>
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
 				</li>
 				<li class="notice-list-item notice-list-item--warning" data-notice>
-					<p>This is a warning notice.</p>
-					<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-close"></use>
-						</svg>	
-					</button>
+					<div class="notice-list-item-wrapper">
+						<p>This is a warning notice.</p>
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
 				</li>
 			</ul>
 
@@ -1229,7 +1153,7 @@
 
 			<!-- Table -->
 			<div class="table-wrapper">
-				<table class="table">
+				<table>
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -1566,26 +1490,53 @@
 						</div>
 					</li>
 					<li class="grid-col grid-col--6">
-						<div class="form-item">
+						<div class="form-item is-required">
 							<fieldset class="form-fieldset">
 								<legend class="form-fieldset-legend">Checkboxes</legend>
 								<ul class="flex flex--gap flex--uniform">
 									<li class="flex-col">
 										<label class="form-control form-control--checkbox">
-											<input name="checkboxItem" id="checkboxItem1" type="checkbox" value="1">
+											<input name="checkboxItem2" id="checkboxItem1" type="checkbox" value="1" required>
 											<span class="form-control-indicator"></span> Item 1
 										</label>
 									</li>
 									<li class="flex-col">
 										<label class="form-control form-control--checkbox">
-											<input name="checkboxItem" id="checkboxItem2" type="checkbox" value="2">
+											<input name="checkboxItem2" id="checkboxItem2" type="checkbox" value="2" required>
 											<span class="form-control-indicator"></span> Item 2
 										</label>
 									</li>
 									<li class="flex-col">
 										<label class="form-control form-control--checkbox">
-											<input name="checkboxItem" id="checkboxItem3" type="checkbox" value="3">
+											<input name="checkboxItem2" id="checkboxItem3" type="checkbox" value="3" required>
 											<span class="form-control-indicator"></span> Item 3
+										</label>
+									</li>
+								</ul>
+							</fieldset>
+						</div>
+					</li>
+					<li class="grid-col grid-col--6">
+						<div class="form-item">
+							<fieldset class="form-fieldset">
+								<legend class="form-fieldset-legend">Checkboxes 2</legend>
+								<ul class="flex flex--gap flex--uniform">
+									<li class="flex-col">
+										<label class="form-control form-control--checkbox">
+											<input name="checkboxItem" id="checkboxItem4" type="checkbox" value="1">
+											<span class="form-control-indicator"></span> Item 4
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--checkbox">
+											<input name="checkboxItem" id="checkboxItem5" type="checkbox" value="2">
+											<span class="form-control-indicator"></span> Item 5
+										</label>
+									</li>
+									<li class="flex-col">
+										<label class="form-control form-control--checkbox">
+											<input name="checkboxItem" id="checkboxItem6" type="checkbox" value="3">
+											<span class="form-control-indicator"></span> Item 6
 										</label>
 									</li>
 								</ul>

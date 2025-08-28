@@ -1,0 +1,15 @@
+/*!
+ * Table wrapper CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Table wrapper component */
+div.table-wrapper {
+	margin: 0 0 var(--element-margin) 0;
+	overflow-x: auto;
+}
+
+/* Table wrapper extensions */
+div.table-wrapper {
+}
