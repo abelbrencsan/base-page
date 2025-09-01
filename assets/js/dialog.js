@@ -92,6 +92,13 @@ class Dialog {
 	dialogYouTubeClass = "dialog--youtube";
 
 	/**
+	 * The class that is added to the YouTube dialog when the video is a Short.
+	 * 
+	 * @type {string}
+	 */
+	dialogYouTubeShortClass = "dialog--youtube--short";
+
+	/**
 	 * The class that is added to the dialog when its type is iframe.
 	 * 
 	 * @type {string}
@@ -240,6 +247,7 @@ class Dialog {
 	 * @param {string} options.dialogImageClass
 	 * @param {string} options.dialogVideoClass
 	 * @param {string} options.dialogYouTubeClass
+	 * @param {string} options.dialogYouTubeShortClass
 	 * @param {string} options.dialogIframeClass
 	 * @param {string} options.dialogAjaxClass
 	 * @param {string} options.closeFormClass
@@ -466,6 +474,9 @@ class Dialog {
 				this.dialog = document.createElement("dialog");
 				this.dialog.classList.add(this.dialogClass);
 				this.dialog.classList.add(this.dialogYouTubeClass);
+				if (this.source.includes("/shorts/")) {
+					this.dialog.classList.add(this.dialogYouTubeShortClass);
+				}
 				this.dialog.appendChild(iframe);
 				document.body.appendChild(this.dialog);
 				this.#addDialogEvents();
@@ -688,7 +699,7 @@ class Dialog {
 	#isDialogClosed() {}
 
 	/**
-	 * Retrieves the YouTube embed URL from the specified URL.
+	 * Retrieves the YouTube embed URL and whether the video is a Short from the specified URL.
 	 * 
 	 * @param {string} url
 	 * @returns {string|null}
@@ -696,12 +707,13 @@ class Dialog {
 	#getYouTubeEmbedUrl(url) {
 		const host = "https://www.youtube.com/embed/";
 		const params = "?enablejsapi=1&autoplay=1";
-		const regex = /(youtube|youtu)\.(com|be)\/(watch\?v=([\w-]+)|([\w-]+))/;
-		const match = url.match(regex);
-		if (match) {
-			const videoId = (match[1] === "youtube") ? match[4] : match[5];
-			if (videoId) {
-				return host + videoId + params;
+		const regex = /(youtube\.com)\/(watch\?v=([\w-]+)|shorts\/([\w-]+))/;
+		const matches = url.match(regex);
+		if (matches[1] == 'youtube.com') {
+			if (matches[3]) {
+				return host + matches[3] + params;
+			} else if (matches[4]) {
+				return host + matches[4] + params;
 			}
 		}
 	}

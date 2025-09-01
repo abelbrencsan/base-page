@@ -203,6 +203,10 @@ dialog.dialog {
 		form.dialog-close-form {
 			position: fixed;
 		}
+
+		&.dialog--youtube--short {
+			aspect-ratio: 9 / 16;
+		}
 	}
 
 	&.dialog--iframe {
