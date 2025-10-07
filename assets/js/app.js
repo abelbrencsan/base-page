@@ -475,7 +475,8 @@ class App {
 						}
 					}
 					return null;
-				}
+				},
+				isDraggingStartedCallback: (isBlock) => { console.log("isDraggingStartedCallback", isBlock) }
 			}));
 		});
 	}

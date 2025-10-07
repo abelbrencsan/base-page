@@ -5,7 +5,7 @@
  */
 
 /* Button component variables */
-a.button, button.button {	
+a.button, button.button {
 	--button-bg-color: var(--border-color);
 	--button-bg-hover-color: var(--border-hover-color);
 	--button-fg-color: var(--fg-color);
@@ -13,7 +13,7 @@ a.button, button.button {
 }
 
 /* Button component prototype */
-a.button, button.button {	
+a.button, button.button {
 	align-items: center;
 	background-color: var(--button-bg-color);
 	border-radius: var(--border-radius);
@@ -50,9 +50,16 @@ button.button {
 	border: none;
 	cursor: pointer;
 
-	&[type="submit"]:disabled, &[type="button"]:disabled {
+	&:disabled {
+		cursor: not-allowed;
 		opacity: 0.5;
-		pointer-events: none;
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				background-color: var(--button-bg-color);
+			}
+		}
 	}
 }
 

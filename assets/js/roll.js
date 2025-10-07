@@ -181,7 +181,7 @@ class Roll {
 	}
 
 	/**
-	 * Remove event listeners related to the roll.
+	 * Removes event listeners related to the roll.
 	 * 
 	 * @returns {void}
 	 */

@@ -266,7 +266,7 @@ class Dropdown {
 	}
 
 	/**
-	 * Remove event listeners related to the dropdown.
+	 * Removes event listeners related to the dropdown.
 	 * 
 	 * @returns {void}
 	 */

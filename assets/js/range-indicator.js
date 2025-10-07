@@ -151,7 +151,7 @@ class RangeIndicator {
 	}
 
 	/**
-	 * Remove event listeners related to the range indicator.
+	 * Removes event listeners related to the range indicator.
 	 * 
 	 * @returns {void}
 	 */

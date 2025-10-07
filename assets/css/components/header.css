@@ -16,7 +16,7 @@ header.header {
 	h3, h4, h5, h6, .h3, .h4, .h5, .h6 {
 
 		+ p {
-			--heading-margin: var(--block-margin);
+			margin: calc(var(--block-margin) * -1) 0 var(--block-margin) 0;
 		}
 	}
 

@@ -55,8 +55,15 @@ details.details {
 		margin-bottom: calc(var(--element-margin) * 0.75);
 	}
 
-	&:not(:last-of-type) {
-		margin-bottom: 0;
+	+ details.details {
+		margin-top: calc(var(--element-margin) * -1);
+	}
+
+	&[open] {
+
+		+ details.details {
+			margin-top: calc((var(--element-margin) * -0.25));
+		}
 	}
 
 	&[open] > summary {

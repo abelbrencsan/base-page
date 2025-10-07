@@ -313,7 +313,7 @@ class Glider {
 	}
 
 	/**
-	 * Remove event listeners related to the glider.
+	 * Removes event listeners related to the glider.
 	 * 
 	 * @returns {void}
 	 */

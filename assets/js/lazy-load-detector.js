@@ -108,7 +108,7 @@ class LazyLoadDetector {
 	}
 
 	/**
-	 * Remove event listeners related to the lazy load detector.
+	 * Removes event listeners related to the lazy load detector.
 	 * 
 	 * @returns {void}
 	 */

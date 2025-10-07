@@ -183,7 +183,7 @@ class Router {
 	}
 
 	/**
-	 * Remove event listeners related to the router.
+	 * Removes event listeners related to the router.
 	 * 
 	 * @returns {void}
 	 */

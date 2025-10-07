@@ -244,7 +244,7 @@ class Slideshow {
 	}
 
 	/**
-	 * Remove event listeners related to the slideshow.
+	 * Removes event listeners related to the slideshow.
 	 * 
 	 * @returns {void}
 	 */

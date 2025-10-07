@@ -35,6 +35,10 @@ ul.notice-list {
 			margin-bottom: 0;
 		}
 
+		a {
+			color: inherit;
+		}
+
 		button {
 			align-items: center;
 			background-color: transparent;

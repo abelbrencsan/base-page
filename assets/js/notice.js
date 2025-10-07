@@ -126,7 +126,7 @@ class Notice {
 	}
 
 	/**
-	 * Remove event listeners related to the notice.
+	 * Removes event listeners related to the notice.
 	 * 
 	 * @returns {void}
 	 */

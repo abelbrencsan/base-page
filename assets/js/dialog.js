@@ -274,7 +274,7 @@ class Dialog {
 		if (typeof options.source !== "string") {
 			throw "Dialog \"source\" option must be a string";
 		}
-		if (Dialog.types.indexOf(options.type) === -1) {
+		if (!Dialog.types.includes(options.type)) {
 			throw "Dialog type is not supported";
 		}
 

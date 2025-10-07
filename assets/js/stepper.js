@@ -174,7 +174,7 @@ class Stepper {
 	}
 
 	/**
-	 * Remove event listeners related to the stepper.
+	 * Removes event listeners related to the stepper.
 	 * 
 	 * @returns {void}
 	 */

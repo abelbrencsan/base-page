@@ -100,7 +100,7 @@ class PageReveal {
 	}
 
 	/**
-	 * Remove event listeners related to the page reveal.
+	 * Removes event listeners related to the page reveal.
 	 * 
 	 * @returns {void}
 	 */

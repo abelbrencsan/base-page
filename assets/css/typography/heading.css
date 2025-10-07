@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6, .heading {
 }
 
 h3, h4, h5, h6, .h3, .h4, .h5, .h6 {
-	--heading-margin: var(--block-margin);
+	margin-bottom: var(--block-margin);
 }
 
 h1, .h1 {

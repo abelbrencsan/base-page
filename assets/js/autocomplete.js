@@ -519,7 +519,7 @@ class Autocomplete {
 	}
 
 	/**
-	 * Remove event listeners related to the autocomplete.
+	 * Removes event listeners related to the autocomplete.
 	 * 
 	 * @returns {void}
 	 */

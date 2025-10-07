@@ -253,12 +253,11 @@ class SortableTree {
 	 * @returns {void}
 	 */
 	#isDraggingStarted(event) {
-		console.log(event.target);
 		if (!(event.target instanceof HTMLElement)) return;
 		if (!event.target.draggable) return;
 		this.draggedNode = this.#getNodeOrBlock(event.target);
-		console.log(this.draggedNode);
 		if (this.draggedNode) {
+			const isBlock = this.isBlockTarget(this.draggedNode);
 			const transferData = this.getTransferData(this.draggedNode);
 			const {x, y} = this.#getDragOffsetPosition(event.clientX, event.clientY);
 			event.dataTransfer.setData("text/plain", transferData);
@@ -269,7 +268,7 @@ class SortableTree {
 			}
 			this.draggedNode.classList.add(this.isDraggingClass);
 			if ("vibrate" in navigator) navigator.vibrate(100);
-			if (typeof(this.isDraggingStartedCallback) == "function") this.isDraggingStartedCallback();
+			if (typeof(this.isDraggingStartedCallback) == "function") this.isDraggingStartedCallback(isBlock);
 		}
 	}
 
@@ -614,7 +613,7 @@ class SortableTree {
 	}
 
 	/**
-	 * Remove event listeners related to the sortable tree.
+	 * Removes event listeners related to the sortable tree.
 	 * 
 	 * @returns {void}
 	 */

@@ -209,7 +209,7 @@ class Tab {
 	}
 
 	/**
-	 * Remove event listeners related to the tab.
+	 * Removes event listeners related to the tab.
 	 * 
 	 * @returns {void}
 	 */
