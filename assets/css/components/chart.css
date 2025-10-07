@@ -6,14 +6,13 @@
 
 /* Chart component variables */
 div.chart {
-	--chart-color-1: #0369a1;
-	--chart-color-2: #b91c1c;
-	--chart-color-3: #eab308;
-	--chart-color-4: #15803d;
-	--chart-color-5: #4338ca;
-	--chart-color-6: #4338ca;
-	--chart-color-7: #4338ca;
-	--chart-color-8: #4338ca;
+	--chart-color-1: #299cea;
+	--chart-color-2: #ff5176;
+	--chart-color-3: #42bcbc;
+	--chart-color-4: #ff9730;
+	--chart-color-5: #8d54ff;
+	--chart-color-6: #ffc845;
+	--chart-color-7: #bec1c5;
 	--chart-gap: 0.05;
 }
 
@@ -68,23 +67,23 @@ svg.chart-plot {
 	&.chart-plot--bar, &.chart-plot--line {
 
 		&.chart-plot--10 {
-			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 20), #ffffff calc(100% / 20), #ffffff calc(100% / 10));
+			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 20), var(--bg-color) calc(100% / 20), var(--bg-color) calc(100% / 10));
 		}
 
 		&.chart-plot--9 {
-			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 18), #ffffff calc(100% / 18), #ffffff calc(100% / 9));
+			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 18), var(--bg-color) calc(100% / 18), var(--bg-color) calc(100% / 9));
 		}
 
 		&.chart-plot--8 {
-			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 16), #ffffff calc(100% / 16), #ffffff calc(100% / 8));
+			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 16), var(--bg-color) calc(100% / 16), var(--bg-color) calc(100% / 8));
 		}
 
 		&.chart-plot--7 {
-			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 14), #ffffff calc(100% / 14), #ffffff calc(100% / 7));
+			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 14), var(--bg-color) calc(100% / 14), var(--bg-color) calc(100% / 7));
 		}
 
 		&.chart-plot--6 {
-			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 12), #ffffff calc(100% / 12), #ffffff calc(100% / 6));
+			background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 12), var(--bg-color) calc(100% / 12), var(--bg-color) calc(100% / 6));
 		}
 	}
 
@@ -120,10 +119,6 @@ svg.chart-plot {
 
 				&:nth-of-type(7) {
 					fill: var(--chart-color-7);
-				}
-
-				&:nth-of-type(8) {
-					fill: var(--chart-color-8);
 				}
 			}
 		}
@@ -219,17 +214,6 @@ svg.chart-plot {
 					fill: var(--chart-color-7);
 				}
 			}
-
-			&:nth-of-type(8) {
-				
-				polyline.chart-plot-dataset-data {
-					stroke: var(--chart-color-8);
-				}
-
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
-					fill: var(--chart-color-8);
-				}
-			}
 		}
 	}
 
@@ -272,10 +256,6 @@ svg.chart-plot {
 				&:nth-of-type(7) {
 					fill: var(--chart-color-7);
 				}
-
-				&:nth-of-type(8) {
-					fill: var(--chart-color-8);
-				}
 			}
 		}
 	}
@@ -285,23 +265,23 @@ svg.chart-plot {
 		&.chart-plot--bar, &.chart-plot--line {
 
 			&.chart-plot--10 {
-				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 10), #ffffff calc(100% / 10), #ffffff calc(100% / 5));
+				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 10), var(--bg-color) calc(100% / 10), var(--bg-color) calc(100% / 5));
 			}
 
 			&.chart-plot--9 {
-				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 9), #ffffff calc(100% / 9), #ffffff calc(100% / 4.5));
+				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 9), var(--bg-color) calc(100% / 9), var(--bg-color) calc(100% / 4.5));
 			}
 
 			&.chart-plot--8 {
-				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 8), #ffffff calc(100% / 8), #ffffff calc(100% / 4));
+				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 8), var(--bg-color) calc(100% / 8), var(--bg-color) calc(100% / 4));
 			}
 
 			&.chart-plot--7 {
-				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 7), #ffffff calc(100% / 7), #ffffff calc(100% / 3.5));
+				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 7), var(--bg-color) calc(100% / 7), var(--bg-color) calc(100% / 3.5));
 			}
 
 			&.chart-plot--6 {
-				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 6), #ffffff calc(100% / 6), #ffffff calc(100% / 3));
+				background-image: repeating-linear-gradient(180deg, var(--border-bg-color), var(--border-bg-color) calc(100% / 6), var(--bg-color) calc(100% / 6), var(--bg-color) calc(100% / 3));
 			}
 		}
 	}
@@ -437,10 +417,6 @@ ul.chart-legend-list {
 
 		&:nth-child(7):before {
 			background-color: var(--chart-color-7);
-		}
-
-		&:nth-child(8):before {
-			background-color: var(--chart-color-8);
 		}
 	}
 }
