@@ -82,7 +82,14 @@ class Chart {
 	 * 
 	 * @type {boolean}
 	 */
-	isDonut = true;
+	isDonut = false;
+
+	/**
+	 * Indicates whether the pie chart is displayed as a gauge chart.
+	 * 
+	 * @type {boolean}
+	 */
+	isGauge = false;
 
 	/**
 	 * The class that is added to the chart when its type is bar.
@@ -181,6 +188,7 @@ class Chart {
 	 * @param {number} options.roundness
 	 * @param {boolean} options.showArea
 	 * @param {boolean} options.isDonut
+	 * @param {boolean} options.isGauge
 	 * @param {string} options.chartBarClass
 	 * @param {string} options.chartLineClass
 	 * @param {string} options.chartPieClass
@@ -303,6 +311,15 @@ class Chart {
 			steps.push(val);
 		}
 		return steps.reverse();
+	}
+
+	/**
+	 * Retrieves whether the chart is a gauge pie chart.
+	 * 
+	 * @returns {boolean}
+	 */
+	get isPieGauge() {
+		return this.type == "pie" && this.isGauge
 	}
 
 	/**
@@ -504,13 +521,14 @@ class Chart {
 	 * @returns {void}
 	 */
 	#drawPieChart() {
+		const diameter = this.isPieGauge ? this.height * 2 : this.height;
 		const offsetStep = this.width / this.datasets.length;
-		let offset = (offsetStep - this.height) * 0.5;
+		let offset = (offsetStep - diameter) * 0.5;
 		this.wrapper.classList.add(this.chartPieClass);
 		this.datasets.forEach((dataset) => {
 			this.#drawPie(dataset, offset);
 			offset += offsetStep;
-		})
+		})	
 	}
 
 	/**
@@ -555,10 +573,11 @@ class Chart {
 	 * @returns {SVGPolylineElement}
 	 */
 	#createPieSlice(startAngle, endAngle) {
-		const radius = this.height / 2;
+		const radius = this.isPieGauge ? this.height : this.height / 2;
 		const path = this.#getPieSlicePath(radius, startAngle, endAngle);
 		let slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		slice.setAttribute("d", path);
+		slice.setAttribute("stroke-linejoin", "bevel");
 		slice.classList.add(this.datasetDataClass);
 		return slice;
 	}
@@ -572,11 +591,12 @@ class Chart {
 	 * @returns {string}
 	 */
 	#getPieSlicePath(radius, startAngle, endAngle) {
+		const offsetAngle = this.isPieGauge ? 180 : 90;
 		const isCircle = (endAngle - startAngle === 360);
 		if (isCircle) endAngle--;
 		const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
-		const startCoords = Chart.polarToCartesian(radius, startAngle);
-		const endCoords = Chart.polarToCartesian(radius, endAngle);
+		const startCoords = Chart.polarToCartesian(radius, startAngle, offsetAngle);
+		const endCoords = Chart.polarToCartesian(radius, endAngle, offsetAngle);
 		return this.#generatePieSlicePathShape(startCoords, endCoords, radius, largeArcFlag, isCircle);
 	}
 
@@ -608,10 +628,11 @@ class Chart {
 	 */
 	#createDonut() {
 		if (!this.isDonut) return null;
+		const diameter = this.isPieGauge ? this.height : this.height / 2;
 		let donut = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-		donut.setAttribute("cx", this.height * 0.5);
-		donut.setAttribute("cy", this.height * 0.5);
-		donut.setAttribute("r", this.height * 0.25);
+		donut.setAttribute("cx", diameter);
+		donut.setAttribute("cy", diameter);
+		donut.setAttribute("r", diameter * 0.5);
 		donut.classList.add(this.datasetDonutClass);
 		return donut;
 	}
@@ -622,8 +643,8 @@ class Chart {
 	 * @returns {void}
 	 */
 	#setViewport() {
-		this.width = this.wrapper.attributes.width ? this.wrapper.attributes.width.value : this.width;
-		this.height = this.wrapper.attributes.height ? this.wrapper.attributes.height.value : this.height;
+		this.width = this.wrapper.attributes.width ? parseInt(this.wrapper.attributes.width.value) : this.width;
+		this.height = this.wrapper.attributes.height ? parseInt(this.wrapper.attributes.height.value) : this.height;
 		const coords = [0, 0, this.width, this.height].join(" ");
 		this.wrapper.setAttribute("viewBox", coords);
 	}
@@ -660,7 +681,7 @@ class Chart {
 	 */
 	#getPieSliceAngles(dataset) {
 		let sum = dataset.reduce((total, current) => (total + current), 0);
-		return dataset.map((data) => ((data / sum) * 360));
+		return dataset.map((data) => ((data / sum) * (this.isPieGauge ? 180 : 360)));
 	}
 
 	/**
@@ -668,10 +689,11 @@ class Chart {
 	 * 
 	 * @param {number} radius
 	 * @param {number} angle
+	 * @param {number} offsetAngle
 	 * @returns {{x:number,y:number}}
 	 */
-	static polarToCartesian(radius, angle) {
-		let radians = (angle - 90) * Math.PI / 180;
+	static polarToCartesian(radius, angle, offsetAngle = 90) {
+		let radians = (angle - offsetAngle) * Math.PI / 180;
 		return {
 			x: radius + (radius * Math.cos(radians)),
 			y: radius + (radius * Math.sin(radians))

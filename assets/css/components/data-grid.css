@@ -1,0 +1,28 @@
+/*!
+ * Data grid CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Data grid component prototype */
+dl.data-grid.grid {
+	grid-gap: 3px;
+	margin-bottom: var(--element-margin);
+	
+	div.grid-col {
+		background-color: var(--border-bg-color);
+		padding: calc(var(--box-padding) * 0.75);
+
+		dt {
+			font-family: var(--base-font-family);
+			font-size: var(--small-font-size);
+			font-weight: var(--bold-font-weight);
+			letter-spacing: var(--base-letter-spacing);
+			line-height: var(--base-line-height);
+		}
+
+		dd {
+			margin-left: 0;
+		}
+	}
+}

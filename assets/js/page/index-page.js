@@ -35,6 +35,23 @@ class IndexPage extends Page {
 	});
 
 	/**
+	 * Sample gauge pie chart.
+	 * 
+	 * @type {Chart}
+	 */
+	sampleGaugePieChart = new Chart({
+		type: "pie",
+		wrapper: document.getElementById("sample-gauge-pie-chart-plot"),
+		isGauge: true,
+		isDonut: true,
+		datasets: [
+			[60, 50, 35, 18, 33],
+			[75, 55, 32, 15, 45],
+			[70, 40, 30, 25, 40]
+		]
+	});
+
+	/**
 	 * Sample pie chart.
 	 * 
 	 * @type {Chart}
@@ -42,6 +59,7 @@ class IndexPage extends Page {
 	samplePieChart = new Chart({
 		type: "pie",
 		wrapper: document.getElementById("sample-pie-chart-plot"),
+		isDonut: true,
 		datasets: [
 			[60, 50, 35, 18, 33],
 			[75, 55, 32, 15, 45],

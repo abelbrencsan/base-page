@@ -6,13 +6,13 @@
 
 /* Chart component variables */
 div.chart {
-	--chart-color-1: #299cea;
-	--chart-color-2: #ff5176;
-	--chart-color-3: #42bcbc;
-	--chart-color-4: #ff9730;
-	--chart-color-5: #8d54ff;
-	--chart-color-6: #ffc845;
-	--chart-color-7: #bec1c5;
+	--chart-color-1: #3498DB;
+	--chart-color-2: #1ABC9C;
+	--chart-color-3: #E67E22;
+	--chart-color-4: #E74C3C;
+	--chart-color-5: #9B59B6;
+	--chart-color-6: #F1C40F;
+	--chart-color-7: #95A5A6;
 	--chart-gap: 0.05;
 }
 
@@ -56,6 +56,16 @@ div.chart {
 
 /* Chart component extensions */
 div.chart {
+
+	&.chart--sequential {
+		--chart-color-1: #3498DB;
+		--chart-color-2: color-mix(in hsl, #3498DB, #9B59B6 15%);
+		--chart-color-3: color-mix(in hsl, #3498DB, #9B59B6 30%);
+		--chart-color-4: color-mix(in hsl, #3498DB, #9B59B6 45%);
+		--chart-color-5: color-mix(in hsl, #3498DB, #9B59B6 60%);
+		--chart-color-6: color-mix(in hsl, #3498DB, #9B59B6 75%);
+		--chart-color-7: color-mix(in hsl, #3498DB, #9B59B6 90%);
+	}
 }
 
 /* Chart plot component prototype */
