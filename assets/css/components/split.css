@@ -20,7 +20,7 @@ div.split {
 	max-width: calc(var(--container-width) * 2.5);
 	width: calc(100% - (var(--split-gap) * 2));
 
-	div.split-image.image, a.split-image.image {
+	div.image, a.image {
 		border-radius: 0;
 		grid-area: image;
 		height: 100%;

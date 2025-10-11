@@ -372,6 +372,39 @@ ul.form-group-list.grid {
 div.form-item {
 	position: relative;
 
+	a.form-item-help, button.form-item-help {
+		color: inherit;
+		display: block;
+		position: absolute;
+		right: 0;
+		top: 0;
+
+		svg.icon {
+			display: block;
+		}
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				color: var(--link-color);
+			}
+		}
+	}
+
+	a.form-item-help {
+		-webkit-user-select: none;
+		text-decoration: none;
+		user-select: none;
+	}
+
+	button.form-item-help {
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		text-align: left;
+	}
+
 	&[data-label]:after {
 		content: attr(data-label);
 		display: block;

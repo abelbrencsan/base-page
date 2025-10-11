@@ -1,0 +1,125 @@
+/*!
+ * Metric CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Metric component variables */
+div.metric {
+	--metric-color: var(--link-color);
+}
+
+/* Metric component prototype */
+div.metric {
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
+	display: grid;
+	grid-template-areas: "term keypoint" "value keypoint" "trend trend";
+	grid-template-columns: 1fr auto;
+	margin-bottom: var(--element-margin);
+	padding: var(--box-padding);
+
+	div.metric-keypoint {
+		align-items: center;
+		background-color: color-mix(in srgb, var(--metric-color) 25%, #ffffff 100%);
+		border-radius: var(--border-radius);
+		color: var(--metric-color);
+		display: flex;
+		grid-area: keypoint;
+		height: 64px;
+		justify-content: center;
+		width: 64px;
+
+		svg.icon {
+			display: block;
+			height: 40px;
+			width: 40px;
+		}
+	}
+
+	div.metric-term {
+		font-size: var(--small-font-size);
+		/*font-weight: var(--bold-font-weight);*/
+		grid-area: term;
+		margin-bottom: 0;
+	}
+
+	div.metric-value {
+		font-size: var(--heading-1-font-size);
+		font-weight: var(--bold-font-weight);
+		grid-area: value;
+		margin-top: -0.25rem;
+	}
+
+	div.metric-trend {
+		align-items: center;
+		display: flex;
+		font-size: var(--small-font-size);
+		grid-area: trend;
+		margin-top: 0.5rem;
+
+		span.metric-trend-value {
+			background-color: var(--border-color);
+			border-radius: var(--border-radius);
+			padding: 0.15rem 0.3rem;
+		}
+
+		span.metric-trend-interval {
+			margin-left: 0.25rem;
+		}
+	}
+}
+
+/* Metric component extensions */
+div.metric {
+
+	&.metric--uptrend {
+
+		div.metric-trend {
+
+			span.metric-trend-value {
+				background-color: var(--success-bg-color);
+				color: var(--success-fg-color);
+			}
+		}
+	}
+
+	&.metric--downtrend {
+
+		div.metric-trend {
+
+			span.metric-trend-value {
+				background-color: var(--error-bg-color);
+				color: var(--error-fg-color);
+			}
+		}
+	}
+
+	&.metric--blue {
+		--metric-color: var(--blue-paint-color);
+	}
+
+	&.metric--green {
+		--metric-color: var(--green-paint-color);
+	}
+
+	&.metric--orange {
+		--metric-color: var(--orange-paint-color);
+	}
+
+	&.metric--red {
+		--metric-color: var(--red-paint-color);
+	}
+
+	&.metric--purple {
+		--metric-color: var(--purple-paint-color);
+	}
+
+	&.metric--yellow {
+		--metric-color: var(--yellow-paint-color);
+	}
+
+	&.metric--stone {
+		--metric-color: var(--stone-paint-color);
+	}
+}

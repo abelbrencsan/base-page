@@ -151,7 +151,7 @@ article.manual-step-item {
 	margin-bottom: var(--element-margin);
 	overflow: hidden;
 
-	div.manual-step-item-image.image, a.manual-step-item-image.image {
+	div.image, a.image {
 		border-radius: 0;
 		grid-area: image;
 		margin-bottom: 0;

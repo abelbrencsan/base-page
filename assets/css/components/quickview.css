@@ -33,7 +33,7 @@ div.quickview[popover]:popover-open {
 	transition: transform var(--quickview-toggle-transition), opacity var(--quickview-toggle-transition);
 	width: 90%;
 
-	div.quickview-image.image {
+	div.image {
 		border-radius: 0;
 		grid-area: image;
 		margin-bottom: 0;
@@ -100,7 +100,7 @@ div.quickview[popover]:popover-open {
 		padding: var(--box-padding);
 		text-align: center;
 
-		div.quickview-image.image {
+		div.image {
 			border-radius: var(--border-radius);
 			margin: 0 auto var(--grid-gap) auto;
 			max-width: 16rem;
@@ -120,7 +120,7 @@ div.quickview[popover]:popover-open {
 		bottom: 0;
 		width: 100%;
 		
-		div.quickview-image.image {
+		div.image {
 			max-width: 12rem;
 		}
 	}

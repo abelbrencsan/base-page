@@ -13,7 +13,6 @@ div.spotlight {
 
 /* Spotlight component prototype */
 div.spotlight {
-	background-color: var(--spotlight-bg-color);
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: flex-start;
@@ -23,26 +22,20 @@ div.spotlight {
 	position: relative;
 	width: calc(100% - (var(--spotlight-gap) * 2));
 
-	div.spotlight-image {
+	div.image {
+		border-radius: 0;
 		height: 100%;
 		left: 0;
+		margin-bottom: 0;
 		position: absolute;
 		top: 0;
 		width: 100%;
 			
 		img, canvas {
+			border-radius: 0;
 			height: 100%;
 			object-fit: cover;
 			width: 100%;
-
-			&[loading=lazy] {
-				opacity: 0;
-				transition: opacity var(--spotlight-image-lazy-load-transition);
-
-				&.is-loaded {
-					opacity: 1;
-				}
-			}
 		}
 	}
 
@@ -81,7 +74,7 @@ div.spotlight {
 		padding: 0;
 		width: 100%;
 
-		div.spotlight-image {
+		div.image {
 			position: relative;
 		}
 

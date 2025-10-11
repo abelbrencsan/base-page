@@ -1,0 +1,40 @@
+/*!
+ * Progress CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Progress component prototype */
+progress.progress {
+	--progress-bar-color: var(--border-color);
+	--progress-value-color: var(--link-color);
+}
+
+/* Progress component prototype */
+progress.progress {
+	background-color: var(--progress-bar-color);
+	border-radius: var(--border-radius);
+	border: none;
+	height: 1em;
+	margin-bottom: var(--element-margin);
+	width: 100%;
+
+	&::-webkit-progress-bar {
+		background-color: var(--progress-bar-color);
+		border-radius: var(--border-radius);
+	}
+
+	&::-webkit-progress-value {
+		background-color: var(--progress-value-color);
+		border-radius: var(--border-radius);
+	}
+
+	&::-moz-progress-bar {
+		background-color: var(--progress-value-color);
+		border-radius: var(--border-radius);
+	}
+}
+
+/* Progress component extensions */
+progress.progress {
+}

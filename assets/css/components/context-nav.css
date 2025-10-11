@@ -1,0 +1,109 @@
+/*!
+ * Context nav CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Context nav component prototype */
+nav.context-nav {
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
+	margin-bottom: var(--element-margin);
+	padding: calc(var(--box-padding) * 0.5);
+
+	> ul {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			border-radius: var(--border-radius);
+			display: grid;
+			grid-column-gap: var(--grid-gap);
+			grid-template-areas: "icon heading" "icon summary";
+			grid-template-columns: auto 1fr;
+			padding-left: 0;
+			padding: var(--box-padding);
+			position: relative;
+
+			svg.icon {
+				grid-area: icon;
+				height: 64px;
+				width: 64px;
+			}
+
+			h1, h2, h3, h4, h5, h6, .heading {
+				font-size: var(--large-font-size);
+				grid-area: heading;
+
+				a {
+					color: inherit;
+					text-decoration: none;
+
+					&:after {
+						border-radius: var(--border-radius);
+						content: "";
+						height: 100%;
+						left: 0;
+						position: absolute;
+						top: 0;
+						width: 100%;
+					}
+
+					&:focus-visible {
+						outline: 0;
+
+						&:after {
+							box-shadow: inset 0 0 0 3px var(--focus-color);
+						}
+					}
+				}
+			}
+
+			p {
+				grid-area: summary;
+				margin-bottom: 0;
+			}
+
+			@media (hover: hover) {
+
+				&:hover, &:active {
+					background-color: var(--border-color);
+
+					svg.icon, h1, h2, h3, h4, h5, h6, .heading {
+						color: var(--link-color);
+					}
+				}
+			}
+		}
+	}
+
+	@media (max-width: 47em) {
+
+		> ul {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 32em) {
+
+		> ul {
+
+			> li {
+				grid-template-areas: "icon" "heading" "summary";
+				grid-template-columns: 1fr;
+				text-align: center;
+
+				svg.icon {
+					margin: 0 auto var(--block-margin) auto;
+				}
+			}
+		}
+	}
+}
+
+/* Context nav component extensions */
+nav.context-nav {
+}

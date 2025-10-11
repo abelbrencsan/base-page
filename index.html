@@ -39,7 +39,7 @@
 		<li class="notice-list-item notice-list-item--success" data-notice>
 			<div class="notice-list-item-wrapper">
 				<p>This is a success notice.</p>
-				<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+				<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss>
 					<svg class="icon" aria-hidden="true">
 						<use xlink:href="#icon-close"></use>
 					</svg>
@@ -54,7 +54,7 @@
 			<div class="navbar-container">
 				<a href="/" class="navbar-logo">My Company</a>
 				<div class="navbar-menu">
-					<button type="button" aria-label="Toggle navigation" title="Toggle navigation" popovertarget="navbar-nav" popvertargetaction="toggle">
+					<button type="button" popovertarget="navbar-nav" popvertargetaction="toggle" aria-label="Toggle navigation" title="Toggle navigation">
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-menu"></use>
 						</svg>
@@ -100,7 +100,7 @@
 							<a href="#">Contact</a>
 						</li>
 					</ul>
-					<button type="button" class="navbar-nav-close" aria-label="Close navigation" title="Close navigation" popovertarget="navbar-nav" popvertargetaction="close">
+					<button type="button" class="navbar-nav-close" popovertarget="navbar-nav" popvertargetaction="close" aria-label="Close navigation" title="Close navigation">
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-close"></use>
 						</svg>
@@ -184,29 +184,6 @@
 						<dd>Lorem ipsum dolor amet</dd>
 						<dt>Lorem ipsum</dt>
 						<dd>Lorem ipsum dolor amet</dd>
-					</dl>
-					<h2 class="heading-block">User details</h2>
-					<dl class="data-grid grid">
-						<div class="grid-col grid-col--3 grid-col--small--6">
-							<dt>Full name</dt>
-							<dd>John Doe</dd>
-						</div>
-						<div class="grid-col grid-col--3 grid-col--small--6">
-							<dt>Birth date</dt>
-							<dd>May 8, 1980</dd>
-						</div>
-						<div class="grid-col grid-col--3 grid-col--small--6">
-							<dt>E-mail</dt>
-							<dd><a href="mailto:john.doe@example.com">john.doe@example.com</a></dd>
-						</div>
-						<div class="grid-col grid-col--3 grid-col--small--6">
-							<dt>Phone</dt>
-							<dd><a href="tel:+442071234567">+44 20 7123 4567</a></dd>
-						</div>
-						<div class="grid-col grid-col--6">
-							<dt>Introduction</dt>
-							<dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque.</dd>
-						</div>
 					</dl>
 
 				</main>
@@ -429,7 +406,7 @@
 
 		<!-- Split -->
 		<div class="split split--transparent split--reveal">
-			<a href="/images/gallery/05.jpg" class="split-image image image--cover" data-dialog="image">
+			<a href="/images/gallery/05.jpg" class="image image--cover" data-dialog="image">
 				<picture>
 					<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 				</picture>
@@ -446,7 +423,7 @@
 
 		<!-- Reverse split -->
 		<div class="split split--reverse split--transparent split--reveal">
-			<a href="/images/gallery/06.jpg" class="split-image image image--cover" data-dialog="image">
+			<a href="/images/gallery/06.jpg" class="image image--cover" data-dialog="image">
 				<picture>
 					<img src="/images/gallery/06.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 				</picture>
@@ -463,7 +440,7 @@
 
 		<!-- Spotlight -->
 		<div class="spotlight spotlight--reveal">
-			<div class="spotlight-image">
+			<div class="image">
 				<picture>
 					<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 				</picture>
@@ -481,7 +458,7 @@
 
 		<!-- Reverse spotlight -->
 		<div class="spotlight spotlight--reverse spotlight--reveal">
-			<div class="spotlight-image">
+			<div class="image">
 				<picture>
 					<img src="/images/gallery/06.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 				</picture>
@@ -970,28 +947,28 @@
 					</li>
 				</ul>
 				<ul class="timelapse-frame-list">
-					<li data-stickable>
+					<li>
 						<a href="/images/gallery/01-square.jpg" class="image image--cover" data-dialog="image">
 							<picture>
 								<img src="/images/gallery/01-square.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
 							</picture>
 						</a>
 					</li>
-					<li data-stickable>
+					<li>
 						<a href="/images/gallery/02-square.jpg" class="image image--cover" data-dialog="image">
 							<picture>
 								<img src="/images/gallery/02-square.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
 							</picture>
 						</a>
 					</li>
-					<li data-stickable>
+					<li>
 						<a href="/images/gallery/03-square.jpg" class="image image--cover" data-dialog="image">
 							<picture>
 								<img src="/images/gallery/03-square.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
 							</picture>
 						</a>
 					</li>
-					<li data-stickable>
+					<li>
 						<a href="/images/gallery/04-square.jpg" class="image image--cover" data-dialog="image">
 							<picture>
 								<img src="/images/gallery/04-square.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
@@ -1051,7 +1028,7 @@
 				<ul class="manual-step-list">
 					<li>
 						<article class="manual-step-item">
-							<a href="/images/gallery/01.jpg" class="manual-step-item-image image image--cover" data-dialog="image">
+							<a href="/images/gallery/01.jpg" class="image image--cover" data-dialog="image">
 								<picture>
 									<img src="/images/gallery/01-square.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
 								</picture>
@@ -1064,7 +1041,7 @@
 					</li>
 					<li>
 						<article class="manual-step-item">
-							<a href="/images/gallery/02.jpg" class="manual-step-item-image image image--cover" data-dialog="image">
+							<a href="/images/gallery/02.jpg" class="image image--cover" data-dialog="image">
 								<picture>
 									<img src="/images/gallery/02-square.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
 								</picture>
@@ -1077,7 +1054,7 @@
 					</li>
 					<li>
 						<article class="manual-step-item">
-							<a href="/images/gallery/03.jpg" class="manual-step-item-image image image--cover" data-dialog="image">
+							<a href="/images/gallery/03.jpg" class="image image--cover" data-dialog="image">
 								<picture>
 									<img src="/images/gallery/03-square.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
 								</picture>
@@ -1099,7 +1076,7 @@
 
 			<!-- Feature -->
 			<div class="feature feature--reveal feature--reverse">
-				<a href="https://www.youtube.com/watch?v=aqz-KE-bpKQ" class="feature-image image image--cover image--cover--video" data-dialog="youtube">
+				<a href="https://www.youtube.com/watch?v=aqz-KE-bpKQ" class="image image--cover image--cover--video" data-dialog="youtube">
 					<picture>
 						<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 					</picture>
@@ -1120,7 +1097,7 @@
 			<ul class="column-list column-list--reveal">
 				<li>
 					<article class="column-item">
-						<a href="/images/gallery/01.jpg" class="column-item-image image image--cover" data-dialog="image">
+						<a href="/images/gallery/01.jpg" class="image image--cover" data-dialog="image">
 							<picture>
 								<img src="/images/gallery/01-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
@@ -1136,7 +1113,7 @@
 				</li>
 				<li>
 					<article class="column-item">
-						<a href="/images/gallery/02.jpg" class="column-item-image image image--cover" data-dialog="image">
+						<a href="/images/gallery/02.jpg" class="image image--cover" data-dialog="image">
 							<picture>
 								<img src="/images/gallery/02-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
@@ -1152,7 +1129,7 @@
 				</li>
 				<li>
 					<article class="column-item">
-						<a href="/images/gallery/03.jpg" class="column-item-image image image--cover" data-dialog="image">
+						<a href="/images/gallery/03.jpg" class="image image--cover" data-dialog="image">
 							<picture>
 								<img src="/images/gallery/03-cover.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
 							</picture>
@@ -1239,7 +1216,7 @@
 				<li class="notice-list-item" data-notice>
 					<div class="notice-list-item-wrapper">
 						<p>This is a default notice.</p>
-						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss=>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-close"></use>
 							</svg>
@@ -1249,7 +1226,7 @@
 				<li class="notice-list-item notice-list-item--error" data-notice>
 					<div class="notice-list-item-wrapper">
 						<p>This is an error notice.</p>
-						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss=>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-close"></use>
 							</svg>
@@ -1259,7 +1236,7 @@
 				<li class="notice-list-item notice-list-item--success" data-notice>
 					<div class="notice-list-item-wrapper">
 						<p>This is a success notice.</p>
-						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-close"></use>
 							</svg>
@@ -1269,7 +1246,7 @@
 				<li class="notice-list-item notice-list-item--warning" data-notice>
 					<div class="notice-list-item-wrapper">
 						<p>This is a warning notice.</p>
-						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss="">
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-close"></use>
 							</svg>
@@ -1508,8 +1485,8 @@
 					<a href="#" role="button">10</a>
 				</li>
 				<li>
-					<a href="" role="button">
-						<svg class="icon" aria-label="Next">
+					<a href="#" role="button" aria-label="Next page" title="Next page">
+						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-chevron-forward"></use>
 						</svg>
 					</a>
@@ -1523,6 +1500,11 @@
 						<div class="form-item is-required">
 							<label class="form-label" for="fullName">Full name</label>
 							<input type="text" name="fullName" id="fullName" class="form-input" required>
+							<button type="button" class="form-item-help" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Help" title="Help">
+								<svg class="icon" aria-hidden="true">
+									<use xlink:href="#icon-information-circle"></use>
+								</svg>
+							</button>
 						</div>
 					</li>
 					<li class="grid-col grid-col--3 grid-col--small--6">
@@ -1530,12 +1512,12 @@
 							<label class="form-label" for="amount">Amount</label>
 							<input type="number" name="amount" id="amount" min="0" max="10000" step="100" value="1000" class="form-input" required  data-stepper-input>
 							<div class="form-item-stepper-indicator" data-stepper-indicator aria-hidden="true"></div>
-							<button class="button button--icon" type="button" data-stepper-step-down-trigger>
+							<button class="button button--icon" type="button" aria-label="Step down" title="Step down" data-stepper-step-down-trigger>
 								<svg class="icon" aria-hidden="true">
 									<use xlink:href="#icon-remove"></use>
 								</svg>
 							</button>
-							<button class="button button--icon" type="button" data-stepper-step-up-trigger>
+							<button class="button button--icon" type="button" aria-label="Step up" title="Step up" data-stepper-step-up-trigger>
 								<svg class="icon" aria-hidden="true">
 									<use xlink:href="#icon-add"></use>
 								</svg>
@@ -1709,6 +1691,145 @@
 				</ul>
 			</form>
 
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Data grid</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Data grid -->
+			<dl class="data-grid grid">
+				<div class="data-grid-col grid-col grid-col--3 grid-col--small--6">
+					<dt>Full name</dt>
+					<dd>John Doe</dd>
+				</div>
+				<div class="data-grid-col grid-col grid-col--3 grid-col--small--6">
+					<dt>
+						Birth date
+						<button type="button" class="data-grid-col-term-help" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Help" title="Help">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-information-circle"></use>
+							</svg>
+						</button>
+					</dt>
+					<dd>May 8, 1980</dd>
+				</div>
+				<div class="data-grid-col grid-col grid-col--3 grid-col--small--6">
+					<dt>E-mail</dt>
+					<dd><a href="mailto:john.doe@example.com">john.doe@example.com</a></dd>
+				</div>
+				<div class="data-grid-col grid-col grid-col--3 grid-col--small--6">
+					<dt>Phone</dt>
+					<dd><a href="tel:+442071234567">+44 20 7123 4567</a></dd>
+				</div>
+				<div class="data-grid-col grid-col grid-col--6">
+					<dt>Introduction</dt>
+					<dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque.</dd>
+				</div>
+			</dl>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Metrics</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Metrics -->
+			<ul class="grid grid--gap">
+				<li class="grid-col grid-col--2 grid-col--small--6">
+					<div class="metric metric--blue metric--uptrend">
+						<div class="metric-keypoint">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-person"></use>
+							</svg>
+						</div>
+						<div class="metric-term">Users</div>
+						<div class="metric-value">320</div>
+						<div class="metric-trend">
+							<span class="metric-trend-value">+15%</span>
+							<span class="metric-trend-interval">this week</span>
+						</div>
+					</div>
+				</li>
+				<li class="grid-col grid-col--2 grid-col--small--6">
+					<div class="metric metric--red metric--uptrend">
+						<div class="metric-keypoint">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-cart"></use>
+							</svg>
+						</div>
+						<div class="metric-term">Order</div>
+						<div class="metric-value">490</div>
+						<div class="metric-trend">
+							<span class="metric-trend-value">+22%</span>
+							<span class="metric-trend-interval">this week</span>
+						</div>
+					</div>
+				</li>
+				<li class="grid-col grid-col--2 grid-col--small--6">
+					<div class="metric metric--green metric--downtrend">
+						<div class="metric-keypoint">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-mail"></use>
+							</svg>
+						</div>
+						<div class="metric-term">Subscriptions</div>
+						<div class="metric-value">189</div>
+						<div class="metric-trend">
+							<span class="metric-trend-value">-5%</span>
+							<span class="metric-trend-interval">this week</span>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Context nav</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<nav class="context-nav">
+				<ul>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-person-add"></use>
+						</svg>
+						<span class="heading">
+							<a href="#">Create new user</a>
+						</span>
+						<p>Maiores quaerat exercitationem provident et tempora sapiente impedit inventore.</p>
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-cart"></use>
+						</svg>
+						<span class="heading">
+							<a href="#">Create new order</a>
+						</span>
+						<p>Maiores quaerat exercitationem provident et tempora sapiente impedit inventore.</p>
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-mail"></use>
+						</svg>
+						<span class="heading">
+							<a href="#">Create new subscription</a>
+						</span>
+						<p>Maiores quaerat exercitationem provident et tempora sapiente impedit inventore.</p>
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-person-add"></use>
+						</svg>
+						<span class="heading">
+							<a href="#">Create new user</a>
+						</span>
+						<p>Maiores quaerat exercitationem provident et tempora sapiente impedit inventore.</p>
+					</li>
+				</ul>
+			</nav>
+
 		</div>
 	</section>
 
@@ -1859,7 +1980,7 @@
 
 	<!-- Demo quickview -->
 	<div id="demo-quickview" class="quickview" popover>
-		<div class="quickview-image image">
+		<div class="image">
 			<picture>
 				<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 			</picture>

@@ -89,7 +89,7 @@ article.column-item {
 	grid-gap: var(--grid-gap);
 	grid-template-areas: "image" "text";
 
-	div.column-item-image.image, a.column-item-image.image {
+	div.image, a.image {
 		grid-area: image;
 		margin-bottom: 0;
 

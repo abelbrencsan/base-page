@@ -6,10 +6,13 @@
 
 /* Data grid component prototype */
 dl.data-grid.grid {
+	background-color: var(--bg-color);
+	border-radius: var(--border-radius);
 	grid-gap: 3px;
 	margin-bottom: var(--element-margin);
+	overflow: hidden;
 	
-	div.grid-col {
+	div.data-grid-col.grid-col {
 		background-color: var(--border-bg-color);
 		padding: calc(var(--box-padding) * 0.75);
 
@@ -19,10 +22,48 @@ dl.data-grid.grid {
 			font-weight: var(--bold-font-weight);
 			letter-spacing: var(--base-letter-spacing);
 			line-height: var(--base-line-height);
+			position: relative;
+
+			a.data-grid-col-term-help, button.data-grid-col-term-help {
+				color: inherit;
+				display: block;
+				position: absolute;
+				right: 0;
+				top: 0;
+
+				svg.icon {
+					display: block;
+				}
+
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						color: var(--link-color);
+					}
+				}
+			}
+
+			a.data-grid-col-term-help {
+				-webkit-user-select: none;
+				text-decoration: none;
+				user-select: none;
+			}
+
+			button.data-grid-col-term-help {
+				background-color: transparent;
+				border: none;
+				cursor: pointer;
+				padding: 0;
+				text-align: left;
+			}
 		}
 
 		dd {
 			margin-left: 0;
 		}
 	}
+}
+
+/* Data grid component extensions */
+dl.data-grid.grid {
 }

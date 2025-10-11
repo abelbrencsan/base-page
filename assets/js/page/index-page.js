@@ -61,7 +61,7 @@ class IndexPage extends Page {
 		wrapper: document.getElementById("sample-pie-chart-plot"),
 		isDonut: true,
 		datasets: [
-			[60, 50, 35, 18, 33],
+			[60, 50, 35, 18, 33, 33, 33],
 			[75, 55, 32, 15, 45],
 			[70, 40, 30, 25, 40]
 		]
