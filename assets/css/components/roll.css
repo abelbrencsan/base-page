@@ -195,6 +195,16 @@ div.roll-item {
 				width: 100%;
 			}
 		}
+
+		a.image {
+
+			&:focus-visible {
+
+				&:after {
+					border-radius: 0;
+				}
+			}
+		}
 	}
 }
 

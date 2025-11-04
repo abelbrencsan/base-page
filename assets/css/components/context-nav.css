@@ -9,7 +9,7 @@ nav.context-nav {
 	background-color: var(--border-bg-color);
 	border-radius: var(--border-radius);
 	margin-bottom: var(--element-margin);
-	padding: calc(var(--box-padding) * 0.5);
+	padding: calc(var(--box-padding) * 1);
 
 	> ul {
 		display: grid;
@@ -30,13 +30,14 @@ nav.context-nav {
 
 			svg.icon {
 				grid-area: icon;
-				height: 64px;
-				width: 64px;
+				height: 40px;
+				width: 40px;
 			}
 
 			h1, h2, h3, h4, h5, h6, .heading {
 				font-size: var(--large-font-size);
 				grid-area: heading;
+				margin-bottom: var(--block-margin);
 
 				a {
 					color: inherit;

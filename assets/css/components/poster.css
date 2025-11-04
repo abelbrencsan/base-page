@@ -85,6 +85,16 @@ div.poster-item {
 		}
 	}
 
+	a.image {
+
+		&:focus-visible {
+
+			&:after {
+				border-radius: 0;
+			}
+		}
+	}
+
 	div.poster-item-text {
 		backdrop-filter: blur(10px);
 		background-color: var(--translucent-bg-color);

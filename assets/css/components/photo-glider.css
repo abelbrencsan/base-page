@@ -24,6 +24,16 @@ div.photo-glider.glider {
 					width: 100%;
 				}
 			}
+
+			a.glider-list-item.image {
+
+				&:focus-visible {
+
+					&:after {
+						border-radius: 0;
+					}
+				}
+			}
 		}
 	}
 

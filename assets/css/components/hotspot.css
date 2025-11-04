@@ -1,0 +1,78 @@
+/*!
+ * Hotspot CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Hotspot list component prototype */
+ul.hotspot-list {
+	height: 100%;
+	left: 0;
+	list-style: none;
+	margin-bottom: 0;
+	padding-left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+
+	> li {
+		padding-left: 0;
+		position: absolute;
+	}
+}
+
+/* Hotspot list component extensions */
+ul.hotspot-list {
+}
+
+/* Hotspot component variables */
+button.hotspot {
+	--hotspot-size: 1.25rem;
+	--hotspot-transition: var(--transition);
+}
+
+/* Hotspot component prototype */
+button.hotspot {
+	animation: hotspot-pulse 1.5s infinite;
+	background-color: var(--bg-color);
+	border-radius: 50%;
+	border: none;
+	cursor: pointer;
+	height: var(--hotspot-size);
+	padding: 0;
+	transform-origin: 0% 0%;
+	transform: scale3d(1, 1, 1) translate3d(-50%, -50%, 0);
+	transition: transform var(--hotspot-transition);
+	width: var(--hotspot-size);
+
+	@media (hover: hover) {
+
+		&:hover, &:active {
+			transform: scale3d(1.25, 1.25, 1) translate3d(-50%, -50%, 0);
+		}
+	}
+}
+
+/* Hotspot component extensions */
+button.hotspot {
+}
+
+/* Hotspot component animations */
+@keyframes hotspot-pulse {
+	0% {
+		box-shadow: 0 0 0 0 var(--bg-color), var(--bold-box-shadow);
+	}
+
+	100% {
+		box-shadow: 0 0 0 calc(var(--hotspot-size) * 0.5) rgba(0, 0, 0, 0), var(--bold-box-shadow);
+	}
+}
+
+/* Hotspot wrapper component prototype */
+div.hotspot-wrapper {
+	position: relative;
+}
+
+/* Hotspot wrapper component extensions */
+div.hotspot-wrapper {
+}

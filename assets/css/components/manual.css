@@ -164,6 +164,16 @@ article.manual-step-item {
 		}
 	}
 
+	a.image {
+
+		&:focus-visible {
+
+			&:after {
+				border-radius: 0;
+			}
+		}
+	}
+
 	div.manual-step-item-text {
 		align-self: center;
 		grid-area: text;
