@@ -1,0 +1,258 @@
+/*!
+ * Tour CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Tour component variables */
+div.tour {
+	--tour-bg-color: #333333;
+	--tour-image-lazy-load-transition: 1000ms ease;
+	--tour-scene-hotspot-color: transparent;
+	--tour-scene-hotspot-size: 2rem;
+	--tour-tooltip-bg-color: var(--scheme-dark-bg-color);
+	--tour-tooltip-fg-color: var(--scheme-dark-fg-bold-color);
+	--tour-transition: var(--transition);
+}
+
+/* Tour component prototype */
+div.tour {
+	background-color: var(--tour-bg-color);
+	border-radius: var(--border-radius);
+	margin-bottom: var(--element-margin);
+	position: relative;
+
+	ul.tour-scene-list > li button.tour-scene-hotspot, button.tour-back-trigger {
+		align-items: center;
+		border: none;
+		cursor: pointer;
+		display: inline-flex;
+		justify-content: center;
+		padding: 0;
+	}
+
+	ul.tour-scene-list {
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			display: none;
+			padding-left: 0;
+			position: relative;
+
+			img {
+				border-radius: var(--border-radius);
+				display: block;
+				height: auto;
+				width: 100%;
+
+				&[loading=lazy] {
+					opacity: 0;
+					transition: opacity var(--tour-image-lazy-load-transition);
+
+					&.is-loaded {
+						opacity: 1;
+					}
+				}
+			}
+
+			ul.tour-scene-hotspot-list {
+				height: 100%;
+				left: 0;
+				list-style: none;
+				margin-bottom: 0;
+				padding-left: 0;
+				position: absolute;
+				top: 0;
+				width: 100%;
+
+				> li {
+					padding-left: 0;
+					position: absolute;
+				}
+			}
+
+			button.tour-scene-hotspot {
+				animation: tour-scene-hotspot-pulse 1.5s infinite;
+				background-color: var(--tour-scene-hotspot-color);
+				border-radius: 50%;
+				border: calc(var(--tour-scene-hotspot-size) * 0.125) solid var(--bg-color);
+				color: var(--bg-color);
+				height: var(--tour-scene-hotspot-size);
+				transform: translate3d(-50%, -50%, 0);
+				transition: outline var(--tour-transition);
+				width: var(--tour-scene-hotspot-size);
+
+				svg.icon {
+					height: calc(var(--tour-scene-hotspot-size) * 0.5);
+					width: calc(var(--tour-scene-hotspot-size) * 0.5);
+				}
+
+				&[data-tour-scene-hotspot-tooltip] {
+
+					&:before, &:after {
+						background-color: var(--tour-tooltip-bg-color);
+						left: 50%;
+						opacity: 0;
+						pointer-events: none;
+						position: absolute;
+						transform: translate3d(-50%, 0.5rem, 0);
+						transition: transform var(--tour-transition), opacity var(--tour-transition), visibility var(--tour-transition);
+						visibility: hidden;
+					}
+
+					&:before {
+						clip-path: polygon(50% 0, 0 100%, 100% 100%);
+						content: "";
+						height: var(--box-arrow);
+						top: calc(100% - (var(--box-arrow) * 0.5) + 1px);
+						width: calc(var(--box-arrow) * 2);
+					}
+
+					&:after {
+						border-radius: var(--border-radius);
+						color: var(--tour-tooltip-fg-color);
+						content: attr(data-tour-scene-hotspot-tooltip);
+						cursor: default;
+						font-size: var(--small-font-size);
+						font-weight: var(--bold-font-weight);
+						inline-size: max-content;
+						max-width: 10rem;
+						padding: 0.5em;
+						top: calc(100% + (var(--box-arrow) * 0.5));
+					}
+
+					&:focus-visible {
+						background-color: var(--bg-color);
+						border-color: var(--focus-color);
+						color: var(--fg-bold-color);
+						outline: 0;
+
+						&:after, &:before {
+							opacity: 1;
+							transform: translate3d(-50%, 0, 0);
+							visibility: visible;
+						}
+					}
+				}
+
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						background-color: var(--bg-color);
+						color: var(--fg-bold-color);
+
+						&:after, &:before {
+							opacity: 1;
+							transform: translate3d(-50%, 0, 0);
+							visibility: visible;
+						}
+					}
+				}
+
+				&.tour-scene-hotspot--blue {
+					--tour-scene-hotspot-color: var(--blue-paint-color);
+				}
+
+				&.tour-scene-hotspot--green {
+					--tour-scene-hotspot-color: var(--green-paint-color);
+				}
+
+				&.tour-scene-hotspot--orange {
+					--tour-scene-hotspot-color: var(--orange-paint-color);
+				}
+
+				&.tour-scene-hotspot--red {
+					--tour-scene-hotspot-color: var(--red-paint-color);
+				}
+
+				&.tour-scene-hotspot--purple {
+					--tour-scene-hotspot-color: var(--purple-paint-color);
+				}
+
+				&.tour-scene-hotspot--yellow {
+					--tour-scene-hotspot-color: var(--yellow-paint-color);
+				}
+
+				&.tour-scene-hotspot--stone {
+					--tour-scene-hotspot-color: var(--stone-paint-color);
+				}
+			}
+
+			&.is-selected {
+				display: block;
+			}
+		}
+	}
+
+	button.tour-back-trigger {
+		background-color: var(--tour-tooltip-bg-color);
+		border-radius: 50%;
+		box-shadow: var(--bold-box-shadow);
+		color: var(--tour-tooltip-fg-color);
+		height: var(--element-height);
+		opacity: 0.75;
+		position: absolute;
+		right: calc(var(--grid-gap) * 0.5);
+		top: calc(var(--grid-gap) * 0.5);
+		visibility: hidden;
+		width: var(--element-height);
+
+		svg.icon {
+			height: 24px;
+			margin-top: -3px;
+			width: 24px;
+		}
+
+		&:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+
+			@media (hover: hover) {
+
+				&:hover, &:active {
+					opacity: 0.5;
+				}
+			}
+		}
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				opacity: 1;
+			}
+		}
+	}
+
+	&.has-history {
+
+		button.tour-back-trigger {
+			visibility: visible;
+		}
+	}
+
+	&:not(.is-initialized) {
+
+		ul.tour-scene-list {
+
+			> li {
+
+				&:first-child {
+					display: block;
+				}
+			}
+		}
+	}
+}
+
+/* Tour component animations */
+@keyframes tour-scene-hotspot-pulse {
+	0% {
+		box-shadow: 0 0 0 0 var(--bg-color), var(--bold-box-shadow);
+	}
+
+	100% {
+		box-shadow: 0 0 0 calc(var(--tour-scene-hotspot-size) * 0.5) rgba(0, 0, 0, 0), var(--bold-box-shadow);
+	}
+}
