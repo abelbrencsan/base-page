@@ -41,7 +41,6 @@
 @import url("./components/glider.css");
 @import url("./components/grid.css");
 @import url("./components/header.css");
-@import url("./components/hotspot.css");
 @import url("./components/icon.css");
 @import url("./components/image.css");
 @import url("./components/layout.css");
@@ -64,6 +63,7 @@
 @import url("./components/tab.css");
 @import url("./components/table-wrapper.css");
 @import url("./components/timelapse.css");
+@import url("./components/tour.css");
 @import url("./components/tree.css");
 
 /* Singleton imports */

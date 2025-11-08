@@ -12,6 +12,7 @@ import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { SortableTree } from "../js/sortable-tree.js";
 import { Stepper } from "../js/stepper.js";
 import { Tab } from "../js/tab.js";
+import { Tour, TourScene, TourSceneTrigger } from "../js/tour.js";
 import { Validator } from "../js/validator.js";
 
 /**
@@ -150,6 +151,13 @@ class App {
 	steppers = [];
 
 	/**
+	 * List of tours.
+	 * 
+	 * @type {Array<Tour>}
+	 */
+	tours = [];
+
+	/**
 	 * List of pages.
 	 * 
 	 * @type {Array<Page>}
@@ -201,6 +209,7 @@ class App {
 		this.#initTabs();
 		this.#initSortableTrees();
 		this.#initSteppers();
+		this.#initTours();
 		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
@@ -499,6 +508,61 @@ class App {
 				}
 			}));
 		});
+	}
+
+	/**
+	 * Initializes the tours.
+	 * 
+	 * @returns {void}
+	 */
+	#initTours() {
+		let elems = document.querySelectorAll("[data-tour]");
+		elems.forEach((elem) => {
+			let tourScenes = this.#initTourScenes(elem);
+			this.tours.push(new Tour({
+				wrapper: elem,
+				backTrigger: elem.querySelector("[data-tour-back-trigger]"),
+				scenes: tourScenes
+			}));
+		});
+	}
+
+	/**
+	 * Retrieves a list of tour scenes under the specified element.
+	 * 
+	 * @param {Element} tourElem
+	 * @returns {Array<TourScene>}
+	 */
+	#initTourScenes(tourElem) {
+		let tourScenes = [];
+		let tourSceneElems = tourElem.querySelectorAll("[data-tour-scene]");
+		tourSceneElems.forEach((tourSceneElem) => {
+			let tourSceneTriggers = this.#initTourSceneTriggers(tourSceneElem);
+			tourScenes.push(new TourScene({
+				id: tourSceneElem.getAttribute("data-tour-scene"),
+				wrapper: tourSceneElem,
+				sceneTriggers: tourSceneTriggers
+			}));
+		});
+		return tourScenes;
+	}
+
+	/**
+	 * Retrieves a list of tour scene triggers under the specified element.
+	 * 
+	 * @param {Element} tourSceneElem
+	 * @returns {Array<TourSceneTrigger>}
+	 */
+	#initTourSceneTriggers(tourSceneElem) {
+		let tourSceneTriggers = [];
+		let tourSceneTriggerElems = tourSceneElem.querySelectorAll("[data-tour-scene-trigger]");
+		tourSceneTriggerElems.forEach((tourSceneTriggerElem) => {
+			tourSceneTriggers.push(new TourSceneTrigger({
+				targetId: tourSceneTriggerElem.getAttribute("data-tour-scene-trigger"),
+				trigger: tourSceneTriggerElem
+			}));
+		});
+		return tourSceneTriggers;
 	}
 
 	/**

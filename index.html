@@ -1693,6 +1693,81 @@
 
 			<!-- Section header -->
 			<header class="header header--section">
+				<h2>Tour</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Sample tour -->
+			<div class="tour" data-tour>
+				<ul class="tour-scene-list">
+					<li class="tour-scene-list-item" data-tour-scene="scene-baltic-states">
+						<picture>
+							<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+						<ul class="tour-scene-hotspot-list">
+							<li style="left:6%;top:67%">
+								<button type="button" class="tour-scene-hotspot" aria-label="Estonia" data-tour-scene-hotspot-tooltip="Estonia" data-tour-scene-trigger="scene-estonia"></button>
+							</li>
+							<li style="left:74%;top:75%">
+								<button type="button" class="tour-scene-hotspot" aria-label="Latvia" data-tour-scene-hotspot-tooltip="Latvia" data-tour-scene-trigger="scene-latvia"></button>
+							</li>
+							<li style="left:54%;top:38%">
+								<button type="button" class="tour-scene-hotspot" aria-label="Lithuania" data-tour-scene-hotspot-tooltip="Lithuania" data-tour-scene-trigger="scene-lithuania"></button>
+							</li>
+						</ul>
+					</li>
+					<li class="tour-scene-list-item" data-tour-scene="scene-estonia">
+						<picture>
+							<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+						<ul class="tour-scene-hotspot-list">
+							<li style="left:81%;top:36%">
+								<button type="button" class="tour-scene-hotspot tour-scene-hotspot--purple" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Tallinn" data-tour-scene-hotspot-tooltip="Tallinn">
+									<svg class="icon" aria-hidden="true">
+										<use xlink:href="#icon-information"></use>
+									</svg>
+								</button>
+							</li>
+						</ul>
+					</li>
+					<li class="tour-scene-list-item" data-tour-scene="scene-latvia">
+						<picture>
+							<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+						<ul class="tour-scene-hotspot-list">
+							<li style="left:67%;top:52%">
+								<button type="button" class="tour-scene-hotspot tour-scene-hotspot--red" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Riga" data-tour-scene-hotspot-tooltip="Riga">
+									<svg class="icon" aria-hidden="true">
+										<use xlink:href="#icon-information"></use>
+									</svg>
+								</button>
+							</li>
+						</ul>
+					</li>
+					<li class="tour-scene-list-item" data-tour-scene="scene-lithuania">
+						<picture>
+							<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+						<ul class="tour-scene-hotspot-list">
+							<li style="left:30%;top:75%">
+								<button type="button" class="tour-scene-hotspot tour-scene-hotspot--blue" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Vilnius" data-tour-scene-hotspot-tooltip="Vilnius">
+									<svg class="icon" aria-hidden="true">
+										<use xlink:href="#icon-information"></use>
+									</svg>
+								</button>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<button type="button" class="tour-back-trigger" aria-label="Go back" title="Go back" data-tour-back-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-arrow-undo"></use>
+					</svg>
+				</button>
+			</div>
+
+			<!-- Section header -->
+			<header class="header header--section">
 				<h2>Data grid</h2>
 				<p>Lorem ipsum dolor amet si</p>
 			</header>
@@ -1737,7 +1812,7 @@
 			<!-- Metrics -->
 			<ul class="grid grid--gap">
 				<li class="grid-col grid-col--2 grid-col--small--6">
-					<div class="metric metric--blue metric--uptrend">
+					<div class="metric metric--uptrend">
 						<div class="metric-keypoint">
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-person"></use>
@@ -1752,7 +1827,7 @@
 					</div>
 				</li>
 				<li class="grid-col grid-col--2 grid-col--small--6">
-					<div class="metric metric--red metric--uptrend">
+					<div class="metric metric--uptrend">
 						<div class="metric-keypoint">
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-cart"></use>
@@ -1767,7 +1842,7 @@
 					</div>
 				</li>
 				<li class="grid-col grid-col--2 grid-col--small--6">
-					<div class="metric metric--green metric--downtrend">
+					<div class="metric metric--downtrend">
 						<div class="metric-keypoint">
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-mail"></use>

@@ -132,7 +132,6 @@ a.image {
 					
 					&:after {
 						background-size: 70px 70px;
-						/*transform: translate3d(-50%, -50%, 0) scale3d(1.1, 1.1, 1.0);*/
 					}
 				}
 			}

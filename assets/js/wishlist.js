@@ -120,7 +120,7 @@ class Wishlist {
 	 * 
 	 * @param {number} id
 	 * @param {any} data
-	 * @param {bool} skipCallback
+	 * @param {boolean} skipCallback
 	 * @returns {void}
 	 */
 	add(id, data = null, skipCallback = false) {
@@ -142,7 +142,7 @@ class Wishlist {
 	 * Removes the item with the specified ID from the wishlist.
 	 * 
 	 * @param {number} id
-	 * @param {bool} skipCallback
+	 * @param {boolean} skipCallback
 	 * @returns {void}
 	 */
 	remove(id, skipCallback = false) {
@@ -170,7 +170,7 @@ class Wishlist {
 	 * 
 	 * @param {number} id
 	 * @param {any} data
-	 * @param {bool} skipCallback
+	 * @param {boolean} skipCallback
 	 * @returns {void}
 	 */
 	toggle(id, data = null, skipCallback = false) {
@@ -194,7 +194,7 @@ class Wishlist {
 	/**
 	 * Removes all items from the wishlist.
 	 * 
-	 * @param {bool} skipCallback
+	 * @param {boolean} skipCallback
 	 * @returns {void}
 	 */
 	clear(skipCallback = false) {

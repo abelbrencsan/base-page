@@ -39,7 +39,6 @@ div.metric {
 
 	div.metric-term {
 		font-size: var(--small-font-size);
-		/*font-weight: var(--bold-font-weight);*/
 		grid-area: term;
 		margin-bottom: 0;
 	}
