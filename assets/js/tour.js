@@ -137,7 +137,10 @@ class Tour {
 		// Initialize the tour
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		this.selectScene(this.scenes[0]);
+		this.scenes.forEach((scene) => {
+			scene.wrapper.tabIndex = 0;
+		});
+		this.selectScene(this.scenes[0], true, false);
 		this.wrapper.classList.add(this.isInitializedClass);
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}
@@ -147,11 +150,13 @@ class Tour {
 	 * 
 	 * @param {TourScene} scene
 	 * @param {boolean} addToHistory
+	 * @param {boolean} setFocus
 	 * @returns {void}
 	 */
-	selectScene(scene, addToHistory = true) {
+	selectScene(scene, addToHistory = true, setFocus = true) {
 		this.#updateSelectedSceneClass(scene);
 		if (addToHistory) this.sceneHistory.push(scene);
+		if (setFocus) scene.wrapper.focus();
 		this.#isHistoryUpdated();
 		if (typeof(this.selectSceneCallback) == "function") this.selectSceneCallback(scene);
 	}
@@ -160,11 +165,13 @@ class Tour {
 	 * Selects the scene by the specified ID.
 	 * 
 	 * @param {string} id
+	 * @param {boolean} addToHistory
+	 * @param {boolean} setFocus
 	 * @returns {void}
 	 */
-	selectSceneById(id) {
+	selectSceneById(id, addToHistory = true, setFocus = true) {
 		let scene = this.getSceneById(id);
-		if (scene) this.selectScene(scene);
+		if (scene) this.selectScene(scene, addToHistory, setFocus);
 	}
 
 	/**
@@ -189,11 +196,6 @@ class Tour {
 			let lastIndex = this.sceneHistory.length - 1;
 			let lastScene = this.sceneHistory[lastIndex];
 			this.selectScene(lastScene, false);
-			lastScene.sceneTriggers.forEach((sceneTrigger) => {
-				if (sceneTrigger.targetId == removedScene.id) {
-					sceneTrigger.trigger.focus();
-				}
-			});
 		}
 		if (typeof(this.goBackCallback) == "function") this.goBackCallback();
 	}
@@ -209,6 +211,7 @@ class Tour {
 		this.wrapper.classList.remove(this.hasHistoryClass);
 		this.backTrigger.removeAttribute("disabled");
 		this.scenes.forEach((scene) => {
+			scene.wrapper.tabIndex = 0;
 			scene.wrapper.classList.remove(this.isSelectedClass);
 			scene.destroy();
 		});

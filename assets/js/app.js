@@ -521,6 +521,7 @@ class App {
 			let tourScenes = this.#initTourScenes(elem);
 			this.tours.push(new Tour({
 				wrapper: elem,
+				viewport: elem.querySelector("[data-tour-viewport]"),
 				backTrigger: elem.querySelector("[data-tour-back-trigger]"),
 				scenes: tourScenes
 			}));

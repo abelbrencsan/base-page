@@ -46,8 +46,6 @@ div.filmstrip {
 			display: flex;
 			justify-content: center;
 			padding-left: 0;
-			position: sticky;
-			top: var(--grid-gap);
 
 			div.image, a.image {
 				width: 100%;

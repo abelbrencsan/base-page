@@ -46,8 +46,6 @@ div.manual {
 		> li {
 			counter-increment: step-list;
 			padding-left: 0;
-			position: sticky;
-			top: var(--grid-gap);
 
 			article.manual-step-item {
 				position: relative;
