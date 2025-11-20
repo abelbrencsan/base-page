@@ -1737,7 +1737,7 @@
 			<!-- Sample tour -->
 			<div class="tour" data-tour>
 				<div class="tour-viewport" data-tour-viewport>
-					<div class="tour-scene" data-tour-scene="scene-baltic-states" aria-label="Blatic states">
+					<div class="tour-scene" data-tour-scene="scene-world" aria-label="World">
 						<picture>
 							<img src="/images/maps/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 						</picture>
@@ -1813,11 +1813,230 @@
 						</ul>
 					</div>
 				</div>
+				<ul class="tour-zoom-trigger-list">
+					<li>
+						<button type="button" class="tour-zoom-trigger" aria-label="Zoom in" title="Zoom in" data-tour-zoom-in-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-add"></use>
+							</svg>
+						</button>
+					</li>
+					<li>
+						<button type="button" class="tour-zoom-trigger" aria-label="Zoom out" title="Zoom out" data-tour-zoom-out-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-remove"></use>
+							</svg>
+						</button>
+					</li>
+				</ul>
 				<button type="button" class="tour-back-trigger" aria-label="Go back" title="Go back" data-tour-back-trigger>
 					<svg class="icon" aria-hidden="true">
 						<use xlink:href="#icon-arrow-undo"></use>
 					</svg>
 				</button>
+			</div>
+
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Memory game</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Memory game -->
+			<div class="memory-game memory-game--debug" data-memory-game>
+				<ul class="memory-game-state-list">
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-flip"></use>
+						</svg> Moves: <span data-memory-game-move-count-indicator>-</span>
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-medal"></use>
+						</svg> Score: <span data-memory-game-score-indicator>-</span>
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-timer"></use>
+						</svg> Timer: <span data-memory-game-timer-indicator>-</span>
+					</li>
+				</ul>
+				<button type="button" class="memory-game-restart-trigger" data-memory-game-restart-trigger aria-label="Restart" title="Restart">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-refresh"></use>
+					</svg> Restart
+				</button>
+				<ul class="memory-game-card-list" data-memory-game-list>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-1">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/01.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-1">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/01.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-2">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/02.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-2">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/02.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-3">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/03.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-3">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/03.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-4">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/04.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-4">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/04.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-5">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/05.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-5">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/05.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-6">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/06.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+					<li>
+						<button class="memory-game-card" data-memory-game-card="card-6">
+							<span class="memory-game-card-front" data-memory-game-card-front>
+								<picture>
+									<img src="/images/memory-game/front.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+							<span class="memory-game-card-back" data-memory-game-card-back>
+								<picture>
+									<img src="/images/memory-game/06.jpg" loading="lazy" width="900" height="900" alt="Lorem ipsum">
+								</picture>
+							</span>
+						</button>
+					</li>
+				</ul>
 			</div>
 
 			<!-- Section header -->

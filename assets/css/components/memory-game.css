@@ -1,0 +1,258 @@
+/*!
+ * Memory game CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Memory game component variables */
+div.memory-game {
+	--memory-game-card-flip-transition-duration: 500ms;
+	--memory-game-card-flip-transition: var(--memory-game-card-flip-transition-duration) ease;
+}
+
+/* Memory game component prototype */
+div.memory-game {
+	display: grid;
+	grid-gap: var(--grid-gap);
+	grid-template-areas: "state restart-trigger" "cards cards";
+	grid-template-columns: 1fr auto;
+	margin-bottom: var(--element-margin);
+
+	ul.memory-game-state-list {
+		display: flex;
+		flex-flow: row wrap;
+		grid-area: state;
+		list-style: none;
+		margin-bottom: var(--block-margin);
+		padding-left: 0;
+
+		> li {
+			align-items: center;
+			display: flex;
+			flex-flow: row wrap;
+			padding-left: var(--grid-gap);
+
+			svg.icon {
+				margin-right: 0.25rem;
+			}
+
+			span {
+				font-family: var(--fixed-font-family);
+				font-weight: var(--fixed-font-weight);
+				letter-spacing: var(--fixed-letter-spacing);
+				line-height: var(--fixed-line-height);
+				margin-left: 0.25rem;
+			}
+
+			&:first-child {
+				padding-left: 0;
+			}
+		}
+	}
+
+	button.memory-game-restart-trigger, button.memory-game-card {
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+	}
+
+	button.memory-game-restart-trigger {
+		align-items: center;
+		color: inherit;
+		display: flex;
+		grid-area: restart-trigger;
+
+		svg.icon {
+			margin-right: 0.25rem;
+		}
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+				color: var(--link-color);
+			}
+		}
+	}
+
+	ul.memory-game-card-list {
+		display: grid;
+		grid-area: cards;
+		grid-gap: calc(var(--grid-gap) * 0.5);
+		grid-template-columns: repeat(6, 1fr);
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			padding-left: 0;
+		}
+	}
+
+	button.memory-game-card {
+		display: block;
+		position: relative;
+
+		span.memory-game-card-front, span.memory-game-card-back {
+			backface-visibility: hidden;
+			box-shadow: var(--bold-box-shadow);
+			display: block;
+			transition: transform var(--memory-game-card-flip-transition);
+
+			img {
+				border-radius: var(--border-radius);
+				display: block;
+				height: auto;
+				width: 100%;
+			}
+		}
+
+		span.memory-game-card-front {
+			transform: rotate3d(0, 1, 0, 0deg);
+
+			&:after {
+				border-radius: var(--border-radius);
+				border: 3px solid transparent;
+				content: "";
+				display: none;
+				height: 100%;
+				left: 0;
+				position: absolute;
+				top: 0;
+				width: 100%;
+			}
+		}
+
+		span.memory-game-card-back {
+			height: 100%;
+			left: 0;
+			position: absolute;
+			top: 0;
+			transform: rotate3d(0, 1, 0, -180deg);
+			width: 100%;
+		}
+
+		@media (hover: hover) {
+
+			&:hover, &:active {
+
+				&:not(:disabled) {
+
+					span.memory-game-card-front:after {
+						border-color: var(--link-color);
+						display: block;
+					}
+				}
+			}
+		}
+
+
+		&:focus-visible {
+			outline: 0;
+
+			span.memory-game-card-front:after {
+				border-color: var(--focus-color);
+				display: block;
+			}
+		}
+
+		&:disabled {
+			cursor: default;
+		}
+
+		&.is-paired, &.is-flipped {
+
+			span.memory-game-card-front {
+				transform: rotate3d(0, 1, 0, 180deg);
+			}
+
+			span.memory-game-card-back {
+				transform: rotate3d(0, 1, 0, 0deg);
+			}
+		}
+
+		&.is-paired {
+			animation: memory-game-card-paired var(--memory-game-card-flip-transition-duration) var(--memory-game-card-flip-transition-duration) 1 forwards;
+		}
+
+		&.is-mismatched {
+			animation: memory-game-card-mismatched var(--memory-game-card-flip-transition-duration) var(--memory-game-card-flip-transition-duration) 1 forwards;
+		}
+	}
+
+	@media (max-width: 32em) {
+		grid-template-areas: "state" "cards" "restart-trigger";
+		grid-template-columns: 1fr;
+
+		ul.memory-game-state-list {
+			justify-content: center;
+
+			> li {
+				display: block;
+				flex: 1;
+				text-align: center;
+
+				svg.icon {
+					display: block;
+					margin: 0 auto;
+				}
+			}
+		}
+
+		button.memory-game-restart-trigger {
+			margin: 0 auto;
+		}
+
+		ul.memory-game-card-list {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+}
+
+/* Memory game component extension */
+div.memory-game {
+
+	&.memory-game--debug {
+
+		button.memory-game-card {
+
+			&:after {
+				bottom: 0.75em;
+				color: var(--fg-color);
+				content: attr(data-memory-game-card);
+				font-size: 0.5rem;
+				position: absolute;
+				right: 0.75em;
+				text-transform: uppercase;
+			}
+
+			&.is-paired, &.is-flipped {
+
+				&:after {
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+/* Memory game component animations */
+@keyframes memory-game-card-paired {
+	0%, 50%, 100% {
+		transform: scale3d(1, 1, 1);
+	}
+
+	25%, 75% {
+		transform: scale3d(1.05, 1.05, 1);
+	}
+}
+
+@keyframes memory-game-card-mismatched {
+	0%, 50%, 100% {
+		transform: translate3d(0, 0, 0);
+	}
+
+	25%, 75% {
+		transform: translate3d(calc(var(--grid-gap) * 0.25), 0, 0);
+	}
+}

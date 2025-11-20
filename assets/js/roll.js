@@ -98,6 +98,7 @@ class Roll {
 		// Initialize the roll
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
+		this.#updateTriggerStatus(this.viewport.scrollLeft);
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}
 
@@ -108,13 +109,11 @@ class Roll {
 	 * @returns {void}
 	 */
 	scrollBack() {
-		let maxScrollLeft = this.#getViewportMaxScrollLeft();
-		let scrollOffset = this.#getScrollOffset() * -1;
-		if (this.viewport.scrollLeft == 0) {
-			scrollOffset = maxScrollLeft;
-		}
-		this.viewport.scrollBy({
-			left: scrollOffset,
+		let scrollOffset = this.#getScrollOffset();
+		let scrollLeft = this.viewport.scrollLeft - scrollOffset;
+		this.#updateTriggerStatus(scrollLeft);
+		this.viewport.scrollTo({
+			left: scrollLeft,
 			behavior: "smooth",
 		});
 	}
@@ -126,15 +125,40 @@ class Roll {
 	 * @returns {void}
 	 */
 	scrollForward() {
-		let maxScrollLeft = this.#getViewportMaxScrollLeft();
 		let scrollOffset = this.#getScrollOffset();
-		if (this.viewport.scrollLeft == maxScrollLeft) {
-			scrollOffset = maxScrollLeft * -1;
-		}
-		this.viewport.scrollBy({
-			left: scrollOffset,
+		let scrollLeft = this.viewport.scrollLeft + scrollOffset;
+		this.#updateTriggerStatus(scrollLeft);
+		this.viewport.scrollTo({
+			left: scrollLeft,
 			behavior: "smooth",
 		});
+	}
+
+	/**
+	 * Enables / disables triggers when scrolling backward or forward is not available.
+	 * 
+	 * @param {number} scrollLeft
+	 * @returns {void}
+	 */
+	#updateTriggerStatus(scrollLeft) {
+		let maxScrollLeft = this.#getViewportMaxScrollLeft();
+		this.prevTrigger.removeAttribute("disabled");
+		this.nextTrigger.removeAttribute("disabled");
+		if (scrollLeft <= 0) {
+			this.prevTrigger.setAttribute("disabled", "disabled");
+		}
+		if (scrollLeft >= maxScrollLeft) {
+			this.nextTrigger.setAttribute("disabled", "disabled");
+		}
+	}
+
+	/**
+	 * Retrieves the maximum left scroll offset possible for the viewport.
+	 * 
+	 * @returns {number}
+	 */
+	#getViewportMaxScrollLeft() {
+		return this.viewport.scrollWidth - this.viewport.clientWidth;
 	}
 
 	/**
@@ -148,26 +172,12 @@ class Roll {
 	}
 
 	/**
-	 * Retrieves the maximum left scroll offset possible for the viewport.
-	 * 
-	 * @returns {number}
-	 */
-	#getViewportMaxScrollLeft() {
-		return this.viewport.scrollWidth - this.viewport.clientWidth;
-	}
-
-	/**
 	 * Retrieves the pixel offset by which the viewport should be scrolled.
 	 * 
 	 * @returns {number}
 	 */
 	#getScrollOffset() {
-		if (this.items.length) {
-			return this.items[0].offsetWidth;
-		}
-		else {
-			return 0;
-		}
+		return this.items.length ? this.items[0].offsetWidth : 0;
 	}
 
 	/**
@@ -178,6 +188,7 @@ class Roll {
 	#addEvents() {
 		this.prevTrigger.addEventListener("click", this);
 		this.nextTrigger.addEventListener("click", this);
+		this.viewport.addEventListener("scrollend", this);
 	}
 
 	/**
@@ -188,6 +199,7 @@ class Roll {
 	#removeEvents() {
 		this.prevTrigger.removeEventListener("click", this);
 		this.nextTrigger.removeEventListener("click", this);
+		this.viewport.removeEventListener("scrollend", this);
 	}
 
 	/**
@@ -206,6 +218,8 @@ class Roll {
 					this.scrollForward();
 				}
 				break;
+			case "scrollend":
+				this.#updateTriggerStatus(this.viewport.scrollLeft);
 		}
 	}
 }

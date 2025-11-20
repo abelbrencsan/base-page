@@ -4,6 +4,7 @@ import { Dropdown } from "../js/dropdown.js";
 import { Glider } from "../js/glider.js";
 import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
+import { MemoryGame, MemoryGameCard } from "../js/memory-game.js";
 import { Notice } from "../js/notice.js";
 import { RangeIndicator } from "../js/range-indicator.js";
 import { Roll } from "../js/roll.js";
@@ -158,6 +159,13 @@ class App {
 	tours = [];
 
 	/**
+	 * List of memory games.
+	 * 
+	 * @type {Array<MemoryGame>}
+	 */
+	memoryGames = [];
+
+	/**
 	 * List of pages.
 	 * 
 	 * @type {Array<Page>}
@@ -210,6 +218,7 @@ class App {
 		this.#initSortableTrees();
 		this.#initSteppers();
 		this.#initTours();
+		this.#initMemoryGames();
 		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
@@ -523,6 +532,8 @@ class App {
 				wrapper: elem,
 				viewport: elem.querySelector("[data-tour-viewport]"),
 				backTrigger: elem.querySelector("[data-tour-back-trigger]"),
+				zoomInTrigger: elem.querySelector("[data-tour-zoom-in-trigger]"),
+				zoomOutTrigger: elem.querySelector("[data-tour-zoom-out-trigger]"),
 				scenes: tourScenes
 			}));
 		});
@@ -542,7 +553,10 @@ class App {
 			tourScenes.push(new TourScene({
 				id: tourSceneElem.getAttribute("data-tour-scene"),
 				wrapper: tourSceneElem,
-				sceneTriggers: tourSceneTriggers
+				sceneTriggers: tourSceneTriggers,
+				zoomLevel: 2,
+				offsetX: tourSceneElem.getAttribute("data-tour-scene-offset-x") || 50,
+				offsetY: tourSceneElem.getAttribute("data-tour-scene-offset-y") || 50
 			}));
 		});
 		return tourScenes;
@@ -564,6 +578,87 @@ class App {
 			}));
 		});
 		return tourSceneTriggers;
+	}
+
+	/**
+	 * Initializes the memory games.
+	 * 
+	 * @returns {void}
+	 */
+	#initMemoryGames() {
+		let cardFlipSoundEffect = new Audio("../assets/sounds/memory-game/card-flip.ogg");
+		let cardMatchSoundEffect = new Audio("../assets/sounds/memory-game/card-match.ogg");
+		let cardMismatchSoundEffect = new Audio("../assets/sounds/memory-game/card-mismatch.ogg");
+		let completeSoundEffect = new Audio("../assets/sounds/memory-game/complete.ogg");
+		let restartSoundEffect = new Audio("../assets/sounds/memory-game/restart.ogg");
+		let elems = document.querySelectorAll("[data-memory-game]");
+		elems.forEach((elem) => {
+			let cards = this.#initMemoryGameCards(elem);
+			this.memoryGames.push(new MemoryGame({
+				wrapper: elem,
+				cardList: elem.querySelector("[data-memory-game-list]"),
+				cards: cards,
+				restartTrigger: elem.querySelector("[data-memory-game-restart-trigger]"),
+				scoreIndicator: elem.querySelector("[data-memory-game-score-indicator]"),
+				moveCountIndicator: elem.querySelector("[data-memory-game-move-count-indicator]"),
+				timerIndicator: elem.querySelector("[data-memory-game-timer-indicator]"),
+				cardFlipCallback: () => {					
+					this.#playSoundEffect(cardFlipSoundEffect);
+				},
+				cardMatchCallback: (firstCard, secondCard, isCompleted) => {
+					if (!isCompleted) {
+						setTimeout(() => {
+							this.#playSoundEffect(cardMatchSoundEffect);
+						}, 350);
+					}
+				},
+				cardMismatchCallback: (firstCard, secondCard) => {
+					setTimeout(() => {
+						this.#playSoundEffect(cardMismatchSoundEffect);
+					}, 350);
+				},
+				completeCallback: (score, moveCount, timer) => {
+					setTimeout(() => {
+						this.#playSoundEffect(completeSoundEffect);
+						this.dialogs[0].open();
+					}, 350);
+				},
+				restartCallback: () => {
+					this.#playSoundEffect(restartSoundEffect);
+				}
+			}));
+		});
+	}
+
+	/**
+	 * Retrieves a list of memory game cards under the specified element.
+	 * 
+	 * @param {Element} elem
+	 * @returns {Array<MemoryGameCard>}
+	 */
+	#initMemoryGameCards(elem) {
+		let cards = [];
+		let cardElems = elem.querySelectorAll("[data-memory-game-card]");
+		cardElems.forEach((cardElem) => {
+			cards.push(new MemoryGameCard({
+				id: cardElem.getAttribute("data-memory-game-card"),
+				trigger: cardElem,
+				frontView: cardElem.querySelector("[data-memory-game-card-front]"),
+				backView: cardElem.querySelector("[data-memory-game-card-back]")
+			}));
+		});
+		return cards;
+	}
+
+	/**
+	 * Plays the specified sound effect once.
+	 * 
+	 * @param {Audio} soundEffect
+	 * @returns {void}
+	 */
+	#playSoundEffect(soundEffect) {
+		soundEffect.play();
+		soundEffect.currentTime = 0;
 	}
 
 	/**
