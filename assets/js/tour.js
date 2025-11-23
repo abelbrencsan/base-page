@@ -276,10 +276,10 @@ class Tour {
 		}
 		options.scenes.forEach((scene, index) => {
 			if (!(scene instanceof TourScene)) {
-				throw 'Tour \"scene\" must be a `TourScene`';
+				throw 'Tour scene must be a `TourScene`';
 			}
 			if (sceneIds.includes(scene.id)) {
-				throw 'Tour \"scene\" ids must be unique';
+				throw 'Tour scene ids must be unique';
 			} else {
 				sceneIds.push(scene.id);
 			}
@@ -476,7 +476,6 @@ class Tour {
 	 * @returns {void}
 	 */
 	destroy() {
-		this.#removeEvents();
 		this.wrapper.removeAttribute("tabindex");
 		this.wrapper.classList.remove(this.isInitializedClass);
 		this.wrapper.classList.remove(this.hasHistoryClass);
@@ -486,6 +485,7 @@ class Tour {
 		this.#resetBackTrigger();
 		this.#resetZoomTriggers();
 		this.#resetProperties();
+		this.#removeEvents();
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 

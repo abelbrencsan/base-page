@@ -107,6 +107,7 @@ label.form-control {
 	span.form-control-indicator {
 		cursor: pointer;
 		display: block;
+		flex: 0 0 auto;
 		margin-right: 0.5rem;
 
 		input:disabled + & {

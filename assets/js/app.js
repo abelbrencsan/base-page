@@ -6,6 +6,7 @@ import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
 import { MemoryGame, MemoryGameCard } from "../js/memory-game.js";
 import { Notice } from "../js/notice.js";
+import { Quiz, QuizQuestion, QuizQuestionOption, QuizQuestionResult } from "../js/quiz.js";
 import { RangeIndicator } from "../js/range-indicator.js";
 import { Roll } from "../js/roll.js";
 import { Router, Route } from "../js/router.js";
@@ -166,6 +167,13 @@ class App {
 	memoryGames = [];
 
 	/**
+	 * List of quizzes.
+	 * 
+	 * @type {Array<Quiz>}
+	 */
+	quizzes = [];
+
+	/**
 	 * List of pages.
 	 * 
 	 * @type {Array<Page>}
@@ -219,6 +227,7 @@ class App {
 		this.#initSteppers();
 		this.#initTours();
 		this.#initMemoryGames();
+		this.#initQuizzes();
 		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
@@ -493,8 +502,7 @@ class App {
 						}
 					}
 					return null;
-				},
-				isDraggingStartedCallback: (isBlock) => { console.log("isDraggingStartedCallback", isBlock) }
+				}
 			}));
 		});
 	}
@@ -609,19 +617,19 @@ class App {
 					if (!isCompleted) {
 						setTimeout(() => {
 							this.#playSoundEffect(cardMatchSoundEffect);
-						}, 350);
+						}, 300);
 					}
 				},
 				cardMismatchCallback: (firstCard, secondCard) => {
 					setTimeout(() => {
 						this.#playSoundEffect(cardMismatchSoundEffect);
-					}, 350);
+					}, 300);
 				},
 				completeCallback: (score, moveCount, timer) => {
 					setTimeout(() => {
 						this.#playSoundEffect(completeSoundEffect);
 						this.dialogs[0].open();
-					}, 350);
+					}, 300);
 				},
 				restartCallback: () => {
 					this.#playSoundEffect(restartSoundEffect);
@@ -659,6 +667,70 @@ class App {
 	#playSoundEffect(soundEffect) {
 		soundEffect.play();
 		soundEffect.currentTime = 0;
+	}
+
+	/**
+	 * Initializes the quizzes
+	 * 
+	 * @returns {void}
+	 */
+	#initQuizzes() {
+		let elems = document.querySelectorAll("[data-quiz]");
+		elems.forEach((elem) => {
+			let questions = this.#initQuizQuestions(elem);
+			this.quizzes.push(new Quiz({
+				wrapper: elem,
+				questions: questions,
+				nextTrigger: elem.querySelector("[data-quiz-next-trigger]"),
+				startTriggers: Array.from(elem.querySelectorAll("[data-quiz-start-trigger]")),
+				scoreIndicator: elem.querySelector("[data-quiz-score-indicator]"),
+				questionCountIndicator: elem.querySelector("[data-quiz-question-count-indicator]"),
+				timerIndicator: elem.querySelector("[data-quiz-timer-indicator]"),
+				progressIndicator: elem.querySelector("[data-quiz-progress-indicator]"),
+				completeCallback: (score, timer, questionResults) => {
+					let rateElem = elem.querySelector("[data-quiz-result-rate]");
+					if (rateElem) {
+						rateElem.innerHTML = `<h3>You achieved a score of ${score}!</h3>`;
+					}
+				}
+			}));
+		});
+	}
+
+	/**
+	 * Retrieves a list of quiz questions under the specified element.
+	 * 
+	 * @param {Element} elem
+	 * @returns {Array<QuizQuestion>}
+	 */
+	#initQuizQuestions(elem) {
+		let questions = [];
+		let questionElems = elem.querySelectorAll("[data-quiz-question]");
+		questionElems.forEach((questionElem) => {
+			let options = this.#initQuizQuestionOptions(questionElem);
+			questions.push(new QuizQuestion({
+				wrapper: questionElem,
+				options: options
+			}));
+		});
+		return questions;
+	}
+
+	/**
+	 * Retrieves a list of quiz question options under the specified element.
+	 * 
+	 * @param {Element} elem
+	 * @returns {Array<QuizQuestionOption>}
+	 */
+	#initQuizQuestionOptions(elem) {
+		let options = [];
+		let optionElems = elem.querySelectorAll("[data-quiz-question-option]");
+		optionElems.forEach((optionElem) => {
+			options.push(new QuizQuestionOption({
+				input: optionElem
+			}));
+		});
+		return options;
 	}
 
 	/**

@@ -57,6 +57,13 @@ class Roll {
 	destroyCallback = null;
 
 	/**
+	 * The ID of the timeout used to detect when scrolling has ended.
+	 * 
+	 * @type {null|number}
+	 */
+	timeoutId = null;
+
+	/**
 	 * Creates a roll.
 	 * 
 	 * @param {Object} options
@@ -188,7 +195,7 @@ class Roll {
 	#addEvents() {
 		this.prevTrigger.addEventListener("click", this);
 		this.nextTrigger.addEventListener("click", this);
-		this.viewport.addEventListener("scrollend", this);
+		this.viewport.addEventListener("scroll", this);
 	}
 
 	/**
@@ -199,7 +206,7 @@ class Roll {
 	#removeEvents() {
 		this.prevTrigger.removeEventListener("click", this);
 		this.nextTrigger.removeEventListener("click", this);
-		this.viewport.removeEventListener("scrollend", this);
+		this.viewport.removeEventListener("scroll", this);
 	}
 
 	/**
@@ -218,8 +225,11 @@ class Roll {
 					this.scrollForward();
 				}
 				break;
-			case "scrollend":
-				this.#updateTriggerStatus(this.viewport.scrollLeft);
+			case "scroll":
+				if (this.timeoutId) clearTimeout(this.timeoutId);
+				this.timeoutId = setTimeout(() => {
+					this.#updateTriggerStatus(this.viewport.scrollLeft);
+				}, 300);
 		}
 	}
 }

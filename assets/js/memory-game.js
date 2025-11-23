@@ -232,6 +232,17 @@ class MemoryGame {
 		if (!(options.cardList instanceof HTMLUListElement)) {
 			throw "Memory game \"cardList\" must be an `HTMLUListElement`";
 		}
+		if (!(options.cards instanceof Array)) {
+			throw 'Memory game \"cards\" must be an `array`';
+		}
+		if (options.cards.length == 0) {
+			throw 'Memory game \"cards\" must include at least one card';
+		}
+		options.cards.forEach((card, index) => {
+			if (!(card instanceof MemoryGameCard)) {
+				throw 'Memory game card must be a `MemoryGameCard`';
+			}
+		});
 
 		// Set fields from options
 		if (typeof(options) == "object") {
@@ -244,7 +255,7 @@ class MemoryGame {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.shuffleCards();
-		this.#updateIndicatos();
+		this.#updateIndicators();
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}
 
@@ -255,6 +266,8 @@ class MemoryGame {
 	 * @returns {void}
 	 */
 	flipCard(card) {
+		if (card.trigger.classList.contains(this.isCardFlippedClass)) return;
+		if (this.flippedCard == card) return; 
 		if (this.hasFlippingCard) return;
 		this.#applyCardAsFlipped(card);
 		this.#startTimer();
@@ -307,9 +320,9 @@ class MemoryGame {
 	 * @returns {void}
 	 */
 	destroy() {
-		this.#removeEvents();
 		this.reset();
 		this.#destroyCards();
+		this.#removeEvents();
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
@@ -486,7 +499,7 @@ class MemoryGame {
 		this.timer = 0;
 		this.flippedCard = null;
 		this.#stopTimer();
-		this.#updateIndicatos();
+		this.#updateIndicators();
 	}
 
 	/**
@@ -528,7 +541,7 @@ class MemoryGame {
 	 * 
 	 * @returns {void}
 	 */
-	#updateIndicatos() {
+	#updateIndicators() {
 		this.#updateScoreIndicator();
 		this.#updateMoveCountIndicator();
 		this.#updateTimerIndicator();

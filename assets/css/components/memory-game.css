@@ -6,7 +6,7 @@
 
 /* Memory game component variables */
 div.memory-game {
-	--memory-game-card-flip-transition-duration: 500ms;
+	--memory-game-card-flip-transition-duration: 400ms;
 	--memory-game-card-flip-transition: var(--memory-game-card-flip-transition-duration) ease;
 }
 

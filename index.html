@@ -1836,7 +1836,6 @@
 				</button>
 			</div>
 
-
 			<!-- Section header -->
 			<header class="header header--section">
 				<h2>Memory game</h2>
@@ -1849,17 +1848,17 @@
 					<li>
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-flip"></use>
-						</svg> Moves: <span data-memory-game-move-count-indicator>-</span>
+						</svg><span class="is-visually-hidden">Moves:</span> <span data-memory-game-move-count-indicator>-</span>
 					</li>
 					<li>
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-medal"></use>
-						</svg> Score: <span data-memory-game-score-indicator>-</span>
+						</svg><span class="is-visually-hidden">Score:</span> <span data-memory-game-score-indicator>-</span>
 					</li>
 					<li>
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-timer"></use>
-						</svg> Timer: <span data-memory-game-timer-indicator>-</span>
+						</svg><span class="is-visually-hidden">Timer:</span> <span data-memory-game-timer-indicator>-</span>
 					</li>
 				</ul>
 				<button type="button" class="memory-game-restart-trigger" data-memory-game-restart-trigger aria-label="Restart" title="Restart">
@@ -2037,6 +2036,146 @@
 						</button>
 					</li>
 				</ul>
+			</div>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Quiz</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Quiz -->
+			<div class="quiz" data-quiz>
+				<progress class="quiz-progress progress" value="0" max="3" aria-hidden="true" data-quiz-progress-indicator></progress>
+				<ul class="quiz-state-list">
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-help-circle"></use>
+						</svg><span class="is-visually-hidden">Questions:</span> <span data-quiz-question-count-indicator>-/-</span>
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-medal"></use>
+						</svg><span class="is-visually-hidden">Score:</span> <span data-quiz-score-indicator>-</span>
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-timer"></use>
+						</svg><span class="is-visually-hidden">Timer:</span> <span data-quiz-timer-indicator>-</span>
+					</li>
+				</ul>
+				<div class="quiz-intro">
+					<h3>Phasellus vehicula nunc et tortor lobortis?</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
+					<button type="button" class="quiz-intro-start-trigger button button--primary" data-quiz-start-trigger>Start quiz</button>
+				</div>
+				<ul class="quiz-question-list">
+					<li data-quiz-question>
+						<h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit?</h3>
+						<ul class="quiz-question-answer-list">
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion1" type="radio" value="1" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Etiam posuere mauris sit amet eros
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion1" type="radio" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Sed non nulla ac ipsum blandit mattis
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion1" type="radio" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Nunc volutpat eros id tempor
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion1" type="radio" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Donec sit amet malesuada enim
+								</label>
+							</li>
+						</ul>
+					</li>
+					<li data-quiz-question>
+						<h3>Morbi rhoncus, diam non porta bibendum neque quam hendrerit?</h3>
+						<ul class="quiz-question-answer-list">
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion2" type="radio" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Nunc tempor ornare justo eget
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion2" type="radio" value="1" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Pellentesque laoreet nunc sed lacus
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion2" type="radio" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Sed mollis odio quis tincidunt
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--radio">
+									<input name="quizQuestion2" type="radio" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Dolor nibh posuere justo non
+								</label>
+							</li>
+						</ul>
+					</li>
+					<li data-quiz-question>
+						<h3>Vivamus bibendum molestie mi sed sagittis?</h3>
+						<ul class="quiz-question-answer-list">
+							<li>
+								<label class="form-control form-control--checkbox">
+									<input name="quizQuestion3[]" type="checkbox" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Morbi efficitur malesuada
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--checkbox">
+									<input name="quizQuestion3[]" type="checkbox" value="0" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Duis eleifend urna vestibulum
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--checkbox">
+									<input name="quizQuestion3[]" type="checkbox" value="1" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Aenean eros ex ultrices sed
+								</label>
+							</li>
+							<li>
+								<label class="form-control form-control--checkbox">
+									<input name="quizQuestion3[]" type="checkbox" value="1" data-quiz-question-option>
+									<span class="form-control-indicator"></span>
+									Mauris aliquam suscipit
+								</label>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<div class="quiz-result">
+					<div class="quiz-result-rate" data-quiz-result-rate></div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
+					<button type="button" class="quiz-result-restart-trigger button" data-quiz-start-trigger>Restart quiz</button>
+				</div>
+				<button type="button" class="quiz-next-trigger button button--primary" data-quiz-next-trigger>Next question</button>
 			</div>
 
 			<!-- Section header -->
