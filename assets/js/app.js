@@ -708,9 +708,11 @@ class App {
 		let questionElems = elem.querySelectorAll("[data-quiz-question]");
 		questionElems.forEach((questionElem) => {
 			let options = this.#initQuizQuestionOptions(questionElem);
+			let totalPoints = this.#getQuestionTotalPoints(questionElem);
 			questions.push(new QuizQuestion({
 				wrapper: questionElem,
-				options: options
+				options: options,
+				minPoints: totalPoints
 			}));
 		});
 		return questions;
@@ -727,10 +729,24 @@ class App {
 		let optionElems = elem.querySelectorAll("[data-quiz-question-option]");
 		optionElems.forEach((optionElem) => {
 			options.push(new QuizQuestionOption({
-				input: optionElem
+				input: optionElem,
+				isInvalid: optionElem.value === "0"
 			}));
 		});
 		return options;
+	}
+
+	/**
+	 * Retrieves the total points of quiz question options under the specified element.
+	 * 
+	 * @param {Element} elem
+	 * @returns {Array<QuizQuestionOption>}
+	 */
+	#getQuestionTotalPoints(elem) {
+		let optionElems = elem.querySelectorAll("[data-quiz-question-option]");
+		return Array.from(optionElems).reduce((acc, optionElem) => {
+			return parseInt(optionElem.value) + acc;
+		}, 0);
 	}
 
 	/**

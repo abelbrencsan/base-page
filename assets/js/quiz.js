@@ -50,14 +50,14 @@ class Quiz {
 	questionCountIndicator = null;
 
 	/**
-	 * Represents an indicator where the elapsed seconds are displayed since the quiz started.
+	 * Represents an indicator where the current number of elapsed seconds is displayed since the quiz started.
 	 * 
 	 * @type {HTMLElement|null}
 	 */
 	timerIndicator = null;
 
 	/**
-	 * Represents an indicator where the quiz completion progress is displayed.
+	 * Represents a progress indicator where the current quiz completion progress is displayed.
 	 * 
 	 * @type {HTMLProgressElement|null}
 	 */
@@ -113,7 +113,7 @@ class Quiz {
 	questionAnsweredCallback = null;
 
 	/**
-	 * Callback function that is called after a question is missing or invalid answer.
+	 * Callback function that is called after an answer is missing or invalid within the question. 
 	 * 
 	 * @type {function(QuizQuestion):void|null}
 	 */
@@ -134,7 +134,7 @@ class Quiz {
 	destroyCallback = null;
 
 	/**
-	 * List of results of the answered questions.
+	 * List of results for the answered questions.
 	 * 
 	 * @type {Array<QuizQuestionResult>}
 	 */
@@ -148,14 +148,14 @@ class Quiz {
 	activeIndex = null;
 
 	/**
-	 * The elapsed seconds since the quiz started.
+	 * The number of seconds elapsed since the quiz started.
 	 * 
 	 * @type {number}
 	 */
 	timer = 0;
 
 	/**
-	 * The ID of the interval created to count the elapsed seconds since the start.
+	 * The ID of the interval created to count the number of elapsed seconds since the squiz started.
 	 * 
 	 * @type {number|null}
 	 */
@@ -340,7 +340,7 @@ class Quiz {
 	}
 
 	/**
-	 * Retireves the current score.
+	 * Retrieves the current score.
 	 * 
 	 * @type {number}
 	 */
@@ -349,7 +349,7 @@ class Quiz {
 	}
 
 	/**
-	 * Processes the specified question if it is answered and valid.
+	 * Processes the specified question if it is answered and the answer is valid.
 	 * 
 	 * @param {QuizQuestion} question
 	 * @returns {QuizQuestionResult|undefined}
@@ -371,13 +371,13 @@ class Quiz {
 	}
 
 	/**
-	 * Evaluates the specified question.
+	 * Evaluates the validity of the specified question.
 	 * 
 	 * @param {QuizQuestion} question
 	 * @returns {QuizQuestionResult|undefined}
 	 */
 	#evaluateQuestion(question) {
-		if (question.points < question.requiredPoints) return;
+		if (question.hasInvalidCheckedOption || question.points < question.minPoints) return;
 		return new QuizQuestionResult({
 			question: question,
 			checkedOptions: question.checkedOptions
@@ -462,7 +462,7 @@ class Quiz {
 	}
 
 	/**
-	 * Updates the indicators.
+	 * Updates the indicators to their current values.
 	 * 
 	 * @returns {void}
 	 */
@@ -494,7 +494,7 @@ class Quiz {
 	}
 
 	/**
-	 * Displays the current elapsed seconds since the quiz started.
+	 * Displays the current number of elapsed seconds since the quiz started.
 	 * 
 	 * @returns {void}
 	 */
@@ -597,10 +597,11 @@ class QuizQuestion {
 
 	/**
 	 * The minimum points required to pass the question; otherwise, it becomes invalid.
+	 * This is intended for checkboxes when multiple answers are allowed.
 	 * 
 	 * @type {number}
 	 */
-	requiredPoints = 0;
+	minPoints = 0;
 
 	/**
 	 * The class that is added to the question wrapper when it is active.
@@ -617,7 +618,7 @@ class QuizQuestion {
 	isAnswerMissingClass = "is-missing";
 
 	/**
-	 * The class added to the wrapper when the question is processed and the points are below the required threshold.
+	 * The class added to the wrapper when the question is processed and and the answer is invalid.
 	 * 
 	 * @type {string}
 	 */
@@ -645,7 +646,7 @@ class QuizQuestion {
 	missingAnswerCallback = null;
 
 	/**
-	 * Callback function that is called after the question is processed and the points are below the required threshold.
+	 * Callback function that is called after the question is processed and one or more selected options are invalid.
 	 * 
 	 * @type {function():void|null}
 	 */
@@ -664,7 +665,7 @@ class QuizQuestion {
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper
 	 * @param {Array<QuizQuestionOption>} options.options
-	 * @param {number} options.requiredPoints
+	 * @param {number} options.minPoints
 	 * @param {string} options.isActiveClass
 	 * @param {string} options.isAnswerMissingClass
 	 * @param {string} options.isAnswerInvalidClass
@@ -742,7 +743,7 @@ class QuizQuestion {
 	}
 
 	/**
-	 * Executes when the question is processed and the points are below the required threshold.
+	 * Executes when the question is processed and one or more selected options are invalid.
 	 * 
 	 * @returns {void}
 	 */
@@ -791,6 +792,15 @@ class QuizQuestion {
 	get points() {
 		return this.checkedOptions.reduce((acc, option) => option.points + acc, 0);
 	}
+
+	/**
+	 * Indicates whether any invalid option is checked within the question.
+	 * 
+	 * @type {boolean}
+	 */
+	get hasInvalidCheckedOption() {
+		return this.checkedOptions.some((option) => option.isInvalid, 0);
+	}
 }
 
 /**
@@ -808,6 +818,13 @@ class QuizQuestionOption {
 	 * @type {HTMLInputElement}
 	 */
 	input;
+
+	/**
+	 * Indicates whether the question becomes invalid when this option is selected as the answer.
+	 * 
+	 * @type {boolean}
+	 */
+	isInvalid = false;
 
 	/**
 	 * Callback function that is called after the option has been initialized.
@@ -828,6 +845,7 @@ class QuizQuestionOption {
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLInputElement} options.input
+	 * @param {boolean} options.isInvalid
 	 * @param {function():void} options.initCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {QuizQuestionOption}
