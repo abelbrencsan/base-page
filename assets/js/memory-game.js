@@ -50,7 +50,7 @@ class MemoryGame {
 	moveCountIndicator = null;
 
 	/**
-	 * Represents an element where the elapsed seconds is displayed since the first flip.
+	 * Represents an element where the number of elapsed seconds is displayed since the first flip.
 	 * 
 	 * @type {HTMLElement|null}
 	 */
@@ -169,7 +169,7 @@ class MemoryGame {
 	moveCount = 0;
 
 	/**
-	 * The elapsed seconds since the first flip.
+	 * The number of elapsed seconds since the first flip.
 	 * 
 	 * @type {number}
 	 */
@@ -190,7 +190,7 @@ class MemoryGame {
 	hasFlippingCard = false;
 
 	/**
-	 * The ID of the interval created to count the elapsed seconds since the first flip.
+	 * The ID of the interval created to count the number of elapsed seconds since the first flip.
 	 * 
 	 * @type {number|null}
 	 */
@@ -568,7 +568,7 @@ class MemoryGame {
 	}
 
 	/**
-	 * Displays the elapsed seconds since the first flip within the timer indicator.
+	 * Displays the number of seconds elapsed since the first flip within the timer indicator.
 	 * 
 	 * @returns {void}
 	 */

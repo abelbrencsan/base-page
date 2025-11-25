@@ -134,11 +134,11 @@ class Chart {
 	datasetAreaClass = "chart-plot-dataset-area";
 
 	/**
-	 * The class that is added to the markers within the line chart.
+	 * The class that is added to the line within the line chart.
 	 * 
 	 * @type {string}
 	 */
-	datasetMarkerClass = "chart-plot-dataset-marker";
+	datasetLineClass = "chart-plot-dataset-line";
 
 	/**
 	 * The class that is added to the donut within the pie chart.
@@ -146,6 +146,27 @@ class Chart {
 	 * @type {string}
 	 */
 	datasetDonutClass = "chart-plot-dataset-donut";
+
+	/**
+	 * The format in which an index-based custom class is added to each dataset.
+	 * 
+	 * @type {function(number):string}
+	 */
+	datasetItemClass = (datasetIndex) => `chart-plot-dataset--${datasetIndex}`;
+
+	/**
+	 * The format in which an index-based custom class is added to each data within a dataset.
+	 * 
+	 * @type {function(number):string}
+	 */
+	datasetDataItemClass = (dataIndex) => `chart-plot-dataset-data--${dataIndex}`;
+
+	/**
+	 * The name of the attribute added to each data with its value from the dataset.
+	 * 
+	 * @type {string}
+	 */
+	datasetDataAttribute = "data-chart-dataset-data";
 
 	/**
 	 * Callback function that is called after the chart has been initialized.
@@ -195,8 +216,11 @@ class Chart {
 	 * @param {string} options.datasetClass
 	 * @param {string} options.datasetDataClass
 	 * @param {string} options.datasetAreaClass
-	 * @param {string} options.datasetMarkerClass
+	 * @param {string} options.datasetLineClass
 	 * @param {string} options.datasetDonutClass
+	 * @param {function(number):string} options.datasetItemClass
+	 * @param {function(number):string} options.datasetDataItemClass
+	 * @param {string} options.datasetDataAttribute
 	 * @param {function(Chart):void} options.initCallback
 	 * @param {function(Chart):void} options.updateCallback
 	 * @param {function(Chart):void} options.destroyCallback
@@ -206,7 +230,7 @@ class Chart {
 
 		// Test required options
 		if (typeof options.type !== "string") {
-			throw 'Chart \"type\" must be a `string`';
+			throw "Chart \"type\" must be a `string`";
 		}
 		if (!Chart.types.includes(options.type)) {
 			throw "Chart type is not supported";
@@ -215,15 +239,15 @@ class Chart {
 			throw "Chart \"wrapper\" must be an `SVGElement`";
 		}
 		if (!(options.datasets instanceof Array)) {
-			throw 'Chart \"datasets\" must be an `array`';
+			throw "Chart \"datasets\" must be an `array`";
 		}
 		options.datasets.forEach((dataset) => {
 			if (!(dataset instanceof Array)) {
-				throw 'Chart \"dataset\" must be an `array`';
+				throw "Chart \"dataset\" must be an `array`";
 			}
 			dataset.forEach((data) => {
 				if (typeof data !== "number") {
-					throw 'Chart \"data\" must be a `number`';
+					throw "Chart \"data\" must be a `number`";
 				}
 			})
 		});
@@ -356,7 +380,7 @@ class Chart {
 		this.#setChartGridLinesClass();
 		scaledDatasets.forEach((scaledDataset, index) => {
 			const groupOffset = (groupGap * 0.5) + (index * groupWidth);
-			this.#drawBars(scaledDataset, barWidth, colWidth, groupOffset);
+			this.#drawBars(scaledDataset, barWidth, colWidth, groupOffset, index);
 		})
 	}
 
@@ -367,13 +391,15 @@ class Chart {
 	 * @param {number} barWidth
 	 * @param {number} colWidth
 	 * @param {number} groupOffset
+	 * @param {number} datasetIndex
 	 * @returns {void}
 	 */
-	#drawBars(scaledDataset, barWidth, colWidth, groupOffset) {
+	#drawBars(scaledDataset, barWidth, colWidth, groupOffset, datasetIndex) {
 		const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-		const bars = this.#createBars(scaledDataset, barWidth, colWidth, groupOffset);
+		const bars = this.#createBars(scaledDataset, barWidth, colWidth, groupOffset, datasetIndex);
 		group.append(...bars);
 		group.classList.add(this.datasetClass);
+		group.classList.add(this.datasetItemClass(datasetIndex));
 		this.wrapper.append(group);
 	}
 
@@ -384,14 +410,15 @@ class Chart {
 	 * @param {number} barWidth
 	 * @param {number} colWidth
 	 * @param {number} groupOffset
+	 * @param {number} datasetIndex
 	 * @returns {Array<SVGRectElement>}
 	 */
-	#createBars(scaledDataset, barWidth, colWidth, groupOffset) {
+	#createBars(scaledDataset, barWidth, colWidth, groupOffset, datasetIndex) {
 		const startOffset = ((colWidth - barWidth) * 0.5) - colWidth;
 		return scaledDataset.map((scaledData, index) => {
 			const colOffset = (index + 1) * colWidth;
 			const offset = groupOffset + startOffset + colOffset;
-			return this.#createBar(offset, scaledData, barWidth)
+			return this.#createBar(offset, scaledData, barWidth, datasetIndex, index);
 		});
 	}
 
@@ -401,20 +428,24 @@ class Chart {
 	 * @param {number} groupOffset
 	 * @param {number} scaledData
 	 * @param {number} barWidth
+	 * @param {number} datasetIndex
+	 * @param {number} dataIndex
 	 * @returns {SVGRectElement}
 	 */
-	#createBar(groupOffset, scaledData, barWidth) {
+	#createBar(groupOffset, scaledData, barWidth, datasetIndex, dataIndex) {
 		const roundness = (barWidth * 0.5) * this.roundness;
 		let bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-		bar.setAttribute('x', groupOffset);
-		bar.setAttribute('y', this.height - scaledData);
-		bar.setAttribute('height', scaledData);
-		bar.setAttribute('width', barWidth);
+		bar.setAttribute("x", groupOffset);
+		bar.setAttribute("y", this.height - scaledData);
+		bar.setAttribute("height", scaledData);
+		bar.setAttribute("width", barWidth);
 		if (roundness) {
-			bar.setAttribute('ry', roundness);
-			bar.setAttribute('rx', roundness);
+			bar.setAttribute("ry", roundness);
+			bar.setAttribute("rx", roundness);
 		}
 		bar.classList.add(this.datasetDataClass);
+		bar.classList.add(this.datasetDataItemClass(dataIndex));
+		bar.setAttribute(this.datasetDataAttribute, this.datasets[datasetIndex][dataIndex]);
 		return bar;
 	}
 
@@ -427,8 +458,8 @@ class Chart {
 		const scaledDatasets = this.#getScaledDatasets(this.height);
 		this.wrapper.classList.add(this.chartLineClass);
 		this.#setChartGridLinesClass();
-		scaledDatasets.forEach((scaledDataset) => {
-			this.#drawLine(scaledDataset);
+		scaledDatasets.forEach((scaledDataset, index) => {
+			this.#drawLine(scaledDataset, index);
 		})
 	}
 
@@ -436,17 +467,19 @@ class Chart {
 	 * Draws a line within the line chart.
 	 * 
 	 * @param {Array<number>} scaledDataset
+	 * @param {number} datasetIndex
 	 * @returns {void}
 	 */
-	#drawLine(scaledDataset) {
+	#drawLine(scaledDataset, datasetIndex) {
 		const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
 		const line = this.#createLine(scaledDataset);
 		const area = this.#createLineArea(scaledDataset);
-		const markers = this.#createLineMarkers(scaledDataset);
+		const markers = this.#createLineMarkers(scaledDataset, datasetIndex);
 		if (area) group.append(area);
 		group.append(line);
 		group.append(...markers);
 		group.classList.add(this.datasetClass);
+		group.classList.add(this.datasetItemClass(datasetIndex));
 		this.wrapper.append(group);
 	}
 
@@ -460,7 +493,7 @@ class Chart {
 		let points = this.#getLineChartPoints(scaledDataset);
 		let line = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
 		line.setAttribute("points", points.join(" "));
-		line.classList.add(this.datasetDataClass);
+		line.classList.add(this.datasetLineClass);
 		return line;
 	}
 
@@ -485,17 +518,20 @@ class Chart {
 	 * Creates the markers for a line within the line chart.
 	 * 
 	 * @param {Array<number>} scaledDataset
+	 * @param {number} datasetIndex
 	 * @returns {Array<SVGCircleElement>}
 	 */
-	#createLineMarkers(scaledDataset) {
+	#createLineMarkers(scaledDataset, datasetIndex) {
 		const points = this.#getLineChartPoints(scaledDataset);
-		return points.map((point) => {
+		return points.map((point, index) => {
 			const [x, y] = point.split(",");
 			let marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-			marker.setAttribute('cx', x);
-			marker.setAttribute('cy', y);
-			marker.setAttribute('r', this.markerSize);
-			marker.classList.add(this.datasetMarkerClass);
+			marker.setAttribute("cx", x);
+			marker.setAttribute("cy", y);
+			marker.setAttribute("r", this.markerSize);
+			marker.classList.add(this.datasetDataClass);
+			marker.classList.add(this.datasetDataItemClass(index));
+			marker.setAttribute(this.datasetDataAttribute, this.datasets[datasetIndex][index]);
 			return marker;
 		});
 	}
@@ -525,8 +561,8 @@ class Chart {
 		const offsetStep = this.width / this.datasets.length;
 		let offset = (offsetStep - diameter) * 0.5;
 		this.wrapper.classList.add(this.chartPieClass);
-		this.datasets.forEach((dataset) => {
-			this.#drawPie(dataset, offset);
+		this.datasets.forEach((dataset, index) => {
+			this.#drawPie(dataset, offset, index);
 			offset += offsetStep;
 		})	
 	}
@@ -536,16 +572,18 @@ class Chart {
 	 * 
 	 * @param {Array<number>} dataset
 	 * @param {number} offset
+	 * @param {number} datasetIndex
 	 * @returns {void}
 	 */
-	#drawPie(dataset, offset) {
+	#drawPie(dataset, offset, datasetIndex) {
 		let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-		let slices = this.#createPieSlices(dataset);
+		let slices = this.#createPieSlices(dataset, datasetIndex);
 		let donut = this.#createDonut();
 		group.append(...slices);
 		if (donut) group.append(donut); 
 		group.classList.add(this.datasetClass);
-		group.setAttribute('transform', `translate(${offset} 0)`);
+		group.classList.add(this.datasetItemClass(datasetIndex));
+		group.setAttribute("transform", `translate(${offset} 0)`);
 		this.wrapper.append(group);
 	}
 
@@ -553,15 +591,16 @@ class Chart {
 	 * Creates the slices of a pie within the pie chart.
 	 * 
 	 * @param {Array<number>} dataset
+	 * @param {number} datasetIndex
 	 * @returns {Array<SVGPolylineElement>}
 	 */
-	#createPieSlices(dataset) {
+	#createPieSlices(dataset, datasetIndex) {
 		const angles = this.#getPieSliceAngles(dataset);
 		let currentAngle = 0;
-		return angles.map((angle) => {
+		return angles.map((angle, index) => {
 			let startAngle = currentAngle;
 			currentAngle += angle;
-			return this.#createPieSlice(startAngle, currentAngle);
+			return this.#createPieSlice(startAngle, currentAngle, datasetIndex, index);
 		})
 	}
 
@@ -570,15 +609,19 @@ class Chart {
 	 * 
 	 * @param {number} startAngle
 	 * @param {number} endAngle
+	 * @param {number} datasetIndex
+	 * @param {number} dataIndex
 	 * @returns {SVGPolylineElement}
 	 */
-	#createPieSlice(startAngle, endAngle) {
+	#createPieSlice(startAngle, endAngle, datasetIndex, dataIndex) {
 		const radius = this.isPieGauge ? this.height : this.height / 2;
 		const path = this.#getPieSlicePath(radius, startAngle, endAngle);
 		let slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		slice.setAttribute("d", path);
 		slice.setAttribute("stroke-linejoin", "bevel");
 		slice.classList.add(this.datasetDataClass);
+		slice.classList.add(this.datasetDataItemClass(dataIndex));
+		slice.setAttribute(this.datasetDataAttribute, this.datasets[datasetIndex][dataIndex]);
 		return slice;
 	}
 

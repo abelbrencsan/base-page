@@ -269,6 +269,7 @@ class Quiz {
 				}
 			} else {
 				currentQuestion.wrapper.focus();
+				if ("vibrate" in navigator) navigator.vibrate(200);
 				if (typeof(this.questionErrorCallback) == "function") this.questionErrorCallback(currentQuestion);
 			}
 		}

@@ -622,6 +622,7 @@ class App {
 				},
 				cardMismatchCallback: (firstCard, secondCard) => {
 					setTimeout(() => {
+						if ("vibrate" in navigator) navigator.vibrate(200);
 						this.#playSoundEffect(cardMismatchSoundEffect);
 					}, 300);
 				},

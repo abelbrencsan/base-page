@@ -140,87 +140,88 @@ svg.chart-plot {
 
 			polyline.chart-plot-dataset-area {
 				opacity: 0.2;
+				pointer-events: none;
 				stroke: none;
 			}
 
-			polyline.chart-plot-dataset-data {
+			polyline.chart-plot-dataset-line {
 				fill: none;
 				stroke-width: 3px;
 			}
 
 			&:nth-of-type(1) {
 
-				polyline.chart-plot-dataset-data, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-line, circle.chart-plot-dataset-data {
 					stroke: var(--chart-color-1);
 				}
 
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-data {
 					fill: var(--chart-color-1);
 				}
 			}
 
 			&:nth-of-type(2) {
 
-				polyline.chart-plot-dataset-data, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-line, circle.chart-plot-dataset-data {
 					stroke: var(--chart-color-2);
 				}
 
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-data {
 					fill: var(--chart-color-2);
 				}
 			}
 
 			&:nth-of-type(3) {
 				
-				polyline.chart-plot-dataset-data, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-line, circle.chart-plot-dataset-data {
 					stroke: var(--chart-color-3);
 				}
 
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-data {
 					fill: var(--chart-color-3);
 				}
 			}
 
 			&:nth-of-type(4) {
 				
-				polyline.chart-plot-dataset-data, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-line, circle.chart-plot-dataset-data {
 					stroke: var(--chart-color-4);
 				}
 
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-data {
 					fill: var(--chart-color-4);
 				}
 			}
 
 			&:nth-of-type(5) {
 				
-				polyline.chart-plot-dataset-data, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-line, circle.chart-plot-dataset-data {
 					stroke: var(--chart-color-5);
 				}
 
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-data {
 					fill: var(--chart-color-5);
 				}
 			}
 
 			&:nth-of-type(6) {
 				
-				polyline.chart-plot-dataset-data, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-line, circle.chart-plot-dataset-data {
 					stroke: var(--chart-color-6);
 				}
 
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-data {
 					fill: var(--chart-color-6);
 				}
 			}
 
 			&:nth-of-type(7) {
 				
-				polyline.chart-plot-dataset-data, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-line, circle.chart-plot-dataset-data {
 					stroke: var(--chart-color-7);
 				}
 
-				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-marker {
+				polyline.chart-plot-dataset-area, circle.chart-plot-dataset-data {
 					fill: var(--chart-color-7);
 				}
 			}
@@ -299,11 +300,11 @@ svg.chart-plot {
 
 			g.chart-plot-dataset {
 
-				polyline.chart-plot-dataset-data {
+				polyline.chart-plot-dataset-line {
 					stroke-width: 6px;
 				}
 
-				circle.chart-plot-dataset-marker {
+				circle.chart-plot-dataset-data {
 					stroke-width: 4px;
 				}
 			}

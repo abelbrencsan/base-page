@@ -188,13 +188,13 @@ div.memory-game {
 			justify-content: center;
 
 			> li {
-				display: block;
-				flex: 1;
-				text-align: center;
+				/*display: block;*/
+				/*flex: 1;*/
+				/*text-align: center;*/
 
 				svg.icon {
-					display: block;
-					margin: 0 auto;
+					/*display: block;*/
+					/*margin: 0 auto;*/
 				}
 			}
 		}
