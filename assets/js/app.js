@@ -6,6 +6,7 @@ import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
 import { MemoryGame, MemoryGameCard } from "../js/memory-game.js";
 import { Notice } from "../js/notice.js";
+import { PopupManager, PopupManagerPopup } from "../js/popup-manager.js";
 import { Quiz, QuizQuestion, QuizQuestionOption, QuizQuestionResult } from "../js/quiz.js";
 import { RangeIndicator } from "../js/range-indicator.js";
 import { Roll } from "../js/roll.js";
@@ -60,6 +61,13 @@ class App {
 		container: document.querySelector("[data-alert-container]"),
 		closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>"
 	});
+
+	/**
+	 * Popup manager for the apllication.
+	 * 
+	 * @type {PopupManager}
+	 */
+	popupManager = new PopupManager();
 
 	/**
 	 * List of gliders.
@@ -174,11 +182,11 @@ class App {
 	quizzes = [];
 
 	/**
-	 * List of pages.
+	 * The current page.
 	 * 
-	 * @type {Array<Page>}
+	 * @type {Page|null}
 	 */
-	pages = [];
+	page = null;
 
 	/**
 	 * Breakpoints for responsive layout handling.
@@ -200,18 +208,19 @@ class App {
 	 * Creates an application.
 	 * 
 	 * @param {Object} options
+	 * @param {Object[]} options.popupConfigs
+	 * @param {string} options.popupConfigs[].id
+	 * @param {string} options.popupConfigs[].target
+	 * @param {boolean} options.popupConfigs[].onlyUpward
+	 * @param {Object} options.popupConfigs[].dialog
+	 * @param {string} options.popupConfigs[].dialog.type
+	 * @param {string} options.popupConfigs[].dialog.source
 	 * @returns {App}
 	 */
-	constructor(options) {
-
-		// Set fields from options
-		if (typeof(options) == "object") {
-			Object.entries(options).forEach(([key, value]) => {
-				this[key] = value;
-			});
-		}
+	constructor(options = { popupConfigs: [] }) {
 
 		// Initialize the application
+		this.#initPopups(options.popupConfigs);
 		this.#initGliders();
 		this.#initRolls();
 		this.#initNavbarSubnavs();
@@ -231,6 +240,36 @@ class App {
 		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
+	}
+
+	/**
+	 * Creates popups from configurations and adds them to the popup manager.
+	 * 
+	 * @param {Object[]} popupConfigs
+	 * @param {string} popupConfigs[].id
+	 * @param {string} popupConfigs[].target
+	 * @param {boolean} popupConfigs[].onlyUpward
+	 * @param {Object} popupConfigs[].dialog
+	 * @param {string} popupConfigs[].dialog.type
+	 * @param {string} popupConfigs[].dialog.source
+	 * @returns {void}
+	 */
+	#initPopups(popupConfigs) {
+		popupConfigs.forEach((popupConfig) => {
+			let targetElement = document.querySelector(popupConfig.target);
+			if (targetElement) {
+				this.popupManager.addPopup(new PopupManagerPopup({
+					id: popupConfig.id,
+					targetElement: targetElement,
+					onlyUpward: popupConfig.onlyUpward,
+					dialog: new Dialog({
+						type: popupConfig.dialog.type,
+						source: popupConfig.dialog.source,
+						closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>"
+					})
+				}));
+			}
+		});
 	}
 
 	/**
@@ -838,9 +877,7 @@ class App {
 		this.slideshows.forEach((slideshow) => {
 			if (slideshow.glider) slideshow.glider.detectIsScrollable();
 		});
-		this.pages.forEach((page) => {
-			page.onBreakpointChange(event);
-		});
+		if (this.page) this.page.onBreakpointChange(event);
 	}
 }
 

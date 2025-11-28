@@ -81,7 +81,7 @@ class IndexPage extends Page {
 			[70, 40, 30, 25, 40]
 		],
 		updateCallback: (chart) => {
-			this.updateChartLabel(chart);
+			this.updateChartLabels(chart);
 		}
 	});
 
@@ -99,7 +99,7 @@ class IndexPage extends Page {
 			[70, 40, 30, 25, 40]
 		],
 		updateCallback: (chart) => {
-			this.updateChartLabel(chart);
+			this.updateChartLabels(chart);
 		}
 	});
 
@@ -119,7 +119,7 @@ class IndexPage extends Page {
 	 * @param {Chart} chart
 	 * @returns {void}
 	 */  
-	updateChartLabel(chart) {
+	updateChartLabels(chart) {
 		let labelList = chart.wrapper.nextElementSibling;
 		labelList.replaceChildren();
 		chart.labels.forEach((label) => {

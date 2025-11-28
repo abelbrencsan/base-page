@@ -148,6 +148,13 @@ class Chart {
 	datasetDonutClass = "chart-plot-dataset-donut";
 
 	/**
+	 * The format in which the class that defines the grid lines is added to the chart.
+	 * 
+	 * @type {function(number):string}
+	 */
+	gridLineClass = (gridLineCount) => `chart-plot--${gridLineCount}`
+
+	/**
 	 * The format in which an index-based custom class is added to each dataset.
 	 * 
 	 * @type {function(number):string}
@@ -167,6 +174,13 @@ class Chart {
 	 * @type {string}
 	 */
 	datasetDataAttribute = "data-chart-dataset-data";
+
+	/**
+	 * The factor by which the highest data point is multiplied to calculate the X-axis value.
+	 * 
+	 * @type {number}
+	 */
+	AxisMultiplier = 1;
 
 	/**
 	 * Callback function that is called after the chart has been initialized.
@@ -218,9 +232,11 @@ class Chart {
 	 * @param {string} options.datasetAreaClass
 	 * @param {string} options.datasetLineClass
 	 * @param {string} options.datasetDonutClass
+	 * @param {function(number):string} options.gridLineClass
 	 * @param {function(number):string} options.datasetItemClass
 	 * @param {function(number):string} options.datasetDataItemClass
 	 * @param {string} options.datasetDataAttribute
+	 * @param {number} options.AxisMultiplier
 	 * @param {function(Chart):void} options.initCallback
 	 * @param {function(Chart):void} options.updateCallback
 	 * @param {function(Chart):void} options.destroyCallback
@@ -271,6 +287,7 @@ class Chart {
 	 * @returns {void}
 	 */
 	update() {
+		this.wrapper.replaceChildren();
 		this.#drawChart();
 		if (typeof(this.updateCallback) == "function") this.updateCallback(this);
 	}
@@ -306,7 +323,7 @@ class Chart {
 	 */
 	get highestData() {
 		if (!this.datasets.length) return 0;
-		return Math.max(...[].concat(...this.datasets));
+		return Math.max(...[].concat(...this.datasets)) * this.AxisMultiplier;
 	}
 
 	/**
@@ -325,16 +342,16 @@ class Chart {
 	 * @returns {Array<number>}
 	 */
 	get labels() {
-		let steps = [];
+		let labels = [];
 		let highestData = this.highestData;
 		let digits = Math.ceil(Math.log10(highestData));
 		let factor = Math.pow(10, digits - 1);
 		let roundedHighestData = Math.ceil(highestData / factor) * factor;
-		if (roundedHighestData / factor < 6) factor = factor / 2;
+		while (roundedHighestData / factor < 6) factor = factor / 2;
 		for (let val = 0; val <= roundedHighestData; val += factor) {
-			steps.push(val);
+			labels.push(val);
 		}
-		return steps.reverse();
+		return labels.reverse();
 	}
 
 	/**
@@ -698,7 +715,7 @@ class Chart {
 	 * @returns {void}
 	 */
 	#setChartGridLinesClass() {
-		this.wrapper.classList.add(`chart-plot--${this.labels.length - 1}`);
+		this.wrapper.classList.add(this.gridLineClass(this.labels.length - 1));
 	}
 
 	/**

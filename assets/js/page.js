@@ -13,15 +13,7 @@ class Page {
 	 * @param {Object} options
 	 * @returns {Page}
 	 */
-	constructor(options) {
-
-		// Set fields from options
-		if (typeof(options) == "object") {
-			Object.entries(options).forEach(([key, value]) => {
-				this[key] = value;
-			});
-		}
-	}
+	constructor(options = {}) {}
 
 	/**
 	 * Event handler that is triggered when the breakpoint has changed.

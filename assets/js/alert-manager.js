@@ -127,7 +127,7 @@ class AlertManager {
 	static types = ["info", "success", "warning", "error"];
 
 	/**
-	 * Creates an alert.
+	 * Creates an alert manager.
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLElement} options.container

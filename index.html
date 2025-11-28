@@ -2374,6 +2374,12 @@
 		</div>
 	</footer>
 
+	<!-- Sample popup dialog -->
+	<dialog id="sample-popup-dialog">
+		<h2 class="heading-block">Quisque in risus massa</h2>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque. In ut posuere leo. Morbi eleifend consequat quam, nec laoreet enim facilisis a. Quisque sed felis non arcu pretium vehicula. Vestibulum ut convallis nisi. Duis vel enim placerat urna faucibus pretium sit amet at risus. Pellentesque scelerisque sapien metus, molestie congue turpis sollicitudin sed. Mauris et nibh at dolor iaculis sagittis. Etiam ac feugiat ex. Ut sollicitudin nibh at rutrum tincidunt.</p>
+	</dialog>
+
 	<!-- Sample dialog -->
 	<dialog id="sample-dialog">
 		<h2 class="heading-block">Quisque in risus massa</h2>
@@ -2467,13 +2473,25 @@
 	<script type="module" src="/assets/js/app.js"></script>
 	<script type="module">
 
-		import { IndexPage } from "/assets/js/page/index-page.js";
 		import { App } from "/assets/js/app.js";
+		import { IndexPage } from "/assets/js/page/index-page.js";
 
 		// Initialize page and application
 		window.page = new IndexPage();
-		window.app = new App();
-		window.app.pages.push(page);
+		window.app = new App({
+			popupConfigs: [
+				{
+					id: "sample-dialog-popup",
+					target: "div.hero",
+					onlyUpward: true,
+					dialog: {
+						type: "dialog",
+						source: "#sample-popup-dialog"
+					}
+				}
+			]
+		});
+		window.app.page = page;
 
 	</script>
 
