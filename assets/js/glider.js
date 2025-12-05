@@ -1,6 +1,6 @@
 /**
  * Glider
- * This class is designed to create responsive content gliders.
+ * This class is designed to create responsive gliders.
  * 
  * @author Abel Brencsan
  * @license MIT License
@@ -22,46 +22,95 @@ class Glider {
 	viewport;
 
 	/**
-	 * Represents a collection of nodes inside the viewport.
-	 * 
-	 * @type {NodeList}
-	 */
-	items;
-
-	/**
-	 * Represents a button that scrolls the glider to the previous item.
+	 * Represents the trigger that scrolls the glider to the previous item when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	prevTrigger;
 
 	/**
-	 * Represents a button that scrolls the glider to the next item.
+	 * Represents the trigger that scrolls the glider to the next item when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	nextTrigger;
 
 	/**
-	 * Indicates whether the glider jumps back to the first item or to the last item when there is no next or previous item available.
+	 * List of items that are gliding within the viewport.
+	 * 
+	 * @type {Array<HTMLElement>}
+	 */
+	items;
+
+	/**
+	 * Indicates whether the glider jumps back to the first or last item when no next or previous items are available.
 	 * 
 	 * @type {boolean}
 	 */
 	hasRewind = true;
 
 	/**
-	 * The class added to the wrapper element if the glider is scrollable (wider than the viewport).
+	 * The threshold between 0 and 1 indicating how much of the element must be visible to be marked as visible.
+	 * 
+	 * @type {number}
+	 */
+	threshold = 0.5;
+
+	/**
+	 * The delay in milliseconds after the glider automatically scrolls forward to the next item. 
+	 *
+	 * @type {number}
+	 */
+	autoplay = 0;
+
+	/**
+	 * Represents the trigger that stops or restarts the autoplay.
+	 * 
+	 * @type {HTMLButtonElement|null}
+	 */
+	autoplayTrigger = null;
+
+	/**
+	 * The class that is added to the items while they are visible within the viewport.
+	 * 
+	 * @type {string}
+	 */
+	isItemVisibleClass = "is-visible";
+
+	/**
+	 * The class that is added to the wrapper element when the viewport is scrollable.
 	 * 
 	 * @type {string}
 	 */
 	isScrollableClass = "is-scrollable";
 
 	/**
-	 * The class added to the wrapper element while the glider is scrolling.
+	 * The class that is added to the wrapper element when the viewport reaches the first glide.
 	 * 
 	 * @type {string}
 	 */
-	isScrollingClass = "is-scrolling";
+	isFirstGlideClass = "is-first-glide";
+
+	/**
+	 * The class that is added to the wrapper element when the viewport reaches the last glide.
+	 * 
+	 * @type {string}
+	 */
+	isLastGlideClass = "is-last-glide";
+
+	/**
+	 * The class that is added to the wrapper element when the autoplay is enabled.
+	 * 
+	 * @type {string}
+	 */
+	hasAutoplayClass = "has-autoplay";
+
+	/**
+	 * The class that is added to the wrapper when the autoplay has been stopped.
+	 * 
+	 * @type {string}
+	 */
+	isAutoplayStoppedClass = "is-autoplay-stopped";
 
 	/**
 	 * Callback function that is called after the glider has been initialized.
@@ -71,39 +120,39 @@ class Glider {
 	initCallback = null;
 
 	/**
+	 * Callback function that is called after the autoplay has been started.
+	 * 
+	 * @type {function():void|null}
+	 */
+	startAutoplayCallback = null;
+
+	/**
+	 * Callback function that is called after the autoplay has been stopped.
+	 * 
+	 * @type {function():void|null}
+	 */
+	stopAutoplayCallback = null;
+
+	/**
 	 * Callback function that is invoked after the glider becomes scrollable.
-	 * 
-	 * @type {function():void|null}
-	 */
-	isScrollableCallback = null;
-
-	/**
-	 * Callback function that is called after the glider has started scrolling.
-	 * 
-	 * @type {function():void|null}
-	 */
-	isScrollStartedCallback = null;
-
-	/**
-	 * Callback function that is called after the glider scrolling has ended.
-	 * 
-	 * @type {function():void|null}
-	 */
-	isScrollEndedCallback = null;
-
-	/**
-	 * Callback function that is called after the glider has been destroyed.
 	 * 
 	 * @type {function():void|null}
 	 */
 	destroyCallback = null;
 
 	/**
-	 * The ID of the timeout used to detect when scrolling has ended.
+	 * The ID of the interval created to handle autoplay.
 	 * 
-	 * @type {null|number}
+	 * @type {number|null}
 	 */
-	timeoutId = null;
+	intervalId = null;
+
+	/**
+	 * The Intersection Observer API used to detect visible items within the glider.
+	 * 
+	 * @type {IntersectionObserver}
+	 */
+	observer;
 
 	/**
 	 * Creates a glider.
@@ -111,16 +160,22 @@ class Glider {
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper
 	 * @param {HTMLElement} options.viewport
-	 * @param {NodeList} options.items
 	 * @param {HTMLButtonElement} options.prevTrigger
 	 * @param {HTMLButtonElement} options.nextTrigger
+	 * @param {Array<HTMLElement>} options.items
 	 * @param {boolean} options.hasRewind
+	 * @param {number} options.threshold
+	 * @param {number} options.autoplay
+	 * @param {HTMLButtonElement|null} options.autoplayTrigger
+	 * @param {string} options.isItemVisibleClass
 	 * @param {string} options.isScrollableClass
-	 * @param {string} options.isScrollingClass
+	 * @param {string} options.isFirstGlideClass
+	 * @param {string} options.isLastGlideClass
+	 * @param {string} options.hasAutoplayClass
+	 * @param {string} options.isAutoplayStoppedClass
 	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.isScrollableCallback
-	 * @param {function():void} options.isScrollStartedCallback
-	 * @param {function():void} options.isScrollEndedCallback
+	 * @param {function():void} options.startAutoplayCallback
+	 * @param {function():void} options.stopAutoplayCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {Glider}
 	 */
@@ -133,15 +188,20 @@ class Glider {
 		if (!(options.viewport instanceof HTMLElement)) {
 			throw "Glider \"viewport\" must be an `HTMLElement`";
 		}
-		if (!(options.items instanceof NodeList)) {
-			throw "Glider \"items\" must be an `NodeList`";
-		}
 		if (!(options.prevTrigger instanceof HTMLButtonElement)) {
 			throw "Glider \"prevTrigger\" must be an `HTMLButtonElement`";
 		}
 		if (!(options.nextTrigger instanceof HTMLButtonElement)) {
 			throw "Glider \"nextTrigger\" must be an `HTMLButtonElement`";
 		}
+		if (!(options.items instanceof Array)) {
+			throw 'Glider \"items\" must be an `array`';
+		}
+		options.items.forEach((item) => {
+			if (!(item instanceof HTMLElement)) {
+				throw 'Glider item must be an `HTMLElement`';
+			}
+		});
 
 		// Set fields from options
 		if (typeof(options) == "object") {
@@ -153,89 +213,31 @@ class Glider {
 		// Initialize the glider
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		this.detectIsScrollable.call(this);
+		this.observer = this.#initObserver();
+		this.items.forEach((item) => this.observer.observe(item));
+		this.startAutoplay();
+		this.wrapper.classList.toggle(this.hasAutoplayClass, this.autoplay);
 		if (typeof(this.initCallback) == "function") this.initCallback();
 	}
 
 	/**
-	 * Retrieves the index of the currently active item in the glider.
-	 * 
-	 * @returns {number|null}
-	 */
-	getActiveIndex() {
-		const offset = Math.floor(this.viewport.scrollLeft);
-		for (let i = 0; i < this.items.length; i++) {
-			if (this.items[i].offsetLeft >= offset) {
-				return i;
-			}
-		}
-	}
-
-	/**
-	 * Retrieves the last possible active index in the glider.
-	 * 
-	 * @returns {number|null}
-	 */
-	getLastActiveIndex() {
-		const maxOffsetWidth = this.viewport.scrollWidth - this.viewport.offsetWidth;
-		for (let i = 0; i < this.items.length; i++) {
-			if (this.items[i].offsetLeft >= maxOffsetWidth) {
-				return i;
-			}
-		}
-	}
-
-	/**
-	 * Retrieves the scroll position of the item at the specified index in the glider.
-	 * 
-	 * @param {number|null} index
-	 * @returns {number}
-	 */
-	getPositionByIndex(index) {
-		if (index === null) return 0;
-		if (index < 0) {
-			index = 0;
-			if (this.hasRewind) {
-				index = this.getLastActiveIndex();
-			}
-		}
-		else if (index >= this.getLastActiveIndex() + 1) {
-			index = index - 1;
-			if (this.hasRewind) {
-				index = 0;
-			}
-		}
-		return this.items[index].offsetLeft;
-	}
-
-	/**
-	 * Scrolls the glider back to the previous item.
-	 * If the current item is the first one, loop back to the last item.
+	 * Scrolls the glider back to the previous item, or rewinds to the last item if rewind is enabled.
 	 * 
 	 * @returns {void}
 	 */
 	scrollBack() {
-		const activeIndex = this.getActiveIndex();
-		const pos = this.getPositionByIndex(activeIndex - 1);
-		this.viewport.scrollTo({
-			left: pos,
-			behavior: "smooth",
-		});
+		let scrollLeft = this.viewport.scrollLeft - this.itemScrollWidth;
+		this.#scrollTo(scrollLeft);
 	}
 
 	/**
-	 * Scrolls the glider forward to the previous item.
-	 * If the current item is the last one, loop back to the first item.
+	 * Scrolls the glider forward to the next item, or rewinds to the first item if rewind is enabled.
 	 * 
 	 * @returns {void}
 	 */
 	scrollForward() {
-		let activeIndex = this.getActiveIndex();
-		let pos = this.getPositionByIndex(activeIndex + 1);
-		this.viewport.scrollTo({
-			left: pos,
-			behavior: "smooth",
-		});
+		let scrollLeft = this.viewport.scrollLeft + this.itemScrollWidth;
+		this.#scrollTo(scrollLeft);
 	}
 
 	/**
@@ -245,27 +247,34 @@ class Glider {
 	 * @param {behavior} string
 	 * @returns {void}
 	 */
-	scrollTo(index, behavior = "smooth") {
-		let pos = this.getPositionByIndex(index);
-		this.viewport.scrollTo({
-			left: pos,
-			behavior: behavior,
-		});
+	scrollToItem(index, behavior = "smooth") {
+		let scrollLeft = index * this.itemScrollWidth;
+		this.#scrollTo(scrollLeft, behavior);
 	}
 
 	/**
-	 * Detect whether the glider is currently scrollable.
+	 * Starts the autoplay.
 	 * 
 	 * @returns {void}
 	 */
-	detectIsScrollable() {
-		let isScrollable = false;
-		this.wrapper.classList.remove(this.isScrollableClass);
-		if (this.viewport.offsetWidth < this.viewport.scrollWidth) {
-			isScrollable = true;
-			this.wrapper.classList.add(this.isScrollableClass);
-		}
-		if (typeof(this.isScrollableCallback) == "function") this.isScrollableCallback(isScrollable);
+	startAutoplay() {
+		if (this.intervalId || !this.autoplay) return;
+		this.#setAutoplayInterval();
+		this.wrapper.classList.remove(this.isAutoplayStoppedClass);
+		if (typeof(this.startAutoplayCallback) == "function") this.startAutoplayCallback();
+	}
+
+	/**
+	 * Stops the autoplay.
+	 * 
+	 * @returns {void}
+	 */
+	stopAutoplay() {
+		if (!this.intervalId || !this.autoplay) return;
+		clearInterval(this.intervalId);
+		this.intervalId = null;
+		this.wrapper.classList.add(this.isAutoplayStoppedClass);
+		if (typeof(this.stopAutoplayCallback) == "function") this.stopAutoplayCallback();
 	}
 
 	/**
@@ -274,31 +283,138 @@ class Glider {
 	 * @returns {void}
 	 */
 	destroy() {
-		this.wrapper.classList.remove(this.isScrollableClass);
-		this.wrapper.classList.remove(this.isScrollingClass);
 		this.#removeEvents();
+		this.stopAutoplay();
+		this.observer.disconnect();
+		this.wrapper.classList.remove(this.isScrollableClass);
+		this.wrapper.classList.remove(this.isFirstGlideClass);
+		this.wrapper.classList.remove(this.isLastGlideClass);
+		this.wrapper.classList.remove(this.hasAutoplayClass);
+		this.wrapper.classList.remove(this.isAutoplayStoppedClass);
+		this.prevTrigger.removeAttribute("disabled");
+		this.nextTrigger.removeAttribute("disabled");
+		this.items.forEach((item) => {
+			item.classList.remove(this.isItemVisibleClass);
+		});
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**
-	 * Executes after the glider has started scrolling.
+	 * Retrieves the width which the viewport should be scrolled.
 	 * 
-	 * @returns {void}
+	 * @returns {number}
 	 */
-	#isScrollStarted() {
-		this.wrapper.classList.add(this.isScrollingClass);
-		if (typeof(this.isScrollStartedCallback) == "function") this.isScrollStartedCallback();
+	get itemScrollWidth() {
+		return this.items.length ? this.items[0].offsetWidth : 0;
 	}
 
 	/**
-	 * Executes after the glider scrolling has ended.
+	 * Indicates whether the viewport is scrollable.
+	 * 
+	 * @returns {boolean}
+	 */
+	get isScrollable() {
+		return this.viewport.scrollWidth > this.viewport.offsetWidth;
+	}
+
+	/**
+	 * Retrieves the scroll position of the last glide.
+	 * 
+	 * @returns {number}
+	 */
+	get maxScrollLeft() {
+		return this.viewport.scrollWidth - this.viewport.clientWidth;
+	}
+
+	/**
+	 * Initializes the intersection observer API to detect visible items within the viewport.
+	 * 
+	 * @returns {IntersectionObserver}
+	 */
+	#initObserver() {
+		return new IntersectionObserver((entries) => {
+			entries.forEach((entry) => this.#processObserverEntry(entry));
+			this.wrapper.classList.toggle(this.isScrollableClass, this.isScrollable);
+			this.#resetAutoplay();
+		}, { root: this.viewport, threshold: this.threshold });
+	}
+
+	/**
+	 * Processes an entry within the intersection observer API.
+	 * 
+	 * @param {IntersectionObserverEntry} entry
+	 * @returns {void}
+	 */
+	#processObserverEntry(entry) {
+		entry.target.classList.toggle(this.isItemVisibleClass, entry.isIntersecting);
+		if (entry.target == this.items[0]) {
+			this.wrapper.classList.toggle(this.isFirstGlideClass, entry.isIntersecting);
+			if (!this.hasRewind) {
+				this.prevTrigger.toggleAttribute("disabled", entry.isIntersecting);
+			}
+		}
+		if (entry.target == this.items[this.items.length - 1]) {
+			this.wrapper.classList.toggle(this.isLastGlideClass, entry.isIntersecting);
+			if (!this.hasRewind) {
+				this.nextTrigger.toggleAttribute("disabled", entry.isIntersecting);
+			}
+		}
+	}
+
+	/**
+	 * Scrolls the glider to the specified scroll position.
+	 * 
+	 * @param {number} scrollLeft
+	 * @param {behavior} string
+	 * @returns {void}
+	 */
+	#scrollTo(scrollLeft, behavior = "smooth") {
+		let clampedScrollLeft = this.#clampScrollLeft(scrollLeft);
+		this.viewport.scrollTo({
+			left: clampedScrollLeft,
+			behavior: behavior
+		});
+	}
+
+	/**
+	 * Retrieves the clamped value of the specified scroll position to ensure it stays within the available range.
+	 * 
+	 * @param {number} scrollLeft
+	 * @returns {number}
+	 */
+	#clampScrollLeft(scrollLeft) {
+		let clampedScrollLeft = Math.min(Math.max(0, scrollLeft), this.maxScrollLeft);
+		if (this.hasRewind) {
+			let isAtFirstGlide = Math.floor(this.viewport.scrollLeft) <= 0;
+			let isAtLastGlide = Math.ceil(this.viewport.scrollLeft) >= this.maxScrollLeft;
+			if (clampedScrollLeft <= 0 && isAtFirstGlide) {
+				clampedScrollLeft = this.maxScrollLeft;
+			}
+			else if (clampedScrollLeft >= this.maxScrollLeft && isAtLastGlide) {
+				clampedScrollLeft = 0;
+			}
+		}
+		return clampedScrollLeft;
+	}
+
+	/**
+	 * Clears the current autoplay and starts a new one. 
 	 * 
 	 * @returns {void}
 	 */
-	#isScrollEnded() {
-		this.timeoutId = null;
-		this.wrapper.classList.remove(this.isScrollingClass);
-		if (typeof(this.isScrollEndedCallback) == "function") this.isScrollEndedCallback();
+	#resetAutoplay() {
+		if (!this.intervalId || !this.autoplay) return;
+		clearInterval(this.intervalId);
+		this.#setAutoplayInterval();
+	}
+	
+	/**
+	 * Sets the interval for the autoplay.
+	 * 
+	 * @returns {void}
+	 */
+	#setAutoplayInterval() {
+		this.intervalId = setInterval(() => this.scrollForward(), this.autoplay);
 	}
 
 	/**
@@ -309,7 +425,7 @@ class Glider {
 	#addEvents() {
 		this.prevTrigger.addEventListener("click", this);
 		this.nextTrigger.addEventListener("click", this);
-		this.viewport.addEventListener("scroll", this);
+		if (this.autoplayTrigger) this.autoplayTrigger.addEventListener("click", this);
 	}
 
 	/**
@@ -320,7 +436,7 @@ class Glider {
 	#removeEvents() {
 		this.prevTrigger.removeEventListener("click", this);
 		this.nextTrigger.removeEventListener("click", this);
-		this.viewport.removeEventListener("scroll", this);
+		if (this.autoplayTrigger) this.autoplayTrigger.removeEventListener("click", this);
 	}
 
 	/**
@@ -332,24 +448,21 @@ class Glider {
 	#handleEvents(event) {
 		switch (event.type) {
 			case "click":
-				if (this.prevTrigger.contains(event.target)) {
-					this.scrollBack();
+				switch (event.target) {
+					case this.prevTrigger:
+						this.scrollBack();
+						break;
+					case this.nextTrigger:
+						this.scrollForward();
+						break;
+					case this.autoplayTrigger:
+						if (this.intervalId) {
+							this.stopAutoplay();
+						} else {
+							this.startAutoplay();
+						}
+						break;
 				}
-				else if (this.nextTrigger.contains(event.target)) {
-					this.scrollForward();
-				}
-				break;
-			case "scroll":
-				if (this.timeoutId === null) {
-					this.#isScrollStarted();
-
-				} else {
-					clearTimeout(this.timeoutId);
-				}
-				this.timeoutId = setTimeout(() => {
-					this.#isScrollEnded();
-				}, 300);
-				break;
 		}
 	}
 }

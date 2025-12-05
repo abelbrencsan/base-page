@@ -9,7 +9,6 @@ import { Notice } from "../js/notice.js";
 import { PopupManager, PopupManagerPopup } from "../js/popup-manager.js";
 import { Quiz, QuizQuestion, QuizQuestionOption, QuizQuestionResult } from "../js/quiz.js";
 import { RangeIndicator } from "../js/range-indicator.js";
-import { Roll } from "../js/roll.js";
 import { Router, Route } from "../js/router.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { SortableTree } from "../js/sortable-tree.js";
@@ -72,112 +71,112 @@ class App {
 	/**
 	 * List of gliders.
 	 * 
-	 * @type {Array<Glider>}
+	 * @type {Glider[]}
 	 */
 	gliders = [];
 
 	/**
 	 * List of rolls.
 	 * 
-	 * @type {Array<Roll>}
+	 * @type {Glider[]}
 	 */
 	rolls = [];
 
 	/**
 	 * List of navigation bar sub-navigations.
 	 * 
-	 * @type {Array<Dropdown>}
+	 * @type {Dropdown[]}
 	 */
 	navbarSubnavs = [];
 
 	/**
 	 * List of button sub-navigations.
 	 * 
-	 * @type {Array<Dropdown>}
+	 * @type {Dropdown[]}
 	 */
 	buttonSubnavs = [];
 
 	/**
 	 * List of lazy load detectors.
 	 * 
-	 * @type {Array<LazyLoadDetector>}
+	 * @type {LazyLoadDetector[]}
 	 */
 	lazyLoadDetectors = [];
 
 	/**
 	 * List of dialogs.
 	 * 
-	 * @type {Array<Dialog>}
+	 * @type {Dialog[]}
 	 */
 	dialogs = [];
 
 	/**
 	 * List of slideshows.
 	 * 
-	 * @type {Array<Slideshow>}
+	 * @type {Slideshow[]}
 	 */
 	slideshows = [];
 
 	/**
 	 * List of range indicators.
 	 * 
-	 * @type {Array<RangeIndicator>}
+	 * @type {RangeIndicator[]}
 	 */
 	rangeIndicators = [];
 
 	/**
 	 * List of validators.
 	 * 
-	 * @type {Array<Validator>}
+	 * @type {Validator[]}
 	 */
 	validators = [];
 
 	/**
 	 * List of notices.
 	 * 
-	 * @type {Array<Notice>}
+	 * @type {Notice[]}
 	 */
 	notices = [];
 
 	/**
 	 * List of tabs.
 	 * 
-	 * @type {Array<Tab>}
+	 * @type {Tab[]}
 	 */
 	tabs = [];
 
 	/**
 	 * List of sortable tres.
 	 * 
-	 * @type {Array<sortableTree>}
+	 * @type {sortableTree[]}
 	 */
 	sortableTrees = [];
 
 	/**
 	 * List of steppers.
 	 * 
-	 * @type {Array<Stepper>}
+	 * @type {Stepper[]}
 	 */
 	steppers = [];
 
 	/**
 	 * List of tours.
 	 * 
-	 * @type {Array<Tour>}
+	 * @type {Tour[]}
 	 */
 	tours = [];
 
 	/**
 	 * List of memory games.
 	 * 
-	 * @type {Array<MemoryGame>}
+	 * @type {MemoryGame[]}
 	 */
 	memoryGames = [];
 
 	/**
 	 * List of quizzes.
 	 * 
-	 * @type {Array<Quiz>}
+	 * @type {Quiz[]}
 	 */
 	quizzes = [];
 
@@ -283,9 +282,9 @@ class App {
 			this.gliders.push(new Glider({
 				wrapper: elem,
 				viewport: elem.querySelector("[data-glider-viewport]"),
-				items: elem.querySelectorAll("[data-glider-list-item]"),
 				prevTrigger: elem.querySelector("[data-glider-prev-trigger]"),
-				nextTrigger: elem.querySelector("[data-glider-next-trigger]")
+				nextTrigger: elem.querySelector("[data-glider-next-trigger]"),
+				items: Array.from(elem.querySelectorAll("[data-glider-list-item]"))
 			}));
 		});
 	}
@@ -298,12 +297,13 @@ class App {
 	#initRolls() {
 		let elems = document.querySelectorAll("[data-roll]");
 		elems.forEach((elem) => {
-			this.rolls.push(new Roll({
+			this.rolls.push(new Glider({
 				wrapper: elem,
 				viewport: elem.querySelector("[data-roll-viewport]"),
-				items: elem.querySelectorAll("[data-roll-list-item]"),
 				prevTrigger: elem.querySelector("[data-roll-prev-trigger]"),
-				nextTrigger: elem.querySelector("[data-roll-next-trigger]")
+				nextTrigger: elem.querySelector("[data-roll-next-trigger]"),
+				items: Array.from(elem.querySelectorAll("[data-roll-list-item]")),
+				hasRewind: false
 			}));
 		});
 	}
@@ -401,9 +401,9 @@ class App {
 				closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>",
 				gliderWrapper: elem.querySelector("[data-slideshow-glider]"),
 				gliderViewport: elem.querySelector("[data-slideshow-glider-viewport]"),
-				gliderItems: elem.querySelectorAll("[data-slideshow-glider-list-item]"),
 				gliderPrevTrigger: elem.querySelector("[data-slideshow-glider-prev-trigger]"),
-				gliderNextTrigger: elem.querySelector("[data-slideshow-glider-next-trigger]")
+				gliderNextTrigger: elem.querySelector("[data-slideshow-glider-next-trigger]"),
+				gliderItems: Array.from(elem.querySelectorAll("[data-slideshow-glider-list-item]")),
 			}));
 		});
 		this.#addSlideshowAdditionalTriggers();
@@ -590,7 +590,7 @@ class App {
 	 * Retrieves a list of tour scenes under the specified element.
 	 * 
 	 * @param {Element} tourElem
-	 * @returns {Array<TourScene>}
+	 * @returns {TourScene[]}
 	 */
 	#initTourScenes(tourElem) {
 		let tourScenes = [];
@@ -613,7 +613,7 @@ class App {
 	 * Retrieves a list of tour scene triggers under the specified element.
 	 * 
 	 * @param {Element} tourSceneElem
-	 * @returns {Array<TourSceneTrigger>}
+	 * @returns {TourSceneTrigger[]}
 	 */
 	#initTourSceneTriggers(tourSceneElem) {
 		let tourSceneTriggers = [];
@@ -682,7 +682,7 @@ class App {
 	 * Retrieves a list of memory game cards under the specified element.
 	 * 
 	 * @param {Element} elem
-	 * @returns {Array<MemoryGameCard>}
+	 * @returns {MemoryGameCard[]}
 	 */
 	#initMemoryGameCards(elem) {
 		let cards = [];
@@ -741,7 +741,7 @@ class App {
 	 * Retrieves a list of quiz questions under the specified element.
 	 * 
 	 * @param {Element} elem
-	 * @returns {Array<QuizQuestion>}
+	 * @returns {QuizQuestion[]}
 	 */
 	#initQuizQuestions(elem) {
 		let questions = [];
@@ -762,7 +762,7 @@ class App {
 	 * Retrieves a list of quiz question options under the specified element.
 	 * 
 	 * @param {Element} elem
-	 * @returns {Array<QuizQuestionOption>}
+	 * @returns {QuizQuestionOption[]}
 	 */
 	#initQuizQuestionOptions(elem) {
 		let options = [];
@@ -780,7 +780,7 @@ class App {
 	 * Retrieves the total points of quiz question options under the specified element.
 	 * 
 	 * @param {Element} elem
-	 * @returns {Array<QuizQuestionOption>}
+	 * @returns {QuizQuestionOption[]}
 	 */
 	#getQuestionTotalPoints(elem) {
 		let optionElems = elem.querySelectorAll("[data-quiz-question-option]");
@@ -871,12 +871,6 @@ class App {
 	#onBreakpointChange(event) {
 		this.#switchNavbarType(event.target);
 		this.alertManager.updatePositions();
-		this.gliders.forEach((glider) => {
-			glider.detectIsScrollable();
-		});
-		this.slideshows.forEach((slideshow) => {
-			if (slideshow.glider) slideshow.glider.detectIsScrollable();
-		});
 		if (this.page) this.page.onBreakpointChange(event);
 	}
 }

@@ -115,14 +115,14 @@ class AlertManager {
 	/**
 	 * List of all alert elements.
 	 * 
-	 * @type {Array<HTMLElement>}
+	 * @type {HTMLElement[]}
 	 */
 	alerts = [];
 
 	/**
 	 * Available alert types.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	static types = ["info", "success", "warning", "error"];
 

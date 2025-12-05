@@ -88,7 +88,7 @@ class Validator {
 	/**
 	 * Callback function that is called when all input fields are validated and one or more of them are invalid.
 	 * 
-	 * @type {function(Array<Element>):void|null}
+	 * @type {function(Element[]):void|null}
 	 */
 	hasInvalidCallback = null;
 
@@ -111,7 +111,7 @@ class Validator {
 	 * @param {function():void} options.initCallback
 	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void} options.invalidCallback
 	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void} options.validCallback
-	 * @param {function(function(Array<Element>):void} options.hasInvalidCallback
+	 * @param {function(function(Element[]):void} options.hasInvalidCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {Validator}
 	 */

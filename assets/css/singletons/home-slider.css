@@ -1,0 +1,142 @@
+/*!
+ * Home slider CSS singleton
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Home slider singleton variables */
+div.home-slider.glider {
+	--home-slider-buttons-transition: 300ms ease 1200ms;
+	--home-slider-heading-transition: 300ms ease 400ms;
+	--home-slider-hide-transition-duration: 100ms;
+	--home-slider-subheading-transition: 300ms ease 800ms;
+}
+
+/* Home slider singleton prototype */
+div.home-slider.glider {
+	--glider-gap: 0rem;
+	position: relative;
+
+	ul.glider-list {
+		margin-bottom: 0;
+
+		> li {
+
+			&.is-visible {
+
+				div.home-slider-item.glider-item {
+
+					div.home-slider-item-text {
+
+						h1, h2, h3, h4, h5, h6, p, ul.home-slider-item-button-list.button-list {
+							opacity: 1;
+							transform: translate3d(0, 0, 0);
+						}
+
+						h1, h2, h3, h4, h5, h6 {
+							transition: opacity var(--home-slider-heading-transition), transform var(--home-slider-heading-transition);
+						}
+
+						p {
+							transition: opacity var(--home-slider-subheading-transition), transform var(--home-slider-subheading-transition);
+						}
+
+						ul.home-slider-item-button-list.button-list {
+							transition: opacity var(--home-slider-buttons-transition), transform var(--home-slider-buttons-transition);
+						}
+					}
+				}
+			}
+
+			&:not(.is-visible) {
+
+				div.home-slider-item.glider-item {
+
+					div.home-slider-item-text {
+
+						h1, h2, h3, h4, h5, h6, p, ul.home-slider-item-button-list.button-list {
+							opacity: 0;
+							transition: opacity var(--home-slider-hide-transition-duration), transform 0ms var(--home-slider-hide-transition-duration);
+						}
+
+						h1, h2, h3, h4, h5, h6, p {
+							transform: translate3d(0, 2rem, 0);
+						}
+
+						ul.home-slider-item-button-list.button-list {
+							transform: translate3d(-2rem, 0, 0);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	div.home-slider-item.glider-item {
+		align-items: center;
+		background-color: var(--border-bg-color);
+		display: flex;
+		justify-content: center;
+		padding: calc(var(--section-padding) * 2) 0;
+
+		div.home-slider-item-text {
+			max-width: calc(var(--container-width) * 0.5);
+			text-align: center;
+			width: 90%;
+
+			h1, h2, h3, h4, h5, h6 {
+				font-size: var(--heading-1-font-size);
+				margin-bottom: 0;
+			}
+
+			p {
+				font-size: var(--subheading-1-font-size);
+			}
+
+			ul.home-slider-item-button-list.button-list {
+				justify-content: center;
+				margin-bottom: 0;
+
+				> li {
+
+					a.button, button.button {
+						width: 7rem;
+					}
+				}
+			}
+		}
+	}
+
+	ul.glider-action-list.button-list {
+		bottom: var(--grid-gap);
+		margin-bottom: 0;
+		position: absolute;
+		right: var(--grid-gap);
+	}
+
+	@media (max-width: 62em) {
+
+		div.home-slider-item.glider-item {
+			padding: calc(var(--section-padding) * 1.5) 0;
+		}
+
+		ul.glider-action-list.button-list {
+			bottom: auto;
+			justify-content: center;
+			margin-top: calc(var(--element-height) * -0.5);
+			position: relative;
+			right: auto;
+		}
+	}
+
+	@media (max-width: 47em) {
+
+		div.home-slider-item.glider-item {
+			padding: var(--section-padding) 0;
+		}
+	}
+}
+
+/* Home slider singleton extensions */
+div.home-slider.glider {
+}

@@ -24,7 +24,7 @@ class Chart {
 	/**
 	 * The datasets to be visualized within the chart, where each inner array represents a dataset.
 	 * 
-	 * @type {Array<Array<number>>}
+	 * @type {number[][]}
 	 */
 	datasets;
 
@@ -206,7 +206,7 @@ class Chart {
 	/**
 	 * Available chart types.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	static types = ["bar", "line", "pie"];
 
@@ -216,7 +216,7 @@ class Chart {
 	 * @param {Object} options
 	 * @param {string} options.type
 	 * @param {SVGElement} options.wrapper
-	 * @param {Array<Array<number>>} options.datasets
+	 * @param {number[][]} options.datasets
 	 * @param {number} options.width
 	 * @param {number} options.height
 	 * @param {number} options.barThickness
@@ -339,7 +339,7 @@ class Chart {
 	/**
 	 * Retrieves the labels between zero and the highest value.
 	 * 
-	 * @returns {Array<number>}
+	 * @returns {number[]}
 	 */
 	get labels() {
 		let labels = [];
@@ -404,7 +404,7 @@ class Chart {
 	/**
 	 * Draws the bars within the bar chart.
 	 * 
-	 * @param {Array<number>} scaledDataset
+	 * @param {number[]} scaledDataset
 	 * @param {number} barWidth
 	 * @param {number} colWidth
 	 * @param {number} groupOffset
@@ -423,12 +423,12 @@ class Chart {
 	/**
 	 * Creates the bars within the bar chart.
 	 * 
-	 * @param {Array<number>} scaledDataset
+	 * @param {number[]} scaledDataset
 	 * @param {number} barWidth
 	 * @param {number} colWidth
 	 * @param {number} groupOffset
 	 * @param {number} datasetIndex
-	 * @returns {Array<SVGRectElement>}
+	 * @returns {SVGRectElement[]}
 	 */
 	#createBars(scaledDataset, barWidth, colWidth, groupOffset, datasetIndex) {
 		const startOffset = ((colWidth - barWidth) * 0.5) - colWidth;
@@ -483,7 +483,7 @@ class Chart {
 	/**
 	 * Draws a line within the line chart.
 	 * 
-	 * @param {Array<number>} scaledDataset
+	 * @param {number[]} scaledDataset
 	 * @param {number} datasetIndex
 	 * @returns {void}
 	 */
@@ -503,7 +503,7 @@ class Chart {
 	/**
 	 * Creates a line within the line chart.
 	 * 
-	 * @param {Array<number>} scaledDataset
+	 * @param {number[]} scaledDataset
 	 * @returns {SVGPolylineElement}
 	 */
 	#createLine(scaledDataset) {
@@ -517,7 +517,7 @@ class Chart {
 	/**
 	 * Creates the area for a line within the line chart.
 	 * 
-	 * @param {Array<number>} scaledDataset
+	 * @param {number[]} scaledDataset
 	 * @returns {SVGPolylineElement|null}
 	 */
 	#createLineArea(scaledDataset) {
@@ -534,9 +534,9 @@ class Chart {
 	/**
 	 * Creates the markers for a line within the line chart.
 	 * 
-	 * @param {Array<number>} scaledDataset
+	 * @param {number[]} scaledDataset
 	 * @param {number} datasetIndex
-	 * @returns {Array<SVGCircleElement>}
+	 * @returns {SVGCircleElement[]}
 	 */
 	#createLineMarkers(scaledDataset, datasetIndex) {
 		const points = this.#getLineChartPoints(scaledDataset);
@@ -556,8 +556,8 @@ class Chart {
 	/**
 	 * Retrieves the point coordinates for the line chart.
 	 * 
-	 * @param {Array<number>} scaledDataset
-	 * @returns {array<string>}
+	 * @param {number[]} scaledDataset
+	 * @returns {string[]}
 	 */
 	#getLineChartPoints(scaledDataset) {
 		const offset = this.width / (this.datasetSize - 1);
@@ -587,7 +587,7 @@ class Chart {
 	/**
 	 * Draws a pie within the pie chart.
 	 * 
-	 * @param {Array<number>} dataset
+	 * @param {number[]} dataset
 	 * @param {number} offset
 	 * @param {number} datasetIndex
 	 * @returns {void}
@@ -607,9 +607,9 @@ class Chart {
 	/**
 	 * Creates the slices of a pie within the pie chart.
 	 * 
-	 * @param {Array<number>} dataset
+	 * @param {number[]} dataset
 	 * @param {number} datasetIndex
-	 * @returns {Array<SVGPolylineElement>}
+	 * @returns {SVGPolylineElement[]}
 	 */
 	#createPieSlices(dataset, datasetIndex) {
 		const angles = this.#getPieSliceAngles(dataset);
@@ -723,7 +723,7 @@ class Chart {
 	 * The highest value equals the scale value.
 	 * 
 	 * @param {number} scale
-	 * @returns {Array<Array<number>>}
+	 * @returns {number[][]}
 	 */
 	#getScaledDatasets(scale) {
 		const labels = this.labels;
@@ -736,8 +736,8 @@ class Chart {
 	/**
 	 * Retrieves the pie slice angles of the specified dataset.
 	 * 
-	 * @param {Array<number>} dataset
-	 * @returns {Array<number>}
+	 * @param {number[]} dataset
+	 * @returns {number[]}
 	 */
 	#getPieSliceAngles(dataset) {
 		let sum = dataset.reduce((total, current) => (total + current), 0);

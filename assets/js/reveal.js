@@ -59,7 +59,7 @@ class Reveal {
 	/**
 	 * The elements that are added to the reveal.
 	 * 
-	 * @type {Array<HTMLElement>}
+	 * @type {HTMLElement[]}
 	 */
 	#elems = [];
 
@@ -93,7 +93,7 @@ class Reveal {
 	/**
 	 * Handles the reveals.
 	 * 
-	 * @param {Array<IntersectionObserverEntry>} entries
+	 * @param {IntersectionObserverEntry[]} entries
 	 * @param {IntersectionObserver} observer
 	 * @returns {void}
 	 */

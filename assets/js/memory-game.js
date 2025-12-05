@@ -24,7 +24,7 @@ class MemoryGame {
 	/**
 	 * List of cards to be paired.
 	 * 
-	 * @type {Array<MemoryGameCard>}
+	 * @type {MemoryGameCard[]}
 	 */
 	cards;
 
@@ -202,7 +202,7 @@ class MemoryGame {
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper
 	 * @param {HTMLUListElement} options.cardList
-	 * @param {Array<MemoryGameCard>} options.cards
+	 * @param {MemoryGameCard[]} options.cards
 	 * @param {HTMLButtonElement|null} options.restartTrigger
 	 * @param {HTMLElement|null} options.scoreIndicator
 	 * @param {HTMLElement|null} options.moveCountIndicator
@@ -526,8 +526,8 @@ class MemoryGame {
 	/**
 	 * Retrieves the specified elements in a random order.
 	 * 
-	 * @param {Array<HTMLLIElement>} elems
-	 * @returns {Array<HTMLLIElement>}
+	 * @param {HTMLLIElement[]} elems
+	 * @returns {HTMLLIElement[]}
 	 */
 	#getShuffledElems(elems) {
 		return Array.from(elems)

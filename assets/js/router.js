@@ -10,7 +10,7 @@ class Router {
 	/**
 	 * List of all routes.
 	 * 
-	 * @type {Array<Route>}
+	 * @type {Route[]}
 	 */
 	routes = [];
 
@@ -24,7 +24,7 @@ class Router {
 	/**
 	 * Represents a collection of route triggers.
 	 * 
-	 * @type {Array<Node>}
+	 * @type {Node[]}
 	 */
 	triggers = [];
 
@@ -60,7 +60,7 @@ class Router {
 	 * Creates a router.
 	 * 
 	 * @param {Object} options
-	 * @param {Array<Route>} options.routes
+	 * @param {Route[]} options.routes
 	 * @param {string} options.root
 	 * @param {boolean} options.isHashMode
 	 * @param {function():void} options.initCallback
@@ -143,7 +143,7 @@ class Router {
 	 * 
 	 * @param {string} pathname
 	 * @param {URL} url
-	 * @returns {Array<Route>}
+	 * @returns {Route[]}
 	 */
 	#selectRoutes(pathname, url) {
 		return this.routes.filter((route) => {
@@ -161,7 +161,7 @@ class Router {
 	 * Splits the search parameters from the path and returns the path and the search parameters as a separate array.
 	 * 
 	 * @param {string} path
-	 * @returns {Array<string>}
+	 * @returns {string[]}
 	 */
 	#splitPath(path) {
 		let [pathname, search] = this.getOrCleanPath(path).split("?");

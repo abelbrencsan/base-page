@@ -24,7 +24,7 @@ class Dialog {
 	/**
 	 * List of trigger elements that open the dialog on click.
 	 * 
-	 * @type {Array<HTMLElement>}
+	 * @type {HTMLElement[]}
 	 */
 	triggers = [];
 
@@ -52,7 +52,7 @@ class Dialog {
 	/**
 	 * Custom classes to be added to the dialog.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	customClasses = [];
 
@@ -220,7 +220,7 @@ class Dialog {
 	/**
 	 * Available dialog types.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	static types = ["image", "video", "youtube", "iframe", "ajax", "dialog"];
 
@@ -237,11 +237,11 @@ class Dialog {
 	 * @param {Object} options
 	 * @param {string} options.type
 	 * @param {string} options.source
-	 * @param {Array<HTMLElement>} options.triggers
+	 * @param {HTMLElement[]} options.triggers
 	 * @param {string} options.description
 	 * @param {boolean} options.isCancellable
 	 * @param {boolean} options.isCloseable
-	 * @param {Array<string>} options.customClasses
+	 * @param {string[]} options.customClasses
 	 * @param {string} options.dialogClass
 	 * @param {string} options.triggerClass
 	 * @param {string} options.dialogImageClass
@@ -927,7 +927,7 @@ class Dialog {
 	 * 
 	 * @param {HTMLElement} elem
 	 * @param {string} attribute
-	 * @returns {Array<string>}
+	 * @returns {string[]}
 	 */
 	static parseCustomClasses(elem, attribute) {
 		let customclassesStr = elem.getAttribute(attribute);

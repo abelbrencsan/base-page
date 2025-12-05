@@ -54,7 +54,7 @@
 			<div class="navbar-container">
 				<a href="/" class="navbar-logo">My Company</a>
 				<div class="navbar-menu">
-					<button type="button" popovertarget="navbar-nav" popvertargetaction="toggle" aria-label="Toggle navigation" title="Toggle navigation">
+					<button type="button" popovertarget="navbar-nav" popovertargetaction="toggle" aria-label="Toggle navigation" title="Toggle navigation">
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-menu"></use>
 						</svg>
@@ -100,7 +100,7 @@
 							<a href="#">Contact</a>
 						</li>
 					</ul>
-					<button type="button" class="navbar-nav-close" popovertarget="navbar-nav" popvertargetaction="close" aria-label="Close navigation" title="Close navigation">
+					<button type="button" class="navbar-nav-close" popovertarget="navbar-nav" popovertargetaction="hide" aria-label="Close navigation" title="Close navigation">
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-close"></use>
 						</svg>
@@ -140,6 +140,83 @@
 				</li>
 			</ul>
 		</div>
+	</div>
+
+	<!-- Home slider -->
+	<div class="home-slider glider" data-home-slider>
+		<ul class="glider-list" data-home-slider-viewport>
+			<li data-home-slider-list-item>
+				<div class="home-slider-item glider-item">
+					<div class="home-slider-item-text">
+						<h2>Lorem ipsum dolor amet</h2>
+						<p>Cras sapien metus, consequat non massa quis, fermentum tempor nisl</p>
+						<ul class="home-slider-item-button-list button-list button-list--group">
+							<li>
+								<button type="button" class="button button--primary">Button 1</button>
+							</li>
+							<li>
+								<button type="button" class="button button--secondary">Button 2</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</li>
+			<li data-home-slider-list-item>
+				<div class="home-slider-item glider-item">
+					<div class="home-slider-item-text">
+						<h2>Donec sodales odio quis justo</h2>
+						<p>Maecenas viverra arcu augue, eget luctus enim elementum a volutpat</p>
+						<ul class="home-slider-item-button-list button-list button-list--group">
+							<li>
+								<button type="button" class="button button--primary">Button 1</button>
+							</li>
+							<li>
+								<button type="button" class="button button--secondary">Button 2</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</li>
+			<li data-home-slider-list-item>
+				<div class="home-slider-item glider-item">
+					<div class="home-slider-item-text">
+						<h2>Phasellus nec leo dictum</h2>
+						<p>Aliquam erat volutpat. Integer volutpat tempus odio quis accumsan odio</p>
+						<ul class="home-slider-item-button-list button-list button-list--group">
+							<li>
+								<button type="button" class="button button--primary">Button 1</button>
+							</li>
+							<li>
+								<button type="button" class="button button--secondary">Button 2</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<ul class="glider-action-list button-list button-list--group">
+			<li>
+				<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-home-slider-prev-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-chevron-back"></use>
+					</svg>
+				</button>
+			</li>
+			<li>
+				<button type="button" class="button button--icon" aria-label="Next item" title="Next item" data-home-slider-next-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-chevron-forward"></use>
+					</svg>
+				</button>
+			</li>
+			<li>
+				<button type="button" class="button button--icon" aria-label="Toggle autoplay" title="Toggle autoplay" data-home-slider-autoplay-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-pause"></use>
+					</svg>
+				</button>
+			</li>
+		</ul>
 	</div>
 
 	<!-- Layout section -->
@@ -196,7 +273,7 @@
 	<section class="section">
 
 		<!-- Photo glider -->
-		<div class="photo-glider glider" data-glider>
+		<div class="photo-glider glider  glider--1of3 glider--small--full" data-glider>
 
 			<!-- Section header -->
 			<header class="header header--section">
@@ -205,45 +282,43 @@
 			</header>
 
 			<!-- Glider viewport -->
-			<div class="glider-viewport" data-glider-viewport>
-				<ul class="glider-list glider-list--1of3 glider-list--small--full" data-glider-list>
-					<li>
-						<a href="/images/gallery/01.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/02.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/03.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/04.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-					<li>
-						<a href="/images/gallery/05.jpg" class="glider-list-item image image--cover" data-dialog="image" data-glider-list-item>
-							<picture>
-								<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
-							</picture>
-						</a>
-					</li>
-				</ul>
-			</div>
+			<ul class="glider-list" data-glider-viewport>
+				<li data-glider-list-item>
+					<a href="/images/gallery/01.jpg" class="glider-item image image--cover" data-dialog="image">
+						<picture>
+							<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li data-glider-list-item>
+					<a href="/images/gallery/02.jpg" class="glider-item image image--cover" data-dialog="image">
+						<picture>
+							<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li data-glider-list-item>
+					<a href="/images/gallery/03.jpg" class="glider-item image image--cover" data-dialog="image">
+						<picture>
+							<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li data-glider-list-item>
+					<a href="/images/gallery/04.jpg" class="glider-item image image--cover" data-dialog="image">
+						<picture>
+							<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li data-glider-list-item>
+					<a href="/images/gallery/05.jpg" class="glider-item image image--cover" data-dialog="image">
+						<picture>
+							<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+			</ul>
 			<ul class="glider-action-list button-list button-list--group">
 				<li>
 					<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-glider-prev-trigger>
@@ -1107,7 +1182,7 @@
 				<li class="notice-list-item" data-notice>
 					<div class="notice-list-item-wrapper">
 						<p>This is a default notice.</p>
-						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss=>
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-close"></use>
 							</svg>
@@ -1117,7 +1192,7 @@
 				<li class="notice-list-item notice-list-item--error" data-notice>
 					<div class="notice-list-item-wrapper">
 						<p>This is an error notice.</p>
-						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss=>
+						<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss>
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-close"></use>
 							</svg>
@@ -1204,7 +1279,7 @@
 			</div>
 
 			<!-- Glider -->
-			<div class="glider" data-glider>
+			<div class="glider glider--1of2 glider--small--full" data-glider>
 
 				<!-- Section header -->
 				<header class="header header--section">
@@ -1213,73 +1288,71 @@
 				</header>
 
 				<!-- Glider viewport -->
-				<div class="glider-viewport" data-glider-viewport>
-					<ul class="glider-list glider-list--1of2 glider-list--small--full" data-glider-list>
-						<li>
-							<div class="box glider-list-item" data-glider-list-item>
-								<header class="header">
-									<h3>Lorem ipsum dolor 1</h3>
-									<p>Nunc lacinia ante nunc ac lobortis</p>
-								</header>
-								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
-							</div>
-						</li>
-						<li>
-							<div class="box glider-list-item" data-glider-list-item>
-								<header class="header">
-									<h3>Lorem ipsum dolor 2</h3>
-									<p>Nunc lacinia ante nunc ac lobortis</p>
-								</header>
-								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
-							</div>
-						</li>
-						<li>
-							<div class="box glider-list-item" data-glider-list-item>
-								<header class="header">
-									<h3>Lorem ipsum dolor 3</h3>
-									<p>Nunc lacinia ante nunc ac lobortis</p>
-								</header>
-								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
-							</div>
-						</li>
-						<li>
-							<div class="box glider-list-item" data-glider-list-item>
-								<header class="header">
-									<h3>Lorem ipsum dolor 4</h3>
-									<p>Nunc lacinia ante nunc ac lobortis</p>
-								</header>
-								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
-							</div>
-						</li>
-						<li>
-							<div class="box glider-list-item" data-glider-list-item>
-								<header class="header">
-									<h3>Lorem ipsum dolor 5</h3>
-									<p>Nunc lacinia ante nunc ac lobortis</p>
-								</header>
-								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
-							</div>
-						</li>
-						<li>
-							<div class="box glider-list-item" data-glider-list-item>
-								<header class="header">
-									<h3>Lorem ipsum dolor 6</h3>
-									<p>Nunc lacinia ante nunc ac lobortis</p>
-								</header>
-								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
-							</div>
-						</li>
-						<li>
-							<div class="box glider-list-item" data-glider-list-item>
-								<header class="header">
-									<h3>Lorem ipsum dolor 7</h3>
-									<p>Nunc lacinia ante nunc ac lobortis</p>
-								</header>
-								<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
-							</div>
-						</li>
-					</ul>
-				</div>
+				<ul class="glider-list" data-glider-viewport>
+					<li data-glider-list-item>
+						<div class="glider-item box">
+							<header class="header">
+								<h3>Lorem ipsum dolor 1</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</li>
+					<li data-glider-list-item>
+						<div class="glider-item box">
+							<header class="header">
+								<h3>Lorem ipsum dolor 2</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</li>
+					<li data-glider-list-item>
+						<div class="glider-item box">
+							<header class="header">
+								<h3>Lorem ipsum dolor 3</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</li>
+					<li data-glider-list-item>
+						<div class="glider-item box">
+							<header class="header">
+								<h3>Lorem ipsum dolor 4</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</li>
+					<li data-glider-list-item>
+						<div class="glider-item box">
+							<header class="header">
+								<h3>Lorem ipsum dolor 5</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</li>
+					<li data-glider-list-item>
+						<div class="glider-item box">
+							<header class="header">
+								<h3>Lorem ipsum dolor 6</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</li>
+					<li data-glider-list-item>
+						<div class="glider-item box">
+							<header class="header">
+								<h3>Lorem ipsum dolor 7</h3>
+								<p>Nunc lacinia ante nunc ac lobortis</p>
+							</header>
+							<p>Maiores quaerat exercitationem provident et tempora. Sapiente impedit inventore cum dignissimos sed. Dolores reiciendis molestias optio quos quasi minus quas.</p>
+						</div>
+					</li>
+				</ul>
 				<ul class="glider-action-list button-list button-list--group">
 					<li>
 						<button type="button" class="button button--icon" aria-label="Previous item" title="Previous item" data-glider-prev-trigger>
@@ -2390,31 +2463,29 @@
 	<!-- Sample slideshow -->
 	<dialog id="sample-slideshow" class="slideshow" data-slideshow>
 		<div class="slideshow-glider glider" data-slideshow-glider>
-			<div class="glider-viewport" data-slideshow-glider-viewport>
-				<ul class="glider-list glider-list--full" data-slideshow-glider-list>
-					<li>
-						<div class="glider-list-item" data-slideshow-glider-list-item>
-							<picture>
-								<img src="/images/gallery/01.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
-							</picture>
-						</div>
-					</li>
-					<li>
-						<div class="glider-list-item" data-slideshow-glider-list-item>
-							<picture>
-								<img src="/images/gallery/02.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
-							</picture>
-						</div>
-					</li>
-					<li>
-						<div class="glider-list-item" data-slideshow-glider-list-item>
-							<picture>
-								<img src="/images/gallery/03.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
-							</picture>
-						</div>
-					</li>
-				</ul>
-			</div>
+			<ul class="glider-list" data-slideshow-glider-viewport>
+				<li data-slideshow-glider-list-item>
+					<div class="glider-item">
+						<picture>
+							<img src="/images/gallery/01.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+						</picture>
+					</div>
+				</li>
+				<li data-slideshow-glider-list-item>
+					<div class="glider-item">
+						<picture>
+							<img src="/images/gallery/02.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+						</picture>
+					</div>
+				</li>
+				<li data-slideshow-glider-list-item>
+					<div class="glider-item">
+						<picture>
+							<img src="/images/gallery/03.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+						</picture>
+					</div>
+				</li>
+			</ul>
 			<ul class="glider-action-list button-list button-list--group">
 				<li>
 					<button type="button" class="button button--primary button--icon" aria-label="Previous photo" title="Previous photo" data-slideshow-glider-prev-trigger>

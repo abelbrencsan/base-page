@@ -1,5 +1,6 @@
 import { Autocomplete } from "../autocomplete.js";
 import { Chart } from "../chart.js";
+import { Glider } from "../glider.js";
 import { Page } from "../page.js";
 
 /**
@@ -10,6 +11,13 @@ import { Page } from "../page.js";
  * @license MIT License
  */
 class IndexPage extends Page {
+
+	/**
+	 * Home slider.
+	 * 
+	 * @type {Glider|null}
+	 */
+	homeSlider = null;
 
 	/**
 	 * Autocomplete for the search bar.
@@ -81,7 +89,7 @@ class IndexPage extends Page {
 			[70, 40, 30, 25, 40]
 		],
 		updateCallback: (chart) => {
-			this.updateChartLabels(chart);
+			this.#updateChartLabels(chart);
 		}
 	});
 
@@ -99,7 +107,7 @@ class IndexPage extends Page {
 			[70, 40, 30, 25, 40]
 		],
 		updateCallback: (chart) => {
-			this.updateChartLabels(chart);
+			this.#updateChartLabels(chart);
 		}
 	});
 
@@ -111,22 +119,7 @@ class IndexPage extends Page {
 	 */  
 	constructor(options) {
 		super(options);
-	}
-
-	/**
-	 * Updates the labels for the specified chart.
-	 * 
-	 * @param {Chart} chart
-	 * @returns {void}
-	 */  
-	updateChartLabels(chart) {
-		let labelList = chart.wrapper.nextElementSibling;
-		labelList.replaceChildren();
-		chart.labels.forEach((label) => {
-			let listItem = document.createElement("li");
-			listItem.innerText = label.toLocaleString("en-US");
-			labelList.append(listItem);
-		});
+		this.#initHomeSlider();
 	}
 
 	/**
@@ -136,6 +129,52 @@ class IndexPage extends Page {
 	 * @returns {void}
 	 */
 	onBreakpointChange(event) {}
+
+	/**
+	 * Initializes the home slider.
+	 * 
+	 * @returns {void}
+	 */
+	#initHomeSlider() {
+		let elem = document.querySelector("[data-home-slider]");
+		if (elem) {
+			this.mainSlider = new Glider({
+				wrapper: elem,
+				viewport: elem.querySelector("[data-home-slider-viewport]"),
+				prevTrigger: elem.querySelector("[data-home-slider-prev-trigger]"),
+				nextTrigger: elem.querySelector("[data-home-slider-next-trigger]"),
+				items: Array.from(elem.querySelectorAll("[data-home-slider-list-item]")),
+				autoplay: 5000,
+				autoplayTrigger: elem.querySelector("[data-home-slider-autoplay-trigger]"),
+				stopAutoplayCallback: function() {
+					if (!this.autoplayTrigger) return;
+					let icon = this.autoplayTrigger.querySelector("svg.icon use");
+					if (icon) icon.setAttribute("xlink:href", "#icon-play");
+				},
+				startAutoplayCallback: function() {
+					if (!this.autoplayTrigger) return;
+					let icon = this.autoplayTrigger.querySelector("svg.icon use");
+					if (icon) icon.setAttribute("xlink:href", "#icon-pause");
+				}
+			});
+		};
+	}
+
+	/**
+	 * Updates the labels for the specified chart.
+	 * 
+	 * @param {Chart} chart
+	 * @returns {void}
+	 */  
+	#updateChartLabels(chart) {
+		let labelList = chart.wrapper.nextElementSibling;
+		labelList.replaceChildren();
+		chart.labels.forEach((label) => {
+			let listItem = document.createElement("li");
+			listItem.innerText = label.toLocaleString("en-US");
+			labelList.append(listItem);
+		});
+	}
 }
 
 export { IndexPage };

@@ -87,7 +87,7 @@ class Dropdown {
 	/**
 	 * List of opened dropdown items.
 	 * 
-	 * @type {Array<Dropdown>}
+	 * @type {Dropdown[]}
 	 */
 	static openedDropdowns = [];
 

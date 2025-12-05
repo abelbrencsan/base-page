@@ -17,7 +17,7 @@ class Quiz {
 	/**
 	 * List of questions.
 	 * 
-	 * @type {Array<QuizQuestion>}
+	 * @type {QuizQuestion[]}
 	 */
 	questions;
 
@@ -31,7 +31,7 @@ class Quiz {
 	/**
 	 * Represents the trigger buttons that start or restart the quiz when clicked.
 	 * 
-	 * @type {Array<HTMLButtonElement>}
+	 * @type {HTMLButtonElement[]}
 	 */
 	startTriggers = [];
 
@@ -122,7 +122,7 @@ class Quiz {
 	/**
 	 * Callback function that is called after the quiz has been completed.
 	 * 
-	 * @type {function(number,number,Array<QuizQuestionResult>):void|null}
+	 * @type {function(number,number,QuizQuestionResult[]):void|null}
 	 */
 	completeCallback = null;
 
@@ -136,7 +136,7 @@ class Quiz {
 	/**
 	 * List of results for the answered questions.
 	 * 
-	 * @type {Array<QuizQuestionResult>}
+	 * @type {QuizQuestionResult[]}
 	 */
 	questionResults = [];
 
@@ -180,9 +180,9 @@ class Quiz {
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper
-	 * @param {Array<QuizQuestion>} options.questions
+	 * @param {QuizQuestion[]} options.questions
 	 * @param {HTMLButtonElement} options.nextTrigger
-	 * @param {Array<HTMLButtonElement>} options.startTriggers
+	 * @param {HTMLButtonElement[]} options.startTriggers
 	 * @param {HTMLElement|null} options.scoreIndicator
 	 * @param {HTMLElement|null} options.questionCountIndicator
 	 * @param {HTMLElement|null} options.timerIndicator
@@ -195,7 +195,7 @@ class Quiz {
 	 * @param {function():void} options.startCallback
 	 * @param {function(QuizQuestionResult):void|null} options.questionAnsweredCallback
 	 * @param {function(QuizQuestion):void|null} options.questionErrorCallback
-	 * @param {function(number,number,Array<QuizQuestionResult>):void} options.completeCallback
+	 * @param {function(number,number,QuizQuestionResult[]):void} options.completeCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {Quiz}
 	 */
@@ -592,7 +592,7 @@ class QuizQuestion {
 	/**
 	 * List of options for the question.
 	 * 
-	 * @type {Array<QuizQuestionOption>}
+	 * @type {QuizQuestionOption[]}
 	 */
 	options;
 
@@ -665,7 +665,7 @@ class QuizQuestion {
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper
-	 * @param {Array<QuizQuestionOption>} options.options
+	 * @param {QuizQuestionOption[]} options.options
 	 * @param {number} options.minPoints
 	 * @param {string} options.isActiveClass
 	 * @param {string} options.isAnswerMissingClass
@@ -779,7 +779,7 @@ class QuizQuestion {
 	/**
 	 * Retrieves the checked options.
 	 * 
-	 * @returns {Array<QuizQuestionOption>}
+	 * @returns {QuizQuestionOption[]}
 	 */
 	get checkedOptions() {
 		return this.options.filter((option) => option.input.checked);
@@ -916,7 +916,7 @@ class QuizQuestionResult {
 	/**
 	 * The options that were checked when the question was processed.
 	 * 
-	 * @type {Array<QuizQuestionOption>}
+	 * @type {QuizQuestionOption[]}
 	 */
 	checkedOptions;
 
@@ -925,7 +925,7 @@ class QuizQuestionResult {
 	 * 
 	 * @param {Object} options
 	 * @param {QuizQuestion} options.question
-	 * @param {Array<QuizQuestionOption>} options.checkedOptions
+	 * @param {QuizQuestionOption[]} options.checkedOptions
 	 * @returns {QuizQuestionResult}
 	 */
 	constructor(options) {

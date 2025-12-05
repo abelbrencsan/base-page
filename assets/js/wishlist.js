@@ -17,14 +17,14 @@ class Wishlist {
 	/**
 	 * Triggers that add or remove their related item from the wishlist on click.
 	 * 
-	 * @type {Array<{elem:HTMLButtonElement,id:number,data:any}>}
+	 * @type {{elem:HTMLButtonElement,id:number,data:any}[]}
 	 */
 	triggers = [];
 
 	/**
 	 * The initial data from which the initial items are added to the wishlist (overwrites existing local storage).
 	 * 
-	 * @type {Array<{id:number,data:any}|null}
+	 * @type {{id:number,data:any}[]|null}
 	 */
 	initialData = null;
 
@@ -80,7 +80,7 @@ class Wishlist {
 	/**
 	 * List of items added to the wishlist.
 	 * 
-	 * @type {Array<WishlistItem>}
+	 * @type {WishlistItem[]}
 	 */
 	items = [];
 
@@ -89,8 +89,8 @@ class Wishlist {
 	 * 
 	 * @param {Object} options
 	 * @param {string|null} options.storageKeyName
-	 * @param {Array<{elem:HTMLButtonElement,id:number,data:any}>} options.triggers
-	 * @param {Array<{id:number,data:any}|null} options.initialData
+	 * @param {{elem:HTMLButtonElement,id:number,data:any}[]} options.triggers
+	 * @param {{id:number,data:any}[]|null} options.initialData
 	 * @param {function():void|null} options.initCallback
 	 * @param {function(number):void|null} options.addCallback
 	 * @param {function(number):void|null} options.removeCallback
@@ -227,7 +227,7 @@ class Wishlist {
 	/**
 	 * Retrieves the item IDs that are added to the wishlist.
 	 * 
-	 * @returns {Array<number>}
+	 * @returns {number[]}
 	 */
 	getIds() {
 		return this.items.map((item) => item.id );
@@ -294,7 +294,7 @@ class Wishlist {
 	/**
 	 * Retrieves the storage data as an object that can be converted to wishlist items.
 	 * 
-	 * @returns {Array<{id:number,data:any}>|null}
+	 * @returns {{id:number,data:any}[]|null}
 	 */
 	#getStorageData() {
 		if (!this.storageKeyName) return null; 

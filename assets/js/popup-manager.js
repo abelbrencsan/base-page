@@ -68,7 +68,7 @@ class PopupManager {
 	/**
 	 * List of popups to be managed.
 	 * 
-	 * @type {Array<PopupManagerPopup>}
+	 * @type {PopupManagerPopup[]}
 	 */
 	popups = [];
 
@@ -189,7 +189,7 @@ class PopupManager {
 	/**
 	 * Retrieves the IDs of viewed popups from session storage.
 	 * 
-	 * @returns {Array<string>}
+	 * @returns {string[]}
 	 */
 	#getViewedPopupIds() {
 		const encodedIds = sessionStorage.getItem(this.storageKeyName) || "[]";
@@ -199,7 +199,7 @@ class PopupManager {
 	/**
 	 * Sets the specified popup IDs as viewed in session storage.
 	 * 
-	 * @param {Array<string>} popupIds
+	 * @param {string[]} popupIds
 	 * @returns {void}
 	 */
 	#setViewedPopupIds(popupIds) {

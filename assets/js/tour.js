@@ -31,7 +31,7 @@ class Tour {
 	/**
 	 * List of scenes.
 	 * 
-	 * @type {Array<TourScene>}
+	 * @type {TourScene[]}
 	 */
 	scenes;
 
@@ -52,7 +52,7 @@ class Tour {
 	/**
 	 * List of classes added to the wrapper at the zoom level specified by the index.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	zoomLevelClasses = [
 		"tour--zoom-1",
@@ -171,21 +171,21 @@ class Tour {
 	/**
 	 * List of previously opened scenes.
 	 * 
-	 * @type {Array<TourScene>}
+	 * @type {TourScene[]}
 	 */
 	#sceneHistory = [];
 
 	/**
 	 * List of zoom-levels recorded when a scene is added to the history.
 	 * 
-	 * @type {Array<number>}
+	 * @type {number[]}
 	 */
 	#zoomLevelHistory = [];
 
 	/**
 	 * List of X and Y relative offsets recorded when a scene is added to the history.
 	 * 
-	 * @type {Array<[number, number]>}
+	 * @type {[number, number][]}
 	 */
 	#offsetHistory = [];
 
@@ -237,10 +237,10 @@ class Tour {
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper
 	 * @param {HTMLButtonElement} options.backTrigger
-	 * @param {Array<TourScene>} options.scenes
+	 * @param {TourScene[]} options.scenes
 	 * @param {HTMLButtonElement|null} options.zoomInTrigger
 	 * @param {HTMLButtonElement|null} options.zoomOutTrigger
-	 * @param {Array<string>} options.zoomLevelClasses
+	 * @param {string[]} options.zoomLevelClasses
 	 * @param {string} options.isInitializedClass
 	 * @param {string} options.isSelectedClass
 	 * @param {string} options.isPanningClass
@@ -552,7 +552,7 @@ class Tour {
 	/**
 	 * Removes and retrieves the X and Y offsets of the previous scene from the offset history.
 	 * 
-	 * @returns {Array<[number, number]>|undefined}
+	 * @returns {[number, number][]|undefined}
 	 */
 	#popPrevOffsetsFromHistory() {
 		return this.#offsetHistory.pop();
@@ -879,7 +879,7 @@ class TourScene {
 	/**
 	 * List of triggers that navigate to another tour scene when clicked.
 	 * 
-	 * @type {Array<TourSceneTrigger>}
+	 * @type {TourSceneTrigger[]}
 	 */
 	sceneTriggers;
 
@@ -924,7 +924,7 @@ class TourScene {
 	 * @param {Object} options
 	 * @param {string} options.id
 	 * @param {HTMLElement} options.wrapper
-	 * @param {Array<TourSceneTrigger>} options.sceneTriggers
+	 * @param {TourSceneTrigger[]} options.sceneTriggers
 	 * @param {number} options.zoomLevel
 	 * @param {number} options.offsetX
 	 * @param {number} options.offsetY

@@ -46,13 +46,6 @@ class Slideshow {
 	gliderViewport;
 
 	/**
-	 * Represents a collection of nodes inside the slideshow glider viewport.
-	 * 
-	 * @type {NodeList}
-	 */
-	gliderItems;
-
-	/**
 	 * Represents a button that scrolls the slideshow glider to the previous item.
 	 * 
 	 * @type {HTMLButtonElement}
@@ -67,16 +60,23 @@ class Slideshow {
 	gliderNextTrigger;
 
 	/**
+	 * List of items inside the slideshow glider viewport.
+	 * 
+	 * @type {HTMLElement[]}
+	 */
+	gliderItems;
+
+	/**
 	 * List of slideshow triggers that open the dialog on click.
 	 * 
-	 * @type {Array<SlideshowTrigger>}
+	 * @type {SlideshowTrigger[]}
 	 */
 	triggers = [];
 
 	/**
 	 * Custom classes to be added to the slideshow dialog.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	customClasses = [];
 
@@ -117,11 +117,11 @@ class Slideshow {
 	 * @param {string|null} options.closeButtonLabel
 	 * @param {HTMLElement} options.gliderWrapper
 	 * @param {HTMLElement} options.gliderViewport
-	 * @param {NodeList} options.gliderItems
 	 * @param {HTMLButtonElement} options.gliderPrevTrigger
 	 * @param {HTMLButtonElement} options.gliderNextTrigger
-	 * @param {Array<SlideshowTrigger>} options.triggers
-	 * @param {Array<string>} options.customClasses
+	 * @param {HTMLElement[]} options.gliderItems
+	 * @param {SlideshowTrigger[]} options.triggers
+	 * @param {string[]} options.customClasses
 	 * @param {function():void} options.initCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {Slideshow}
@@ -138,15 +138,20 @@ class Slideshow {
 		if (!(options.gliderViewport instanceof HTMLElement)) {
 			throw "Slideshow \"gliderViewport\" must be an `HTMLElement`";
 		}
-		if (!(options.gliderItems instanceof NodeList)) {
-			throw "Slideshow \"gliderItems\" must be an `NodeList`";
-		}
 		if (!(options.gliderPrevTrigger instanceof HTMLButtonElement)) {
 			throw "Slideshow \"gliderPrevTrigger\" must be an `HTMLButtonElement`";
 		}
 		if (!(options.gliderNextTrigger instanceof HTMLButtonElement)) {
 			throw "Slideshow \"gliderNextTrigger\" must be an `HTMLButtonElement`";
 		}
+		if (!(options.gliderItems instanceof Array)) {
+			throw 'Slideshow \"gliderItems\" must be an `array`';
+		}
+		options.gliderItems.forEach((gliderItem) => {
+			if (!(gliderItem instanceof HTMLElement)) {
+				throw 'Slideshow glider item must be an `HTMLElement`';
+			}
+		});
 
 		// Set fields from options
 		if (typeof(options) == "object") {
@@ -181,10 +186,11 @@ class Slideshow {
 	 * @param {behavior} string
 	 * @returns {void}
 	 */
-	scrollTo(index, behavior = "instant") {
-		this.glider.scrollTo(index, behavior);
+	scrollToItem(index, behavior = "instant") {
+		if (!this.glider) return;
+		this.glider.scrollToItem(index, behavior);
 	}
-
+	
 	/**
 	 * Destroys the slideshow.
 	 * 
@@ -206,9 +212,10 @@ class Slideshow {
 		this.glider = new Glider({
 			wrapper: this.gliderWrapper,
 			viewport: this.gliderViewport,
-			items: this.gliderItems,
 			prevTrigger: this.gliderPrevTrigger,
-			nextTrigger: this.gliderNextTrigger
+			nextTrigger: this.gliderNextTrigger,
+			items: this.gliderItems,
+			hasRewind: false
 		});
 	}
 
@@ -224,11 +231,6 @@ class Slideshow {
 			customClasses: this.customClasses,
 			closeButtonHTML: this.closeButtonHTML,
 			closeButtonLabel: this.closeButtonLabel,
-			showCallback: () => {
-				if (this.glider) {
-					this.glider.detectIsScrollable();
-				}
-			}
 		});
 	}
 
@@ -267,7 +269,7 @@ class Slideshow {
 					if (trigger.elem.contains(event.target)) {
 						event.preventDefault();
 						this.dialog.open();
-						this.scrollTo(trigger.index);
+						this.scrollToItem(trigger.index);
 					}
 				});
 				break;

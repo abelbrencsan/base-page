@@ -24,7 +24,7 @@ class Autocomplete {
 	/**
 	 * A function that is called to retrieve the available suggestions.
 	 * 
-	 * @type {function(string,function(Array<string>)):void}
+	 * @type {function(string,function(string[])):void}
 	 */
 	getSuggestions;
 
@@ -66,14 +66,14 @@ class Autocomplete {
 	/**
 	 * Classes added to the list element to which suggestions are appended.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	listClasses = ["autocomplete"];
 
 	/**
 	 * Classes added to the list item where a suggestion is rendered.
 	 * 
-	 * @type {Array<string>}
+	 * @type {string[]}
 	 */
 	itemClasses = [];
 
@@ -150,7 +150,7 @@ class Autocomplete {
 	/**
 	 * The suggestions from which the list items are rendered.
 	 * 
-	 * @type {Array<any>}
+	 * @type {any[]}
 	 */
 	suggestions = [];
 
@@ -173,14 +173,14 @@ class Autocomplete {
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLInputElement} options.input
-	 * @param {function(string,function(Array<string>)):void} options.getSuggestions
+	 * @param {function(string,function(string[])):void} options.getSuggestions
 	 * @param {function(any,string):string} options.renderItem
 	 * @param {function(any,string):string} options.renderInputValue
 	 * @param {number} options.minChars
 	 * @param {number} options.delay
 	 * @param {number|null} options.maxSuggestions
-	 * @param {Array<string>} options.listClasses
-	 * @param {Array<string>} options.itemClasses
+	 * @param {string[]} options.listClasses
+	 * @param {string[]} options.itemClasses
 	 * @param {string} options.isOpenClass
 	 * @param {string} options.hasOpenAutocompleteClass
 	 * @param {function():void} options.initCallback
@@ -284,7 +284,7 @@ class Autocomplete {
 	/**
 	 * Creates the items from the specified suggestions and appends them to the list.
 	 * 
-	 * @param {Array<any>} suggestions
+	 * @param {any[]} suggestions
 	 * @returns {void}
 	 */
 	#createItems(suggestions) {
