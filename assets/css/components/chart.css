@@ -4,7 +4,7 @@
  * Licensed under the MIT license
  */
 
-/* Chart component variables */
+/* Chart component prototype */
 div.chart {
 	--chart-color-1: var(--blue-paint-color);
 	--chart-color-2: var(--green-paint-color);
@@ -14,10 +14,6 @@ div.chart {
 	--chart-color-6: var(--yellow-paint-color);
 	--chart-color-7: var(--stone-paint-color);
 	--chart-gap: 0.05;
-}
-
-/* Chart component prototype */
-div.chart {
 	display: grid;
 	grid-template-areas: "heading heading" "labels plot" ". categories" ". legends";
 	grid-template-columns: auto 1fr;

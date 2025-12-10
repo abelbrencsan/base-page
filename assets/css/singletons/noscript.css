@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Noscript singleton variables */
-div.noscript {
-	--noscript-z-index: 1001;
-}
-
 /* Noscript singleton prototype */
 div.noscript {
+	--noscript-z-index: 1001;
 	align-items: center;
 	backdrop-filter: blur(5px);
 	background-color: var(--dialog-backdrop-color);

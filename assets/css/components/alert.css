@@ -4,15 +4,11 @@
  * Licensed under the MIT license
  */
 
-/* Alert component variables */
-div.alert[popover] {	
+/* Alert component prototype */
+div.alert[popover]:popover-open {
 	--alert-bg-color: var(--link-color);
 	--alert-fg-color: var(--bg-color);
 	--alert-transition: var(--transition);
-}
-
-/* Alert component prototype */
-div.alert[popover]:popover-open {
 	align-items: center;
 	background-color: var(--alert-bg-color);
 	border-radius: var(--border-radius);

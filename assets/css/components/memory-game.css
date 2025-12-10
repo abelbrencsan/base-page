@@ -4,14 +4,10 @@
  * Licensed under the MIT license
  */
 
-/* Memory game component variables */
+/* Memory game component prototype */
 div.memory-game {
 	--memory-game-card-flip-transition-duration: 400ms;
 	--memory-game-card-flip-transition: var(--memory-game-card-flip-transition-duration) ease;
-}
-
-/* Memory game component prototype */
-div.memory-game {
 	display: grid;
 	grid-gap: var(--grid-gap);
 	grid-template-areas: "state restart-trigger" "cards cards";

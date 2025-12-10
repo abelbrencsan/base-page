@@ -4,15 +4,11 @@
  * Licensed under the MIT license
  */
 
-/* Step list component variables */
+/* Step list component prototype */
 ul.step-list {
 	--step-list-indicator-size: 2rem;
 	--step-list-item-width: 8rem;
 	--step-list-line-width: 0.25rem;
-}
-
-/* Step list component prototype */
-ul.step-list {
 	counter-reset: step-list;
 	display: flex;
 	flex-flow: row wrap;

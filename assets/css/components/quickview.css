@@ -4,17 +4,13 @@
  * Licensed under the MIT license
  */
 
-/* Quickview component variables */
-div.quickview[popover] {
+/* Quickview component prototype */
+div.quickview[popover]:popover-open {
 	--quickview-close-button-bg-color: var(--palette-secondary-bg-color);
 	--quickview-close-button-bg-hover-color: var(--palette-secondary-bg-hover-color);
 	--quickview-close-button-fg-color: var(--palette-secondary-fg-color);
 	--quickview-toggle-transition: var(--toggle-transition);
 	--quickview-transition: var(--transition);
-}
-
-/* Quickview component prototype */
-div.quickview[popover]:popover-open {
 	background-color: var(--bg-color);
 	border-radius: var(--border-radius);
 	border: none;

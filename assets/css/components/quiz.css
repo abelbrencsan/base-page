@@ -4,15 +4,11 @@
  * Licensed under the MIT license
  */
 
-/* Quiz component variables */
+/* Quiz component prototype */
 div.quiz {
 	--quiz-button-width: 12rem;
 	--quiz-progress-height: 0.5rem;
 	--quiz-transition: 400ms ease;
-}
-
-/* Quiz component prototype */
-div.quiz {
 	background-color: var(--border-bg-color);
 	border-radius: var(--border-radius);
 	margin-bottom: var(--element-margin);

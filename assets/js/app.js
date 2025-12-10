@@ -27,6 +27,24 @@ import { Validator } from "../js/validator.js";
 class App {
 
 	/**
+	 * Represents the configurations for the application.
+	 * 
+	 * @typedef {Object} AppOptions
+	 * @property {PopupConfig[]} options.popupConfigs
+	 */
+
+	/**
+	 * Represents the configuration for a popup.
+	 * 
+	 * @typedef {Object} PopupConfig
+	 * @property {string} id
+	 * @property {string} target
+	 * @property {boolean} onlyUpward
+	 * @property {Object} dialog
+	 * @property {string} dialog.type
+	 */
+
+	/**
 	 * Icon manager for the apllication.
 	 * 
 	 * @type {IconManager}
@@ -206,14 +224,7 @@ class App {
 	/**
 	 * Creates an application.
 	 * 
-	 * @param {Object} options
-	 * @param {Object[]} options.popupConfigs
-	 * @param {string} options.popupConfigs[].id
-	 * @param {string} options.popupConfigs[].target
-	 * @param {boolean} options.popupConfigs[].onlyUpward
-	 * @param {Object} options.popupConfigs[].dialog
-	 * @param {string} options.popupConfigs[].dialog.type
-	 * @param {string} options.popupConfigs[].dialog.source
+	 * @param {AppOptions} options
 	 * @returns {App}
 	 */
 	constructor(options = { popupConfigs: [] }) {
@@ -244,13 +255,7 @@ class App {
 	/**
 	 * Creates popups from configurations and adds them to the popup manager.
 	 * 
-	 * @param {Object[]} popupConfigs
-	 * @param {string} popupConfigs[].id
-	 * @param {string} popupConfigs[].target
-	 * @param {boolean} popupConfigs[].onlyUpward
-	 * @param {Object} popupConfigs[].dialog
-	 * @param {string} popupConfigs[].dialog.type
-	 * @param {string} popupConfigs[].dialog.source
+	 * @param {PopupConfig[]} popupConfigs
 	 * @returns {void}
 	 */
 	#initPopups(popupConfigs) {

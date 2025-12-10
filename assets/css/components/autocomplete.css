@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Autocomplete component variables */
-ul.autocomplete {
-	--autocomplete-z-index: 1000;
-}
-
 /* Autocomplete component prototype */
 ul.autocomplete {
+	--autocomplete-z-index: 1000;
 	background-color: var(--bg-color);
 	border-radius: 0 0 var(--border-radius) var(--border-radius);
 	box-shadow: var(--bold-box-shadow);

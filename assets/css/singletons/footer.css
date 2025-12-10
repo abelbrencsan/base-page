@@ -4,16 +4,12 @@
  * Licensed under the MIT license
  */
 
-/* Footer singleton variables */
+/* Footer singleton prototype */
 footer.footer {
 	--footer-bg-color: var(--scheme-dark-bg-color);
 	--footer-fg-bold-color: var(--scheme-dark-fg-bold-color);
 	--footer-fg-color: var(--scheme-dark-fg-color);
 	--footer-link-color: var(--scheme-dark-link-color);
-}
-
-/* Footer singleton prototype */
-footer.footer {
 	background-color: var(--footer-bg-color);
 	color: var(--footer-fg-color);
 	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;

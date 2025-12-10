@@ -4,18 +4,14 @@
  * Licensed under the MIT license
  */
 
-/* Dialog component variables */
+/* Dialog component prototype */
 dialog.dialog {
 	--dialog-animation: 300ms ease-in-out;
-	--dialog-close-button-transition: var(--transition);
 	--dialog-close-button-bg-color: var(--palette-secondary-bg-color);
 	--dialog-close-button-bg-hover-color: var(--palette-secondary-bg-hover-color);
 	--dialog-close-button-fg-color: var(--palette-secondary-fg-color);
+	--dialog-close-button-transition: var(--transition);
 	--dialog-transition: var(--transition);
-}
-
-/* Dialog component prototype */
-dialog.dialog {
 	background-color: var(--bg-color);
 	border-radius: var(--border-radius);
 	border: none;
@@ -241,13 +237,9 @@ dialog.dialog {
 	}
 }
 
-/* Dialog trigger component variables */
-.dialog-trigger {
-	--dialog-trigger-animation: 1200ms ease-in infinite;
-}
-
 /* Dialog trigger component prototype */
 .dialog-trigger {
+	--dialog-trigger-animation: 1200ms ease-in infinite;
 	
 	&.is-dialog-loading {
 		animation: dialog-trigger-is-loading var(--dialog-trigger-animation);

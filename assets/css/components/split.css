@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Split component variables */
-div.split {
-	--split-gap: 4rem;
-}
-
 /* Split component extensions */
 div.split {
+	--split-gap: 4rem;
 	align-items: center;
 	background-color: var(--border-bg-color);
 	display: grid;

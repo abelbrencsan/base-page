@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Poster flow component veriables */
-ul.poster-flow {
-	--poster-flow-gap: 4rem;
-}
-
 /* Poster flow component prototype */
 ul.poster-flow {
+	--poster-flow-gap: 4rem;
 	list-style: none;
 	margin: 0 auto var(--element-margin) auto;
 	max-width: calc(var(--container-width) * 2.5);

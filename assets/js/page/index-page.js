@@ -13,6 +13,12 @@ import { Page } from "../page.js";
 class IndexPage extends Page {
 
 	/**
+	 * Represents the configurations for the home page.
+	 * 
+	 * @typedef {Object} HomePageOptions
+	 */
+
+	/**
 	 * Home slider.
 	 * 
 	 * @type {Glider|null}
@@ -114,7 +120,7 @@ class IndexPage extends Page {
 	/**
 	 * Creates an index page.
 	 * 
-	 * @param {Object} options
+	 * @param {HomePageOptions} options
 	 * @returns {Page}
 	 */  
 	constructor(options) {

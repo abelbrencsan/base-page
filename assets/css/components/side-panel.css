@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Side panel component variables */
-aside.side-panel[popover] {
-	--side-panel-toggle-transition: var(--toggle-transition);
-}
-
 /* Side panel component prototype */
 aside.side-panel[popover]:popover-open {
+	--side-panel-toggle-transition: var(--toggle-transition);
 	background-color: var(--bg-color);
 	border: none;
 	bottom: auto;

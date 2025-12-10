@@ -4,17 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Roll component variables */
-div.roll {
-	--roll-max-height: 36rem;
-
-	@media (max-width: 47em) {
-		--roll-max-height: 32rem;
-	}
-}
-
 /* Roll component prototype */
 div.roll {
+	--roll-max-height: 36rem;
 	margin-bottom: var(--element-margin);
 	position: relative;
 
@@ -99,6 +91,7 @@ div.roll {
 	}
 
 	@media (max-width: 47em) {
+		--roll-max-height: 32rem;
 
 		ul.roll-list {
 			

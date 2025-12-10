@@ -4,14 +4,10 @@
  * Licensed under the MIT license
  */
 
-/* Listing component variables */
+/* Listing component prototype */
 ul.listing {
 	--listing--sortable-indicator-size: 2px;
 	--listing-item-meta-list-width: 15rem;
-}
-
-/* Listing component prototype */
-ul.listing {
 	list-style: none;
 	padding-left: 0;
 
@@ -199,10 +195,6 @@ ul.listing-block-list {
 
 /* Listing block list component extensions */
 ul.listing-block-list {
-}
-
-/* Listing block item component variables */
-button.listing-block-item {
 }
 
 /* Listing block item component prototype */

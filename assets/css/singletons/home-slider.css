@@ -4,17 +4,13 @@
  * Licensed under the MIT license
  */
 
-/* Home slider singleton variables */
+/* Home slider singleton prototype */
 div.home-slider.glider {
+	--glider-gap: 0rem;
 	--home-slider-buttons-transition: 300ms ease 1200ms;
 	--home-slider-heading-transition: 300ms ease 400ms;
 	--home-slider-hide-transition-duration: 100ms;
 	--home-slider-subheading-transition: 300ms ease 800ms;
-}
-
-/* Home slider singleton prototype */
-div.home-slider.glider {
-	--glider-gap: 0rem;
 	position: relative;
 
 	ul.glider-list {

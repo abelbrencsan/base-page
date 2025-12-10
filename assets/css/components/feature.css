@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Feature component variables */
-div.feature {
-	--feature-offset: -3rem;
-}
-
 /* Feature component extensions */
 div.feature {
+	--feature-offset: -3rem;
 	align-items: center;
 	display: grid;
 	grid-gap: calc(var(--grid-gap) * 2);

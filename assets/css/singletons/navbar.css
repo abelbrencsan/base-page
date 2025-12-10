@@ -4,7 +4,7 @@
  * Licensed under the MIT license
  */
 
-/* Navbar singleton variables */
+/* Navbar singleton prototype */
 header.navbar {
 	--navbar-offset-bg-color: var(--scheme-dark-bg-color);
 	--navbar-offset-fg-color: var(--scheme-dark-fg-color);
@@ -12,10 +12,6 @@ header.navbar {
 	--navbar-offset-toggle-transition: var(--toggle-transition);
 	--navbar-subnav-transition: var(--transition);
 	--navbar-z-index: 1000;
-}
-
-/* Navbar singleton prototype */
-header.navbar {
 	align-items: center;
 	background-color: var(--border-bg-color);
 	display: flex;
@@ -383,6 +379,10 @@ header.navbar {
 	}
 }
 
+/* Navbar singleton extensions */
+header.navbar {
+}
+
 /* Navbar singleton animations */
 @keyframes navbar-subnav-sweep {
 
@@ -395,8 +395,4 @@ header.navbar {
 		opacity: 1;
 		transform: translate3d(0, 0, 0);
 	}
-}
-
-/* Navbar singleton extensions */
-header.navbar {
 }

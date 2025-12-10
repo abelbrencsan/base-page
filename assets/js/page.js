@@ -8,9 +8,15 @@
 class Page {
 
 	/**
+	 * Represents the configurations for the page.
+	 * 
+	 * @typedef {Object} PageOptions
+	 */
+
+	/**
 	 * Creates a page.
 	 * 
-	 * @param {Object} options
+	 * @param {PageOptions} options
 	 * @returns {Page}
 	 */
 	constructor(options = {}) {}

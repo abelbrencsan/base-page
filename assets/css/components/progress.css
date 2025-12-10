@@ -8,10 +8,6 @@
 progress.progress {
 	--progress-bar-color: var(--border-color);
 	--progress-value-color: var(--link-color);
-}
-
-/* Progress component prototype */
-progress.progress {
 	background-color: var(--progress-bar-color);
 	border-radius: var(--border-radius);
 	border: none;

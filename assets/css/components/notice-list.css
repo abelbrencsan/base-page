@@ -7,10 +7,6 @@
 /* Notice list component prototype */
 ul.notice-list {
 	--notice-list-transition: 300ms ease;
-}
-
-/* Notice list component prototype */
-ul.notice-list {
 	list-style: none;
 	margin-bottom: 0;
 	padding-left: 0;

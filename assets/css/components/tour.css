@@ -4,7 +4,7 @@
  * Licensed under the MIT license
  */
 
-/* Tour component variables */
+/* Tour component prototype */
 div.tour {
 	--tour-bg-color: #333333;
 	--tour-image-lazy-load-transition: 1000ms ease;
@@ -14,10 +14,6 @@ div.tour {
 	--tour-tooltip-fg-color: var(--scheme-dark-fg-bold-color);
 	--tour-transition: var(--transition);
 	--tour-zoom-level: 100%;
-}
-
-/* Tour component prototype */
-div.tour {
 	margin-bottom: var(--element-margin);
 	position: relative;
 

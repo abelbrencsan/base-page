@@ -4,15 +4,11 @@
  * Licensed under the MIT license
  */
 
-/* Tree list component variables */
+/* Tree list component prototype */
 ul.tree-list {
 	--tree-list--sortable-indicator-size: 2px;
 	--tree-list-indent: 2rem;
 	--tree-list-margin: var(--block-margin);
-}
-
-/* Tree list component prototype */
-ul.tree-list {
 	list-style: none;
 	padding-left: 0;
 
@@ -122,13 +118,9 @@ ul.tree-list {
 	}
 }
 
-/* Tree node component variables */
-div.tree-node {
-	--tree-node-meta-list-width: 15rem;
-}
-
 /* Tree node component prototype */
 div.tree-node {
+	--tree-node-meta-list-width: 15rem;
 	align-items: center;
 	background-color: var(--border-bg-color);
 	border-radius: var(--border-radius);
@@ -262,13 +254,9 @@ ul.tree-block-list {
 ul.tree-block-list {
 }
 
-/* Tree block item component variables */
-button.tree-block-item {
-	--tree-block-item-transition: var(--transition);
-}
-
 /* Tree block item component prototype */
 button.tree-block-item {
+	--tree-block-item-transition: var(--transition);
 	background-color: transparent;
 	border: none;
 	cursor: grabbing;

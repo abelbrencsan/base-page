@@ -4,15 +4,11 @@
  * Licensed under the MIT license
  */
 
-/* Button component variables */
+/* Button component prototype */
 a.button, button.button {
 	--button-bg-color: var(--border-color);
 	--button-bg-hover-color: var(--border-hover-color);
 	--button-fg-color: var(--fg-color);
-}
-
-/* Button component prototype */
-a.button, button.button {
 	align-items: center;
 	background-color: var(--button-bg-color);
 	border-radius: var(--border-radius);
@@ -153,14 +149,10 @@ ul.button-list {
 ul.button-group-list {
 }
 
-/* Button subnav component variables */
+/* Button subnav component prototype */
 div.button-subnav {
 	--button-subnav-transition: 200ms ease;
 	--button-subnav-z-index: 999;
-}
-
-/* Button subnav component prototype */
-div.button-subnav {
 	position: relative;
 
 	> ul {

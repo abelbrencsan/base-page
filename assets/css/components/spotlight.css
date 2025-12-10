@@ -4,15 +4,11 @@
  * Licensed under the MIT license
  */
 
-/* Spotlight component variables */
+/* Spotlight component prototype */
 div.spotlight {
 	--spotlight-bg-color: #333333;
 	--spotlight-gap: 4rem;
 	--spotlight-image-lazy-load-transition: 1000ms ease;
-}
-
-/* Spotlight component prototype */
-div.spotlight {
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: flex-start;

@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Metric component variables */
-div.metric {
-	--metric-color: var(--link-color);
-}
-
 /* Metric component prototype */
 div.metric {
+	--metric-color: var(--link-color);
 	background-color: var(--border-bg-color);
 	border-radius: var(--border-radius);
 	display: grid;

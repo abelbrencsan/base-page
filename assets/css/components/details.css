@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Details component variables */
-details.details {
-	--details-transition: var(--transition);
-}
-
 /* Details component prototype */
 details.details {
+	--details-transition: var(--transition);
 	margin-bottom: var(--element-margin);
 	padding: 0 var(--box-padding);
 

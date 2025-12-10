@@ -4,13 +4,9 @@
  * Licensed under the MIT license
  */
 
-/* Slideshow component variables */
-dialog.slideshow.dialog {
-	--slideshow-image-transition: var(--transition);
-}
-
 /* Slideshow component prototype */
 dialog.slideshow.dialog {
+	--slideshow-image-transition: var(--transition);
 	background-color: transparent;
 	box-shadow: none;
 	height: auto;

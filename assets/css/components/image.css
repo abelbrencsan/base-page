@@ -4,15 +4,11 @@
  * Licensed under the MIT license
  */
 
-/* Image component variables */
-div.image, a.image {
-	--image-lazy-load-transition: 1000ms ease;
-	--image-cover-transition: var(--transition);
-	--image-bg-color: #333333;
-}
-
 /* Image component prototype */
 div.image, a.image {
+	--image-bg-color: #333333;
+	--image-cover-transition: var(--transition);
+	--image-lazy-load-transition: 1000ms ease;
 	background-color: var(--image-bg-color);
 	border-radius: var(--border-radius);
 	display: block;

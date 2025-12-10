@@ -4,14 +4,10 @@
  * Licensed under the MIT license
  */
 
-/* Pagination component variables */
+/* Pagination component prototype */
 ul.pagination {
 	--pagination-button-bg-hover-color: var(--border-hover-color);
 	--pagination-transition: var(--transition);
-}
-
-/* Pagination component prototype */
-ul.pagination {
 	align-items: center;
 	display: flex;
 	flex-flow: row wrap;

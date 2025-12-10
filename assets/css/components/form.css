@@ -84,13 +84,9 @@ select.form-input {
 	}
 }
 
-/* Form control component variable */
-label.form-control {
-	--form-control-switch-transition: 200ms ease;
-}
-
 /* Form control component prototype */
 label.form-control {
+	--form-control-switch-transition: 200ms ease;
 	display: inline-flex;
 
 	input {

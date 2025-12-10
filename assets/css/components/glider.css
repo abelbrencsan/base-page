@@ -4,14 +4,10 @@
  * Licensed under the MIT license
  */
 
-/* Glider component variables */
+/* Glider component prototype */
 div.glider {
 	--glider-gap: var(--grid-gap);
 	--glider-width: calc(100% + var(--glider-gap));
-}
-
-/* Glider component prototype */
-div.glider {
 
 	ul.glider-list {
 		display: flex;
