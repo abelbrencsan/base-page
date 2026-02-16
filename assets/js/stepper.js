@@ -38,9 +38,9 @@ class Stepper {
 	/**
 	 * Function that is called to handle how the current value is rendered in the indicator.
 	 * 
-	 * @type {function(number):void|null}
+	 * @type {function(number):string}
 	 */
-	formatter = (value) => value;
+	formatter = (value) => value.toString();
 
 	/**
 	 * Callback function that is called after the stepper has been initialized.
@@ -64,7 +64,7 @@ class Stepper {
 	 * @param {HTMLButtonElement} options.stepUpTrigger
 	 * @param {HTMLButtonElement} options.stepDownTrigger
 	 * @param {HTMLElement|null} options.indicator
-	 * @param {function(number):void|null} options.formatter
+	 * @param {function(number):string} options.formatter
 	 * @param {function():void} options.initCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {Stepper}

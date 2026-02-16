@@ -76,6 +76,13 @@ class Chart {
 	 * @type {boolean}
 	 */
 	showArea = true;
+
+	/**
+	 * Indicates whether a tooltip is shown while a data is hovered within a dataset.
+	 * 
+	 * @type {boolean}
+	 */
+	showTooltip = true;
 	
 	/**
 	 * Indicates whether the pie chart is displayed as a donut chart.
@@ -148,6 +155,20 @@ class Chart {
 	datasetDonutClass = "chart-plot-dataset-donut";
 
 	/**
+	 * The class that is added to the tooltip.
+	 * 
+	 * @type {string}
+	 */
+	tooltipClass = "chart-tooltip";
+
+	/**
+	 * The class that is added to the tooltip while a data is hovered within a dataset.
+	 * 
+	 * @type {string}
+	 */
+	isTooltipVisibleClass = "is-visible";
+
+	/**
 	 * The format in which the class that defines the grid lines is added to the chart.
 	 * 
 	 * @type {function(number):string}
@@ -174,6 +195,13 @@ class Chart {
 	 * @type {string}
 	 */
 	datasetDataAttribute = "data-chart-dataset-data";
+
+	/**
+	 * Function that is called to handle how the value is rendered in the tooltip.
+	 * 
+	 * @type {function(number):string}
+	 */
+	tooltipFormatter = (value) => value.toString();
 
 	/**
 	 * The factor by which the highest data point is multiplied to calculate the X-axis value.
@@ -204,6 +232,13 @@ class Chart {
 	destroyCallback = null;
 
 	/**
+	 * Represents the tooltip that displays the value of a data within a dataset.
+	 * 
+	 * @type {HTMLElement|null}
+	 */
+	tooltip = null;
+
+	/**
 	 * Available chart types.
 	 * 
 	 * @type {string[]}
@@ -222,6 +257,7 @@ class Chart {
 	 * @param {number} options.barThickness
 	 * @param {number} options.roundness
 	 * @param {boolean} options.showArea
+	 * @param {boolean} options.showTooltip
 	 * @param {boolean} options.isDonut
 	 * @param {boolean} options.isGauge
 	 * @param {string} options.chartBarClass
@@ -232,10 +268,13 @@ class Chart {
 	 * @param {string} options.datasetAreaClass
 	 * @param {string} options.datasetLineClass
 	 * @param {string} options.datasetDonutClass
+	 * @param {string} options.tooltipClass
+	 * @param {string} options.isTooltipVisibleClass
 	 * @param {function(number):string} options.gridLineClass
 	 * @param {function(number):string} options.datasetItemClass
 	 * @param {function(number):string} options.datasetDataItemClass
 	 * @param {string} options.datasetDataAttribute
+	 * @param {function(number):string} options.tooltipFormatter
 	 * @param {number} options.AxisMultiplier
 	 * @param {function(Chart):void} options.initCallback
 	 * @param {function(Chart):void} options.updateCallback
@@ -276,7 +315,10 @@ class Chart {
 		}
 
 		// Initialize the chart
+		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#setViewport();
+		this.#createTooltip();
+		this.#addEvents();
 		this.update();
 		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
@@ -298,11 +340,13 @@ class Chart {
 	 * @returns {void}
 	 */
 	destroy() {
+		this.#removeEvents();
 		this.wrapper.replaceChildren();
 		this.wrapper.classList.remove(this.chartBarClass);
 		this.wrapper.classList.remove(this.chartLineClass);
 		this.wrapper.classList.remove(this.chartPieClass);
 		this.wrapper.removeAttribute("viewBox");
+		if (this.tooltip) this.tooltip.remove();
 		if (typeof(this.destroyCallback) == "function") this.destroyCallback(this);
 	}
 
@@ -742,6 +786,165 @@ class Chart {
 	#getPieSliceAngles(dataset) {
 		let sum = dataset.reduce((total, current) => (total + current), 0);
 		return dataset.map((data) => ((data / sum) * (this.isPieGauge ? 180 : 360)));
+	}
+
+	/**
+	 * Adds event listeners related to the chart.
+	 * 
+	 * @returns {void}
+	 */
+	#addEvents() {
+		if (this.showTooltip) {
+			this.wrapper.addEventListener("mousemove", this);
+			this.wrapper.addEventListener("mouseleave", this);
+		}
+	}
+
+	/**
+	 * Removes event listeners related to the chart.
+	 * 
+	 * @returns {void}
+	 */
+	#removeEvents() {
+		this.wrapper.removeEventListener("mousemove", this);
+		this.wrapper.removeEventListener("mouseleave", this);
+	}
+
+	/**
+	 * Handles events.
+	 * 
+	 * @param {Event} event
+	 * @returns {void}
+	 */
+	#handleEvents(event) {
+		switch (event.type) {
+			case "mousemove":
+				if (event.target.hasAttribute(this.datasetDataAttribute)) {
+					this.#showTooltip(event.target, event.clientX, event.clientY);
+				} else {
+					this.#hideTooltip();
+				}
+				break;
+			case "mouseleave":
+				this.#hideTooltip();
+				break;
+		}
+	}
+
+	/**
+	 * Creates the tooltip.
+	 * 
+	 * @returns {void}
+	 */
+	#createTooltip() {
+		if (!this.showTooltip) return;
+		this.tooltip = document.createElement("span");
+		this.tooltip.classList.add(this.tooltipClass);
+		this.wrapper.before(this.tooltip);
+	}
+
+	/**
+	 * Displays the tooltip.
+	 * 
+	 * @param {SVGElement} target
+	 * @param {number} clientX
+	 * @param {number} clienty
+	 * @returns {void}
+	 */
+	#showTooltip(target, clientX, clienty) {
+		if (!this.tooltip) return;
+		const value = Number(target.getAttribute(this.datasetDataAttribute));
+		if (!isNaN(value)) {
+			const formattedValue = this.tooltipFormatter(value);
+			this.tooltip.innerText = formattedValue;
+			this.tooltip.classList.add(this.isTooltipVisibleClass);
+			this.#setTooltipCoords(target, clientX, clienty);
+		}
+	}
+
+	/**
+	 * Sets the X and Y coordinates of the tooltip.
+	 * 
+	 * @param {SVGElement} target
+	 * @param {number} clientX
+	 * @param {number} clienty
+	 * @returns {void}
+	 */
+	#setTooltipCoords(target, clientX, clienty) {
+		if (!this.tooltip) return;
+		const { x, y } = this.#getTooltipCoords(target, clientX, clienty);
+		this.tooltip.style.left = `${x}px`;
+		this.tooltip.style.top = `${y}px`;
+	}
+
+	/**
+	 * Retrieves the X and Y coordinates of the tooltip.
+	 * 
+	 * @param {SVGElement} target
+	 * @param {number} clientX
+	 * @param {number} clienty
+	 * @returns {{x: number, y: number}}
+	 */
+	#getTooltipCoords(target, clientX, clienty) {
+		switch(this.type) {
+			case "bar":
+				return this.#getTooltipStaticCoords(target, clientX, clienty);
+			case "line":
+				return this.#getTooltipStaticCoords(target, clientX, clienty);
+			case "pie":
+				return this.#getTooltipCursorCoords(target, clientX, clienty);
+		}
+	}
+
+	/**
+	 * Retrieves the X and Y coordinates of the tooltip based on the target position.
+	 * 
+	 * @param {SVGElement} target
+	 * @param {number} clientX
+	 * @param {number} clienty
+	 * @returns {{x: number, y: number}}
+	 */
+	#getTooltipStaticCoords(target, clientX, clienty) {
+		if (!this.tooltip) return { x: 0, y: 0 };
+		const rootRect = this.wrapper.parentElement.getBoundingClientRect();
+		const targetRect = target.getBoundingClientRect();
+		const targetLeft = targetRect.left - rootRect.left;
+		const targetTop = targetRect.top - rootRect.top;
+		const leftOffset = (targetRect.width - this.tooltip.offsetWidth) * 0.5;
+		const topOffset = this.tooltip.offsetHeight;
+		return {
+			x: targetLeft + leftOffset,
+			y: targetTop - topOffset
+		};
+	}
+
+	/**
+	 * Retrieves the X and Y coordinates of the tooltip based on the cursor position.
+	 * 
+	 * @param {SVGElement} target
+	 * @param {number} clientX
+	 * @param {number} clienty
+	 * @returns {{x: number, y: number}}
+	 */
+	#getTooltipCursorCoords(target, clientX, clienty) {
+		const rootRect = this.wrapper.parentElement.getBoundingClientRect();
+		return {
+			x: clientX - rootRect.left - (this.tooltip.offsetWidth * 0.5),
+			y: clienty - rootRect.top - this.tooltip.offsetHeight
+		};
+	}
+
+	/**
+	 * Hides the tooltip.
+	 * 
+	 * @returns {void}
+	 */
+	#hideTooltip() {
+		if (!this.tooltip) return;
+		this.tooltip.innerText = "";
+		this.tooltip.style.left = "";
+		this.tooltip.style.top = "";
+		this.tooltip.classList.remove(this.isTooltipVisibleClass);
 	}
 
 	/**

@@ -10,7 +10,6 @@ div.quickview[popover]:popover-open {
 	--quickview-close-button-bg-hover-color: var(--palette-secondary-bg-hover-color);
 	--quickview-close-button-fg-color: var(--palette-secondary-fg-color);
 	--quickview-toggle-transition: var(--toggle-transition);
-	--quickview-transition: var(--transition);
 	background-color: var(--bg-color);
 	border-radius: var(--border-radius);
 	border: none;
@@ -69,7 +68,6 @@ div.quickview[popover]:popover-open {
 		position: absolute;
 		right: calc(var(--grid-gap) * 0.5);
 		top: calc(var(--grid-gap) * 0.5);
-		transition: background-color var(--quickview-transition);
 		user-select: none;
 		width: calc(var(--element-height) * 0.75);
 

@@ -4,6 +4,7 @@ import { Dropdown } from "../js/dropdown.js";
 import { Glider } from "../js/glider.js";
 import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
+import { LiveFilter, LiveFilterItem } from "../js/live-filter.js";
 import { MemoryGame, MemoryGameCard } from "../js/memory-game.js";
 import { Notice } from "../js/notice.js";
 import { PopupManager, PopupManagerPopup } from "../js/popup-manager.js";
@@ -199,6 +200,13 @@ class App {
 	quizzes = [];
 
 	/**
+	 * List of live filters.
+	 * 
+	 * @type {LiveFilter[]}
+	 */
+	liveFilters = [];
+
+	/**
 	 * The current page.
 	 * 
 	 * @type {Page|null}
@@ -247,6 +255,7 @@ class App {
 		this.#initTours();
 		this.#initMemoryGames();
 		this.#initQuizzes();
+		this.#initLiveFilters();
 		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
@@ -792,6 +801,41 @@ class App {
 		return Array.from(optionElems).reduce((acc, optionElem) => {
 			return parseInt(optionElem.value) + acc;
 		}, 0);
+	}
+
+	/**
+	 * Initializes the live filters
+	 * 
+	 * @returns {void}
+	 */
+	#initLiveFilters() {
+		let elems = document.querySelectorAll("[data-live-filter]");
+		elems.forEach((elem) => {
+			let items = this.#initLiveFilterItems(elem);
+			this.liveFilters.push(new LiveFilter({
+				wrapper: elem,
+				input: elem.querySelector("[data-live-filter-input]"),
+				items: items
+			}));
+		});
+	}
+
+	/**
+	 * Retrieves a list of live filter items under the specified element.
+	 * 
+	 * @param {Element} elem
+	 * @returns {LiveFilterItem[]}
+	 */
+	#initLiveFilterItems(elem) {
+		let items = [];
+		let itemElems = elem.querySelectorAll("[data-live-filter-item]");
+		itemElems.forEach((itemElem) => {
+			items.push(new LiveFilterItem({
+				wrapper: itemElem,
+				content: itemElem.innerText
+			}));
+		});
+		return items;
 	}
 
 	/**

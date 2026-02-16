@@ -19,7 +19,7 @@ aside.side-panel[popover]:popover-open {
 	top: 0;
 	transform: translate3d(0, 0, 0);
 	transition: transform var(--side-panel-toggle-transition), opacity var(--side-panel-toggle-transition);
-	width: 18rem;
+	width: 22rem;
 
 	> h1, > h2, > h3, > h4, > h5, > h6, >.heading {
 		font-size: var(--heading-3-font-size);
@@ -98,6 +98,10 @@ aside.side-panel[popover]:popover-open {
 	@starting-style {
 		opacity: 0;
 		transform: translate3d(3rem, 0, 0);
+	}
+
+	@media (max-width: 32em) {
+		width: 100%;
 	}
 }
 

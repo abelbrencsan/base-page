@@ -106,8 +106,8 @@ class Validator {
 	 * @param {HTMLFormElement} options.form
 	 * @param {string} options.invalidInputClass
 	 * @param {string} options.validInputClass
-	 * @param {Object} options.messages
-	 * @param {Object} options.messageAttrs
+	 * @param {Object<string, string>} options.messages
+	 * @param {Object<string, string>} options.messageAttrs
 	 * @param {function():void} options.initCallback
 	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void} options.invalidCallback
 	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void} options.validCallback

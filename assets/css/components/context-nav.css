@@ -24,7 +24,6 @@ nav.context-nav {
 			grid-column-gap: var(--grid-gap);
 			grid-template-areas: "icon heading" "icon summary";
 			grid-template-columns: auto 1fr;
-			padding-left: 0;
 			padding: var(--box-padding);
 			position: relative;
 

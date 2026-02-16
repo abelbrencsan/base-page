@@ -222,7 +222,7 @@ header.navbar {
 				top: 0;
 				transform: translate3d(0, 0, 0);
 				transition: transform var(--navbar-offset-toggle-transition), opacity var(--navbar-offset-toggle-transition);
-				width: 18rem;
+				width: 22rem;
 
 				&::backdrop {
 					backdrop-filter: blur(2px);
@@ -374,6 +374,16 @@ header.navbar {
 				&:hover, &:active {
 					color: var(--navbar-offset-link-color);
 				}
+			}
+		}
+	}
+
+	@media (max-width: 32em) {
+
+		nav.navbar-nav {
+
+			&[popover]:popover-open {
+				width: 100%;
 			}
 		}
 	}

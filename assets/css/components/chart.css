@@ -18,6 +18,7 @@ div.chart {
 	grid-template-areas: "heading heading" "labels plot" ". categories" ". legends";
 	grid-template-columns: auto 1fr;
 	margin-bottom: var(--element-margin);
+	position: relative;
 
 	h1, h2, h3, h4, h5, h6, .heading {
 		font-size: var(--large-font-size);
@@ -62,6 +63,48 @@ div.chart {
 		--chart-color-6: color-mix(in hsl, #3498DB, #9B59B6 75%);
 		--chart-color-7: color-mix(in hsl, #3498DB, #9B59B6 90%);
 	}
+}
+
+/* Chart tooltip component prototype */
+span.chart-tooltip {
+	--chart-tooltip-bg-color: var(--scheme-dark-bg-color);
+	--chart-tooltip-fg-color: var(--scheme-dark-fg-bold-color);
+	background-color: var(--chart-tooltip-bg-color);
+	border-radius: var(--border-radius);
+	color: var(--chart-tooltip-fg-color);
+	display: none;
+	font-size: var(--small-font-size);
+	font-weight: var(--bold-font-weight);
+	min-width: 3em;
+	padding: 0.25em 0.5em;
+	pointer-events: none;
+	position: absolute;
+	text-align: center;
+	white-space: nowrap;
+
+	&:before {
+		background-color: var(--chart-tooltip-bg-color);
+		bottom: 0;
+		clip-path: polygon(0 0, 50% 100%, 100% 0);
+		content: "";
+		height: var(--box-arrow);
+		left: 50%;
+		position: absolute;
+		transform: translate3d(-50%, calc(var(--box-arrow) - 1px), 0);
+		width: calc(var(--box-arrow) * 2);
+	}
+
+	&.is-visible {
+		display: block;
+	}
+
+	div.chart.chart--bar &, div.chart.chart--line &, div.chart.chart--pie & {
+		transform: translate3d(0, calc(var(--box-arrow) * -1), 0);
+	}
+}
+
+/* Chart tooltip component extension */
+span.chart-tooltip {
 }
 
 /* Chart plot component prototype */
@@ -301,7 +344,7 @@ svg.chart-plot {
 				}
 
 				circle.chart-plot-dataset-data {
-					stroke-width: 4px;
+					stroke-width: 12px;
 				}
 			}
 		}

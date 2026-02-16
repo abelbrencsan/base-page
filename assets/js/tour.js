@@ -274,7 +274,7 @@ class Tour {
 		if (options.scenes.length == 0) {
 			throw 'Tour \"scenes\" must include at least one scene';
 		}
-		options.scenes.forEach((scene, index) => {
+		options.scenes.forEach((scene) => {
 			if (!(scene instanceof TourScene)) {
 				throw 'Tour scene must be a `TourScene`';
 			}
