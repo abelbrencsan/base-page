@@ -18,7 +18,7 @@ ul.listing {
 		grid-column-gap: calc(var(--grid-gap) * 0.5);
 		grid-template-areas: "control heading meta actions" "control subheading meta actions";
 		grid-template-columns: auto 1fr var(--listing-item-meta-list-width) auto;
-		padding: calc(var(--box-padding) * 0.5);
+		padding: var(--cell-padding);
 
 		div.image, a.image, div.listing-item-sort-trigger {
 			grid-area: control;
@@ -199,24 +199,18 @@ ul.listing-block-list {
 
 /* Listing block item component prototype */
 button.listing-block-item {
-	background-color: transparent;
+	align-items: center;
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
 	border: none;
 	cursor: grabbing;
-	padding: 0;
+	display: flex;
+	font-weight: var(--bold-font-weight);
+	height: calc(var(--element-height) * 1.5);
+	justify-content: center;
+	padding: 0 1.2em;
 	text-align: left;
 	width: 10rem;
-
-	span {
-		align-items: center;
-		background-color: var(--border-bg-color);
-		border-radius: var(--border-radius);
-		border: none;
-		display: flex;
-		font-weight: var(--bold-font-weight);
-		height: calc(var(--element-height) * 1.5);
-		justify-content: center;
-		padding: 0 1.2em;
-	}
 
 	svg.icon {
 		margin-right: 0.5rem;
@@ -224,11 +218,8 @@ button.listing-block-item {
 
 	@media (hover: hover) {
 
-		span {
-
-			&:hover, &:active {
-				background-color: var(--border-color);
-			}
+		&:hover, &:active {
+			background-color: var(--border-color);
 		}
 	}
 }

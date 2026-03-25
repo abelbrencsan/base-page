@@ -4,7 +4,7 @@
  * Licensed under the MIT license
  */
 
-/* Section component */
+/* Section component prototype */
 section.section, div.section {
 	padding: var(--section-padding) 0 calc(var(--section-padding) - var(--element-margin)) 0;
 }

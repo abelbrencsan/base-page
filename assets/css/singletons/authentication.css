@@ -18,9 +18,8 @@ main.authentication {
 	}
 
 	header.header {
-		margin-bottom: calc(var(--element-margin) * 0.5);
+		margin-bottom: var(--heading-margin);
 		
-
 		h1, h2, h3, h4, h5, h6 {
 			font-size: var(--heading-2-font-size);
 		}
@@ -92,7 +91,7 @@ main.authentication {
 		align-items: center;
 		color: inherit;
 		display: inline-flex;
-		margin-top: calc(var(--element-margin) * 0.5);
+		margin-top: var(--heading-margin);
 		text-decoration: none;
 		user-select: none;
 

@@ -251,7 +251,7 @@ class Tab {
 		switch (event.type) {
 			case "click":
 				this.triggers.forEach((trigger, index) => {
-					if (trigger === event.target) {
+					if (trigger.contains(event.target)) {
 						this.select(index);
 					}
 				});

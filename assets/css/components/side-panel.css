@@ -57,11 +57,7 @@ aside.side-panel[popover]:popover-open {
 		color: inherit;
 		cursor: pointer;
 		display: flex;
-		font-family: var(--nav-font-family);
-		font-weight: var(--nav-font-weight);
 		height: var(--navbar-height);
-		letter-spacing: var(--nav-letter-spacing);
-		line-height: var(--nav-line-height);
 		padding: 0 var(--box-padding) 0 3rem;
 		position: absolute;
 		right: 0;

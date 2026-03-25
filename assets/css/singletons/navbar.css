@@ -86,10 +86,7 @@ header.navbar {
 			position: relative;
 
 			> a, > button {
-				font-family: var(--nav-font-family);
-				font-weight: var(--nav-font-weight);
-				letter-spacing: var(--nav-letter-spacing);
-				line-height: var(--nav-line-height);
+				font-weight: var(--bold-font-weight);
 			}
 
 			> ul {
@@ -330,10 +327,6 @@ header.navbar {
 			border: none;
 			color: inherit;
 			cursor: pointer;
-			font-family: var(--nav-font-family);
-			font-weight: var(--nav-font-weight);
-			letter-spacing: var(--nav-letter-spacing);
-			line-height: var(--nav-line-height);
 			padding: 0;
 			text-align: left;
 		}

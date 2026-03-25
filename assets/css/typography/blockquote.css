@@ -35,6 +35,6 @@ blockquote {
 		display: block;
 		font-size: var(--normal-font-size);
 		font-style: normal;
-		margin-top: calc(var(--element-margin) * 0.5);
+		margin-top: var(--heading-margin);
 	}
 }

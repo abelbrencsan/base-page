@@ -22,6 +22,7 @@ import { Validator } from "../js/validator.js";
  * Application
  * This class is designed to handle the workflow of the application.
  * 
+ * @import { Page } from "../js/page.js"
  * @author Abel Brencsan
  * @license MIT License
  */
@@ -864,7 +865,7 @@ class App {
 	 * @returns {void}
 	 */
 	#detectBreakpointChange() {
-		Object.entries(App.breakpoints).forEach(([, query]) => {
+		Object.entries(App.breakpoints).forEach(([name, query]) => {
 			let mediaQueryList = window.matchMedia(query);
 			this.#switchNavbarType(mediaQueryList);
 			mediaQueryList.addEventListener("change", (event) => {

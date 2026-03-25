@@ -16,7 +16,6 @@
 	--fg-color: var(--scheme-dark-fg-color);
 	--fg-light-color: var(--scheme-dark-fg-light-color);
 	--link-color: var(--scheme-dark-link-color);
-	--link-color: var(--scheme-dark-link-color);
 	--translucent-bg-color: var(--scheme-dark-translucent-bg-color);
 
 	/* State colors */

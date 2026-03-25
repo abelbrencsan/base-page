@@ -49,7 +49,6 @@ h1, h2, h3, h4, h5, h6, .heading {
 	&.heading-block {
 		border-bottom: 2px solid var(--border-color);
 		font-size: var(--large-font-size);
-		margin-bottom: calc(var(--element-margin) * 0.5);
 		padding-bottom: var(--block-margin);
 	}
 }

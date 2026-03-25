@@ -145,10 +145,6 @@ ul.button-list {
 	}
 }
 
-/* Button group component extensions */
-ul.button-group-list {
-}
-
 /* Button subnav component prototype */
 div.button-subnav {
 	--button-subnav-transition: 200ms ease;

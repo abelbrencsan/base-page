@@ -15,21 +15,14 @@ table {
 		text-align: center;
 	}
 
-	th {
-		color: var(--fg-bold-color);
-		font-family: var(--heading-font-family);
-		font-weight: var(--heading-font-weight);
-		letter-spacing: var(--heading-letter-spacing);
-		line-height: var(--heading-line-height);
-	}
-
 	td, th {
-		padding: 0.75rem;
+		padding: var(--cell-padding);
 		text-align: left;
 	}
 
 	thead th {
 		border-bottom: 2px solid var(--border-color);
+		font-weight: var(--bold-font-weight);
 	}
 
 	tbody tr:nth-of-type(odd) {
@@ -37,6 +30,7 @@ table {
 	}
 
 	tfoot td {
+		border-top: 2px solid var(--border-color);
 		font-weight: var(--bold-font-weight);
 	}
 }

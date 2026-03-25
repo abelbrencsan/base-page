@@ -24,15 +24,12 @@ dl {
 	dt {
 		color: var(--fg-bold-color);
 		display: block;
-		font-family: var(--heading-font-family);
-		font-weight: var(--heading-font-weight);
-		letter-spacing: var(--heading-letter-spacing);
-		line-height: var(--heading-line-height);
+		font-weight: var(--bold-font-weight);
 		margin: 0 0 var(--block-margin) 0;
 	}
 
 	dd {
-		margin-bottom: calc(var(--element-margin) * 0.5);
+		margin-bottom: var(--heading-margin);
 		margin-left: var(--box-padding);
 	}
 }
@@ -45,7 +42,7 @@ ul, ol {
 		padding-left: 0;
 
 		> li {
-			padding: var(--block-margin) calc(var(--box-padding) * 0.5);
+			padding: var(--block-margin) var(--cell-padding);
 
 			&:nth-child(odd) {
 				background-color: var(--border-bg-color);
@@ -75,12 +72,11 @@ dl {
 
 		dt {
 			font-size: var(--small-font-size);
-			font-weight: var(--bold-font-weight);
-			padding-left: calc(var(--box-padding) * 0.5);
+			padding-left: var(--cell-padding);
 		}
 
 		dd {
-			padding-right: calc(var(--box-padding) * 0.5);
+			padding-right: var(--cell-padding);
 			text-align: right;
 		}
 	}

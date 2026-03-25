@@ -91,7 +91,9 @@ select.form-input {
 /* Form control component prototype */
 label.form-control {
 	--form-control-switch-transition: 200ms ease;
+	-webkit-user-select: none;
 	display: inline-flex;
+	user-select: none;
 
 	input {
 		border: 0;
@@ -468,6 +470,7 @@ div.form-item {
 			display: flex;
 			grid-area: input;
 			height: var(--element-height);
+			overflow: hidden;
 			padding-left: 0.5em;
 			padding-right: 0.5em;
 			user-select: none;
@@ -489,7 +492,7 @@ div.form-item {
 		}
 
 		&[data-label]:after {
-			top: 0;
+			top: calc(100% + calc(var(--block-margin) * 0.5));
 		}
 	}
 }

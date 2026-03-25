@@ -129,7 +129,7 @@ div.tree-node {
 	grid-template-areas: "control heading meta actions" "control subheading meta actions";
 	grid-template-columns: auto 1fr var(--tree-node-meta-list-width) auto;
 	margin-bottom: var(--element-margin);
-	padding: calc(var(--box-padding) * 0.5); 
+	padding: var(--cell-padding); 
 
 	div.image, a.image, div.tree-node-sort-trigger {
 		grid-area: control;
@@ -256,25 +256,18 @@ ul.tree-block-list {
 
 /* Tree block item component prototype */
 button.tree-block-item {
-	--tree-block-item-transition: var(--transition);
-	background-color: transparent;
+	align-items: center;
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
 	border: none;
 	cursor: grabbing;
-	padding: 0;
+	display: flex;
+	font-weight: var(--bold-font-weight);
+	height: calc(var(--element-height) * 1.5);
+	justify-content: center;
+	padding: 0 1.2em;
 	text-align: left;
 	width: 10rem;
-
-	span {
-		align-items: center;
-		background-color: var(--border-bg-color);
-		border-radius: var(--border-radius);
-		border: none;
-		display: flex;
-		font-weight: var(--bold-font-weight);
-		height: calc(var(--element-height) * 1.5);
-		justify-content: center;
-		padding: 0 1.2em;
-	}
 
 	svg.icon {
 		margin-right: 0.5rem;
@@ -282,11 +275,8 @@ button.tree-block-item {
 
 	@media (hover: hover) {
 
-		span {
-
-			&:hover, &:active {
-				background-color: var(--border-color);
-			}
+		&:hover, &:active {
+			background-color: var(--border-color);
 		}
 	}
 }

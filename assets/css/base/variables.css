@@ -9,14 +9,15 @@
 
 	/* Size variables */
 	--block-margin: 0.5rem;
-	--heading-margin: 1rem;
 	--border-radius: 6px;
 	--box-arrow: 10px;
 	--box-padding: 1.5rem;
+	--cell-padding: 0.75rem;
 	--container-width: 60rem;
 	--element-height: 2.5em;
 	--element-margin: 2.5rem;
 	--grid-gap: 1.5rem;
+	--heading-margin: 1.25rem;
 	--navbar-height: 4rem;
 	--section-padding: 4rem;
 
@@ -51,26 +52,22 @@
 	--base-font-family: "Source Sans Pro", sans-serif;
 	--fixed-font-family: "Source Code Pro", monospace;
 	--heading-font-family: "Source Sans Pro", sans-serif;
-	--nav-font-family: "Source Sans Pro", sans-serif;
 
 	/* Font weights */
 	--base-font-weight: var(--normal-font-weight);
 	--fixed-font-weight: var(--normal-font-weight);
 	--heading-font-weight: var(--normal-font-weight);
 	--subheading-font-weight: var(--normal-font-weight);
-	--nav-font-weight: var(--bold-font-weight);
 
 	/* Font line heights */
 	--base-line-height: 1.5;
 	--fixed-line-height: 1.5;
 	--heading-line-height: 1.5;
-	--nav-line-height: 1.5;
 
 	/* Font letter spacing */
 	--base-letter-spacing: 0;
 	--fixed-letter-spacing: 0;
 	--heading-letter-spacing: 0;
-	--nav-letter-spacing: 0;
 
 	/* Box shadows */
 	--bold-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.05), 0px 0px 20px rgba(0, 0, 0, 0.025);
@@ -162,7 +159,7 @@
 
 	@media (max-width: 32em) {
 
-		/* Font size variables */
+		/* Size variables */
 		--box-padding: 1rem;
 	}
 }
