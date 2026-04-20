@@ -805,7 +805,7 @@ class App {
 	}
 
 	/**
-	 * Initializes the live filters
+	 * Initializes the live filters.
 	 * 
 	 * @returns {void}
 	 */

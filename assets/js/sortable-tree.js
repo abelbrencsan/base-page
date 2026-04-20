@@ -148,6 +148,13 @@ class SortableTree {
 	isDroppedCallback = null;
 
 	/**
+	 * Callback function that is called after a block is clicked.
+	 * 
+	 * @type {function(HTMLElement):void|null}
+	 */
+	isBlockClickedCallback = null;
+
+	/**
 	 * Callback function that is called after the sortable tree has been destroyed.
 	 * 
 	 * @type {function():void|null}
@@ -192,6 +199,7 @@ class SortableTree {
 	 * @param {function(HTMLElement):void} options.isDraggedOverCallback
 	 * @param {function():void} options.isDraggingEndedCallback
 	 * @param {function(HTMLElement):void} options.isDroppedCallback
+	 * @param {function(HTMLElement):void} options.isBlockClickedCallback
 	 * @param {function():void} options.destroyCallback
 	 * @returns {SortableTree}
 	 */
@@ -399,6 +407,7 @@ class SortableTree {
 			if (createdNode) {
 				this.wrapper.appendChild(createdNode);
 			}
+			if (typeof(this.isBlockClickedCallback) == "function") this.isBlockClickedCallback(block);
 		}
 	}
 

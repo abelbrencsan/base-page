@@ -1,6 +1,6 @@
 /**
  * Router
- * This class is designed to routing for single page applications.
+ * This class is designed to handle routing between endpoints within the page.
  * 
  * @author Abel Brencsan
  * @license MIT License
