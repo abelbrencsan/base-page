@@ -13,9 +13,9 @@ import { Page } from "../page.js";
 class IndexPage extends Page {
 
 	/**
-	 * Represents the configurations for the home page.
+	 * Represents the configurations for the index page.
 	 * 
-	 * @typedef {Object} HomePageOptions
+	 * @typedef {Object} IndexPageOptions
 	 */
 
 	/**
@@ -120,7 +120,7 @@ class IndexPage extends Page {
 	/**
 	 * Creates an index page.
 	 * 
-	 * @param {HomePageOptions} options
+	 * @param {IndexPageOptions} options
 	 * @returns {Page}
 	 */  
 	constructor(options) {
