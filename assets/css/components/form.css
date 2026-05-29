@@ -415,7 +415,7 @@ div.form-item {
 		pointer-events: none;
 		position: absolute;
 		right: 0;
-		top: calc(100% + calc(var(--block-margin) * 0.5));
+		top: calc(100% + calc(var(--block-margin) * 0.125));
 	}
 
 	&[data-label=""]:after {

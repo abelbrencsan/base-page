@@ -146,84 +146,96 @@ ul.button-list {
 }
 
 /* Button subnav component prototype */
-div.button-subnav {
-	--button-subnav-transition: 200ms ease;
-	--button-subnav-z-index: 999;
+ul.button-subnav[popover] {
+	background-color: var(--bg-color);
+	border-radius: var(--border-radius);
+	border: none;
+	box-shadow: var(--bold-box-shadow);
+	color: inherit;
+	list-style: none;
+	margin: 0;
+	min-width: 10rem;
+	opacity: 1;
+	overflow: visible;
+	padding: 0;
+	position-area: bottom span-left;
 	position: relative;
+	top: var(--box-arrow);
+	transform: translate3d(0, 0, 0);
+	transition: transform var(--transition), opacity var(--transition);
 
-	> ul {
-		background-color: var(--bg-color);
-		border-radius: var(--border-radius);
-		box-shadow: var(--bold-box-shadow);
-		left: 0;
-		list-style: none;
-		margin: 0;
-		opacity: 0;
-		padding-left: 0;
-		position: absolute;
-		text-align: left;
-		top: 100%;
-		transform: translate3d(0, 1rem, 0);
-		transition: visibility var(--button-subnav-transition), transform var(--button-subnav-transition), opacity var(--button-subnav-transition);
-		visibility: hidden;
-		z-index: var(--button-subnav-z-index);
+	> li {
+		padding: 0 var(--cell-padding);
 
-		> li {
-			padding: 0 var(--box-padding);
+		> a, > button {
+			-webkit-user-select: none;
+			align-items: center;
+			border-radius: var(--border-radius);
+			color: inherit;
+			display: flex;
+			padding: var(--block-margin);
+			user-select: none;
 
-			> a, > button {
-				color: inherit;
-				display: block;
-				padding: var(--block-margin);
-				text-decoration: none;
-				white-space: nowrap;
+			> svg.icon {
+				margin-right: 0.5rem;
+			}
 
-				@media (hover: hover) {
+			@media (hover: hover) {
 
-					&:hover, &:active {
-						color: var(--link-color);
-					}
+				&:hover, &:active {
+					color: var(--link-color);
 				}
 			}
-
-			> button {
-				background-color: transparent;
-				border: none;
-				cursor: pointer;
-				text-align: left;
-				width: 100%;
-			}
-
-			&:first-child {
-				padding-top: var(--box-padding);
-			}
-
-			&:last-child {
-				padding-bottom: var(--box-padding);
-			}
 		}
 
-		&:before {
-			background-color: var(--bg-color);
-			bottom: 100%;
-			clip-path: polygon(50% 0, 0 100%, 100% 100%);
-			content: "";
-			height: var(--box-arrow);
-			left: var(--grid-gap);
-			position: absolute;
-			width: calc(var(--box-arrow) * 2);
+		> a {
+			text-decoration: none;
 		}
 
-		&.is-opened {
-			opacity: 1;
-			transform: translate3d(0, 0, 0);
-			visibility: visible;
+		> button {
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
+			text-align: left;
+			width: 100%;
 		}
+
+		&:first-child {
+			padding-top: var(--cell-padding);
+		}
+
+		&:last-child {
+			padding-bottom: var(--cell-padding);
+		}
+	}
+
+	&:before {
+		background-color: var(--bg-color);
+		bottom: calc(100% - 1px);
+		clip-path: polygon(50% 0, 0 100%, 100% 100%);
+		content: "";
+		height: var(--box-arrow);
+		position: absolute;
+		right: calc((var(--element-height) * 0.5) - var(--box-arrow));
+		width: calc(var(--box-arrow) * 2);
+	}
+
+	&::backdrop {
+		display: none;
+	}
+
+	@media (prefers-reduced-motion) {
+		transition: none;
+	}
+
+	@starting-style {
+		opacity: 0;
+		transform: translate3d(0, 0.5rem, 0);
 	}
 }
 
 /* Button subnav component extensions */
-div.button-subnav {
+ul.button-subnav[popover] {
 }
 
 /* Button link component prototype */

@@ -136,7 +136,18 @@
 					<button type="button" class="button button--primary" data-dialog="dialog" data-dialog-source="#sample-dialog">Dialog</button>
 				</li>
 				<li>
-					<button type="button" class="button button--secondary" popovertarget="demo-quickview" popovertargetaction="toggle">Quickview</button>
+					<button type="button" class="button button--secondary" popovertarget="demo-button-subnav" popovertargetaction="toggle">Subnav</button>
+					<ul id="demo-button-subnav" class="button-subnav" popover>
+						<li>
+							<button type="button">Action 1</button>
+						</li>
+						<li>
+							<button type="button">Action 2</button>
+						</li>
+						<li>
+							<button type="button">Action 3</button>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</div>
@@ -238,7 +249,6 @@
 
 				<!-- Layout main -->
 				<main class="layout-main">
-
 					<p class="paragraph-pullquote">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt. Mauris nec magna viverra, commodo est id, pretium sapien. Quisque molestie sed nunc vel scelerisque. In ut posuere leo. Morbi eleifend consequat quam, nec laoreet enim facilisis a. Quisque sed felis non arcu pretium vehicula. Vestibulum ut convallis nisi. Duis vel enim placerat urna faucibus pretium sit amet at risus. Pellentesque scelerisque sapien metus, molestie congue turpis sollicitudin sed. Mauris et nibh at dolor iaculis sagittis. Etiam ac feugiat ex. Ut sollicitudin nibh at rutrum tincidunt.</p>
 					<p>Phasellus vehicula nunc et tortor lobortis hendrerit. Quisque in risus massa. Donec eu ipsum at velit euismod dictum. Cras vel metus finibus mauris pretium scelerisque maximus a metus. Pellentesque risus ipsum, dictum sed enim eu, dignissim aliquet felis. Quisque ultrices ante lacus, vel rutrum quam iaculis ac. Fusce sed turpis nunc. Morbi sit amet condimentum nunc, at dapibus urna. Integer lobortis quam tortor, id lacinia enim tristique in. Nam eu lectus dolor. Aliquam nec nisl sit amet turpis aliquet commodo eu ut ligula. Nam sollicitudin tempus venenatis. Proin lectus nisi, ullamcorper vitae justo nec, faucibus sollicitudin justo.</p>
@@ -272,6 +282,52 @@
 						<dt>Lorem ipsum</dt>
 						<dd>Lorem ipsum dolor amet</dd>
 					</dl>
+					<h2 class="heading-block">Calendar</h2>
+					<div class="calendar" data-calendar>
+						<ul class="calendar-date-selector">
+							<li>
+								<label for="year">Year</label>
+								<select name="year" id="year" class="form-input form-input--select" data-calendar-year-selector></select>
+							</li>
+							<li>
+								<label for="month">Month</label>
+								<select name="month" id="month" class="form-input form-input--select" data-calendar-month-selector></select>
+							</li>
+						</ul>
+						<ul class="calendar-action-list">
+							<li>
+								<button type="button" aria-label="Current month" title="Current month" data-calendar-current-month-trigger>
+									<svg class="icon" aria-hidden="true">
+										<use xlink:href="#icon-calendar-clear"></use>
+									</svg>
+								</button>
+							</li>
+							<li>
+								<button type="button" aria-label="Previous month" title="Previous month" data-calendar-prev-month-trigger>
+									<svg class="icon" aria-hidden="true">
+										<use xlink:href="#icon-chevron-back"></use>
+									</svg>
+								</button>
+							</li>
+							<li>
+								<button type="button" aria-label="Next month" title="Next month" data-calendar-next-month-trigger>
+									<svg class="icon" aria-hidden="true">
+										<use xlink:href="#icon-chevron-forward"></use>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<ul class="calendar-weekday-list" aria-hidden="true">
+							<li>Mon</li>
+							<li>Tue</li>
+							<li>Wed</li>
+							<li>Thu</li>
+							<li>Fri</li>
+							<li>Sat</li>
+							<li>Sun</li>
+						</ul>
+						<div class="calendar-day-wrapper" data-calendar-day-wrapper></div>
+					</div>
 				</main>
 
 			</div>

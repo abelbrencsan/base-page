@@ -191,6 +191,30 @@ class Validator {
 	}
 
 	/**
+	 * Enables all submit buttons within the form.
+	 * 
+	 * @returns {void}
+	 */
+	enableSubmitButtons() {
+		const submitButtons = this.form.querySelectorAll("button[type=submit]");
+		submitButtons.forEach((submitButton) => {
+			submitButton.removeAttribute("disabled")
+		});
+	}
+
+	/**
+	 * Disables all submit buttons within the form.
+	 * 
+	 * @returns {void}
+	 */
+	disableSubmitButtons() {
+		const submitButtons = this.form.querySelectorAll("button[type=submit]");
+		submitButtons.forEach((submitButton) => {
+			submitButton.setAttribute("disabled", "disabled")
+		});
+	}
+
+	/**
 	 * Destroys the validator.
 	 * 
 	 * @returns {void}
@@ -295,8 +319,10 @@ class Validator {
 						if (!this.validateAllInputs()) {
 							event.preventDefault();
 						}
+					} else {
+						this.disableSubmitButtons();
 					}
-				}
+				} 
 				break;
 		}
 	}

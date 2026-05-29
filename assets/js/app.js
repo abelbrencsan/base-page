@@ -1,4 +1,5 @@
 import { AlertManager } from "../js/alert-manager.js";
+import { Calendar, CalendarInterval } from "../js/calendar.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
 import { Glider } from "../js/glider.js";
@@ -8,7 +9,7 @@ import { LiveFilter, LiveFilterItem } from "../js/live-filter.js";
 import { MemoryGame, MemoryGameCard } from "../js/memory-game.js";
 import { Notice } from "../js/notice.js";
 import { PopupManager, PopupManagerPopup } from "../js/popup-manager.js";
-import { Quiz, QuizQuestion, QuizQuestionOption, QuizQuestionResult } from "../js/quiz.js";
+import { Quiz, QuizQuestion, QuizQuestionOption } from "../js/quiz.js";
 import { RangeIndicator } from "../js/range-indicator.js";
 import { Router, Route } from "../js/router.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
@@ -110,13 +111,6 @@ class App {
 	navbarSubnavs = [];
 
 	/**
-	 * List of button sub-navigations.
-	 * 
-	 * @type {Dropdown[]}
-	 */
-	buttonSubnavs = [];
-
-	/**
 	 * List of lazy load detectors.
 	 * 
 	 * @type {LazyLoadDetector[]}
@@ -168,7 +162,7 @@ class App {
 	/**
 	 * List of sortable tres.
 	 * 
-	 * @type {sortableTree[]}
+	 * @type {SortableTree[]}
 	 */
 	sortableTrees = [];
 
@@ -208,6 +202,13 @@ class App {
 	liveFilters = [];
 
 	/**
+	 * List of calendars.
+	 * 
+	 * @type {Calendar[]}
+	 */
+	calendars = [];
+
+	/**
 	 * The current page.
 	 * 
 	 * @type {Page|null}
@@ -243,7 +244,6 @@ class App {
 		this.#initGliders();
 		this.#initRolls();
 		this.#initNavbarSubnavs();
-		this.#initButtonSubnavs();
 		this.#initLazyLoadDetectors();
 		this.#initDialogs();
 		this.#initSlideshows();
@@ -260,6 +260,31 @@ class App {
 		this.#initSmoothScrolls();
 		this.#detectBreakpointChange();
 		this.#detectOffline();
+
+		// Initialize modules that require polyfills
+		if (!window.Temporal) {
+			this.loadScript("/assets/js/polyfill/temporal.js", (error) => {
+				if (error !== undefined) return;
+				this.#initCalendars();
+			});
+		} else {
+			this.#initCalendars();
+		}
+	}
+
+	/**
+	 * Loads the script dynamically from the specified URI.
+	 * 
+	 * @param {src} src - The script URI to be loaded.
+	 * @param {function(Error|undefined):void} callback - The callback function called on load or error.
+	 * @returns {void}
+	 */
+	loadScript(src, callback) {
+		const script = document.createElement("script");
+		script.src = src;
+		script.onload = () => callback();
+		script.onerror = () => callback(new Error(`Failed to load script: ${src}`));
+		document.head.appendChild(script);
 	}
 
 	/**
@@ -334,21 +359,6 @@ class App {
 			this.navbarSubnavs.push(new Dropdown({
 				element: elem.querySelector("[data-navbar-subnav-element]"),
 				trigger: elem.querySelector("[data-navbar-subnav-trigger]")
-			}));
-		});
-	}
-
-	/**
-	 * Initializes the button sub-navigations.
-	 * 
-	 * @returns {void}
-	 */
-	#initButtonSubnavs() {
-		let elems = document.querySelectorAll("[data-button-subnav]");
-		elems.forEach((elem) => {
-			this.buttonSubnavs.push(new Dropdown({
-				trigger: elem.querySelector("[data-button-subnav-trigger]"),
-				element: elem.querySelector("[data-button-subnav-element]")
 			}));
 		});
 	}
@@ -837,6 +847,38 @@ class App {
 			}));
 		});
 		return items;
+	}
+
+	/**
+	 * Initializes the calendars.
+	 * 
+	 * @returns {void}
+	 */
+	#initCalendars() {
+		let elems = document.querySelectorAll("[data-calendar]");
+		elems.forEach((elem) => {
+			const currentMonthTrigger = elem.querySelector("[data-calendar-current-month-trigger]");
+			this.calendars.push(new Calendar({
+				wrapper: elem,
+				dayWrapper: elem.querySelector("[data-calendar-day-wrapper]"),
+				yearSelector: elem.querySelector("[data-calendar-year-selector]"),
+				monthSelector: elem.querySelector("[data-calendar-month-selector]"),
+				prevMonthTrigger: elem.querySelector("[data-calendar-prev-month-trigger]"),
+				nextMonthTrigger: elem.querySelector("[data-calendar-next-month-trigger]"),
+				currentMonthTrigger: currentMonthTrigger,
+				intervals: [
+					new CalendarInterval({
+						from: Temporal.Now.plainDateISO(),
+						to: Temporal.Now.plainDateISO().add({ days: 365 }),
+						weekdays: [1, 2, 3, 4, 5]
+					})
+				]
+			}));
+			if (currentMonthTrigger !== null) {
+				const day = Temporal.Now.plainDateISO().day;
+				currentMonthTrigger.setAttribute("data-calendar-current-day", day);
+			}
+		});
 	}
 
 	/**
