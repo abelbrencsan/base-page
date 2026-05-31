@@ -870,7 +870,7 @@ class App {
 					new CalendarInterval({
 						from: Temporal.Now.plainDateISO(),
 						to: Temporal.Now.plainDateISO().add({ days: 365 }),
-						weekdays: [1, 2, 3, 4, 5]
+						weekdays: [1, 2, 3, 4, 5, 6, 7]
 					})
 				]
 			}));

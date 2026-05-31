@@ -6,10 +6,13 @@
 
 /* Calendar component prototype */
 div.calendar {
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
 	display: grid;
 	grid-template-areas: "date-selector actions" "weekdays weekdays" "days days";
 	grid-template-columns: 1fr auto;
 	margin-bottom: var(--element-margin);
+	padding: var(--box-padding);
 
 	ul.calendar-date-selector, ul.calendar-action-list {
 		align-self: center;
@@ -49,7 +52,6 @@ div.calendar {
 
 				> select.form-input {
 					border-radius: var(--border-radius) 0 0 var(--border-radius);
-					width: 5rem;
 
 					&:focus, &.is-invalid {
 						z-index: 1;
@@ -62,7 +64,6 @@ div.calendar {
 				> select.form-input {
 					border-radius: 0 var(--border-radius) var(--border-radius) 0;
 					left: -1px;
-					width: 4rem;
 				}
 			}
 		}
@@ -91,13 +92,13 @@ div.calendar {
 					align-items: center;
 					content: attr(data-calendar-current-day);
 					display: flex;
-					font-size: 0.7rem;
+					font-size: 0.6rem;
 					font-weight: var(--bold-font-weight);
 					height: 100%;
 					justify-content: center;
 					left: 0;
 					position: absolute;
-					top: 2px;
+					top: 3px;
 					width: 100%;
 				}
 
@@ -157,7 +158,7 @@ div.calendar {
 
 	button.calendar-day {
 		align-items: center;
-		background-color: var(--border-bg-color);
+		background-color: var(--bg-color);
 		border-radius: var(--border-radius);
 		border: none;
 		color: inherit;
