@@ -208,10 +208,8 @@ class Validator {
 	 * @returns {void}
 	 */
 	disableSubmitButtons() {
-		const submitButtons = this.form.querySelectorAll("button[type=submit]");
-		submitButtons.forEach((submitButton) => {
-			submitButton.setAttribute("disabled", "disabled")
-		});
+		this.#disableInnerSubmitButtons();
+		this.#disableOuterSubmitButtons();
 	}
 
 	/**
@@ -278,6 +276,31 @@ class Validator {
 	#isInputValid(input) {
 		input.classList.add(this.validInputClass);
 		if (typeof(this.validCallback) == "function") this.validCallback(input);
+	}
+
+	/**
+	 * Disables all submit buttons located inside the form.
+	 * 
+	 * @returns {void}
+	 */
+	#disableInnerSubmitButtons() {
+		const buttons = this.form.querySelectorAll("button[type=submit]");
+		buttons.forEach((button) => {
+			button.setAttribute("disabled", "disabled")
+		});
+	}
+
+	/**
+	 * Disables all submit buttons located outside the form.
+	 * 
+	 * @returns {void}
+	 */
+	#disableOuterSubmitButtons() {
+		if (this.form.id == "") return;
+		const buttons = document.querySelectorAll(`button[form=${this.form.id}]`);
+		buttons.forEach((button) => {
+			button.setAttribute("disabled", "disabled")
+		});
 	}
 
 	/**

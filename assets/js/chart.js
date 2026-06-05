@@ -59,14 +59,14 @@ class Chart {
 	/**
 	 * The roundness of the bars within the bar chart, ranging from 0 to 1.
 	 * 
-	 * @type {boolean}
+	 * @type {number}
 	 */
 	roundness = 0.25;
 
 	/**
 	 * The size of the markers within the line chart, relative to the viewport.
 	 * 
-	 * @type {boolean}
+	 * @type {number}
 	 */
 	markerSize = 4;
 
@@ -256,6 +256,7 @@ class Chart {
 	 * @param {number} options.height
 	 * @param {number} options.barThickness
 	 * @param {number} options.roundness
+	 * @param {number} options.markerSize
 	 * @param {boolean} options.showArea
 	 * @param {boolean} options.showTooltip
 	 * @param {boolean} options.isDonut
