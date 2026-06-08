@@ -552,6 +552,7 @@ class App {
 				nodeSelector: "[data-sortable-tree-node]",
 				subtreeSelector: "[data-sortable-tree-subtree]",
 				collapseTriggerSelector: "[draggable]",
+				removeTriggerSelector: "[data-sortable-tree-node-remove-trigger]",
 				blockSelector: "[data-sortable-tree-block]",
 				blocksWrapper: elem.parentElement.querySelector('[data-sortable-tree-blocks]'),
 				createNodeFromBlock: (option) => {

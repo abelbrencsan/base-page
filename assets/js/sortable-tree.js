@@ -8,7 +8,7 @@
 class SortableTree {
 
 	/**
-	 * Represents the tree wrapper element.
+	 * The tree wrapper element.
 	 * 
 	 * @type {HTMLElement}
 	 */
@@ -34,6 +34,13 @@ class SortableTree {
 	 * @type {string}
 	 */
 	collapseTriggerSelector = "";
+
+	/**
+	 * The CSS selector used to find the remove triggers of the nodes.
+	 * 
+	 * @type {string}
+	 */
+	removeTriggerSelector = "";
 
 	/**
 	 * The CSS selector used to match blocks that can add new nodes to the wrapper.
@@ -92,7 +99,7 @@ class SortableTree {
 	isBelowClass = "is-below";
 
 	/**
-	 * Represents the blocks wrapper element.
+	 * The blocks wrapper element.
 	 * 
 	 * @type {HTMLElement|null}
 	 */
@@ -155,13 +162,6 @@ class SortableTree {
 	isBlockClickedCallback = null;
 
 	/**
-	 * Callback function that is called after the sortable tree has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * The current dragged node.
 	 * 
 	 * @type {HTMLElement|null}
@@ -179,28 +179,28 @@ class SortableTree {
 	 * Creates a sortable tree.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper
-	 * @param {string} options.nodeSelector
-	 * @param {string} options.subtreeSelector
-	 * @param {string} options.collapseTriggerSelector
-	 * @param {string} options.blockSelector
-	 * @param {boolean} options.isCollapsible
-	 * @param {string} options.isCollapsedClass
-	 * @param {string} options.hasCollapsedSubtreeClass
-	 * @param {string} options.isDraggingClass
-	 * @param {string} options.hasDraggingClass
-	 * @param {string} options.isAboveClass
-	 * @param {string} options.isBelowClass
-	 * @param {function(HTMLElement):string} options.getTransferData
-	 * @param {function(HTMLElement):Element|null} options.createNodeFromBlock
-	 * @param {HTMLElement|null} options.blocksWrapper
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.isDraggingStartedCallback
-	 * @param {function(HTMLElement):void} options.isDraggedOverCallback
-	 * @param {function():void} options.isDraggingEndedCallback
-	 * @param {function(HTMLElement):void} options.isDroppedCallback
-	 * @param {function(HTMLElement):void} options.isBlockClickedCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The tree wrapper element.
+	 * @param {string} options.nodeSelector - The CSS selector used to find all tree nodes within the wrapper.
+	 * @param {string} options.subtreeSelector - The CSS selector used to find the wrappers of the subtrees.
+	 * @param {string} options.collapseTriggerSelector - The CSS selector used to find the collapse triggers for the subtrees within the nodes.
+	 * @param {string} options.removeTriggerSelector - The CSS selector used to find the remove triggers of the nodes.
+	 * @param {string} options.blockSelector - The CSS selector used to match blocks that can add new nodes to the wrapper.
+	 * @param {boolean} options.isCollapsible - Indicates whether the subtrees are collapsible.
+	 * @param {string} options.isCollapsedClass - The class that is added to the subtree when collapsed.
+	 * @param {string} options.hasCollapsedSubtreeClass - The class that is added to the node when its subtree is collapsed.
+	 * @param {string} options.isDraggingClass - The class that is added to the dragged node while it is dragged.
+	 * @param {string} options.hasDraggingClass - The class that is added to the wrapper while a node is dragged.
+	 * @param {string} options.isAboveClass - The class that is added to the target node while the dragged item is over it and would be placed above it if dropped.
+	 * @param {string} options.isBelowClass - The class that is added to the target node while the dragged item is over it and would be placed below it if dropped.
+	 * @param {HTMLElement|null} options.blocksWrapper - The blocks wrapper element.
+	 * @param {function(HTMLElement):string} options.getTransferData - A function that is called to retrieve the transfer data of the dragged node.
+	 * @param {function(HTMLElement):Element|null} options.createNodeFromBlock - A function that is called to retrieve the node to be added to the tree as a new tree node.
+	 * @param {function():void} options.initCallback - Callback function that is called after the sortable tree has been initialized.
+	 * @param {function():void} options.isDraggingStartedCallback - Callback function that is called after dragging has started.
+	 * @param {function(HTMLElement):void} options.isDraggedOverCallback - Callback function that is called after the dragged node is over a valid drop target.
+	 * @param {function():void} options.isDraggingEndedCallback - Callback function that is called after the dragging of a node has ended.
+	 * @param {function(HTMLElement):void} options.isDroppedCallback - Callback function that is called after the dragged node is dropped on a valid drop target.
+	 * @param {function(HTMLElement):void} options.isBlockClickedCallback - Callback function that is called after a block is clicked.
 	 * @returns {SortableTree}
 	 */
 	constructor(options) {
@@ -234,24 +234,6 @@ class SortableTree {
 	 */
 	isBlockTarget(eventTarget) {
 		return this.blocksWrapper && this.blocksWrapper.contains(eventTarget);
-	}
-
-	/**
-	 * Destroys the sortable tree.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeAllInsertionMarkers();
-		this.#removeAllCollapsedClasses();
-		this.wrapper.classList.remove(this.hasDraggingClass);
-		if (this.draggedNode) {
-			this.draggedNode.classList.remove(this.isDraggingClass);
-		}
-		this.draggedNode = null;
-		this.isBelow = false;
-		this.#removeEvents();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**
@@ -382,14 +364,16 @@ class SortableTree {
 	 */
 	#isClicked(event) {
 		if (!(event.target instanceof HTMLElement)) return;
-		if (!this.isCollapsible || !this.subtreeSelector) return;
-		if (this.subtreeSelector && this.collapseTriggerSelector && event.target.matches(this.collapseTriggerSelector)) {
+		if (this.isCollapsible && this.subtreeSelector && this.collapseTriggerSelector && event.target.matches(this.collapseTriggerSelector)) {
 			const node = this.#getNode(event.target);
 			const subtree = node.querySelector(this.subtreeSelector);
 			if (subtree) {
 				node.classList.toggle(this.hasCollapsedSubtreeClass);
 				subtree.classList.toggle(this.isCollapsedClass);
 			}
+		} else if (this.removeTriggerSelector && event.target.matches(this.removeTriggerSelector)) {
+			const node = this.#getNode(event.target);
+			if (node) node.remove();
 		}
 	}
 
@@ -514,39 +498,6 @@ class SortableTree {
 	}
 
 	/**
-	 * Removes classes related to collapsing from all nodes and their subtrees.
-	 * 
-	 * @returns {void}
-	 */
-	#removeAllCollapsedClasses() {
-		this.#removeHasCollapsedClasses();
-		this.#removeIsCollapsedClasses();
-	}
-
-	/**
-	 * Removes classes related to collapsing from all nodes.
-	 * 
-	 * @returns {void}
-	 */
-	#removeHasCollapsedClasses() {
-		this.wrapper.querySelectorAll(this.nodeSelector).forEach((elem) => {
-			elem.classList.remove(this.hasCollapsedSubtreeClass);
-		});
-	}
-
-	/**
-	 * Removes classes related to collapsing from all subtrees.
-	 * 
-	 * @returns {void}
-	 */
-	#removeIsCollapsedClasses() {
-		if (!this.subtreeSelector) return;
-		this.wrapper.querySelectorAll(this.subtreeSelector).forEach((elem) => {
-			elem.classList.remove(this.isCollapsedClass);
-		});
-	}
-
-	/**
 	 * Detects whether the cursor is positioned below the first half of the specified element's height.
 	 * 
 	 * @param {HTMLElement} elem
@@ -618,25 +569,6 @@ class SortableTree {
 			this.blocksWrapper.addEventListener("dragstart", this);
 			this.blocksWrapper.addEventListener("dragend", this);
 			this.blocksWrapper.addEventListener("click", this);
-		}
-	}
-
-	/**
-	 * Removes event listeners related to the sortable tree.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.wrapper.removeEventListener("dragstart", this);
-		this.wrapper.removeEventListener("dragover", this);
-		this.wrapper.removeEventListener("dragend", this);
-		this.wrapper.removeEventListener("dragleave", this);
-		this.wrapper.removeEventListener("drop", this);
-		this.wrapper.removeEventListener("click", this);
-		if (this.blocksWrapper) {
-			this.blocksWrapper.removeEventListener("dragstart", this);
-			this.blocksWrapper.removeEventListener("dragend", this);
-			this.blocksWrapper.removeEventListener("click", this);
 		}
 	}
 
