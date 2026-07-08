@@ -1,0 +1,259 @@
+/*!
+ * Shcedule CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Schedule component prototype */
+div.schedule {
+	--schedule-track-height: 50px;
+	display: grid;
+	grid-template-areas: "actions days" "times tracks";
+	grid-template-columns: 100px 1fr;
+	margin-bottom: var(--element-margin);
+
+	ul.schedule-action-list, ul.schedule-day-list, ul.schedule-time-list, ul.schedule-list, ul.schedule-track-list {
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			padding-left: 0;
+		}
+	}
+
+	ul.schedule-action-list, ul.schedule-day-list {
+		border-bottom: 2px solid var(--border-color);
+		position: sticky;
+		top: 0;
+	}
+
+	ul.schedule-day-list, ul.schedule-time-list {
+
+		> li {
+			align-items: center;
+			display: flex;
+			font-weight: var(--bold-font-weight);
+			justify-content: center;
+		}
+	}
+
+	ul.schedule-day-list, ul.schedule-track-list {
+		display: flex;
+		flex-flow: row nowrap;
+
+		> li {
+			flex: 1;
+			min-width: calc(100% / 3);
+		}
+	}
+
+	ul.schedule-action-list {
+		display: flex;
+		grid-area: actions;
+
+		> li {
+			width: 50%;
+
+			> button {
+				align-items: center;
+				background-color: var(--bg-color);
+				border: none;
+				color: inherit;
+				cursor: pointer;
+				display: inline-flex;
+				height: 100%;
+				justify-content: center;
+				padding: 0;
+				position: relative;
+				width: 100%;
+
+				&:disabled {
+					color: var(--border-hover-color);
+					cursor: not-allowed;
+				}
+
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						background-color: var(--border-bg-color);
+						color: var(--link-color);
+
+						&:disabled {
+							background-color: var(--bg-color);
+							color: var(--border-hover-color);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ul.schedule-day-list {
+		grid-area: days;
+		overflow-x: hidden;
+		z-index: 1;
+
+		> li {
+			background-color: var(--bg-color);
+			height: calc(var(--element-height) * 1.5);
+		}
+	}
+
+	ul.schedule-time-list {
+		border-right: 1px solid var(--border-color);
+		grid-area: times;
+
+		> li {
+			background-color: var(--bg-color);
+			font-size: var(--small-font-size);
+			height: var(--schedule-track-height);
+			width: 100%;
+
+			&:nth-child(even) {
+				background-color: var(--border-bg-color);
+			}
+		}
+	}
+
+	ul.schedule-track-list {
+		background-image: repeating-linear-gradient(var(--bg-color), var(--bg-color) 2.083%, var(--border-color) calc(2.083% + 1px), var(--bg-color) calc(2.083% + 1px), var(--bg-color) 4.166%, var(--border-bg-color) 4.166%, var(--border-bg-color) 6.25%, var(--border-color) calc(6.25% + 1px), var(--border-bg-color) calc(6.25% + 1px), var(--border-bg-color) 8.333%);
+		grid-area: tracks;
+		overflow-x: auto;
+		overscroll-behavior-x: none;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+
+		> li {
+			border-left: 1px solid var(--border-color);
+			scroll-snap-align: start;
+		}
+	}
+
+	ul.schedule-list {
+		height: calc(var(--schedule-track-height) * 24);
+		position: relative;
+
+		> li {
+			left: calc(var(--grid-gap) * 0.25);
+			position: absolute;
+			width: calc(100% - var(--grid-gap) * 0.5);
+		}
+	}
+
+	@media (max-width: 47em) {
+
+		ul.schedule-day-list, ul.schedule-track-list {
+
+			> li {
+				min-width: 50%;
+			}
+		}
+	}
+
+	@media (max-width: 32em) {
+
+		ul.schedule-day-list, ul.schedule-track-list {
+
+			> li {
+				min-width: 100%;
+			}
+		}
+	}
+}
+
+/* Schedule component extensions */
+div.schedule {
+}
+
+/* Schedule item component prototype */
+a.schedule-item {
+	--schedule-item-bg-color: var(--border-color);
+	--schedule-item-fg-color: var(--fg-color);
+	-webkit-user-select: none;
+	align-items: center;
+	background-color: var(--schedule-item-bg-color);
+	background-image: repeating-linear-gradient(-45deg, rgba(0,0,0,0.025), rgba(0,0,0,0.025) 0.5rem, transparent 0.75rem, transparent 1.5rem);
+	border-left: 0.5rem solid rgba(0, 0, 0, 0.125);
+	border-radius: var(--border-radius);
+	color: var(--schedule-item-fg-color);
+	display: flex;
+	flex-flow: column nowrap;
+	font-size: var(--small-font-size);
+	height:100%;
+	justify-content: center;
+	line-height: 1.25;
+	padding: 0 0.5rem;
+	text-align: center;
+	text-decoration: none;
+	user-select: none;
+	width: 100%;
+
+	div.schedule-item-title {
+		font-weight: var(--bold-font-weight);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width: 100%;
+	}
+
+	@media (hover: hover) {
+
+		&:hover, &:active {
+			border-left-color: rgba(0, 0, 0, 0.25);
+		}
+	}
+}
+
+/* Schedule item component extensions */
+a.schedule-item {
+
+	&.schedule-item--compact {
+		
+		div.schedule-item-date {
+			border: 0;
+			clip: rect(0,0,0,0);
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+			width: 1px;
+		}
+	}
+
+	&.schedule-item--blue {
+		--schedule-item-bg-color: var(--blue-paint-color);
+		--schedule-item-fg-color: var(--bg-color);
+	}
+
+	&.schedule-item--green {
+		--schedule-item-bg-color: var(--green-paint-color);
+		--schedule-item-fg-color: var(--bg-color);
+	}
+
+	&.schedule-item--orange {
+		--schedule-item-bg-color: var(--orange-paint-color);
+		--schedule-item-fg-color: var(--bg-color);
+	}
+
+	&.schedule-item--red {
+		--schedule-item-bg-color: var(--red-paint-color);
+		--schedule-item-fg-color: var(--bg-color);
+	}
+
+	&.schedule-item--purple {
+		--schedule-item-bg-color: var(--purple-paint-color);
+		--schedule-item-fg-color: var(--bg-color);
+	}
+
+	&.schedule-item--yellow {
+		--schedule-item-bg-color: var(--yellow-paint-color);
+		--schedule-item-fg-color: var(--bg-color);
+	}
+
+	&.schedule-item--stone {
+		--schedule-item-bg-color: var(--stone-paint-color);
+		--schedule-item-fg-color: var(--bg-color);
+	}
+}

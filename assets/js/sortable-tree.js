@@ -195,12 +195,12 @@ class SortableTree {
 	 * @param {HTMLElement|null} options.blocksWrapper - The blocks wrapper element.
 	 * @param {function(HTMLElement):string} options.getTransferData - A function that is called to retrieve the transfer data of the dragged node.
 	 * @param {function(HTMLElement):Element|null} options.createNodeFromBlock - A function that is called to retrieve the node to be added to the tree as a new tree node.
-	 * @param {function():void} options.initCallback - Callback function that is called after the sortable tree has been initialized.
-	 * @param {function():void} options.isDraggingStartedCallback - Callback function that is called after dragging has started.
-	 * @param {function(HTMLElement):void} options.isDraggedOverCallback - Callback function that is called after the dragged node is over a valid drop target.
-	 * @param {function():void} options.isDraggingEndedCallback - Callback function that is called after the dragging of a node has ended.
-	 * @param {function(HTMLElement):void} options.isDroppedCallback - Callback function that is called after the dragged node is dropped on a valid drop target.
-	 * @param {function(HTMLElement):void} options.isBlockClickedCallback - Callback function that is called after a block is clicked.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the sortable tree has been initialized.
+	 * @param {function():void|null} options.isDraggingStartedCallback - Callback function that is called after dragging has started.
+	 * @param {function(HTMLElement):void|null} options.isDraggedOverCallback - Callback function that is called after the dragged node is over a valid drop target.
+	 * @param {function():void|null} options.isDraggingEndedCallback - Callback function that is called after the dragging of a node has ended.
+	 * @param {function(HTMLElement):void|null} options.isDroppedCallback - Callback function that is called after the dragged node is dropped on a valid drop target.
+	 * @param {function(HTMLElement):void|null} options.isBlockClickedCallback - Callback function that is called after a block is clicked.
 	 * @returns {SortableTree}
 	 */
 	constructor(options) {

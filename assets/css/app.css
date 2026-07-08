@@ -37,6 +37,7 @@
 @import url("./components/dialog.css");
 @import url("./components/feature.css");
 @import url("./components/filmstrip.css");
+@import url("./components/finance-calculator.css");
 @import url("./components/flex.css");
 @import url("./components/form.css");
 @import url("./components/glider.css");
@@ -58,6 +59,7 @@
 @import url("./components/quickview.css");
 @import url("./components/quiz.css");
 @import url("./components/roll.css");
+@import url("./components/schedule.css");
 @import url("./components/section.css");
 @import url("./components/side-panel.css");
 @import url("./components/slideshow.css");

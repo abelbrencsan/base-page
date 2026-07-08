@@ -12,6 +12,7 @@ import { PopupManager, PopupManagerPopup } from "../js/popup-manager.js";
 import { Quiz, QuizQuestion, QuizQuestionOption } from "../js/quiz.js";
 import { RangeIndicator } from "../js/range-indicator.js";
 import { Router, Route } from "../js/router.js";
+import { ScrollTable } from "../js/scroll-table.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { SortableTree } from "../js/sortable-tree.js";
 import { Stepper } from "../js/stepper.js";
@@ -102,6 +103,13 @@ class App {
 	 * @type {Glider[]}
 	 */
 	rolls = [];
+
+	/**
+	 * List of scroll tables.
+	 * 
+	 * @type {ScrollTable[]}
+	 */
+	scrollTables = [];
 
 	/**
 	 * List of navigation bar sub-navigations.
@@ -243,6 +251,7 @@ class App {
 		this.#initPopups(options.popupConfigs);
 		this.#initGliders();
 		this.#initRolls();
+		this.#initScrollTables();
 		this.#initNavbarSubnavs();
 		this.#initLazyLoadDetectors();
 		this.#initDialogs();
@@ -344,6 +353,24 @@ class App {
 				nextTrigger: elem.querySelector("[data-roll-next-trigger]"),
 				items: Array.from(elem.querySelectorAll("[data-roll-list-item]")),
 				hasRewind: false
+			}));
+		});
+	}
+
+	/**
+	 * Initializes the scroll tables.
+	 * 
+	 * @returns {void}
+	 */
+	#initScrollTables() {
+		let elems = document.querySelectorAll("[data-scroll-table]");
+		elems.forEach((elem) => {
+			this.scrollTables.push(new ScrollTable({
+				wrapper: elem,
+				header: elem.querySelector("[data-scroll-table-header]"),
+				body: elem.querySelector("[data-scroll-table-body]"),
+				prevTrigger: elem.querySelector("[data-scroll-table-prev-trigger]"),
+				nextTrigger: elem.querySelector("[data-scroll-table-next-trigger]")
 			}));
 		});
 	}

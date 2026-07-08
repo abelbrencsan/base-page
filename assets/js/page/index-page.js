@@ -1,5 +1,6 @@
 import { Autocomplete } from "../autocomplete.js";
 import { Chart } from "../chart.js";
+import { FinanceCalculator } from "../finance-calculator.js";
 import { Glider } from "../glider.js";
 import { Page } from "../page.js";
 
@@ -24,6 +25,13 @@ class IndexPage extends Page {
 	 * @type {Glider|null}
 	 */
 	homeSlider = null;
+
+	/**
+	 * Finance calculator.
+	 * 
+	 * @type {FinanceCalculator|null}
+	 */
+	financeCalculator = null;
 
 	/**
 	 * Autocomplete for the search bar.
@@ -126,6 +134,7 @@ class IndexPage extends Page {
 	constructor(options) {
 		super(options);
 		this.#initHomeSlider();
+		this.#initFinanceCalculator();
 	}
 
 	/**
@@ -180,6 +189,48 @@ class IndexPage extends Page {
 			listItem.innerText = label.toLocaleString("en-US");
 			labelList.append(listItem);
 		});
+	}
+
+	/**
+	 * Initializes the finance calculator.
+	 * 
+	 * @returns {void}
+	 */
+	#initFinanceCalculator() {
+		const elem = document.querySelector("[data-finance-calculator]");
+		const airInput = document.getElementById("annualInterestRate");
+		const totalAmountInput = document.getElementById("totalAmount");
+		if (elem && airInput && totalAmountInput) {
+			const air = parseFloat(airInput.value);
+			const totalAmount = parseFloat(totalAmountInput.value);
+			this.financeCalculator = new FinanceCalculator({
+				interestRate: FinanceCalculator.interestRatefromAPR(air),
+				totalAmount: totalAmount,
+				downPaymentRateInput: document.getElementById("downPaymentRate"),
+				paymentPeriodsInput: document.getElementById("paymentPeriods"),
+				totalAmountIndicator: elem.querySelector("[data-finance-calculator-total-amount-indicator]"),
+				financedAmountIndicator: elem.querySelector("[data-finance-calculator-financed-amount-indicator]"),
+				monthlyPaymentIndicator: elem.querySelector("[data-finance-calculator-monthly-payment-indicator]"),
+				downPaymentAmountIndicator: elem.querySelector("[data-finance-calculator-down-payment-amount-indicator]"),
+				totalPaymentIndicator: elem.querySelector("[data-finance-calculator-total-payment-indicator]"),
+				paymentPeriodsIndicator: elem.querySelector("[data-finance-calculator-payment-periods-indicator]"),
+				airIndicator: elem.querySelector("[data-finance-calculator-air-indicator]"),
+				aprIndicator: elem.querySelector("[data-finance-calculator-apr-indicator]"),
+				totalCostIndicator: elem.querySelector("[data-finance-calculator-total-cost-indicator]")
+			});
+			airInput.addEventListener(("input"), (event) => {
+				if (this.financeCalculator === null) return;
+				const air = parseFloat(airInput.value);
+				this.financeCalculator.interestRate = FinanceCalculator.interestRatefromAPR(air);
+				this.financeCalculator.update();
+			});
+			totalAmountInput.addEventListener(("input"), (event) => {
+				if (this.financeCalculator === null) return;
+				const totalAmount = parseFloat(totalAmountInput.value);
+				this.financeCalculator.totalAmount = totalAmount;
+				this.financeCalculator.update();
+			});
+		}
 	}
 }
 

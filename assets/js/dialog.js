@@ -22,7 +22,7 @@ class Dialog {
 	source;
 
 	/**
-	 * List of trigger elements that open the dialog on click.
+	 * An array trigger elements that open the dialog on click.
 	 * 
 	 * @type {HTMLElement[]}
 	 */
@@ -197,13 +197,6 @@ class Dialog {
 	cancelCallback = null;
 
 	/**
-	 * Callback function that is called after the dialog has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Represents the dialog element.
 	 * 
 	 * @type {HTMLDialogElement|null}
@@ -235,34 +228,33 @@ class Dialog {
 	 * Creates a dialog.
 	 * 
 	 * @param {Object} options
-	 * @param {string} options.type
-	 * @param {string} options.source
-	 * @param {HTMLElement[]} options.triggers
-	 * @param {string} options.description
-	 * @param {boolean} options.isCancellable
-	 * @param {boolean} options.isCloseable
-	 * @param {string[]} options.customClasses
-	 * @param {string} options.dialogClass
-	 * @param {string} options.triggerClass
-	 * @param {string} options.dialogImageClass
-	 * @param {string} options.dialogVideoClass
-	 * @param {string} options.dialogYouTubeClass
-	 * @param {string} options.dialogYouTubeShortClass
-	 * @param {string} options.dialogIframeClass
-	 * @param {string} options.dialogAjaxClass
-	 * @param {string} options.closeFormClass
-	 * @param {string} options.isOpenedClass
-	 * @param {string} options.isDialogLoadingClass
-	 * @param {string} options.isCloseableClass
-	 * @param {string} options.closeButtonHTML
-	 * @param {string|null} options.closeButtonLabel
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.beforeOpenCallback
-	 * @param {function():void} options.openCallback
-	 * @param {function():void} options.showCallback
-	 * @param {function():void} options.closeCallback
-	 * @param {function():void} options.cancelCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {string} options.type - The type of the dialog.
+	 * @param {string} options.source - The source of the dialog that is loaded.
+	 * @param {HTMLElement[]} options.triggers - An array trigger elements that open the dialog on click.
+	 * @param {string} options.description - The alternate text description added to the image.
+	 * @param {boolean} options.isCancellable - Indicates whether the dialog is cancellable.
+	 * @param {boolean} options.isCloseable - Indicates whether the dialog is closeable.
+	 * @param {string[]} options.customClasses - Custom classes to be added to the dialog.
+	 * @param {string} options.dialogClass - The class that is added to the dialog.
+	 * @param {string} options.triggerClass - The class that is added to the trigger.
+	 * @param {string} options.dialogImageClass - The class that is added to the dialog when its type is image.
+	 * @param {string} options.dialogVideoClass - The class that is added to the dialog when its type is video.
+	 * @param {string} options.dialogYouTubeClass - The class that is added to the dialog when its type is YouTube.
+	 * @param {string} options.dialogYouTubeShortClass - The class that is added to the YouTube dialog when the video is a Short.
+	 * @param {string} options.dialogIframeClass - The class that is added to the dialog when its type is iframe.
+	 * @param {string} options.dialogAjaxClass - The class that is added to the dialog when its type is ajax.
+	 * @param {string} options.closeFormClass - The class that is added to the close form.
+	 * @param {string} options.isOpenedClass - The class that is added to the dialog after it is opened.
+	 * @param {string} options.isDialogLoadingClass - The class that is added to the trigger while the dialog is loading.
+	 * @param {string} options.isCloseableClass - The class that is added to the dialog if it is closeable.
+	 * @param {string} options.closeButtonHTML - The HTML content that is appended to the close button.
+	 * @param {string|null} options.closeButtonLabel - The label that is added to the close button.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the dialog has been initialized.
+	 * @param {function():void|null} options.beforeOpenCallback - Callback function that is called before the dialog has been opened.
+	 * @param {function():void|null} options.openCallback - Callback function that is called after the dialog has been opened.
+	 * @param {function():void|null} options.showCallback - Callback function that is called after the dialog has been shown.
+	 * @param {function():void|null} options.closeCallback - Callback function that is called after the dialog has been closed.
+	 * @param {function():void|null} options.cancelCallback - Callback function that is called after the dialog has been cancelled.
 	 * @returns {Dialog}
 	 */
 	constructor(options) {
@@ -350,48 +342,6 @@ class Dialog {
 		elem.classList.add(this.triggerClass);
 		elem.addEventListener("click", this);
 		this.triggers.push(elem);
-	}
-
-	/**
-	 * Destroys the dialog.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		if (this.dialog) {
-			if (this.dialog.open) {
-				this.close();
-				this.#isClosed();
-			}
-			this.#removeDialogEvents();
-			switch(this.type) {
-				case "image":
-					this.#destroyImage();
-					break;
-				case "video":
-					this.#destroyVideo();
-					break;
-				case "youtube":
-					this.#destroyYouTube();
-					break;
-				case "iframe":
-					this.#destroyIframe();
-					break;
-				case "ajax":
-					this.#destroyAjax();
-					break;
-				default:
-					this.#destroyDialog();
-					break;
-			}
-			this.dialog = null;
-			this.closeForm = null;
-		}
-		this.triggers.forEach((trigger) => {
-			trigger.classList.remove(this.triggerClass);
-			trigger.removeEventListener("click", this);
-		});
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**
@@ -519,7 +469,11 @@ class Dialog {
 	 */
 	#openAjax() {
 		if (!this.dialog) {
-			let request = new Request(this.source);
+			let request = new Request(this.source, {
+				headers: {
+					"X-Requested-With": "XMLHttpRequest"
+				}
+			});
 			fetch(request)
 				.then((response) => {
 					if (response.status === 200) {
@@ -785,70 +739,6 @@ class Dialog {
 	}
 
 	/**
-	 * Destroys the dialog when the type is set to image.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyImage() {
-		if (!this.dialog) return;
-		this.dialog.remove();
-	}
-
-	/**
-	 * Destroys the dialog when the type is set to video.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyVideo() {
-		if (!this.dialog) return;
-		this.dialog.remove();
-	}
-
-	/**
-	 * Destroys the dialog when the type is set to YouTube.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyYouTube() {
-		if (!this.dialog) return;
-		this.dialog.remove();
-	}
-
-	/**
-	 * Destroys the dialog when the type is set to iframe.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyIframe() {
-		if (!this.dialog) return;
-		this.dialog.remove();
-	}
-
-	/**
-	 * Destroys the dialog when the type is set to ajax.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyAjax() {
-		if (!this.dialog) return;
-		this.dialog.remove();
-	}
-
-	/**
-	 * Destroys the dialog when the type is set to dialog.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyDialog() {
-		if (!this.dialog) return;
-		this.dialog.classList.remove(this.dialogClass);
-		if (this.closeForm) {
-			this.closeForm.remove();
-			this.dialog.classList.remove(this.isCloseableClass);
-		}
-	}
-
-	/**
 	 * Adds event listeners related to the dialog element.
 	 * 
 	 * @returns {void}
@@ -858,18 +748,6 @@ class Dialog {
 		this.dialog.addEventListener("cancel", this);
 		this.dialog.addEventListener("close", this);
 		this.dialog.addEventListener("animationend", this);
-	}
-
-	/**
-	 * Adds event listeners related to the dialog element.
-	 * 
-	 * @returns {void}
-	 */
-	#removeDialogEvents() {
-		if (!this.dialog) return;
-		this.dialog.removeEventListener("cancel", this);
-		this.dialog.removeEventListener("close", this);
-		this.dialog.removeEventListener("animationend", this);
 	}
 
 	/**

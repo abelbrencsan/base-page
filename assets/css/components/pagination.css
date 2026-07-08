@@ -41,11 +41,6 @@ ul.pagination {
 				width: 16px;
 			}
 
-			&.is-active {
-				background-color: var(--link-color);
-				color: var(--bg-color);
-			}
-
 			@media (hover: hover) {
 
 				&:hover, &:active {
@@ -67,6 +62,18 @@ ul.pagination {
 
 		&:first-child {
 			padding-left: 0;
+		}
+
+		&:not(:first-child, :last-child, .is-active, li:has(+ li.is-active), li:has(+ li + li.is-active), .is-active + li, .is-active + li + li) {
+			display: none;
+		}
+
+		&.is-active {
+
+			> a {
+				background-color: var(--link-color);
+				color: var(--bg-color);
+			}
 		}
 	}
 }

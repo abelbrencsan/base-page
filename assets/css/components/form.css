@@ -22,7 +22,6 @@ input.form-input, select.form-input, textarea.form-input {
 	height: var(--element-height);
 	padding-left: 0.5em;
 	padding-right: 0.5em;
-	vertical-align: middle;
 	width: 100%;
 
 	&::placeholder {
@@ -331,7 +330,7 @@ ul.form-group-list.grid, ul.form-group-list.flex {
 
 	> li.grid-col, > li.flex-col {
 
-		input.form-input, select.form-input, textarea.form-input {
+		input.form-input, select.form-input, textarea.form-input, a.button, button.button {
 			border-radius: 0;
 			position: relative;
 		}
@@ -339,14 +338,16 @@ ul.form-group-list.grid, ul.form-group-list.flex {
 		&:first-child {
 
 			input.form-input, select.form-input, textarea.form-input, a.button, button.button {
-				border-radius: var(--border-radius) 0 0 var(--border-radius);
+				border-top-left-radius: var(--border-radius);
+				border-bottom-left-radius: var(--border-radius);
 			}
 		}
 
 		&:last-child {
 
 			input.form-input, select.form-input, textarea.form-input, a.button, button.button {
-				border-radius: 0 var(--border-radius) var(--border-radius) 0;
+				border-top-right-radius: var(--border-radius);
+				border-bottom-right-radius: var(--border-radius);
 				left: -1px;
 			}
 		}

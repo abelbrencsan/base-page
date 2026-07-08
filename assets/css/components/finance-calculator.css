@@ -1,0 +1,54 @@
+/*!
+ * Finance calculator CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Finance calculator component prototype */
+div.finance-calculator {
+	background-color: var(--border-bg-color);
+	border-radius: var(--border-radius);
+	display: block;
+	margin-bottom: var(--element-margin);
+	padding: var(--box-padding);
+
+	dl.finance-calculator-result-list {
+		align-items: center;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		margin-bottom: 0;
+
+		dt, dd {
+			line-height: 2.5rem;
+			margin: 0;
+
+			&:nth-of-type(odd) {
+				background-color: var(--border-color);
+			}
+
+			&:first-of-type {
+				background-color: transparent;
+				border-bottom: 2px solid var(--border-color);
+				font-size: var(--large-font-size);
+				font-weight: var(--bold-font-weight);
+			}
+		}
+
+		dt {
+			font-size: var(--small-font-size);
+			overflow: hidden;
+			padding-left: var(--cell-padding);
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		dd {
+			padding-right: var(--cell-padding);
+			text-align: right;
+		}
+	}
+}
+
+/* Finance calculator component extensions */
+div.finance-calculator {
+}

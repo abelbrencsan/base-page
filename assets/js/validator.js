@@ -8,7 +8,7 @@
 class Validator {
 
 	/**
-	 * Represents the form element.
+	 * The form element.
 	 * 
 	 * @type {HTMLFormElement}
 	 */
@@ -27,6 +27,13 @@ class Validator {
 	 * @type {string}
 	 */
 	validInputClass = "is-valid";
+
+	/**
+	 * The class added to the submit buttons when the form is submitted.
+	 * 
+	 * @type {string}
+	 */
+	isDisabledClass = "is-disabled";
 
 	/**
 	 * Error messages for different types of errors.
@@ -72,6 +79,13 @@ class Validator {
 	initCallback = null;
 
 	/**
+	 * Callback function that is called after the form has been submitted.
+	 * 
+	 * @type {function():void|null}
+	 */
+	submitCallback = null;
+
+	/**
 	 * Callback function that is called after an input field is validated as invalid inside the form.
 	 * 
 	 * @type {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void|null}
@@ -93,26 +107,20 @@ class Validator {
 	hasInvalidCallback = null;
 
 	/**
-	 * Callback function that is called after the validator has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Creates a validator.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLFormElement} options.form
-	 * @param {string} options.invalidInputClass
-	 * @param {string} options.validInputClass
-	 * @param {Object<string, string>} options.messages
-	 * @param {Object<string, string>} options.messageAttrs
-	 * @param {function():void} options.initCallback
-	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void} options.invalidCallback
-	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void} options.validCallback
-	 * @param {function(function(Element[]):void} options.hasInvalidCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLFormElement} options.form - The form element.
+	 * @param {string} options.invalidInputClass - The class added to the input field when it is invalid.
+	 * @param {string} options.validInputClass - The class added to the input field when it is valid.
+	 * @param {string} options.isDisabledClass - The class added to the submit buttons when the form is submitted.
+	 * @param {Object<string, string>} options.messages - Error messages for different types of errors.
+	 * @param {Object<string, string>} options.messageAttrs - Attributes that hold custom error messages for different types of errors.
+	 * @param {function():void} options.initCallback - Callback function that is called after the validator been initialized.
+	 * @param {function():void} options.submitCallback - Callback function that is called after the form has been submitted.
+	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void} options.invalidCallback - Callback function that is called after an input field is validated as invalid inside the form.
+	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void} options.validCallback - Callback function that is called after an input field is validated inside the form.
+	 * @param {function(function(Element[]):void} options.hasInvalidCallback - Callback function that is called when all input fields are validated and one or more of them are invalid.
 	 * @returns {Validator}
 	 */
 	constructor(options) {
@@ -191,18 +199,6 @@ class Validator {
 	}
 
 	/**
-	 * Enables all submit buttons within the form.
-	 * 
-	 * @returns {void}
-	 */
-	enableSubmitButtons() {
-		const submitButtons = this.form.querySelectorAll("button[type=submit]");
-		submitButtons.forEach((submitButton) => {
-			submitButton.removeAttribute("disabled")
-		});
-	}
-
-	/**
 	 * Disables all submit buttons within the form.
 	 * 
 	 * @returns {void}
@@ -210,17 +206,6 @@ class Validator {
 	disableSubmitButtons() {
 		this.#disableInnerSubmitButtons();
 		this.#disableOuterSubmitButtons();
-	}
-
-	/**
-	 * Destroys the validator.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		this.form.removeAttribute("novalidate");
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**
@@ -286,7 +271,7 @@ class Validator {
 	#disableInnerSubmitButtons() {
 		const buttons = this.form.querySelectorAll("button[type=submit]");
 		buttons.forEach((button) => {
-			button.setAttribute("disabled", "disabled")
+			button.classList.add(this.isDisabledClass);
 		});
 	}
 
@@ -299,7 +284,7 @@ class Validator {
 		if (this.form.id == "") return;
 		const buttons = document.querySelectorAll(`button[form=${this.form.id}]`);
 		buttons.forEach((button) => {
-			button.setAttribute("disabled", "disabled")
+			button.classList.add(this.isDisabledClass);
 		});
 	}
 
@@ -314,16 +299,6 @@ class Validator {
 	}
 
 	/**
-	 * Adds event listeners related to the validator.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.form.removeEventListener("submit", this);
-		this.form.removeEventListener("input", this);
-	}
-
-	/**
 	 * Handles events.
 	 * 
 	 * @param {Event} event
@@ -332,7 +307,7 @@ class Validator {
 	#handleEvents(event) {
 		switch (event.type) {
 			case "input":
-				if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) {
+				if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement || HTMLTextAreaElement) {
 					this.validateInput(event.target);
 				}
 				break;
@@ -344,6 +319,7 @@ class Validator {
 						}
 					} else {
 						this.disableSubmitButtons();
+						if (typeof(this.submitCallback) == "function") this.submitCallback();
 					}
 				} 
 				break;
