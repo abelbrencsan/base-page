@@ -8,42 +8,42 @@
 class Dropdown {
 
 	/**
-	 * Represents the element that appears when the dropdown is opened.
+	 * The element that appears when the dropdown is opened.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	element;
 
 	/**
-	 * Represents the trigger element that opens the dropdown on click.
+	 * The trigger element that opens the dropdown on click.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	trigger;
 
 	/**
-	 * Represents the close element that closes the dropdown on click.
+	 * The close button element that closes the dropdown on click.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
 	closeButton = null;
 
 	/**
-	 * The class added to the dropdown element after it has been opened.
+	 * The class that is added to the dropdown element after it has been opened.
 	 * 
 	 * @type {string}
 	 */
 	isOpenedClass = "is-opened";
 
 	/**
-	 * The class added to the dropdown trigger after it has been opened.
+	 * The class that is added to the dropdown trigger after it has been opened.
 	 * 
 	 * @type {string}
 	 */
 	isActiveClass = "is-active";
 
 	/**
-	 * The class added to the dropdown's parent element after it has been opened.
+	 * The class that is added to the dropdown's parent element after it has been opened.
 	 * 
 	 * @type {string}
 	 */
@@ -71,13 +71,6 @@ class Dropdown {
 	closeCallback = null;
 
 	/**
-	 * Callback function that is called after the dropdown has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Indicates whether the dropdown is opened.
 	 * 
 	 * @type {boolean}
@@ -102,16 +95,15 @@ class Dropdown {
 	 * Creates a dropdown.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.element
-	 * @param {HTMLButtonElement} options.trigger
-	 * @param {HTMLButtonElement|null} options.closeButton
-	 * @param {string} options.isOpenedClass
-	 * @param {string} options.isActiveClass
-	 * @param {string} options.hasOpenedDropdownClass
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.openCallback
-	 * @param {function():void} options.closeCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.element - The element that appears when the dropdown is opened.
+	 * @param {HTMLButtonElement} options.trigger - The trigger element that opens the dropdown on click.
+	 * @param {HTMLButtonElement|null} options.closeButton - The close button element that closes the dropdown on click.
+	 * @param {string} options.isOpenedClass - The class that is added to the dropdown element after it has been opened.
+	 * @param {string} options.isActiveClass - The class that is added to the dropdown trigger after it has been opened.
+	 * @param {string} options.hasOpenedDropdownClass - The class that is added to the dropdown's parent element after it has been opened.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the dropdown has been initialized.
+	 * @param {function():void|null} options.openCallback - Callback function that is called after the dropdown has been opened.
+	 * @param {function():void|null} options.closeCallback - Callback function that is called after the dropdown has been closed.
 	 * @returns {Dropdown}
 	 */
 	constructor(options) {
@@ -181,19 +173,6 @@ class Dropdown {
 	}
 
 	/**
-	 * Destroys the dropdown.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.close();
-		this.#removeAttributes();
-		this.#removeEvents();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-		Dropdown.itemCount--;
-	}
-
-	/**
 	 * Sets the attributes of the trigger and dropdown element when the dropdown is closed.
 	 * 
 	 * @returns {void}
@@ -241,16 +220,6 @@ class Dropdown {
 	}
 
 	/**
-	 * Removes attributes from the trigger and element that are related to the dropdown.
-	 * 
-	 * @returns {void}
-	 */
-	#removeAttributes() {
-		this.trigger.removeAttribute("aria-expanded");
-		this.element.removeAttribute("aria-hidden");
-	}
-
-	/**
 	 * Adds event listeners related to the dropdown.
 	 * 
 	 * @returns {void}
@@ -266,24 +235,9 @@ class Dropdown {
 	}
 
 	/**
-	 * Removes event listeners related to the dropdown.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		if (Dropdown.itemCount == 1) {
-			Dropdown.#removeGlobalEvents();
-		}
-		if (this.closeButton) {
-			this.closeButton.removeEventListener("click", this);
-		}
-		this.trigger.removeEventListener("click", this);
-	}
-
-	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
@@ -304,7 +258,7 @@ class Dropdown {
 	 * Closes the last opened dropdown on `Escape` key press.
 	 * Closes all dropdowns on `Tab` key press that do not include the target element of the event.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	static #isKeyPressed(event) {
@@ -321,7 +275,7 @@ class Dropdown {
 	 * Executes after the body is clicked.
 	 * Closes dropdowns that do not include the target element of the event.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	static #isBodyClicked(event) {
@@ -337,15 +291,15 @@ class Dropdown {
 	}
 
 	/**
-	 * Closes dropdowns that do not include the specified target element.
+	 * Closes dropdowns that do not include the specified excluded target element.
 	 * 
-	 * @param {HTMLElement} target
+	 * @param {HTMLElement} excludedTarget - The target element inside the dropdown that should remain open.
 	 * @returns {void}
 	 */
-	static #closeDropdowns(target) {
+	static #closeDropdowns(excludedTarget) {
 		let closingDropdowns = [];
 		Dropdown.openedDropdowns.forEach((dropdown) => {
-			if (!dropdown.trigger.contains(target) && !dropdown.element.contains(target)) {
+			if (!dropdown.trigger.contains(excludedTarget) && !dropdown.element.contains(excludedTarget)) {
 				closingDropdowns.push(dropdown);
 			}
 		});
@@ -360,16 +314,6 @@ class Dropdown {
 	static #addGlobalEvents() {
 		document.body.addEventListener("keyup", Dropdown.#isKeyPressed);
 		document.body.addEventListener("click", Dropdown.#isBodyClicked);
-	}
-
-	/**
-	 * Removes global event listeners related to all dropdown instances.
-	 * 
-	 * @returns {void}
-	 */
-	static #removeGlobalEvents() {
-		document.body.removeEventListener("keyup", Dropdown.#isKeyPressed);
-		document.body.removeEventListener("click", Dropdown.#isBodyClicked);
 	}
 }
 

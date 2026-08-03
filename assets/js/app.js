@@ -1,5 +1,6 @@
 import { AlertManager } from "../js/alert-manager.js";
 import { Calendar, CalendarInterval } from "../js/calendar.js";
+import { DateSelector, DateSelectorInterval } from "../js/date-selector.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
 import { Glider } from "../js/glider.js";
@@ -31,21 +32,22 @@ import { Validator } from "../js/validator.js";
 class App {
 
 	/**
-	 * Represents the configurations for the application.
+	 * The configurations for the application.
 	 * 
 	 * @typedef {Object} AppOptions
-	 * @property {PopupConfig[]} options.popupConfigs
+	 * @property {PopupConfig[]} options.popupConfigs - The configurations for the popups.
 	 */
 
 	/**
-	 * Represents the configuration for a popup.
+	 * The configuration for a popup.
 	 * 
 	 * @typedef {Object} PopupConfig
-	 * @property {string} id
-	 * @property {string} target
-	 * @property {boolean} onlyUpward
-	 * @property {Object} dialog
-	 * @property {string} dialog.type
+	 * @property {string} id - The ID of the popup.
+	 * @property {string} target - The dialog appears when the element with the specified query selector becomes visible in the viewport.
+	 * @property {boolean} onlyUpward - Indicates whether the dialog appears only if the target element becomes visible upon scrolling upward.
+	 * @property {Object} dialog - The configuration for a popup dialog.
+	 * @property {string} dialog.type - The type of the dialog.
+	 * @property {string} dialog.source - The source of the dialog to be loaded.
 	 */
 
 	/**
@@ -56,7 +58,7 @@ class App {
 	iconManager = new IconManager();
 
 	/**
-	 * Callback function that is called after routing
+	 * Callback function that is called after the routing.
 	 * 
 	 * @type {function(Route,URL,RegExpMatchArray):void}
 	 */
@@ -217,6 +219,13 @@ class App {
 	calendars = [];
 
 	/**
+	 * List of date selectors.
+	 * 
+	 * @type {DateSelector[]}
+	 */
+	dateSelectors = [];
+
+	/**
 	 * The current page.
 	 * 
 	 * @type {Page|null}
@@ -242,7 +251,7 @@ class App {
 	/**
 	 * Creates an application.
 	 * 
-	 * @param {AppOptions} options
+	 * @param {AppOptions} options - The configurations for the application.
 	 * @returns {App}
 	 */
 	constructor(options = { popupConfigs: [] }) {
@@ -275,9 +284,11 @@ class App {
 			this.loadScript("/assets/js/polyfill/temporal.js", (error) => {
 				if (error !== undefined) return;
 				this.#initCalendars();
+				this.#initDateSelectors();
 			});
 		} else {
 			this.#initCalendars();
+			this.#initDateSelectors();
 		}
 	}
 
@@ -299,7 +310,7 @@ class App {
 	/**
 	 * Creates popups from configurations and adds them to the popup manager.
 	 * 
-	 * @param {PopupConfig[]} popupConfigs
+	 * @param {PopupConfig[]} popupConfigs - The configurations for the popups.
 	 * @returns {void}
 	 */
 	#initPopups(popupConfigs) {
@@ -544,7 +555,7 @@ class App {
 		let elems = document.querySelectorAll("[data-notice]");
 		elems.forEach((elem) => {
 			this.notices.push(new Notice({
-				element: elem,
+				wrapper: elem,
 				dismissButton: elem.querySelector("[data-notice-dismiss]")
 			}));
 		});
@@ -642,8 +653,8 @@ class App {
 	/**
 	 * Retrieves a list of tour scenes under the specified element.
 	 * 
-	 * @param {Element} tourElem
-	 * @returns {TourScene[]}
+	 * @param {Element} tourElem - The wrapper element of the tour.
+	 * @returns {TourScene[]} The created tour scenes.
 	 */
 	#initTourScenes(tourElem) {
 		let tourScenes = [];
@@ -665,8 +676,8 @@ class App {
 	/**
 	 * Retrieves a list of tour scene triggers under the specified element.
 	 * 
-	 * @param {Element} tourSceneElem
-	 * @returns {TourSceneTrigger[]}
+	 * @param {Element} tourSceneElem - The wrapper element of the tour scene.
+	 * @returns {TourSceneTrigger[]} The created tour scene triggers.
 	 */
 	#initTourSceneTriggers(tourSceneElem) {
 		let tourSceneTriggers = [];
@@ -734,8 +745,8 @@ class App {
 	/**
 	 * Retrieves a list of memory game cards under the specified element.
 	 * 
-	 * @param {Element} elem
-	 * @returns {MemoryGameCard[]}
+	 * @param {Element} elem - The wrapper element of the memory game.
+	 * @returns {MemoryGameCard[]} The created memory game cards.
 	 */
 	#initMemoryGameCards(elem) {
 		let cards = [];
@@ -754,7 +765,7 @@ class App {
 	/**
 	 * Plays the specified sound effect once.
 	 * 
-	 * @param {Audio} soundEffect
+	 * @param {Audio} soundEffect - The sound effect to be played.
 	 * @returns {void}
 	 */
 	#playSoundEffect(soundEffect) {
@@ -793,8 +804,8 @@ class App {
 	/**
 	 * Retrieves a list of quiz questions under the specified element.
 	 * 
-	 * @param {Element} elem
-	 * @returns {QuizQuestion[]}
+	 * @param {Element} elem - The wrapper element of the quiz.
+	 * @returns {QuizQuestion[]} The created quiz questions.
 	 */
 	#initQuizQuestions(elem) {
 		let questions = [];
@@ -814,8 +825,8 @@ class App {
 	/**
 	 * Retrieves a list of quiz question options under the specified element.
 	 * 
-	 * @param {Element} elem
-	 * @returns {QuizQuestionOption[]}
+	 * @param {Element} elem - The wrapper element of the quiz question.
+	 * @returns {QuizQuestionOption[]} The created quiz question options.
 	 */
 	#initQuizQuestionOptions(elem) {
 		let options = [];
@@ -832,8 +843,8 @@ class App {
 	/**
 	 * Retrieves the total points of quiz question options under the specified element.
 	 * 
-	 * @param {Element} elem
-	 * @returns {QuizQuestionOption[]}
+	 * @param {Element} elem - The wrapper element of the quiz question.
+	 * @returns {number} The total points of the options for the quiz question.
 	 */
 	#getQuestionTotalPoints(elem) {
 		let optionElems = elem.querySelectorAll("[data-quiz-question-option]");
@@ -862,8 +873,8 @@ class App {
 	/**
 	 * Retrieves a list of live filter items under the specified element.
 	 * 
-	 * @param {Element} elem
-	 * @returns {LiveFilterItem[]}
+	 * @param {Element} elem - The wrapper element of the live filter.
+	 * @returns {LiveFilterItem[]} The created live filter items.
 	 */
 	#initLiveFilterItems(elem) {
 		let items = [];
@@ -907,6 +918,33 @@ class App {
 				currentMonthTrigger.setAttribute("data-calendar-current-day", day);
 			}
 		});
+	}
+
+	/**
+	 * Initializes the date selectors.
+	 * 
+	 * @returns {void}
+	 */
+	#initDateSelectors() {
+		let elems = document.querySelectorAll("[data-date-selector]");
+		elems.forEach((elem) => {
+			this.dateSelectors.push(new DateSelector({
+				yearSelector: elem.querySelector("[data-date-selector-year-selector]"),
+				monthSelector: elem.querySelector("[data-date-selector-month-selector]"),
+				daySelector: elem.querySelector("[data-date-selector-day-selector]"),
+				intervals: [
+					new DateSelectorInterval({
+						from: Temporal.Now.plainDateISO(),
+						to: Temporal.Now.plainDateISO().add({ years: 1 }),
+						weekdays: [1, 2, 3, 4, 5, 6, 7]
+					})
+				],
+				excludedIntervals: [],
+				selectCallback: (date) => console.log(date.toString()),
+				resetCallback: () => console.log("resetCallback")
+			}));
+		});
+		this.dateSelectors[0].selectDate(Temporal.Now.plainDateISO().add({ days: 700 }));
 	}
 
 	/**
@@ -966,7 +1004,7 @@ class App {
 	/**
 	 * Switches between the offset and full navigation bar at the medium breakpoint.
 	 * 
-	 * @param {MediaQueryList} mediaQueryList
+	 * @param {MediaQueryList} mediaQueryList - The media queries applied to the document. 
 	 * @returns {void}
 	 */
 	#switchNavbarType(mediaQueryList) {
@@ -985,7 +1023,7 @@ class App {
 	/**
 	 * Executes after the breakpoint has changed.
 	 * 
-	 * @param {MediaQueryListEvent} event
+	 * @param {MediaQueryListEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#onBreakpointChange(event) {

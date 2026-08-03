@@ -1809,6 +1809,31 @@
 						</div>
 					</li>
 					<li class="grid-col grid-col--6">
+						<div class="form-item">
+							<span class="form-label">Date</span>
+							<ul class="form-date-selector form-group-list flex" data-date-selector>
+								<li class="flex-col flex-col--fit">
+									<div class="form-item">
+										<label class="form-label is-visually-hidden" for="year">Year</label>
+										<select name="year" id="year" class="form-input form-input--select" data-date-selector-year-selector></select>
+									</div>							
+								</li>
+								<li class="flex-col flex-col--fit">
+									<div class="form-item">
+										<label class="form-label is-visually-hidden" for="month">Month</label>
+										<select name="month" id="month" class="form-input form-input--select" data-date-selector-month-selector></select>
+									</div>							
+								</li>
+								<li class="flex-col flex-col--fit">
+									<div class="form-item">
+										<label class="form-label is-visually-hidden" for="day">Day</label>
+										<select name="day" id="day" class="form-input form-input--select" data-date-selector-day-selector></select>
+									</div>							
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="grid-col grid-col--6">
 						<div class="form-item is-required">
 							<label class="form-label" for="message">Message</label>
 							<textarea name="message" id="message" class="form-input form-input--textarea" required></textarea>
@@ -2833,6 +2858,7 @@
 	</aside>
 
 	<!-- Scripts -->
+	<script src="/assets/js/polyfill/temporal.js"></script>
 	<script type="module" src="/assets/js/app.js"></script>
 	<script type="module">
 

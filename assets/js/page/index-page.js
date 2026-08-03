@@ -14,7 +14,7 @@ import { Page } from "../page.js";
 class IndexPage extends Page {
 
 	/**
-	 * Represents the configurations for the index page.
+	 * The configurations for the index page.
 	 * 
 	 * @typedef {Object} IndexPageOptions
 	 */
@@ -128,7 +128,7 @@ class IndexPage extends Page {
 	/**
 	 * Creates an index page.
 	 * 
-	 * @param {IndexPageOptions} options
+	 * @param {IndexPageOptions} options - The configurations for the index page.
 	 * @returns {Page}
 	 */  
 	constructor(options) {
@@ -140,7 +140,7 @@ class IndexPage extends Page {
 	/**
 	 * Event handler that is triggered when the breakpoint has changed.
 	 * 
-	 * @param {MediaQueryListEvent} event
+	 * @param {MediaQueryListEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	onBreakpointChange(event) {}
@@ -178,7 +178,7 @@ class IndexPage extends Page {
 	/**
 	 * Updates the labels for the specified chart.
 	 * 
-	 * @param {Chart} chart
+	 * @param {Chart} chart - The chart whose labels to be updated.
 	 * @returns {void}
 	 */  
 	#updateChartLabels(chart) {

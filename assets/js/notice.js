@@ -1,6 +1,6 @@
 /**
  * Notice
- * This class is designed to make notices dismissible.
+ * This class is designed to handle dismissible notices.
  * 
  * @author Abel Brencsan
  * @license MIT License
@@ -8,21 +8,21 @@
 class Notice {
 
 	/**
-	 * Represents a notice element.
+	 * The wrapper element.
 	 * 
 	 * @type {HTMLElement}
 	 */
-	element;
+	wrapper;
 
 	/**
-	 * Represents a button that dismisses the notice.
+	 * The button element that dismisses the notice.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	dismissButton;
 
 	/**
-	 * The class added to the notice element when it starts to be dismissed.
+	 * The class that is added to the notice element when it starts to be dismissed.
 	 * 
 	 * @type {string}
 	 */
@@ -43,29 +43,21 @@ class Notice {
 	isDismissedCallback = null;
 
 	/**
-	 * Callback function that is called after the notice has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Creates a notice.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.element
-	 * @param {HTMLButtonElement} options.dismissButton
-	 * @param {string} options.isDismissingClass
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.isDismissedCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The wrapper element.
+	 * @param {HTMLButtonElement} options.dismissButton - The button element that dismisses the notice.
+	 * @param {string} options.isDismissingClass - The class that is added to the notice element when it starts to be dismissed.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the notice has been initialized.
+	 * @param {function():void|null} options.isDismissedCallback - Callback function that is called after the notice has been dismissed.
 	 * @returns {Notice}
 	 */
 	constructor(options) {
 
 		// Test required options
-		if (!(options.element instanceof HTMLElement)) {
-			throw "Notice \"element\" must be an `HTMLElement`";
+		if (!(options.wrapper instanceof HTMLElement)) {
+			throw "Notice \"wrapper\" must be an `HTMLElement`";
 		}
 		if (!(options.dismissButton instanceof HTMLButtonElement)) {
 			throw "Notice \"dismissButton\" must be an `HTMLButtonElement`";
@@ -90,7 +82,7 @@ class Notice {
 	 * @returns {void}
 	 */
 	dismiss() {
-		this.element.classList.add(this.isDismissingClass);
+		this.wrapper.classList.add(this.isDismissingClass);
 	}
 
 	/**
@@ -101,19 +93,10 @@ class Notice {
 	 */
 	isDismissed() {
 		this.#removeEvents();
-		this.element.remove();
+		this.wrapper.remove();
 		if (typeof(this.isDismissedCallback) == "function") this.isDismissedCallback();
 	}
 
-	/**
-	 * Destroys the notice.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
 
 	/**
 	 * Adds event listeners related to the notice.
@@ -122,7 +105,7 @@ class Notice {
 	 */
 	#addEvents() {
 		this.dismissButton.addEventListener("click", this);
-		this.element.addEventListener("transitionend", this);
+		this.wrapper.addEventListener("transitionend", this);
 	}
 
 	/**
@@ -132,13 +115,13 @@ class Notice {
 	 */
 	#removeEvents() {
 		this.dismissButton.removeEventListener("click", this);
-		this.element.removeEventListener("transitionend", this);
+		this.wrapper.removeEventListener("transitionend", this);
 	}
 
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
@@ -149,7 +132,7 @@ class Notice {
 				}
 				break;
 			case "transitionend":
-				if (this.element == event.target) {
+				if (this.wrapper == event.target) {
 					this.isDismissed();
 				}
 				break;

@@ -71,13 +71,6 @@ class Wishlist {
 	clearCallback = null;
 
 	/**
-	 * Callback function that is called after the wishlist has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * List of items added to the wishlist.
 	 * 
 	 * @type {WishlistItem[]}
@@ -88,15 +81,15 @@ class Wishlist {
 	 * Creates a wishlist.
 	 * 
 	 * @param {Object} options
-	 * @param {string|null} options.storageKeyName
-	 * @param {{elem:HTMLButtonElement,id:number,data:any}[]} options.triggers
-	 * @param {{id:number,data:any}[]|null} options.initialData
-	 * @param {function():void|null} options.initCallback
-	 * @param {function(number):void|null} options.addCallback
-	 * @param {function(number):void|null} options.removeCallback
-	 * @param {function(number):void|null} options.updateCallback
-	 * @param {function():void|null} options.clearCallback
-	 * @param {function():void|null} options.destroyCallback
+	 * @param {string|null} options.storageKeyName - The key name of the local storage where the added items are stored.
+	 * @param {{elem:HTMLButtonElement,id:number,data:any}[]} options.triggers - Triggers that add or remove their related item from the wishlist on click.
+	 * @param {{id:number,data:any}[]|null} options.initialData - The initial data from which the initial items are added to the wishlist (overwrites existing local storage).
+	 * @param {string} options.triggerAddedClass - The class added to the trigger elements when their related item is added to the wishlist.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the wishlist has been initialized.
+	 * @param {function(number):void|null} options.addCallback - Callback function that is called after an item is added to the wishlist.
+	 * @param {function(number):void|null} options.removeCallback - Callback function that is called after an item is removed from the wishlist.
+	 * @param {function(number):void|null} options.updateCallback - Callback function that is called after an item is added to or removed from the wishlist.
+	 * @param {function():void|null} options.clearCallback - Callback function that is called after the wishlist has been cleared.
 	 * @returns {Wishlist}
 	 */
 	constructor(options) {
@@ -118,9 +111,9 @@ class Wishlist {
 	/**
 	 * Adds an item to the wishlist.
 	 * 
-	 * @param {number} id
-	 * @param {any} data
-	 * @param {boolean} skipCallback
+	 * @param {number} id - The ID of the wishlist item.
+	 * @param {any} data - Any additional data that belongs to the item.
+	 * @param {boolean} skipCallback - Indicates whether to skip callback functions after the item is added.
 	 * @returns {void}
 	 */
 	add(id, data = null, skipCallback = false) {
@@ -141,8 +134,8 @@ class Wishlist {
 	/**
 	 * Removes the item with the specified ID from the wishlist.
 	 * 
-	 * @param {number} id
-	 * @param {boolean} skipCallback
+	 * @param {number} id - The ID of the wishlist item.
+	 * @param {boolean} skipCallback - Indicates whether to skip callback functions after the item is removed.
 	 * @returns {void}
 	 */
 	remove(id, skipCallback = false) {
@@ -158,8 +151,8 @@ class Wishlist {
 	/**
 	 * Detects whether an item with the specified ID is added to the wishlist.
 	 * 
-	 * @param {number} id
-	 * @returns {void}
+	 * @param {number} id - The ID of the wishlist item.
+	 * @returns {boolean} `true` if the item is added to the wishlist; otherwise, `false`.
 	 */
 	includes(id) {
 		return this.items.some((item) => item.id == id);
@@ -168,9 +161,9 @@ class Wishlist {
 	/**
 	 * Adds or removes an item from the wishlist.
 	 * 
-	 * @param {number} id
-	 * @param {any} data
-	 * @param {boolean} skipCallback
+	 * @param {number} id - The ID of the wishlist item.
+	 * @param {any} data - Any additional data that belongs to the item.
+	 * @param {boolean} skipCallback - Indicates whether to skip callback functions after the item is added or removed.
 	 * @returns {void}
 	 */
 	toggle(id, data = null, skipCallback = false) {
@@ -184,8 +177,8 @@ class Wishlist {
 	/**
 	 * Retrieves the item with the specified ID from the wishlist.
 	 * 
-	 * @param {number} id
-	 * @returns {WishlistItem|undefined}
+	 * @param {number} id - The ID of the wishlist item.
+	 * @returns {WishlistItem|undefined} The found item, or `undefined` if no item is found.
 	 */
 	get(id) {
 		return this.items.find((item) => item.id == id);
@@ -194,7 +187,7 @@ class Wishlist {
 	/**
 	 * Removes all items from the wishlist.
 	 * 
-	 * @param {boolean} skipCallback
+	 * @param {boolean} skipCallback - Indicates whether to skip callback functions after the wishlist has been cleared.
 	 * @returns {void}
 	 */
 	clear(skipCallback = false) {
@@ -209,9 +202,9 @@ class Wishlist {
 	/**
 	 * Adds a new trigger to the wishlist.
 	 * 
-	 * @param {HTMLButtonELement} elem
-	 * @param {number} id
-	 * @param {any} data
+	 * @param {HTMLButtonELement} elem - The trigger element that adds or removes the item on click.
+	 * @param {number} id - The ID of the wishlist item.
+	 * @param {any} data - Any additional data that belongs to the item.
 	 * @returns {void}
 	 */
 	addTrigger(elem, id, data = null) {
@@ -227,7 +220,7 @@ class Wishlist {
 	/**
 	 * Retrieves the item IDs that are added to the wishlist.
 	 * 
-	 * @returns {number[]}
+	 * @returns {number[]} The IDs of the items.
 	 */
 	getIds() {
 		return this.items.map((item) => item.id );
@@ -236,21 +229,10 @@ class Wishlist {
 	/**
 	 * Retrieves the items as a JSON-encoded string.
 	 * 
-	 * @returns {string}
+	 * @returns {string} The items as a JSON-encoded string.
 	 */
 	getEncodedData() {
 		return JSON.stringify(this.items);
-	}
-
-	/**
-	 * Destroys the wishlist.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.clear();
-		this.#removeEvents();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**
@@ -283,7 +265,7 @@ class Wishlist {
 	/**
 	 * Sets the local storage data with the specified JSON-encoded string.
 	 * 
-	 * @param {string} encodedData
+	 * @param {string} encodedData - The JSON-encoded data to be set.
 	 * @returns {void}
 	 */
 	#setStorageData(encodedData) {
@@ -294,7 +276,7 @@ class Wishlist {
 	/**
 	 * Retrieves the storage data as an object that can be converted to wishlist items.
 	 * 
-	 * @returns {{id:number,data:any}[]|null}
+	 * @returns {{id:number,data:any}[]|null} - The storage data as an object.
 	 */
 	#getStorageData() {
 		if (!this.storageKeyName) return null; 
@@ -326,8 +308,8 @@ class Wishlist {
 	/**
 	 * Updates a trigger.
 	 * 
-	 * @param {HTMLButtonELement} elem
-	 * @param {number} id
+	 * @param {HTMLButtonELement} elem - The trigger element to be updated.
+	 * @param {number} id - The ID of the wishlist item.
 	 * @returns {void}
 	 */
 	#updateTrigger(elem, id) {
@@ -346,20 +328,9 @@ class Wishlist {
 	}
 
 	/**
-	 * Removes event listeners related to the wishlist.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.triggers.forEach((trigger) => {
-			trigger.elem.removeEventListener("click", this);
-		});
-	}
-
-	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
@@ -402,8 +373,8 @@ class WishlistItem {
 	 * Creates a wishlist item.
 	 * 
 	 * @param {Object} options
-	 * @param {number} options.id
-	 * @param {any} options.data
+	 * @param {number} options.id - The ID of the wishlist item.
+	 * @param {any} options.data - Any additional data that belongs to the item.
 	 * @returns {WishlistItem}
 	 */
 	constructor(options) {

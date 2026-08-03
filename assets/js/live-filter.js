@@ -8,14 +8,14 @@
 class LiveFilter {
 
 	/**
-	 * Represents the wrapper element that contains both the input and the filterable items.
+	 * The wrapper element that contains both the input and the filterable items.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	wrapper;
 
 	/**
-	 * Represents an input element used for filtering.
+	 * The input element used for filtering.
 	 * 
 	 * @type {HTMLInputElement}
 	 */
@@ -29,14 +29,14 @@ class LiveFilter {
 	items = [];
 
 	/**
-	 * The class added to the wrapper of the item when it is filtered out.
+	 * The class that is added to the wrapper of the item when it is filtered out.
 	 * 
 	 * @type {string}
 	 */
 	isFilteredClass = "is-filtered";
 
 	/**
-	 * The class added to the wrapper when at least one item is filtered out.
+	 * The class that is added to the wrapper when at least one item is filtered out.
 	 * 
 	 * @type {string}
 	 */
@@ -50,23 +50,15 @@ class LiveFilter {
 	initCallback = null;
 
 	/**
-	 * Callback function that is called after the live filter has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Creates a live filter.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper
-	 * @param {HTMLInputElement} options.input
-	 * @param {LiveFilterItem[]} options.items
-	 * @param {string} options.isFilteredClass
-	 * @param {string} options.hasFilteredClass
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The wrapper element that contains both the input and the filterable items.
+	 * @param {HTMLInputElement} options.input - The input element used for filtering.
+	 * @param {LiveFilterItem[]} options.items - An array of items that can be filtered in real-time.
+	 * @param {string} options.isFilteredClass - The class that is added to the wrapper of the item when it is filtered out.
+	 * @param {string} options.hasFilteredClass - The class that is added to the wrapper when at least one item is filtered out.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the live filter has been initialized.
 	 * @returns {LiveFilter}
 	 */
 	constructor(options) {
@@ -116,28 +108,6 @@ class LiveFilter {
 	}
 
 	/**
-	 * Destroys the live filter.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		this.#destroyItems();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
-	 * Destroys the live filter items.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyItems() {
-		this.items.forEach((item) => {
-			item.destroy();
-		});
-	}
-
-	/**
 	 * Adds event listeners related to the live filter.
 	 * 
 	 * @returns {void}
@@ -147,18 +117,9 @@ class LiveFilter {
 	}
 
 	/**
-	 * Removes event listeners related to the live filter.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.input.removeEventListener("input", this);
-	}
-
-	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
@@ -180,7 +141,7 @@ class LiveFilter {
 class LiveFilterItem {
 
 	/**
-	 * Represents the wrapper element to which the class is added when an item is filtered out.
+	 * The wrapper element to which the class is added when an item is filtered out.
 	 * 
 	 * @type {HTMLElement}
 	 */
@@ -201,20 +162,12 @@ class LiveFilterItem {
 	initCallback = null;
 
 	/**
-	 * Callback function that is called after the live filter item has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Creates a live filter item.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper
-	 * @param {string} options.content
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The wrapper element to which the class is added when an item is filtered out.
+	 * @param {string} options.content - The content examined to determine if it includes the filter phrase.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the live filter item has been initialized.
 	 * @returns {TourSceneTrigger}
 	 */
 	constructor(options) {
@@ -233,15 +186,6 @@ class LiveFilterItem {
 
 		// Initialize the live filter item
 		if (typeof(this.initCallback) == "function") this.initCallback();
-	}
-
-	/**
-	 * Destroys the live filter item.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 }
 

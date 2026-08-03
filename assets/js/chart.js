@@ -15,7 +15,7 @@ class Chart {
 	type;
 
 	/**
-	 * Represents the wrapper SVG element to which the chart is appended.
+	 * The wrapper SVG element to which the chart is appended.
 	 * 
 	 * @type {SVGElement}
 	 */
@@ -169,28 +169,28 @@ class Chart {
 	isTooltipVisibleClass = "is-visible";
 
 	/**
-	 * The format in which the class that defines the grid lines is added to the chart.
+	 * Function that is called to format the class that defines the grid lines is added to the chart.
 	 * 
 	 * @type {function(number):string}
 	 */
 	gridLineClass = (gridLineCount) => `chart-plot--${gridLineCount}`
 
 	/**
-	 * The format in which an index-based custom class is added to each dataset.
+	 * Function that is called to format the index-based custom class for each dataset.
 	 * 
 	 * @type {function(number):string}
 	 */
 	datasetItemClass = (datasetIndex) => `chart-plot-dataset--${datasetIndex}`;
 
 	/**
-	 * The format in which an index-based custom class is added to each data within a dataset.
+	 * Function that is called to format the index-based custom class for each data within the dataset.
 	 * 
 	 * @type {function(number):string}
 	 */
 	datasetDataItemClass = (dataIndex) => `chart-plot-dataset-data--${dataIndex}`;
 
 	/**
-	 * The name of the attribute added to each data with its value from the dataset.
+	 * The name of the attribute added to each data with its value within the dataset.
 	 * 
 	 * @type {string}
 	 */
@@ -208,7 +208,7 @@ class Chart {
 	 * 
 	 * @type {number}
 	 */
-	AxisMultiplier = 1;
+	axisMultiplier = 1;
 
 	/**
 	 * Callback function that is called after the chart has been initialized.
@@ -223,13 +223,6 @@ class Chart {
 	 * @type {function(Chart):void|null}
 	 */
 	updateCallback = null;
-
-	/**
-	 * Callback function that is called after the chart has been destroyed.
-	 * 
-	 * @type {function(Chart):void|null}
-	 */
-	destroyCallback = null;
 
 	/**
 	 * Represents the tooltip that displays the value of a data within a dataset.
@@ -249,37 +242,37 @@ class Chart {
 	 * Creates a chart.
 	 * 
 	 * @param {Object} options
-	 * @param {string} options.type
-	 * @param {SVGElement} options.wrapper
-	 * @param {number[][]} options.datasets
-	 * @param {number} options.width
-	 * @param {number} options.height
-	 * @param {number} options.barThickness
-	 * @param {number} options.roundness
-	 * @param {number} options.markerSize
-	 * @param {boolean} options.showArea
-	 * @param {boolean} options.showTooltip
-	 * @param {boolean} options.isDonut
-	 * @param {boolean} options.isGauge
-	 * @param {string} options.chartBarClass
-	 * @param {string} options.chartLineClass
-	 * @param {string} options.chartPieClass
-	 * @param {string} options.datasetClass
-	 * @param {string} options.datasetDataClass
-	 * @param {string} options.datasetAreaClass
-	 * @param {string} options.datasetLineClass
-	 * @param {string} options.datasetDonutClass
-	 * @param {string} options.tooltipClass
-	 * @param {string} options.isTooltipVisibleClass
-	 * @param {function(number):string} options.gridLineClass
-	 * @param {function(number):string} options.datasetItemClass
-	 * @param {function(number):string} options.datasetDataItemClass
-	 * @param {string} options.datasetDataAttribute
-	 * @param {function(number):string} options.tooltipFormatter
-	 * @param {number} options.AxisMultiplier
-	 * @param {function(Chart):void} options.initCallback
-	 * @param {function(Chart):void} options.updateCallback
-	 * @param {function(Chart):void} options.destroyCallback
+	 * @param {string} options.type - The type of the chart, which can be "bar", "line", or "pie".
+	 * @param {SVGElement} options.wrapper - The wrapper SVG element to which the chart is appended.
+	 * @param {number[][]} options.datasets - The datasets to be visualized within the chart, where each inner array represents a dataset.
+	 * @param {number} options.width - The SVG viewport width of the chart. If the `width` attribute is defined for the SVG, that value will be used.
+	 * @param {number} options.height - The SVG viewport width of the chart. If the `height` attribute is defined for the SVG, that value will be used.
+	 * @param {number} options.gap - The gap used to separate datasets within the bar chart, relative to the chart size, ranging from 0 to 1.
+	 * @param {number} options.barThickness - The thickness of the bar within the bar chart, relative to the column size, ranging from 0 to 1.
+	 * @param {number} options.roundness - The roundness of the bars within the bar chart, ranging from 0 to 1.
+	 * @param {number} options.markerSize - The size of the markers within the line chart, relative to the viewport.
+	 * @param {boolean} options.showArea - Indicates whether the areas of the lines within the line chart are shown.
+	 * @param {boolean} options.showTooltip - Indicates whether a tooltip is shown while a data is hovered within a dataset.
+	 * @param {boolean} options.isDonut - Indicates whether the pie chart is displayed as a donut chart.
+	 * @param {boolean} options.isGauge - Indicates whether the pie chart is displayed as a gauge chart.
+	 * @param {string} options.chartBarClass - The class that is added to the chart when its type is bar.
+	 * @param {string} options.chartLineClass - The class that is added to the chart when its type is line.
+	 * @param {string} options.chartPieClass - The class that is added to the chart when its type is pie.
+	 * @param {string} options.datasetClass - The class that is added to the dataset groups within the chart.
+	 * @param {string} options.datasetDataClass - The class that is added to the data within the datasets.
+	 * @param {string} options.datasetAreaClass - The class that is added to the areas within the line chart.
+	 * @param {string} options.datasetLineClass - The class that is added to the line within the line chart.
+	 * @param {string} options.datasetDonutClass - The class that is added to the donut within the pie chart.
+	 * @param {string} options.tooltipClass - The class that is added to the tooltip.
+	 * @param {string} options.isTooltipVisibleClass - The class that is added to the tooltip while a data is hovered within a dataset.
+	 * @param {function(number):string} options.gridLineClass - Function that is called to format the class that defines the grid lines is added to the chart.
+	 * @param {function(number):string} options.datasetItemClass - Function that is called to format the index-based custom class for each dataset.
+	 * @param {function(number):string} options.datasetDataItemClass - Function that is called to format the index-based custom class for each data within the dataset.
+	 * @param {string} options.datasetDataAttribute - The name of the attribute added to each data with its value within the dataset.
+	 * @param {function(number):string} options.tooltipFormatter - Function that is called to handle how the value is rendered in the tooltip.
+	 * @param {number} options.axisMultiplier - The factor by which the highest data point is multiplied to calculate the X-axis value.
+	 * @param {function(Chart):void|null} options.initCallback - Callback function that is called after the chart has been initialized.
+	 * @param {function(Chart):void|null} options.updateCallback - Callback function that is called after the chart has been updated.
 	 * @returns {Chart}
 	 */
 	constructor(options) {
@@ -336,22 +329,6 @@ class Chart {
 	}
 
 	/**
-	 * Destroys the chart.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		this.wrapper.replaceChildren();
-		this.wrapper.classList.remove(this.chartBarClass);
-		this.wrapper.classList.remove(this.chartLineClass);
-		this.wrapper.classList.remove(this.chartPieClass);
-		this.wrapper.removeAttribute("viewBox");
-		if (this.tooltip) this.tooltip.remove();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback(this);
-	}
-
-	/**
 	 * Retrieves the size of the first dataset.
 	 * 
 	 * @returns {number}
@@ -368,7 +345,7 @@ class Chart {
 	 */
 	get highestData() {
 		if (!this.datasets.length) return 0;
-		return Math.max(...[].concat(...this.datasets)) * this.AxisMultiplier;
+		return Math.max(...[].concat(...this.datasets)) * this.axisMultiplier;
 	}
 
 	/**
@@ -449,11 +426,11 @@ class Chart {
 	/**
 	 * Draws the bars within the bar chart.
 	 * 
-	 * @param {number[]} scaledDataset
-	 * @param {number} barWidth
-	 * @param {number} colWidth
-	 * @param {number} groupOffset
-	 * @param {number} datasetIndex
+	 * @param {number[]} scaledDataset - The scaled dataset.
+	 * @param {number} barWidth - The width of the bar.
+	 * @param {number} colWidth - The width of a column.
+	 * @param {number} groupOffset - The offset of a group.
+	 * @param {number} datasetIndex - The index of the dataset.
 	 * @returns {void}
 	 */
 	#drawBars(scaledDataset, barWidth, colWidth, groupOffset, datasetIndex) {
@@ -468,12 +445,12 @@ class Chart {
 	/**
 	 * Creates the bars within the bar chart.
 	 * 
-	 * @param {number[]} scaledDataset
-	 * @param {number} barWidth
-	 * @param {number} colWidth
-	 * @param {number} groupOffset
-	 * @param {number} datasetIndex
-	 * @returns {SVGRectElement[]}
+	 * @param {number[]} scaledDataset - The scaled dataset.
+	 * @param {number} barWidth - The width of the bar.
+	 * @param {number} colWidth - The width of a column.
+	 * @param {number} groupOffset - The offset of a group.
+	 * @param {number} datasetIndex - The index of the dataset.
+	 * @returns {SVGRectElement[]} The created bars.
 	 */
 	#createBars(scaledDataset, barWidth, colWidth, groupOffset, datasetIndex) {
 		const startOffset = ((colWidth - barWidth) * 0.5) - colWidth;
@@ -487,12 +464,12 @@ class Chart {
 	/**
 	 * Creates a bar within the bar chart.
 	 * 
-	 * @param {number} groupOffset
-	 * @param {number} scaledData
-	 * @param {number} barWidth
-	 * @param {number} datasetIndex
-	 * @param {number} dataIndex
-	 * @returns {SVGRectElement}
+	 * @param {number} groupOffset - The offset of a group.
+	 * @param {number} scaledData - The scaled data.
+	 * @param {number} barWidth - The width of the bar.
+	 * @param {number} datasetIndex - The index of the dataset.
+	 * @param {number} dataIndex - The index of the data.
+	 * @returns {SVGRectElement} The created bar.
 	 */
 	#createBar(groupOffset, scaledData, barWidth, datasetIndex, dataIndex) {
 		const roundness = (barWidth * 0.5) * this.roundness;
@@ -528,8 +505,8 @@ class Chart {
 	/**
 	 * Draws a line within the line chart.
 	 * 
-	 * @param {number[]} scaledDataset
-	 * @param {number} datasetIndex
+	 * @param {number[]} scaledDataset - The scaled dataset.
+	 * @param {number} datasetIndex - The index of the dataset.
 	 * @returns {void}
 	 */
 	#drawLine(scaledDataset, datasetIndex) {
@@ -548,8 +525,8 @@ class Chart {
 	/**
 	 * Creates a line within the line chart.
 	 * 
-	 * @param {number[]} scaledDataset
-	 * @returns {SVGPolylineElement}
+	 * @param {number[]} scaledDataset - The scaled dataset.
+	 * @returns {SVGPolylineElement} The created line.
 	 */
 	#createLine(scaledDataset) {
 		let points = this.#getLineChartPoints(scaledDataset);
@@ -562,11 +539,11 @@ class Chart {
 	/**
 	 * Creates the area for a line within the line chart.
 	 * 
-	 * @param {number[]} scaledDataset
-	 * @returns {SVGPolylineElement|null}
+	 * @param {number[]} scaledDataset - The scaled dataset.
+	 * @returns {SVGPolylineElement|undefined} The created area, or `undefined` if area is disabled.
 	 */
 	#createLineArea(scaledDataset) {
-		if (!this.showArea) return null;
+		if (!this.showArea) return;
 		let points = this.#getLineChartPoints(scaledDataset);
 		let area = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
 		points.push(`${this.width},${this.height}`);
@@ -579,9 +556,9 @@ class Chart {
 	/**
 	 * Creates the markers for a line within the line chart.
 	 * 
-	 * @param {number[]} scaledDataset
-	 * @param {number} datasetIndex
-	 * @returns {SVGCircleElement[]}
+	 * @param {number[]} scaledDataset - The scaled dataset.
+	 * @param {number} datasetIndex - The index of the dataset.
+	 * @returns {SVGCircleElement[]} The created markers.
 	 */
 	#createLineMarkers(scaledDataset, datasetIndex) {
 		const points = this.#getLineChartPoints(scaledDataset);
@@ -601,8 +578,8 @@ class Chart {
 	/**
 	 * Retrieves the point coordinates for the line chart.
 	 * 
-	 * @param {number[]} scaledDataset
-	 * @returns {string[]}
+	 * @param {number[]} scaledDataset - The scaled dataset.
+	 * @returns {string[]} The point coordinates of the line chart.
 	 */
 	#getLineChartPoints(scaledDataset) {
 		const offset = this.width / (this.datasetSize - 1);
@@ -632,9 +609,9 @@ class Chart {
 	/**
 	 * Draws a pie within the pie chart.
 	 * 
-	 * @param {number[]} dataset
-	 * @param {number} offset
-	 * @param {number} datasetIndex
+	 * @param {number[]} dataset - The dataset of the pie.
+	 * @param {number} offset - The offset of the pie.
+	 * @param {number} datasetIndex - The index of the dataset.
 	 * @returns {void}
 	 */
 	#drawPie(dataset, offset, datasetIndex) {
@@ -652,9 +629,9 @@ class Chart {
 	/**
 	 * Creates the slices of a pie within the pie chart.
 	 * 
-	 * @param {number[]} dataset
-	 * @param {number} datasetIndex
-	 * @returns {SVGPolylineElement[]}
+	 * @param {number[]} dataset - The dataset of the pie.
+	 * @param {number} datasetIndex - The index of the dataset.
+	 * @returns {SVGPolylineElement[]} The created pie slices.
 	 */
 	#createPieSlices(dataset, datasetIndex) {
 		const angles = this.#getPieSliceAngles(dataset);
@@ -669,11 +646,11 @@ class Chart {
 	/**
 	 * Creates a slice of a pie within the pie chart.
 	 * 
-	 * @param {number} startAngle
-	 * @param {number} endAngle
-	 * @param {number} datasetIndex
-	 * @param {number} dataIndex
-	 * @returns {SVGPolylineElement}
+	 * @param {number} startAngle - The start angle of the pie.
+	 * @param {number} endAngle - The end angle of the pie.
+	 * @param {number} datasetIndex - The index of the dataset.
+	 * @param {number} dataIndex - The index of the data.
+	 * @returns {SVGPolylineElement} The created pie slice.
 	 */
 	#createPieSlice(startAngle, endAngle, datasetIndex, dataIndex) {
 		const radius = this.isPieGauge ? this.height : this.height / 2;
@@ -690,10 +667,10 @@ class Chart {
 	/**
 	 * Retrieves the path of the pie slice.
 	 * 
-	 * @param {number} radius
-	 * @param {number} startAngle
-	 * @param {number} endAngle
-	 * @returns {string}
+	 * @param {number} radius - The radius of the pie.
+	 * @param {number} startAngle - The start angle of the pie.
+	 * @param {number} endAngle - The end angle of the pie.
+	 * @returns {string} The path of the pie slice.
 	 */
 	#getPieSlicePath(radius, startAngle, endAngle) {
 		const offsetAngle = this.isPieGauge ? 180 : 90;
@@ -708,12 +685,12 @@ class Chart {
 	/**
 	 * Retrieves the shape of the pie slice path.
 	 * 
-	 * @param {{x:number,y:number}} startCoords
-	 * @param {{x:number,y:number}} endCoords
-	 * @param {number} radius
-	 * @param {0|1} largeArcFlag
-	 * @param {boolean} isCircle
-	 * @returns {string}
+	 * @param {{x:number,y:number}} startCoords - The start coordinates of the pie.
+	 * @param {{x:number,y:number}} endCoords - The end coordinates of the pie.
+	 * @param {number} radius - The radiu of the pie.
+	 * @param {0|1} largeArcFlag - Indicates whether the arc is greater than 180 degrees.
+	 * @param {boolean} isCircle - Indicates whether the pie is a complete circle.
+	 * @returns {string} The shape of the pie slice path.
 	 */
 	#generatePieSlicePathShape(startCoords, endCoords, radius, largeArcFlag, isCircle) {
 		let d = ["M", startCoords.x, startCoords.y, "A", radius, radius, 0, largeArcFlag, 1, endCoords.x, endCoords.y];
@@ -729,7 +706,7 @@ class Chart {
 	/**
 	 * Creates the donut for a pie within the pie chart.
 	 * 
-	 * @returns {SVGCircleElement|null}
+	 * @returns {SVGCircleElement|undefined} The created donut for a pie, or `undefined` if donut is disabled.
 	 */
 	#createDonut() {
 		if (!this.isDonut) return null;
@@ -767,8 +744,8 @@ class Chart {
 	 * Retrieves the modified datasets where values are scaled to the specified value.
 	 * The highest value equals the scale value.
 	 * 
-	 * @param {number} scale
-	 * @returns {number[][]}
+	 * @param {number} scale - The highest value to which the dataset is scaled to.
+	 * @returns {number[][]} The scaled datasets.
 	 */
 	#getScaledDatasets(scale) {
 		const labels = this.labels;
@@ -781,8 +758,8 @@ class Chart {
 	/**
 	 * Retrieves the pie slice angles of the specified dataset.
 	 * 
-	 * @param {number[]} dataset
-	 * @returns {number[]}
+	 * @param {number[]} dataset - The dataset whose pie slice angles to be retrieved.
+	 * @returns {number[]} The pie slice angles.
 	 */
 	#getPieSliceAngles(dataset) {
 		let sum = dataset.reduce((total, current) => (total + current), 0);
@@ -802,19 +779,9 @@ class Chart {
 	}
 
 	/**
-	 * Removes event listeners related to the chart.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.wrapper.removeEventListener("mousemove", this);
-		this.wrapper.removeEventListener("mouseleave", this);
-	}
-
-	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
@@ -847,33 +814,33 @@ class Chart {
 	/**
 	 * Displays the tooltip.
 	 * 
-	 * @param {SVGElement} target
-	 * @param {number} clientX
-	 * @param {number} clienty
+	 * @param {SVGElement} target - The target element.
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
 	 * @returns {void}
 	 */
-	#showTooltip(target, clientX, clienty) {
+	#showTooltip(target, clientX, clientY) {
 		if (!this.tooltip) return;
 		const value = Number(target.getAttribute(this.datasetDataAttribute));
 		if (!isNaN(value)) {
 			const formattedValue = this.tooltipFormatter(value);
 			this.tooltip.innerText = formattedValue;
 			this.tooltip.classList.add(this.isTooltipVisibleClass);
-			this.#setTooltipCoords(target, clientX, clienty);
+			this.#setTooltipCoords(target, clientX, clientY);
 		}
 	}
 
 	/**
 	 * Sets the X and Y coordinates of the tooltip.
 	 * 
-	 * @param {SVGElement} target
-	 * @param {number} clientX
-	 * @param {number} clienty
+	 * @param {SVGElement} target - The target element.
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
 	 * @returns {void}
 	 */
-	#setTooltipCoords(target, clientX, clienty) {
+	#setTooltipCoords(target, clientX, clientY) {
 		if (!this.tooltip) return;
-		const { x, y } = this.#getTooltipCoords(target, clientX, clienty);
+		const { x, y } = this.#getTooltipCoords(target, clientX, clientY);
 		this.tooltip.style.left = `${x}px`;
 		this.tooltip.style.top = `${y}px`;
 	}
@@ -881,31 +848,29 @@ class Chart {
 	/**
 	 * Retrieves the X and Y coordinates of the tooltip.
 	 * 
-	 * @param {SVGElement} target
-	 * @param {number} clientX
-	 * @param {number} clienty
-	 * @returns {{x: number, y: number}}
+	 * @param {SVGElement} target - The target element.
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
+	 * @returns {{x: number, y: number}} The X and Y coordinates of the tooltip.
 	 */
-	#getTooltipCoords(target, clientX, clienty) {
+	#getTooltipCoords(target, clientX, clientY) {
 		switch(this.type) {
 			case "bar":
-				return this.#getTooltipStaticCoords(target, clientX, clienty);
+				return this.#getTooltipStaticCoords(target);
 			case "line":
-				return this.#getTooltipStaticCoords(target, clientX, clienty);
+				return this.#getTooltipStaticCoords(target);
 			case "pie":
-				return this.#getTooltipCursorCoords(target, clientX, clienty);
+				return this.#getTooltipCursorCoords(target, clientX, clientY);
 		}
 	}
 
 	/**
 	 * Retrieves the X and Y coordinates of the tooltip based on the target position.
 	 * 
-	 * @param {SVGElement} target
-	 * @param {number} clientX
-	 * @param {number} clienty
-	 * @returns {{x: number, y: number}}
+	 * @param {SVGElement} target - The target element.
+	 * @returns {{x: number, y: number}} The X and Y coordinates.
 	 */
-	#getTooltipStaticCoords(target, clientX, clienty) {
+	#getTooltipStaticCoords(target) {
 		if (!this.tooltip) return { x: 0, y: 0 };
 		const rootRect = this.wrapper.parentElement.getBoundingClientRect();
 		const targetRect = target.getBoundingClientRect();
@@ -922,16 +887,16 @@ class Chart {
 	/**
 	 * Retrieves the X and Y coordinates of the tooltip based on the cursor position.
 	 * 
-	 * @param {SVGElement} target
-	 * @param {number} clientX
-	 * @param {number} clienty
-	 * @returns {{x: number, y: number}}
+	 * @param {SVGElement} target - The target element.
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
+	 * @returns {{x: number, y: number}} The X and Y coordinates.
 	 */
-	#getTooltipCursorCoords(target, clientX, clienty) {
+	#getTooltipCursorCoords(target, clientX, clientY) {
 		const rootRect = this.wrapper.parentElement.getBoundingClientRect();
 		return {
 			x: clientX - rootRect.left - (this.tooltip.offsetWidth * 0.5),
-			y: clienty - rootRect.top - this.tooltip.offsetHeight
+			y: clientY - rootRect.top - this.tooltip.offsetHeight
 		};
 	}
 
@@ -951,10 +916,10 @@ class Chart {
 	/**
 	 * Converts the specified polar coordinates to cartesian coordinates.
 	 * 
-	 * @param {number} radius
-	 * @param {number} angle
-	 * @param {number} offsetAngle
-	 * @returns {{x:number,y:number}}
+	 * @param {number} radius - The radius.
+	 * @param {number} angle - The angle.
+	 * @param {number} offsetAngle - The offset angle.
+	 * @returns {{x:number,y:number}} The cartesian coordinates.
 	 */
 	static polarToCartesian(radius, angle, offsetAngle = 90) {
 		let radians = (angle - offsetAngle) * Math.PI / 180;

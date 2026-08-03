@@ -8,7 +8,7 @@
 class AlertManager {
 
 	/**
-	 * Represents the container element to which the alerts are appended.
+	 * The container element to which the alerts are appended.
 	 * 
 	 * @type {HTMLElement}
 	 */
@@ -106,13 +106,6 @@ class AlertManager {
 	removeAlertCallback = null;
 
 	/**
-	 * Callback function that is called after the alert manager has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * List of all alert elements.
 	 * 
 	 * @type {HTMLElement[]}
@@ -127,24 +120,32 @@ class AlertManager {
 	static types = ["info", "success", "warning", "error"];
 
 	/**
+	 * The total height of all alerts.
+	 * 
+	 * @type {number}
+	 */
+	get totalHeight() {
+		return this.alerts.reduce((acc, alert) => acc + alert.offsetHeight + this.gap, 0);
+	}
+
+	/**
 	 * Creates an alert manager.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.container
-	 * @param {boolean} options.isCloseable
-	 * @param {number|null} options.autoclose
-	 * @param {string} options.alertClass
-	 * @param {string} options.infoAlertClass
-	 * @param {string} options.successAlertClass
-	 * @param {string} options.warningAlertClass
-	 * @param {string} options.errorAlertClass
-	 * @param {string} options.closeButtonHTML
-	 * @param {string|null} options.closeButtonLabel
-	 * @param {number} options.gap
-	 * @param {function():void} options.initCallback
-	 * @param {function(HTMLElement):void} options.addAlertCallback
-	 * @param {function():void} options.removeAlertCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.container - The container element to which the alerts are appended.
+	 * @param {boolean} options.isCloseable - Indicates whether the alerts are closeable.
+	 * @param {number|null} options.autoclose - The time in milliseconds after which the alerts are closed.
+	 * @param {string} options.alertClass - The class that is added to the created alert.
+	 * @param {string} options.infoAlertClass - The class that is added to the created alert when the type is `info`.
+	 * @param {string} options.successAlertClass - The class that is added to the created alert when the type is `success`.
+	 * @param {string} options.warningAlertClass - The class that is added to the created alert when the type is `warning`.
+	 * @param {string} options.errorAlertClass - The class that is added to the created alert when the type is `error`.
+	 * @param {string} options.closeButtonHTML - The HTML content that is appended to the close button.
+	 * @param {string|null} options.closeButtonLabel - The label that is added to the close button.
+	 * @param {number} options.gap - The size, in pixels, between two alerts.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the alert manager has been initialized.
+	 * @param {function(HTMLElement):void|null} options.addAlertCallback - Callback function that is called after an alert is added.
+	 * @param {function():void|null} options.removeAlertCallback - Callback function that is called after an alert is removed.
 	 * @returns {AlertManager}
 	 */
 	constructor(options) {
@@ -169,8 +170,8 @@ class AlertManager {
 	/**
 	 * Adds a new alert.
 	 * 
-	 * @param {string} message
-	 * @param {string} type
+	 * @param {string} message - The message of the alert.
+	 * @param {string} type - The type of the alert.
 	 * @returns {void}
 	 */
 	addAlert(message, type) {
@@ -188,7 +189,7 @@ class AlertManager {
 	/**
 	 * Removes the specified alert.
 	 * 
-	 * @param {number} index
+	 * @param {number} index - The index of the alert.
 	 * @returns {void}
 	 */
 	removeAlert(elem) {
@@ -200,21 +201,12 @@ class AlertManager {
 	}
 
 	/**
-	 * Removes all alerts.
-	 * 
-	 * @returns {void}
-	 */
-	removeAlerts() {
-		this.alerts.forEach((alert) => this.removeAlert(alert));
-	}
-
-	/**
 	 * Updates the positions of the alerts.
 	 * 
 	 * @returns {void}
 	 */
 	updatePositions() {
-		let totalHeight = this.#getTotalHeight();
+		let totalHeight = this.totalHeight;
 		this.alerts.forEach((alert) => {
 			if (alert.matches(":popover-open")) {
 				totalHeight -= alert.offsetHeight + this.gap;
@@ -224,21 +216,11 @@ class AlertManager {
 	}
 
 	/**
-	 * Destroys the alert manager.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.removeAlerts();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
 	 * Creates the alert.
 	 * 
-	 * @param {string} message
-	 * @param {string} type
-	 * @returns {HTMLElement}
+	 * @param {string} message - The message of the alert.
+	 * @param {string} type - The type of the alert.
+	 * @returns {HTMLElement} The created alert.
 	 */
 	#createAlert(message, type) {
 		const wrapper = this.#createWrapper(type);
@@ -255,8 +237,8 @@ class AlertManager {
 	/**
 	 * Creates the wrapper of the alert.
 	 * 
-	 * @param {string} type
-	 * @returns {HTMLElement}
+	 * @param {string} type - The type of the alert.
+	 * @returns {HTMLElement} - The created wrapper for the alert.
 	 */
 	#createWrapper(type) {
 		let wrapper = document.createElement("div");
@@ -282,8 +264,8 @@ class AlertManager {
 	/**
 	 * Creates the paragraph element for the alert, to which the message is appended.
 	 * 
-	 * @param {string} message
-	 * @returns {HTMLElement}
+	 * @param {string} message - The message of the alert.
+	 * @returns {HTMLElement} - The created paragraph for the alert.
 	 */
 	#createParagraph(message) {
 		let paragraph = document.createElement("p");
@@ -294,15 +276,15 @@ class AlertManager {
 	/**
 	 * Creates a close button for the alert.
 	 * 
-	 * @param {HTMLElement} target
-	 * @returns {HTMLElement}
+	 * @param {HTMLElement} target - The wrapper of the alert.
+	 * @returns {HTMLElement} - The created close button.
 	 */
-	#createCloseButton(target) {
+	#createCloseButton(wrapper) {
 		let closeButton = document.createElement("button");
 		closeButton.type = "button";
 		closeButton.innerHTML = this.closeButtonHTML;
 		closeButton.popoverTargetAction = "hide";
-		closeButton.popoverTargetElement = target;
+		closeButton.popoverTargetElement = wrapper;
 		if (this.closeButtonLabel) {
 			closeButton.title = this.closeButtonLabel;
 			closeButton.setAttribute('aria-label', this.closeButtonLabel);
@@ -313,7 +295,7 @@ class AlertManager {
 	/**
 	 * Validates that the specified alert type is a valid option.
 	 * 
-	 * @param {string} type
+	 * @param {string} type - The type of the alert.
 	 * @returns {void}
 	 */
 	#testAlertType(type) {
@@ -325,7 +307,7 @@ class AlertManager {
 	/**
 	 * Sets autoclose for the specified alert if it is enabled.
 	 * 
-	 * @param {string} type
+	 * @param {string} type - The type of the alert.
 	 * @returns {void}
 	 */
 	#setAutoclose(alert) {
@@ -335,18 +317,9 @@ class AlertManager {
 	}
 
 	/**
-	 * Retrieves the total height of all alerts.
-	 * 
-	 * @returns {number}
-	 */
-	#getTotalHeight() {
-		return this.alerts.reduce((acc, alert) => acc + alert.offsetHeight + this.gap, 0);
-	}
-
-	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {

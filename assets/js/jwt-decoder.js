@@ -8,10 +8,10 @@
 class JWTDecoder {
 
 	/**
-	 * Gets the header of the specified JSON Web Token (JWT).
+	 * Retrieves the header of the specified JSON Web Token (JWT).
 	 * 
-	 * @param {string} token
-	 * @returns {Object|null}
+	 * @param {string} token - The token whose header to be retrieved.
+	 * @returns {Object|undefined} The decoded token header, or `undefined` if it cannot be decoded.
 	 */
 	static getHeader(token) {
 		return JWTDecoder.#decodeTokenPart(token, "header");
@@ -20,8 +20,8 @@ class JWTDecoder {
 	/**
 	 * Gets the payload of the specified JSON Web Token (JWT).
 	 * 
-	 * @param {string} token
-	 * @returns {Object|null}
+	 * @param {string} token - The token whose payload to be retrieved.
+	 * @returns {Object|undefined} The decoded token payload, or `undefined` if it cannot be decoded.
 	 */
 	static getPayload(token) {
 		return JWTDecoder.#decodeTokenPart(token, "payload");
@@ -30,8 +30,8 @@ class JWTDecoder {
 	/**
 	 * Checks whether the specified JSON Web Token (JWT) is expired.
 	 * 
-	 * @param {string} token
-	 * @returns {boolean}
+	 * @param {string} token - The token whose expiration to be checked.
+	 * @returns {boolean} `true` if the token is expired; otherwise, `false`.
 	 */
 	static isExpired(token) {
 		const payload = JWTDecoder.getPayload(token);
@@ -43,11 +43,11 @@ class JWTDecoder {
 	}
 
 	/**
-	 * Decodes the specified part of the given JSON Web Token (JWT).
-	 * 
-	 * @param {string} token
-	 * @param {string} partName
-	 * @returns {Object|null}
+	 * Decodes the specified part of the specified JSON Web Token (JWT).
+	 *
+	 * @param {string} token - The token whose part should be decoded.
+	 * @param {string} partName - The part name to be decoded (e.g., 'header' or 'payload').
+	 * @returns {Object|undefined} The decoded part, or `undefined` if it cannot be decoded.
 	 */
 	static #decodeTokenPart(token, partName = "payload") {
 		const tokenPart = JWTDecoder.#parsePart(token, partName);
@@ -55,11 +55,11 @@ class JWTDecoder {
 	}
 
 	/**
-	 * Parses the specified part of the given JSON Web Token (JWT).
-	 * 
-	 * @param {string} token
-	 * @param {string} partName
-	 * @returns {string}
+	 * Parses the specified part of the specified JSON Web Token (JWT).
+	 *
+	 * @param {string} token - The token whose part should be parsed.
+	 * @param {string} partName - The part name to be parsed (e.g., 'header' or 'payload').
+	 * @returns {string} The parsed part.
 	 */
 	static #parsePart(token, partName = "payload") {
 		const parts = token.split(".");
@@ -81,8 +81,8 @@ class JWTDecoder {
 	/**
 	 * Decodes the specified Base64 encoded string.
 	 * 
-	 * @param {string} base64
-	 * @returns {string}
+	 * @param {string} base64 - The base64 encoded string.
+	 * @returns {string} The decoded string.
 	 */	
 	static #decodeBase64Unicode(base64) {
 		try {

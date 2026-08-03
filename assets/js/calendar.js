@@ -222,9 +222,9 @@ class Calendar {
 	 * @param {string} options.isSelectedClass - The class that is added to the day button for the selected date.
 	 * @param {string} options.dayButtonAttribute - The name of the attribute added to day buttons and whose value contains the date.
 	 * @param {HTMLButtonElement|null} options.currentMonthTrigger - The button element that sets the active year and month to the current year and month when clicked.
-	 * @param {function():void} options.initCallback - Callback function that is called after the calendar has been initialized.
-	 * @param {function(Temporal.PlainDate):void} options.selectCallback - Callback function that is called after the date has been selected.
-	 * @param {function():void} options.resetCallback - Callback function that is called after the selected date has been reset.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the calendar has been initialized.
+	 * @param {function(Temporal.PlainDate):void|null} options.selectCallback - Callback function that is called after the date has been selected.
+	 * @param {function():void|null} options.resetCallback - Callback function that is called after the selected date has been reset.
 	 * @returns {Calendar}
 	 */
 	constructor(options) {
@@ -684,7 +684,7 @@ class Calendar {
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {

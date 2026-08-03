@@ -15,7 +15,7 @@ class Dialog {
 	type;
 
 	/**
-	 * The source of the dialog that is loaded.
+	 * The source of the dialog to be loaded.
 	 * 
 	 * @type {string}
 	 */
@@ -335,7 +335,7 @@ class Dialog {
 	/**
 	 * Adds the specified element as a trigger.
 	 * 
-	 * @param {HTMLElement} elem
+	 * @param {HTMLElement} elem - The trigger element.
 	 * @returns {void}
 	 */
 	addTrigger(elem) {
@@ -468,35 +468,36 @@ class Dialog {
 	 * @returns {void}
 	 */
 	#openAjax() {
-		if (!this.dialog) {
-			let request = new Request(this.source, {
-				headers: {
-					"X-Requested-With": "XMLHttpRequest"
+		let request = new Request(this.source, {
+			headers: {
+				"X-Requested-With": "XMLHttpRequest"
+			}
+		});
+		fetch(request)
+			.then((response) => {
+				if (response.status === 200) {
+					return response.text();
+				} else {
+					this.#hasOpenError();
 				}
-			});
-			fetch(request)
-				.then((response) => {
-					if (response.status === 200) {
-						return response.text();
-					} else {
-						this.#hasOpenError();
-					}
-				})
-				.then((html) => {
+			})
+			.then((html) => {
+				if (!this.dialog) {
 					this.dialog = document.createElement("dialog");
 					this.dialog.classList.add(this.dialogClass);
 					this.dialog.classList.add(this.dialogAjaxClass);
 					this.dialog.innerHTML = html;
 					document.body.appendChild(this.dialog);
 					this.#addDialogEvents();
-					this.#show();
-				})
-				.catch(() => {
-					this.#hasOpenError();
-				});
-		} else {
-			this.#show();
-		}
+				} else {
+					this.dialog.innerHTML = html;
+					this.dialog.appendChild(this.closeForm);
+				}
+				this.#show();
+			})
+			.catch(() => {
+				this.#hasOpenError();
+			});
 	}
 
 	/**
@@ -655,8 +656,8 @@ class Dialog {
 	/**
 	 * Retrieves the YouTube embed URL and whether the video is a Short from the specified URL.
 	 * 
-	 * @param {string} url
-	 * @returns {string|null}
+	 * @param {string} url - The URL of the YouTube video.
+	 * @returns {string|null} The YouTube embed URL.
 	 */
 	#getYouTubeEmbedUrl(url) {
 		const host = "https://www.youtube.com/embed/";
@@ -753,7 +754,7 @@ class Dialog {
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
@@ -803,9 +804,9 @@ class Dialog {
 	/**
 	 * Parse classes from the attribute of the specified element.
 	 * 
-	 * @param {HTMLElement} elem
-	 * @param {string} attribute
-	 * @returns {string[]}
+	 * @param {HTMLElement} elem - The element from which to parse classes.
+	 * @param {string} attribute - The name of the attribute that contains the classes as a string.
+	 * @returns {string[]} The parsed classes.
 	 */
 	static parseCustomClasses(elem, attribute) {
 		let customclassesStr = elem.getAttribute(attribute);

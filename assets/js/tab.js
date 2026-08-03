@@ -225,7 +225,7 @@ class Tab {
 	 * Selects the previous tab on left arrow key press.
 	 * Selects the next tab on left arrow key press.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isKeyPressed(key) {
@@ -244,7 +244,7 @@ class Tab {
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {

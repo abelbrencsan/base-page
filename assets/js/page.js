@@ -8,7 +8,7 @@
 class Page {
 
 	/**
-	 * Represents the configurations for the page.
+	 * The configurations for the page.
 	 * 
 	 * @typedef {Object} PageOptions
 	 */
@@ -16,7 +16,7 @@ class Page {
 	/**
 	 * Creates a page.
 	 * 
-	 * @param {PageOptions} options
+	 * @param {PageOptions} options - The configurations for the page.
 	 * @returns {Page}
 	 */
 	constructor(options = {}) {}
@@ -24,17 +24,10 @@ class Page {
 	/**
 	 * Event handler that is triggered when the breakpoint has changed.
 	 * 
-	 * @param {MediaQueryListEvent} event
+	 * @param {MediaQueryListEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	onBreakpointChange(event) {}
-
-	/**
-	 * Destroys the page.
-	 * 
-	 * @returnsrns {void}
-	 */
-	destroy() {}
 }
 
 export { Page };

@@ -67,7 +67,7 @@ class ScrollTable {
 	 * @param {HTMLElement} options.body - The body element whose scroll position synchronizes with the header.
 	 * @param {HTMLButtonElement|null} options.prevTrigger - The trigger element that scrolls the body backward when clicked.
 	 * @param {HTMLButtonElement|null} options.nextTrigger - The trigger element that scrolls the body forward when clicked.
-	 * @param {function():void} options.initCallback - Callback function that is called after the scroll table has been initialized.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the scroll table has been initialized.
 	 * @returns {ScrollTable}
 	 */
 	constructor(options) {
@@ -135,13 +135,14 @@ class ScrollTable {
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
 		switch (event.type) {
 			case "scroll":
 				this.syncHeader();
+				break;
 		}
 	}
 }

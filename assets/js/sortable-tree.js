@@ -229,8 +229,8 @@ class SortableTree {
 	/**
 	 * Indicates whether the specified event target is a child of the blocks wrapper.
 	 * 
-	 * @param {EventTarget|null} eventTarget
-	 * @returns {boolean}
+	 * @param {EventTarget|null} eventTarget - The event target to be checked.
+	 * @returns {boolean} `true` if the event target is a child; otherwise, `false`.
 	 */
 	isBlockTarget(eventTarget) {
 		return this.blocksWrapper && this.blocksWrapper.contains(eventTarget);
@@ -239,7 +239,7 @@ class SortableTree {
 	/**
 	 * Executes after a draggable node has been started dragging.
 	 * 
-	 * @param {DragEvent} event
+	 * @param {DragEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isDraggingStarted(event) {
@@ -265,7 +265,7 @@ class SortableTree {
 	/**
 	 * Executes after the dragged node is over a valid drop target.
 	 * 
-	 * @param {DragEvent} event
+	 * @param {DragEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isDraggedOver(event) {
@@ -295,7 +295,7 @@ class SortableTree {
 	/**
 	 * Executes after the dragging of a node has ended.
 	 * 
-	 * @param {DragEvent} event
+	 * @param {DragEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isDraggingEnded(event) {
@@ -315,7 +315,7 @@ class SortableTree {
 	/**
 	 * Executes after the dragged node leaves a valid drop target.
 	 * 
-	 * @param {DragEvent} event
+	 * @param {DragEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isDraggingLeft(event) {
@@ -327,7 +327,7 @@ class SortableTree {
 	/**
 	 * Executes after the dragged node is dropped on a valid drop target.
 	 * 
-	 * @param {DragEvent} event
+	 * @param {DragEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isDropped(event) {
@@ -359,7 +359,7 @@ class SortableTree {
 	/**
 	 * Executes after the collapse trigger is clicked.
 	 * 
-	 * @param {PointerEvent} event
+	 * @param {PointerEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isClicked(event) {
@@ -380,7 +380,7 @@ class SortableTree {
 	/**
 	 * Executes after the block is clicked.
 	 * 
-	 * @param {PointerEvent} event
+	 * @param {PointerEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#isBlockClicked(event) {
@@ -396,10 +396,10 @@ class SortableTree {
 	}
 
 	/**
-	 * Retrieves the closest node that is equal to or a parent of the specified element.
+	 * Retrieves the closest node that is equal to the specified element or a parent of it.
 	 * 
-	 * @param {HTMLElement} elem
-	 * @returns {HTMLElement|null}
+	 * @param {HTMLElement} elem - The element that matches or the child of the node.
+	 * @returns {HTMLElement|null} the closest node, or `null` if not found.
 	 */
 	#getNode(elem) {
 		if (elem.matches(this.nodeSelector)) return elem;
@@ -407,10 +407,10 @@ class SortableTree {
 	}
 
 	/**
-	 * Retrieves the closest block that is equal to or a parent of the specified element.
+	 * Retrieves the closest block that is equal to the specified element or a parent of it.
 	 * 
-	 * @param {HTMLElement} elem
-	 * @returns {HTMLElement|null}
+	 * @param {HTMLElement} elem - The element that matches or the child of the block.
+	 * @returns {HTMLElement|null} - the closest block, or `null` if not found.
 	 */
 	#getBlock(elem) {
 		if (elem.matches(this.blockSelector)) return elem;
@@ -418,10 +418,10 @@ class SortableTree {
 	}
 
 	/**
-	 * Retrieves the closest node or block that is equal to or a parent of the specified element.
+	 * Retrieves the closest node or block that is equal to the specified element or a parent of it.
 	 * 
-	 * @param {HTMLElement} elem
-	 * @returns {HTMLElement|null}
+	 * @param {HTMLElement} elem - The element that matches or the child of the block or node.
+	 * @returns {HTMLElement|null} - the closest block or node, or `null` if not found.
 	 */
 	#getNodeOrBlock(elem) {
 		if (this.isBlockTarget(elem)) {
@@ -434,10 +434,10 @@ class SortableTree {
 	/**
 	 * Retrieves the closest drop target of the specified element.
 	 * 
-	 * @param {HTMLElement} elem
-	 * @param {number} clientX
-	 * @param {number} clientY
-	 * @returns {HTMLElement|null}
+	 * @param {HTMLElement} elem - The element whose closest drop target to retrieve.
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
+	 * @returns {HTMLElement|null} The closest drop target, or `null` if not found.
 	 */
 	#getDropTarget(elem, clientX, clientY) {
 		const node = this.#getNode(elem);
@@ -462,9 +462,9 @@ class SortableTree {
 	/**
 	 * Retrieves the offset position of the cursor relative to the dragged node.
 	 * 
-	 * @param {number} clientX
-	 * @param {number} clientY
-	 * @returns {{x: number, y: number}}
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
+	 * @returns {{x: number, y: number}} The X and Y coordinates of the offset position.
 	 */
 	#getDragOffsetPosition(clientX, clientY) {
 		const domRect = this.draggedNode.getBoundingClientRect();
@@ -487,7 +487,7 @@ class SortableTree {
 	/**
 	 * Removes the insertion position markers from all elements within the wrapper that match the specified CSS selector.
 	 * 
-	 * @param {string} selector
+	 * @param {string} selector - The CSS selector of the elements.
 	 * @returns {void}
 	 */
 	#removeInsertionMarkers(selector) {
@@ -500,9 +500,9 @@ class SortableTree {
 	/**
 	 * Detects whether the cursor is positioned below the first half of the specified element's height.
 	 * 
-	 * @param {HTMLElement} elem
-	 * @param {number} clientY
-	 * @returns {boolean}
+	 * @param {HTMLElement} elem - The element used for detection.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
+	 * @returns {boolean} `true` if the cursor is positioned below; otherwise, `false`.
 	 */
 	#detectIsCursorBelow(elem, clientY) {
 		const domRect = elem.getBoundingClientRect();
@@ -513,9 +513,9 @@ class SortableTree {
 	/**
 	 * Detects whether the cursor is positioned after the first half of the specified element's width.
 	 * 
-	 * @param {HTMLElement} elem
-	 * @param {number} clientX
-	 * @returns {boolean}
+	 * @param {HTMLElement} elem - The element used for detection.
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @returns {boolean} `true` if the cursor is positioned after; otherwise, `false`.
 	 */
 	#detectIsCursorIndented(elem, clientX) {
 		const domRect = elem.getBoundingClientRect();
@@ -526,9 +526,9 @@ class SortableTree {
 	/**
 	 * Detects whether the cursor's position is outside of the wrapper element.
 	 * 
-	 * @param {number} clientX
-	 * @param {number} clientY
-	 * @returns {boolean}
+	 * @param {number} clientX - The horizontal coordinate of the mouse.
+	 * @param {number} clientY - The vertical coordinate of the mouse.
+	 * @returns {boolean} `true` if the cursor's position is outside; otherwise, `false`.
 	 */
 	#detectIsCursorOutside(clientX, clientY) {
 		const { top, bottom, left, right } = this.wrapper.getBoundingClientRect();
@@ -540,8 +540,8 @@ class SortableTree {
 	/**
 	 * Opens the collapsed subtree of the node over which the dragged node is positioned.
 	 * 
-	 * @param {HTMLElement} dropTarget
-	 * @param {HTMLElement} elem
+	 * @param {HTMLElement} dropTarget - The drop target over which the dragged node is positioned.
+	 * @param {HTMLElement} elem - The element over which the dragged node is positioned.
 	 * @returns {void}
 	 */
 	#openCollapsedSubtree(dropTarget, elem) {
@@ -575,7 +575,7 @@ class SortableTree {
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {

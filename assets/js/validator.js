@@ -15,21 +15,21 @@ class Validator {
 	form;
 
 	/**
-	 * The class added to the input field when it is invalid.
+	 * The class that is added to the input field when it is invalid.
 	 * 
 	 * @type {string}
 	 */
 	invalidInputClass = "is-invalid";
 
 	/**
-	 * The class added to the input field when it is valid.
+	 * The class that is added to the input field when it is valid.
 	 * 
 	 * @type {string}
 	 */
 	validInputClass = "is-valid";
 
 	/**
-	 * The class added to the submit buttons when the form is submitted.
+	 * The class that is added to the submit buttons when the form is submitted.
 	 * 
 	 * @type {string}
 	 */
@@ -111,16 +111,16 @@ class Validator {
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLFormElement} options.form - The form element.
-	 * @param {string} options.invalidInputClass - The class added to the input field when it is invalid.
-	 * @param {string} options.validInputClass - The class added to the input field when it is valid.
-	 * @param {string} options.isDisabledClass - The class added to the submit buttons when the form is submitted.
+	 * @param {string} options.invalidInputClass - The class that is added to the input field when it is invalid.
+	 * @param {string} options.validInputClass - The class that is added to the input field when it is valid.
+	 * @param {string} options.isDisabledClass - The class that is added to the submit buttons when the form is submitted.
 	 * @param {Object<string, string>} options.messages - Error messages for different types of errors.
 	 * @param {Object<string, string>} options.messageAttrs - Attributes that hold custom error messages for different types of errors.
-	 * @param {function():void} options.initCallback - Callback function that is called after the validator been initialized.
-	 * @param {function():void} options.submitCallback - Callback function that is called after the form has been submitted.
-	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void} options.invalidCallback - Callback function that is called after an input field is validated as invalid inside the form.
-	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void} options.validCallback - Callback function that is called after an input field is validated inside the form.
-	 * @param {function(function(Element[]):void} options.hasInvalidCallback - Callback function that is called when all input fields are validated and one or more of them are invalid.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the validator been initialized.
+	 * @param {function():void|null} options.submitCallback - Callback function that is called after the form has been submitted.
+	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void|null} options.invalidCallback - Callback function that is called after an input field is validated as invalid inside the form.
+	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void|null} options.validCallback - Callback function that is called after an input field is validated inside the form.
+	 * @param {function(function(Element[]):void|null} options.hasInvalidCallback - Callback function that is called when all input fields are validated and one or more of them are invalid.
 	 * @returns {Validator}
 	 */
 	constructor(options) {
@@ -147,9 +147,9 @@ class Validator {
 	/**
 	 * Validates the specified input element.
 	 * 
-	 * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input
-	 * @param {boolean} checkSimilarControls
-	 * @returns {boolean}
+	 * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input - The input element to be validated.
+	 * @param {boolean} checkSimilarControls - Indicates whether to check checkboxes and radios with the same name.
+	 * @returns {boolean} `true` if the input element is valid; otherwise, `false`.
 	 */
 	validateInput(input, checkSimilarControls = true) {
 		const isValid = input.checkValidity();
@@ -183,7 +183,7 @@ class Validator {
 	/**
 	 * Validates all input elements within the form.
 	 * 
-	 * @returns {boolean}
+	 * @returns {boolean} `true` if all input elements are valid; otherwise, `false`.
 	 */
 	validateAllInputs() {
 		let invalidInputs = Array.from(this.form.elements).filter((elem) => {
@@ -209,12 +209,11 @@ class Validator {
 	}
 
 	/**
-	 * Gets the error type of the first error that occurred during input validation.
+	 * Retrieves the type of the first error that occurred during input validation.
 	 * 
-	 * @param {HTMLInputElement|HTMLSelectElement} input
-	 * @returns {string}
+	 * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input - The input element whose error type to be retrieved.
+	 * @returns {string} The error type.
 	 */
-
 	#getErrorType(input) {
 		for (let key in this.messages) {
 			if (key in input.validity && input.validity[key]) {
@@ -225,11 +224,11 @@ class Validator {
 	}
 
 	/**
-	 * Gets the message related to the specified error type.
+	 * Retrieves the message related to the specified error type.
 	 * 
-	 * @param {HTMLInputElement|HTMLSelectElement} input
-	 * @param {string} errorType
-	 * @returns {string}
+	 * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input - The input element whose error message to be retrieved.
+	 * @param {string} errorType - The type of the error.
+	 * @returns {string} The error message.
 	 */
 	#getErrorMessage(input, errorType) {
 		if (errorType in this.messageAttrs && input.hasAttribute(this.messageAttrs[errorType])) {
@@ -243,7 +242,7 @@ class Validator {
 	/**
 	 * Executes when the input element is invalid.
 	 * 
-	 * @param {HTMLInputElement|HTMLSelectElement} input
+	 * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input - The invalid input element.
 	 * @returns {void}
 	 */
 	#isInputInvalid(input) {
@@ -256,6 +255,7 @@ class Validator {
 	/**
 	 * Executes when the input element is valid.
 	 * 
+	 * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input - The valid input element.
 	 * @returns {void}
 	 */
 	#isInputValid(input) {
@@ -301,7 +301,7 @@ class Validator {
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {

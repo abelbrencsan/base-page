@@ -45,13 +45,6 @@ class PopupManager {
 	removePopupCallback = null;
 
 	/**
-	 * Callback function that is called after the popup manager has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * The Intersection Observer API used to detect when the target element of the popups becomes visible.
 	 * 
 	 * @type {IntersectionObserver}
@@ -73,15 +66,33 @@ class PopupManager {
 	popups = [];
 
 	/**
+	 * Indicates whether there is an open dialog.
+	 * 
+	 * @returns {boolean}
+	 */
+	get #hasOpenDialog() {
+		return document.querySelector("[open]") !== null;
+	}
+
+	/**
+	 * The IDs of the viewed popups.
+	 * 
+	 * @returns {string[]}
+	 */
+	get #viewedPopupIds() {
+		const encodedIds = sessionStorage.getItem(this.storageKeyName) || "[]";
+		return JSON.parse(encodedIds);
+	}
+
+	/**
 	 * Creates a popup manager.
 	 * 
 	 * @param {Object} options
-	 * @param {string} options.storageKeyName
-	 * @param {boolean} options.consent
-	 * @param {function():void} options.initCallback
-	 * @param {function(HTMLElement):void} options.addPopupCallback
-	 * @param {function():void} options.removePopupCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {string} options.storageKeyName - The key name of the session storage where the viewed popups are stored.
+	 * @param {boolean} options.consent - The consent for popups to appear.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the popup manager has been initialized.
+	 * @param {function(HTMLElement):void|null} options.addPopupCallback - Callback function that is called after a popup is added to the popup manager.
+	 * @param {function():void|null} options.removePopupCallback - Callback function that is called after a popup is removed from the popup manager.
 	 * @returns {PopupManager}
 	 */
 	constructor(options) {
@@ -98,7 +109,7 @@ class PopupManager {
 		this.observer = new IntersectionObserver((entries) => {
 			let prevScrollPos = this.prevScrollPos;
 			this.prevScrollPos = window.scrollY;
-			if (this.hasOpenDialog || !this.consent) return;
+			if (this.#hasOpenDialog || !this.consent) return;
 			entries.forEach((entry) => {
 				this.popups.forEach((popup) => {
 					if (popup.targetElement == entry.target && !this.#isPopupViewed(popup)) {
@@ -115,7 +126,7 @@ class PopupManager {
 	/**
 	 * Open the specified popup.
 	 * 
-	 * @param {PopupManagerPopup} popup
+	 * @param {PopupManagerPopup} popup - The popup to be opened.
 	 * @returns {void}
 	 */
 	openPopup(popup) {
@@ -126,7 +137,7 @@ class PopupManager {
 	/**
 	 * Adds a new popup.
 	 * 
-	 * @param {PopupManagerPopup} popup
+	 * @param {PopupManagerPopup} popup - The popup to be added.
 	 * @returns {void}
 	 */
 	addPopup(popup) {
@@ -138,7 +149,7 @@ class PopupManager {
 	/**
 	 * Removes the specified popup.
 	 * 
-	 * @param {PopupManagerPopup} popup
+	 * @param {PopupManagerPopup} popup - The popup to be removed.
 	 * @returns {void}
 	 */
 	removePopup(popup) {
@@ -156,50 +167,21 @@ class PopupManager {
 	}
 
 	/**
-	 * Destroys the popup manager.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.popups.forEach((popup) => popup.destroy());
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
-	 * Indicates whether there is an open dialog.
-	 * 
-	 * @returns {boolean}
-	 */
-	get hasOpenDialog() {
-		return document.querySelector("[open]") !== null;
-	}
-
-	/**
 	 * Sets the popup as viewed.
 	 * 
-	 * @param {PopupManagerPopup} popup
+	 * @param {PopupManagerPopup} popup - The popup to be set as viewed.
 	 * @returns {void}
 	 */
 	#setPopupAsViewed(popup) {
-		let popupIds = this.#getViewedPopupIds();
+		let popupIds = this.#viewedPopupIds;
 		popupIds.push(popup.id);
 		this.#setViewedPopupIds(popupIds);
 	}
 
 	/**
-	 * Retrieves the IDs of viewed popups from session storage.
-	 * 
-	 * @returns {string[]}
-	 */
-	#getViewedPopupIds() {
-		const encodedIds = sessionStorage.getItem(this.storageKeyName) || "[]";
-		return JSON.parse(encodedIds);
-	}
-
-	/**
 	 * Sets the specified popup IDs as viewed in session storage.
 	 * 
-	 * @param {string[]} popupIds
+	 * @param {string[]} popupIds - The IDs of the popups to be set as viewed.
 	 * @returns {void}
 	 */
 	#setViewedPopupIds(popupIds) {
@@ -210,11 +192,11 @@ class PopupManager {
 	/**
 	 * Indicates whether the specified popup has been viewed.
 	 * 
-	 * @param {PopupManagerPopup} popup
-	 * @returns {boolean}
+	 * @param {PopupManagerPopup} popup - The popup to be checked.
+	 * @returns {boolean} `true` if the popup has been viewed; otherwise, `false`.
 	 */
 	#isPopupViewed(popup) {
-		let popupIds = this.#getViewedPopupIds();
+		let popupIds = this.#viewedPopupIds;
 		return popupIds.some((popupId) => popup.id == popupId);
 	}
 }
@@ -223,18 +205,24 @@ class PopupManager {
  * Popup manager popup
  * This class is designed to create a popup for a popup manager.
  * 
- * 
  * @author Abel Brencsan
  * @license MIT License
  */
 class PopupManagerPopup {
 
 	/**
-	 * The id of the popup.
+	 * The ID of the popup.
 	 * 
 	 * @type {string}
 	 */
 	id;
+
+	/**
+	 * The dialog to be displayed when the target element becomes visible.
+	 * 
+	 * @type {Dialog}
+	 */
+	dialog;
 
 	/**
 	 * The dialog appears when the target element becomes visible in the viewport.
@@ -244,14 +232,7 @@ class PopupManagerPopup {
 	targetElement;
 
 	/**
-	 * Represents the dialog to be displayed when the target element becomes visible.
-	 * 
-	 * @type {Dialog}
-	 */
-	dialog;
-
-	/**
-	 * The dialog appears when the target element becomes visible upon scrolling upward.
+	 * Indicates whether the dialog appears only if the target element becomes visible upon scrolling upward.
 	 * 
 	 * @type {boolean}
 	 */
@@ -265,22 +246,14 @@ class PopupManagerPopup {
 	initCallback = null;
 
 	/**
-	 * Callback function that is called after the popup has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Creates a popup.
 	 * 
 	 * @param {Object} options
-	 * @param {string} options.id
-	 * @param {Dialog} options.dialog
-	 * @param {Element} options.targetElement
-	 * @param {boolean} options.onlyUpward
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {string} options.id - The ID of the popup.
+	 * @param {Dialog} options.dialog - The dialog to be displayed when the target element becomes visible.
+	 * @param {Element} options.targetElement - The dialog appears when the target element becomes visible in the viewport.
+	 * @param {boolean} options.onlyUpward - Indicates whether the dialog appears only if the target element becomes visible upon scrolling upward.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the popup has been initialized.
 	 * @returns {PopupManagerPopup}
 	 */
 	constructor(options) {
@@ -305,15 +278,6 @@ class PopupManagerPopup {
 
 		// Initialize the popup
 		if (typeof(this.initCallback) == "function") this.initCallback();
-	}
-
-	/**
-	 * Destroys the popup.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 }
 

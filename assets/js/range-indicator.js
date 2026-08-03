@@ -8,21 +8,21 @@
 class RangeIndicator {
 
 	/**
-	 * Represents an input range element.
+	 * The range input element whose value is displayed in the indicator.
 	 * 
 	 * @type {HTMLInputElement}
 	 */
 	input;
 
 	/**
-	 * Represents the indicator of the range input where the value is displayed.
+	 * The indicator of the range input in which the value is displayed.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	indicator;
 
 	/**
-	 * Function that is called to handle custom formatting of the value.
+	 * Function that is called to format the value.
 	 * 
 	 * @type {function():void|null}
 	 */
@@ -43,13 +43,6 @@ class RangeIndicator {
 	isValueChangedCallback = null;
 
 	/**
-	 * Callback function that is called after the range indicator has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Initial inner HTML of the indicator.
 	 * 
 	 * @type {string}
@@ -60,12 +53,11 @@ class RangeIndicator {
 	 * Creates a range indicator.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.input
-	 * @param {HTMLElement} options.indicator
-	 * @param {function():void} options.formatter
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.isValueChangedCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.input - The range input element whose value is displayed in the indicator.
+	 * @param {HTMLElement} options.indicator - The indicator of the range input in which the value is displayed.
+	 * @param {function():void|null} options.formatter - Function that is called to format the value.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the range input has been initialized.
+	 * @param {function():void|null} options.isValueChangedCallback - Callback function that is called after the range input value has changed.
 	 * @returns {RangeIndicator}
 	 */
 	constructor(options) {
@@ -111,21 +103,9 @@ class RangeIndicator {
 	}
 
 	/**
-	 * Destroys the range indicator.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		this.indicator.innerText = this.#initialInnerHTML;
-		this.#initialInnerHTML = "";
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
 	* Get the current value of the range input.
 	* 
-	* @return {number}
+	* @return {number} The value as a number.
 	*/
 	get inputValue() {
 		return Number(this.input.value);
@@ -151,18 +131,9 @@ class RangeIndicator {
 	}
 
 	/**
-	 * Removes event listeners related to the range indicator.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.input.removeEventListener("input", this);
-	}
-
-	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {

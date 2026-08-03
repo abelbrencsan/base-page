@@ -8,7 +8,7 @@
 class Autocomplete {
 
 	/**
-	 * Represents an input element to which the suggestions belong.
+	 * The input element to which the suggestions belong.
 	 * 
 	 * @type {HTMLInputElement}
 	 */
@@ -22,21 +22,21 @@ class Autocomplete {
 	id;
 
 	/**
-	 * A function that is called to retrieve the available suggestions.
+	 * Function that is called to retrieve the available suggestions.
 	 * 
 	 * @type {function(string,function(string[])):void}
 	 */
 	getSuggestions;
 
 	/**
-	 * A function that is called to handle how the suggestion is rendered.
+	 * Function that is called to format how a selected suggestion appears in the input.
 	 * 
 	 * @type {function(any,string):string}
 	 */
 	renderItem;
 
 	/**
-	 * Function that is called to handle how the selected suggestions appears in the input.
+	 * Function that is called to format how the selected suggestion appears in the input.
 	 * 
 	 * @type {function(any,string):string}
 	 */
@@ -127,13 +127,6 @@ class Autocomplete {
 	selectCallback = null;
 
 	/**
-	 * Callback function that is called after the autocomplete has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Represents an HTML list to which suggestions are appended.
 	 * 
 	 * @type {HTMLUListElement|null}
@@ -172,22 +165,22 @@ class Autocomplete {
 	 * Creates an autocomplete.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLInputElement} options.input
-	 * @param {function(string,function(string[])):void} options.getSuggestions
-	 * @param {function(any,string):string} options.renderItem
-	 * @param {function(any,string):string} options.renderInputValue
-	 * @param {number} options.minChars
-	 * @param {number} options.delay
-	 * @param {number|null} options.maxSuggestions
-	 * @param {string[]} options.listClasses
-	 * @param {string[]} options.itemClasses
-	 * @param {string} options.isOpenClass
-	 * @param {string} options.hasOpenAutocompleteClass
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.openCallback
-	 * @param {function():void} options.closeCallback
-	 * @param {function(any):void} options.selectCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLInputElement} options.input - The input element to which the suggestions belong.
+	 * @param {string} options.id - The ID of the list element to which suggestions are appended.
+	 * @param {function(string,function(string[])):void} options.getSuggestions - Function that is called to retrieve the available suggestions.
+	 * @param {function(any,string):string} options.renderInputValue - Function that is called to format how the selected suggestion appears in the input.
+	 * @param {number} options.minChars - The minimum number of characters required before the suggestions appear.
+	 * @param {number} options.delay - The delay before `getSuggestions` is called to retrieve the available suggestions.
+	 * @param {number|null} options.maxSuggestions - The maximum number of suggestions to render.
+	 * @param {string[]} options.listClasses - Classes added to the list element to which suggestions are appended.
+	 * @param {string[]} options.itemClasses - Classes added to the list item where a suggestion is rendered.
+	 * @param {string} options.isOpenClass - The class added to the list element when the autocomplete is open.
+	 * @param {string} options.hasOpenAutocompleteClass -The class added to the input element when it has an open autocomplete. 
+	 * @param {string} options.isHighlightedClass -The class added to the list item when it is highlighted.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the autocomplete has been initialized.
+	 * @param {function():void|null} options.openCallback - Callback function that is called after the autocomplete is opened.
+	 * @param {function():void|null} options.closeCallback - Callback function that is called after the autocomplete is closed.
+	 * @param {function(any):void|null} options.selectCallback - Callback function that is called after a suggestion is selected.
 	 * @returns {Autocomplete}
 	 */
 	constructor(options) {
@@ -222,22 +215,6 @@ class Autocomplete {
 		this.#initInputAttributes();
 		this.#addEvents();
 		if (typeof(this.initCallback) == "function") this.initCallback();
-	}
-
-	/**
-	 * Destroys the autocomplete.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		this.#removeInputAttributes();
-		this.#destroyList();
-		this.timeoutId = null;
-		this.suggestions = [];
-		this.highlightIndex = null;
-		this.isOpen = false;
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**
@@ -284,7 +261,7 @@ class Autocomplete {
 	/**
 	 * Creates the items from the specified suggestions and appends them to the list.
 	 * 
-	 * @param {any[]} suggestions
+	 * @param {any[]} suggestions - The suggestions from which to create list items.
 	 * @returns {void}
 	 */
 	#createItems(suggestions) {
@@ -401,7 +378,7 @@ class Autocomplete {
 	/**
 	 * Selects the specified suggestion.
 	 * 
-	 * @param {any} suggestion
+	 * @param {any} suggestion - The suggestion to be selected.
 	 * @returns {void}
 	 */
 	#selectSuggestion(suggestion) {
@@ -463,16 +440,6 @@ class Autocomplete {
 	}
 
 	/**
-	 * Destroys the list to which suggestions are appended.
-	 * 
-	 * @returns {void}
-	 */
-	#destroyList() {
-		this.list.remove();
-		this.list = [];
-	}
-
-	/**
 	 * Initializes the attributes of the input element.
 	 * 
 	 * @returns {void}
@@ -485,21 +452,6 @@ class Autocomplete {
 		this.input.setAttribute("aria-controls", this.id);
 		this.input.setAttribute("role", "combobox");
 		this.input.setAttribute("aria-autocomplete", "both");
-	}
-
-	/**
-	 * Removes the attributes from the input element.
-	 * 
-	 * @returns {void}
-	 */
-	#removeInputAttributes() {
-		this.input.removeAttribute("autocomplete");
-		this.input.removeAttribute("autocorrect");
-		this.input.removeAttribute("autocapitalize");
-		this.input.removeAttribute("aria-expanded");
-		this.input.removeAttribute("aria-controls");
-		this.input.removeAttribute("role");
-		this.input.removeAttribute("aria-autocomplete");
 	}
 
 	/**
@@ -519,25 +471,24 @@ class Autocomplete {
 	}
 
 	/**
-	 * Removes event listeners related to the autocomplete.
+	 * Executes when the mouse is pressed while the pointer is over the list element.
 	 * 
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
-	#removeEvents() {
-		if (this.list) {
-			this.list.removeEventListener("mousedown", this);
-		}
-		this.input.removeEventListener("focus", this);
-		this.input.removeEventListener("blur", this);
-		this.input.removeEventListener("input", this);
-		this.input.removeEventListener("keydown", this);
-		this.input.removeEventListener("keyup", this);
+	#onListMouseDown(event) {
+		this.list.childNodes.forEach((item, index) => {
+			if (item.contains(event.target)) {
+				this.highlightIndex = index;
+				this.#selectHighlightedItem();
+			}
+		});
 	}
 
 	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
@@ -574,21 +525,6 @@ class Autocomplete {
 				}
 				break;
 		}
-	}
-
-	/**
-	 * Executes when the mouse is pressed while the pointer is over the list element.
-	 * 
-	 * @param {Event} event
-	 * @returns {void}
-	 */
-	#onListMouseDown(event) {
-		this.list.childNodes.forEach((item, index) => {
-			if (item.contains(event.target)) {
-				this.highlightIndex = index;
-				this.#selectHighlightedItem();
-			}
-		});
 	}
 }
 

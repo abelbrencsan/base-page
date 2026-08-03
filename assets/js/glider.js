@@ -8,28 +8,28 @@
 class Glider {
 
 	/**
-	 * Represents the wrapper element.
+	 * The wrapper element.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	wrapper;
 
 	/**
-	 * Represents the viewport element in which the items glide.
+	 * The viewport element within which the items glide.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	viewport;
 
 	/**
-	 * Represents the trigger that scrolls the glider to the previous item when clicked.
+	 * The trigger that scrolls the glider to the previous item when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	prevTrigger;
 
 	/**
-	 * Represents the trigger that scrolls the glider to the next item when clicked.
+	 * The trigger that scrolls the glider to the next item when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
@@ -64,7 +64,7 @@ class Glider {
 	autoplay = 0;
 
 	/**
-	 * Represents the trigger that stops or restarts the autoplay.
+	 * The trigger that stops or restarts the autoplay.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
@@ -134,13 +134,6 @@ class Glider {
 	stopAutoplayCallback = null;
 
 	/**
-	 * Callback function that is invoked after the glider becomes scrollable.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * The ID of the interval created to handle autoplay.
 	 * 
 	 * @type {number|null}
@@ -155,28 +148,54 @@ class Glider {
 	observer;
 
 	/**
+	 * The width which the viewport should be scrolled.
+	 * 
+	 * @returns {number}
+	 */
+	get itemScrollWidth() {
+		return this.items.length ? this.items[0].offsetWidth : 0;
+	}
+
+	/**
+	 * Indicates whether the viewport is scrollable.
+	 * 
+	 * @returns {boolean}
+	 */
+	get isScrollable() {
+		return this.viewport.scrollWidth > this.viewport.offsetWidth;
+	}
+
+	/**
+	 * The scroll position of the last glide.
+	 * 
+	 * @returns {number}
+	 */
+	get maxScrollLeft() {
+		return this.viewport.scrollWidth - this.viewport.clientWidth;
+	}
+
+	/**
 	 * Creates a glider.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper
-	 * @param {HTMLElement} options.viewport
-	 * @param {HTMLButtonElement} options.prevTrigger
-	 * @param {HTMLButtonElement} options.nextTrigger
-	 * @param {Array<HTMLElement>} options.items
-	 * @param {boolean} options.hasRewind
-	 * @param {number} options.threshold
-	 * @param {number} options.autoplay
-	 * @param {HTMLButtonElement|null} options.autoplayTrigger
-	 * @param {string} options.isItemVisibleClass
-	 * @param {string} options.isScrollableClass
-	 * @param {string} options.isFirstGlideClass
-	 * @param {string} options.isLastGlideClass
-	 * @param {string} options.hasAutoplayClass
-	 * @param {string} options.isAutoplayStoppedClass
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.startAutoplayCallback
-	 * @param {function():void} options.stopAutoplayCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The wrapper element.
+	 * @param {HTMLElement} options.viewport - The viewport element within which the items glide.
+	 * @param {HTMLButtonElement} options.prevTrigger - The trigger that scrolls the glider to the previous item when clicked.
+	 * @param {HTMLButtonElement} options.nextTrigger - The trigger that scrolls the glider to the next item when clicked.
+	 * @param {Array<HTMLElement>} options.items - List of items that are gliding within the viewport.
+	 * @param {boolean} options.hasRewind - Indicates whether the glider jumps back to the first or last item when no next or previous items are available.
+	 * @param {number} options.threshold - The threshold between 0 and 1 indicating how much of the element must be visible to be marked as visible.
+	 * @param {number} options.autoplay - The delay in milliseconds after the glider automatically scrolls forward to the next item. 
+	 * @param {HTMLButtonElement|null} options.autoplayTrigger - The trigger that stops or restarts the autoplay.
+	 * @param {string} options.isItemVisibleClass - The class that is added to the items while they are visible within the viewport.
+	 * @param {string} options.isScrollableClass - The class that is added to the wrapper element when the viewport is scrollable.
+	 * @param {string} options.isFirstGlideClass - The class that is added to the wrapper element when the viewport reaches the first glide.
+	 * @param {string} options.isLastGlideClass - The class that is added to the wrapper element when the viewport reaches the last glide.
+	 * @param {string} options.hasAutoplayClass - The class that is added to the wrapper element when the autoplay is enabled.
+	 * @param {string} options.isAutoplayStoppedClass - The class that is added to the wrapper when the autoplay has been stopped.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the glider has been initialized.
+	 * @param {function():void|null} options.startAutoplayCallback - Callback function that is called after the autoplay has been started.
+	 * @param {function():void|null} options.stopAutoplayCallback - Callback function that is called after the autoplay has been stopped.
 	 * @returns {Glider}
 	 */
 	constructor(options) {
@@ -243,8 +262,8 @@ class Glider {
 	/**
 	 * Scrolls the glider to the item with the specified index.
 	 * 
-	 * @param {number} index
-	 * @param {behavior} string
+	 * @param {number} index - The index of the item.
+	 * @param {string} behavior - The behavior of the scroll.
 	 * @returns {void}
 	 */
 	scrollToItem(index, behavior = "smooth") {
@@ -278,58 +297,9 @@ class Glider {
 	}
 
 	/**
-	 * Destroys the glider.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		this.stopAutoplay();
-		this.observer.disconnect();
-		this.wrapper.classList.remove(this.isScrollableClass);
-		this.wrapper.classList.remove(this.isFirstGlideClass);
-		this.wrapper.classList.remove(this.isLastGlideClass);
-		this.wrapper.classList.remove(this.hasAutoplayClass);
-		this.wrapper.classList.remove(this.isAutoplayStoppedClass);
-		this.prevTrigger.removeAttribute("disabled");
-		this.nextTrigger.removeAttribute("disabled");
-		this.items.forEach((item) => {
-			item.classList.remove(this.isItemVisibleClass);
-		});
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
-	 * Retrieves the width which the viewport should be scrolled.
-	 * 
-	 * @returns {number}
-	 */
-	get itemScrollWidth() {
-		return this.items.length ? this.items[0].offsetWidth : 0;
-	}
-
-	/**
-	 * Indicates whether the viewport is scrollable.
-	 * 
-	 * @returns {boolean}
-	 */
-	get isScrollable() {
-		return this.viewport.scrollWidth > this.viewport.offsetWidth;
-	}
-
-	/**
-	 * Retrieves the scroll position of the last glide.
-	 * 
-	 * @returns {number}
-	 */
-	get maxScrollLeft() {
-		return this.viewport.scrollWidth - this.viewport.clientWidth;
-	}
-
-	/**
 	 * Initializes the intersection observer API to detect visible items within the viewport.
 	 * 
-	 * @returns {IntersectionObserver}
+	 * @returns {IntersectionObserver} The created intersection observer.
 	 */
 	#initObserver() {
 		return new IntersectionObserver((entries) => {
@@ -342,7 +312,7 @@ class Glider {
 	/**
 	 * Processes an entry within the intersection observer API.
 	 * 
-	 * @param {IntersectionObserverEntry} entry
+	 * @param {IntersectionObserverEntry} entry - The intersection observer entry to be processed.
 	 * @returns {void}
 	 */
 	#processObserverEntry(entry) {
@@ -364,8 +334,8 @@ class Glider {
 	/**
 	 * Scrolls the glider to the specified scroll position.
 	 * 
-	 * @param {number} scrollLeft
-	 * @param {behavior} string
+	 * @param {number} scrollLeft - The horizontal scroll position to be set.
+	 * @param {string} behavior - The behavior of the scroll.
 	 * @returns {void}
 	 */
 	#scrollTo(scrollLeft, behavior = "smooth") {
@@ -379,8 +349,8 @@ class Glider {
 	/**
 	 * Retrieves the clamped value of the specified scroll position to ensure it stays within the available range.
 	 * 
-	 * @param {number} scrollLeft
-	 * @returns {number}
+	 * @param {number} scrollLeft - The horizontal scroll position to be set.
+	 * @returns {number} The clamped value of the scroll position.
 	 */
 	#clampScrollLeft(scrollLeft) {
 		let clampedScrollLeft = Math.min(Math.max(0, scrollLeft), this.maxScrollLeft);
@@ -429,20 +399,9 @@ class Glider {
 	}
 
 	/**
-	 * Removes event listeners related to the glider.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.prevTrigger.removeEventListener("click", this);
-		this.nextTrigger.removeEventListener("click", this);
-		if (this.autoplayTrigger) this.autoplayTrigger.removeEventListener("click", this);
-	}
-
-	/**
 	 * Handles events.
 	 * 
-	 * @param {Event} event
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#handleEvents(event) {
