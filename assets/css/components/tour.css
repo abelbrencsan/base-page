@@ -316,23 +316,39 @@ div.tour {
 	}
 
 	&.tour--zoom-2 {
-		--tour-zoom-level: 130%;
+		--tour-zoom-level: 120%;
 	}
 
 	&.tour--zoom-3 {
-		--tour-zoom-level: 160%;
+		--tour-zoom-level: 140%;
 	}
 
 	&.tour--zoom-4 {
-		--tour-zoom-level: 190%;
+		--tour-zoom-level: 160%;
 	}
 
 	&.tour--zoom-5 {
-		--tour-zoom-level: 220%;
+		--tour-zoom-level: 180%;
 	}
 
 	&.tour--zoom-6 {
-		--tour-zoom-level: 250%;
+		--tour-zoom-level: 200%;
+	}
+
+	&.tour--zoom-7 {
+		--tour-zoom-level: 220%;
+	}
+
+	&.tour--zoom-8 {
+		--tour-zoom-level: 240%;
+	}
+
+	&.tour--zoom-9 {
+		--tour-zoom-level: 260%;
+	}
+
+	&.tour--zoom-10 {
+		--tour-zoom-level: 280%;
 	}
 }
 

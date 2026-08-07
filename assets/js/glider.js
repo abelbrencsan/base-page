@@ -36,7 +36,7 @@ class Glider {
 	nextTrigger;
 
 	/**
-	 * List of items that are gliding within the viewport.
+	 * An array of items that are gliding within the viewport.
 	 * 
 	 * @type {Array<HTMLElement>}
 	 */
@@ -182,7 +182,7 @@ class Glider {
 	 * @param {HTMLElement} options.viewport - The viewport element within which the items glide.
 	 * @param {HTMLButtonElement} options.prevTrigger - The trigger that scrolls the glider to the previous item when clicked.
 	 * @param {HTMLButtonElement} options.nextTrigger - The trigger that scrolls the glider to the next item when clicked.
-	 * @param {Array<HTMLElement>} options.items - List of items that are gliding within the viewport.
+	 * @param {Array<HTMLElement>} options.items - An array of items that are gliding within the viewport.
 	 * @param {boolean} options.hasRewind - Indicates whether the glider jumps back to the first or last item when no next or previous items are available.
 	 * @param {number} options.threshold - The threshold between 0 and 1 indicating how much of the element must be visible to be marked as visible.
 	 * @param {number} options.autoplay - The delay in milliseconds after the glider automatically scrolls forward to the next item. 

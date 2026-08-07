@@ -8,42 +8,42 @@
 class Tab {
 
 	/**
-	 * Represents the wrapper element.
+	 * The wrapper element.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	wrapper;
 
 	/**
-	 * Represents a collection of nodes that includes the triggers for the tab.
+	 * A collection of nodes that includes the triggers for the tab.
 	 * 
 	 * @type {NodeList}
 	 */
 	triggers;
 
 	/**
-	 * Represents a collection of nodes that includes the panels for the tab.
+	 * A collection of nodes that includes the panels for the tab.
 	 * 
 	 * @type {NodeList}
 	 */
 	panels;
 
 	/**
-	 * The index of the selected tab.
+	 * The index of the selected tab item.
 	 * 
 	 * @type {number}
 	 */
 	index = 0;
 
 	/**
-	 * The class added to the selected tab trigger and panel.
+	 * The class that is added to the selected tab trigger and panel.
 	 * 
 	 * @type {string}
 	 */
 	isActiveClass = "is-active";
 
 	/**
-	 * The class added to the wrapper after the tab has been initialized.
+	 * The class that is added to the wrapper after the tab has been initialized.
 	 * 
 	 * @type {string}
 	 */
@@ -57,24 +57,16 @@ class Tab {
 	initCallback = null;
 
 	/**
-	 * Callback function that is called after the tab has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
 	 * Creates a tab.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper
-	 * @param {NodeList} options.triggers
-	 * @param {NodeList} options.panels
-	 * @param {number} options.index
-	 * @param {string} options.isActiveClass
-	 * @param {string} options.isInitializedClass
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The wrapper element.
+	 * @param {NodeList} options.triggers - A collection of nodes that includes the triggers for the tab.
+	 * @param {NodeList} options.panels - A collection of nodes that includes the panels for the tab.
+	 * @param {number} options.index - The index of the selected tab item.
+	 * @param {string} options.isActiveClass - The class that is added to the selected tab trigger and panel.
+	 * @param {string} options.isInitializedClass - The class that is added to the wrapper after the tab has been initialized.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the tab has been initialized.
 	 * 
 	 * @returns {Tab}
 	 */
@@ -112,7 +104,7 @@ class Tab {
 	/**
 	 * Selects the tab item at the specified index.
 	 * 
-	 * @param {number} index
+	 * @param {number} index - The index to be selected.
 	 * @returns {void}
 	 */
 	select(index) {
@@ -126,23 +118,9 @@ class Tab {
 	}
 
 	/**
-	 * Destroys the tab.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#removeEvents();
-		this.triggers.forEach((trigger, index) => {
-			this.#reset(index);
-		});
-		this.wrapper.classList.remove(this.isInitializedClass);
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
 	 * Checks whether the specified index is valid and returns a valid index if it is not.
 	 * 
-	 * @param {number} index
+	 * @param {number} index - The index to be checked.
 	 * @returns {number}
 	 */
 	#getValidIndex(index) {
@@ -152,9 +130,9 @@ class Tab {
 	}
 
 	/**
-	 * Sets the attributes and classes of the item at the specified index as active.
+	 * Sets the attributes and classes of the tab item at the specified index as active.
 	 * 
-	 * @param {number} index
+	 * @param {number} index - The index to be set as active.
 	 * @returns {void}
 	 */
 	#setActive(index) {
@@ -169,7 +147,7 @@ class Tab {
 	/**
 	 * Sets the inactive attributes and classes of the item at the specified index.
 	 * 
-	 * @param {number} index
+	 * @param {number} index - The index to be set as inactive.
 	 * @returns {void}
 	 */
 	#setInactive(index) {
@@ -181,20 +159,6 @@ class Tab {
 		this.panels[index].setAttribute("tabindex", -1);
 	}
 
-	/**
-	 * Resets the attributes and classes of the item at the specified index.
-	 * 
-	 * @param {number} index
-	 * @returns {void}
-	 */
-	#reset(index) {
-		this.triggers[index].classList.remove(this.isActiveClass);
-		this.panels[index].classList.remove(this.isActiveClass);
-		this.triggers[index].removeAttribute("aria-selected");
-		this.triggers[index].removeAttribute("tabindex");
-		this.panels[index].removeAttribute("aria-hidden");
-		this.panels[index].removeAttribute("tabindex");
-	}
 
 	/**
 	 * Adds event listeners related to the tab.
@@ -209,23 +173,11 @@ class Tab {
 	}
 
 	/**
-	 * Removes event listeners related to the tab.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.wrapper.removeEventListener("keydown", this);
-		this.triggers.forEach((trigger) => {
-			trigger.removeEventListener("click", this);
-		});
-	}
-
-	/**
 	 * Executes after a key is pressed.
 	 * Selects the previous tab on left arrow key press.
 	 * Selects the next tab on left arrow key press.
 	 * 
-	 * @param {Event} event - The event to be handled.
+	 * @param {string} key - The value of the pressed key.
 	 * @returns {void}
 	 */
 	#isKeyPressed(key) {

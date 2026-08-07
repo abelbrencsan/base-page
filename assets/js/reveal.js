@@ -15,21 +15,21 @@ class Reveal {
 	threshold = 0;
 
 	/**
-	 * The class added to an element that is above the viewport.
+	 * The class that is added to an element that is above the viewport.
 	 * 
 	 * @type {string}
 	 */
 	aboveViewportClass = "above-viewport";
 
 	/**
-	 * The class added to an element that is below the viewport.
+	 * The class that is added to an element that is below the viewport.
 	 * 
 	 * @type {string}
 	 */
 	belowViewportClass = "below-viewport";
 
 	/**
-	 * The class added to an element that is in the viewport.
+	 * The class that is added to an element that is in the viewport.
 	 * 
 	 * @type {string}
 	 */
@@ -41,13 +41,6 @@ class Reveal {
 	 * @type {function():void|null}
 	 */
 	initCallback = null;
-
-	/**
-	 * Callback function that is called after the reveal has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
 
 	/**
 	 * The intersection observer used to detect intersections of elements.
@@ -67,12 +60,11 @@ class Reveal {
 	 * Creates a reveal.
 	 * 
 	 * @param {Object} options
-	 * @param {number} options.threshold
-	 * @param {string} options.aboveViewportClass
-	 * @param {string} options.belowViewportClass
-	 * @param {string} options.inViewportClass
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {number} options.threshold - The percentage of the target's visibility after the position has been checked.
+	 * @param {string} options.aboveViewportClass - The class that is added to an element that is above the viewport.
+	 * @param {string} options.belowViewportClass - The class that is added to an element that is below the viewport.
+	 * @param {string} options.inViewportClass - The class that is added to an element that is in the viewport.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the reveal has been initialized.
 	 * @returns {Reveal}
 	 */
 	constructor(options) {
@@ -93,11 +85,10 @@ class Reveal {
 	/**
 	 * Handles the reveals.
 	 * 
-	 * @param {IntersectionObserverEntry[]} entries
-	 * @param {IntersectionObserver} observer
+	 * @param {IntersectionObserverEntry[]} entries - The entries to be handled.
 	 * @returns {void}
 	 */
-	reveal(entries, observer) {
+	reveal(entries) {
 		entries.forEach((entry) => {
 			this.#resetElem(entry.target);
 			if (entry.intersectionRatio > this.threshold) {
@@ -115,7 +106,7 @@ class Reveal {
 	/**
 	 * Adds the specified element to the reveal.
 	 * 
-	 * @param {HTMLElement} elem
+	 * @param {HTMLElement} elem - The element to be added.
 	 * @return {void}
 	 */
 	add(elem) {
@@ -126,7 +117,7 @@ class Reveal {
 	/**
 	 * Removes the specified element from the reveal.
 	 * 
-	 * @param {HTMLElement} elem
+	 * @param {HTMLElement} elem - The element to be removed.
 	 * @return {void}
 	 */
 	remove(elem) {
@@ -138,23 +129,9 @@ class Reveal {
 	}
 
 	/**
-	 * Destroys the reveal.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.#observer.disconnect();
-		this.#elems.forEach((elem) => {
-			this.#resetElem(elem);
-		});
-		this.#elems = [];
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
 	 * Resets the attributes and classes of the specified element.
 	 * 
-	 * @param {HTMLElement} elem
+	 * @param {HTMLElement} elem - The element to be reset.
 	 * @returns {void}
 	 */
 	#resetElem(elem) {

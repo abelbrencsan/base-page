@@ -11,7 +11,7 @@ import { Glider } from "../js/glider.js";
 class Slideshow {
 
 	/**
-	 * The source of the slideshow dialog that is loaded.
+	 * The source of the slideshow dialog to be loaded.
 	 * 
 	 * @type {string}
 	 */
@@ -32,42 +32,42 @@ class Slideshow {
 	closeButtonLabel = "Close";
 
 	/**
-	 * Represents the wrapper element of the slideshow glider.
+	 * The wrapper element of the slideshow glider.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	gliderWrapper;
 
 	/**
-	 * Represents the viewport element of the slideshow glider in which the items glide.
+	 * The viewport element of the slideshow glider within which the items glide.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	gliderViewport;
 
 	/**
-	 * Represents a button that scrolls the slideshow glider to the previous item.
+	 * The trigger that scrolls the slideshow glider to the previous item when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	gliderPrevTrigger;
 
 	/**
-	 * Represents a button that scrolls the slideshow glider to the next item.
+	 * The trigger that scrolls the slideshow glider to the next item when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	gliderNextTrigger;
 
 	/**
-	 * List of items inside the slideshow glider viewport.
+	 * An array of items that are gliding within the slideshow glider viewport.
 	 * 
 	 * @type {HTMLElement[]}
 	 */
 	gliderItems;
 
 	/**
-	 * List of slideshow triggers that open the dialog on click.
+	 * An array of slideshow triggers that open the dialog on click.
 	 * 
 	 * @type {SlideshowTrigger[]}
 	 */
@@ -81,20 +81,6 @@ class Slideshow {
 	customClasses = [];
 
 	/**
-	 * A glider that allows the images to scroll vertically inside the slideshow.
-	 * 
-	 * @type {Glider|null}
-	 */
-	glider = null;
-
-	/**
-	 * A dialog that handles opening and closing the slideshow.
-	 * 
-	 * @type {Dialog|null}
-	 */
-	dialog = null;
-
-	/**
 	 * Callback function that is called after the slideshow has been initialized.
 	 * 
 	 * @type {function():void|null}
@@ -102,28 +88,34 @@ class Slideshow {
 	initCallback = null;
 
 	/**
-	 * Callback function that is called after the slideshow has been destroyed.
+	 * The glider that allows the images to scroll vertically inside the slideshow.
 	 * 
-	 * @type {function():void|null}
+	 * @type {Glider|null}
 	 */
-	destroyCallback = null;
+	glider = null;
+
+	/**
+	 * The dialog that handles opening and closing the slideshow.
+	 * 
+	 * @type {Dialog|null}
+	 */
+	dialog = null;
 
 	/**
 	 * Creates a slideshow.
 	 *
 	 * @param {Object} options
-	 * @param {string} options.source
-	 * @param {string} options.closeButtonHTML
-	 * @param {string|null} options.closeButtonLabel
-	 * @param {HTMLElement} options.gliderWrapper
-	 * @param {HTMLElement} options.gliderViewport
-	 * @param {HTMLButtonElement} options.gliderPrevTrigger
-	 * @param {HTMLButtonElement} options.gliderNextTrigger
-	 * @param {HTMLElement[]} options.gliderItems
-	 * @param {SlideshowTrigger[]} options.triggers
-	 * @param {string[]} options.customClasses
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {string} options.source - The source of the slideshow dialog to be loaded.
+	 * @param {string} options.closeButtonHTML - The HTML content that is appended to the close button of the dialog.
+	 * @param {string|null} options.closeButtonLabel - The label that is added to the close button of the dialog.
+	 * @param {HTMLElement} options.gliderWrapper - The wrapper element of the slideshow glider.
+	 * @param {HTMLElement} options.gliderViewport - The viewport element of the slideshow glider within which the items glide.
+	 * @param {HTMLButtonElement} options.gliderPrevTrigger - The trigger that scrolls the slideshow glider to the previous item when clicked.
+	 * @param {HTMLButtonElement} options.gliderNextTrigger - The trigger that scrolls the slideshow glider to the next item when clicked.
+	 * @param {HTMLElement[]} options.gliderItems - An array of items that are gliding within the slideshow glider viewport.
+	 * @param {SlideshowTrigger[]} options.triggers - An array of slideshow triggers that open the dialog on click.
+	 * @param {string[]} options.customClasses - Custom classes to be added to the slideshow dialog.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the slideshow has been initialized.
 	 * @returns {Slideshow}
 	 */
 	constructor(options) {
@@ -171,7 +163,7 @@ class Slideshow {
 	/**
 	 * Adds the specified element as a trigger.
 	 * 
-	 * @param {SlideshowTrigger} trigger
+	 * @param {SlideshowTrigger} trigger - The trigger to be added.
 	 * @returns {void}
 	 */
 	addTrigger(trigger) {
@@ -182,25 +174,13 @@ class Slideshow {
 	/**
 	 * Scrolls the slideshow glider to the item with the specified index.
 	 * 
-	 * @param {number} index
-	 * @param {behavior} string
+	 * @param {number} index - The index of the slideshow item to scroll to.
+	 * @param {behavior} string - The behavior of the scroll.
 	 * @returns {void}
 	 */
 	scrollToItem(index, behavior = "instant") {
 		if (!this.glider) return;
 		this.glider.scrollToItem(index, behavior);
-	}
-	
-	/**
-	 * Destroys the slideshow.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		if (this.glider) this.glider.destroy();
-		if (this.dialog) this.dialog.destroy();
-		this.#removeEvents();
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
 	}
 
 	/**
@@ -246,17 +226,6 @@ class Slideshow {
 	}
 
 	/**
-	 * Removes event listeners related to the slideshow.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.triggers.forEach((trigger) => {
-			trigger.elem.removeEventListener("click", this);
-		});
-	}
-
-	/**
 	 * Handles events.
 	 * 
 	 * @param {Event} event - The event to be handled.
@@ -287,7 +256,7 @@ class Slideshow {
 class SlideshowTrigger {
 
 	/**
-	 * Represents a trigger element that opens the slideshow dialog when clicked.
+	 * The trigger element that opens the slideshow dialog when clicked.
 	 * 
 	 * @type {HTMLElement}
 	 */
@@ -303,10 +272,9 @@ class SlideshowTrigger {
 	/**
 	 * Creates a slideshow trigger.
 	 * 
-	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.elem
-	 * @param {number} options.index
+	 * @param {HTMLElement} options.elem - The trigger element that opens the slideshow dialog when clicked.
+	 * @param {number} options.index - The index of the slideshow glider item to which the glider scrolls when the trigger is clicked.
 	 * @returns {SlideshowTrigger}
 	 */
 	constructor(options) {

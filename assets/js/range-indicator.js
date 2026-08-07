@@ -43,13 +43,6 @@ class RangeIndicator {
 	isValueChangedCallback = null;
 
 	/**
-	 * Initial inner HTML of the indicator.
-	 * 
-	 * @type {string}
-	 */
-	#initialInnerHTML = "";
-
-	/**
 	 * Creates a range indicator.
 	 * 
 	 * @param {Object} options
@@ -82,7 +75,6 @@ class RangeIndicator {
 
 		// Initialize the range indicator
 		this.handleEvent = (event) => this.#handleEvents(event);
-		this.#initialInnerHTML = this.indicator.innerHTML;
 		this.#addEvents();
 		this.updateIndicator();
 		if (typeof(this.initCallback) == "function") this.initCallback();
