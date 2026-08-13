@@ -4,6 +4,7 @@ import { DateSelector, DateSelectorInterval } from "../js/date-selector.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
 import { Glider } from "../js/glider.js";
+import { Hotspot, HotspotScene, Coordinate } from "../js/hotspot.js";
 import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
 import { LiveFilter, LiveFilterItem } from "../js/live-filter.js";
@@ -191,6 +192,13 @@ class App {
 	tours = [];
 
 	/**
+	 * List of hotspot scenes.
+	 * 
+	 * @type {HotspotScene[]}
+	 */
+	hotspotScenes = [];
+
+	/**
 	 * List of memory games.
 	 * 
 	 * @type {MemoryGame[]}
@@ -272,6 +280,7 @@ class App {
 		this.#initSortableTrees();
 		this.#initSteppers();
 		this.#initTours();
+		this.#initHotspotScenes();
 		this.#initMemoryGames();
 		this.#initQuizzes();
 		this.#initLiveFilters();
@@ -639,6 +648,7 @@ class App {
 		let elems = document.querySelectorAll("[data-tour]");
 		elems.forEach((elem) => {
 			let tourScenes = this.#initTourScenes(elem);
+			const alertManager = this.alertManager;
 			this.tours.push(new Tour({
 				wrapper: elem,
 				viewport: elem.querySelector("[data-tour-viewport]"),
@@ -689,6 +699,45 @@ class App {
 			}));
 		});
 		return tourSceneTriggers;
+	}
+
+	/**
+	 * Initializes the hotspot scenes.
+	 * 
+	 * @returns {void}
+	 */
+	#initHotspotScenes() {
+		const elems = document.querySelectorAll("[data-hotspot-scene]");
+		elems.forEach((elem) => {
+			const hotspots = this.#initHotspots(elem);
+			const lowerLimit = Coordinate.fromString(elem.getAttribute('data-hotspot-scene-lower'));
+			const upperLimit = Coordinate.fromString(elem.getAttribute('data-hotspot-scene-upper'));
+			this.hotspotScenes.push(new HotspotScene({
+				wrapper: elem,
+				lowerLimit: lowerLimit,
+				upperLimit: upperLimit,
+				hotspots: hotspots
+			}));
+		});
+	}
+
+	/**
+	 * Initializes the hotspots under the specified element.
+	 * 
+	 * @param {Element} hotspotSceneElem - The wrapper element of the hotspot scene.
+	 * @returns {Hotspot[]} The created hotspots.
+	 */
+	#initHotspots(hotspotSceneElem) {
+		let hotspots = [];
+		let hotspotElems = hotspotSceneElem.querySelectorAll("[data-hotspot]");
+		hotspotElems.forEach((hotspotElem) => {
+			const coordinate = Coordinate.fromString(hotspotElem.getAttribute('data-hotspot'));
+			hotspots.push(new Hotspot({
+				wrapper: hotspotElem,
+				coordinate: coordinate
+			}));
+		});
+		return hotspots;
 	}
 
 	/**

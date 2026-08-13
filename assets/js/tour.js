@@ -55,6 +55,7 @@ class Tour {
 	 * @type {string[]}
 	 */
 	zoomLevelClasses = [
+		"tour--zoom-0",
 		"tour--zoom-1",
 		"tour--zoom-2",
 		"tour--zoom-3",
@@ -64,7 +65,8 @@ class Tour {
 		"tour--zoom-7",
 		"tour--zoom-8",
 		"tour--zoom-9",
-		"tour--zoom-10"
+		"tour--zoom-10",
+		"tour--zoom-11"
 	];
 
 	/**
@@ -101,6 +103,13 @@ class Tour {
 	 * @type {string}
 	 */
 	hasZoomClass = "has-zoom";
+
+	/**
+	 * Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
+	 * 
+	 * @type {boolean}
+	 */
+	ctrlWheel = true;
 
 	/**
 	 * Callback function that is called after the tour has been initialized.
@@ -166,6 +175,20 @@ class Tour {
 	panEndCallback = null;
 
 	/**
+	 * Callback function that is called after the pinching has started.
+	 * 
+	 * @type {function():void|null}
+	 */
+	pinchStartCallback = null;
+
+	/**
+	 * Callback function that is called after the pinching has ended.
+	 * 
+	 * @type {function():void|null}
+	 */
+	pinchEndCallback = null;
+
+	/**
 	 * List of previously opened scenes.
 	 * 
 	 * @type {TourScene[]}
@@ -199,6 +222,27 @@ class Tour {
 	 * @type {boolean}
 	 */
 	#isPanning = false;
+
+	/**
+	 * Indicates whether the viewport is currently being pinched.
+	 * 
+	 * @type {boolean}
+	 */
+	#isPinching = false;
+
+	/**
+	 * The distance between the two fingers when pinching has been started.
+	 * 
+	 * @type {number}
+	 */
+	#pinchStartDistance = 0;
+
+	/**
+	 * The zoom level when pinching has been started.
+	 * 
+	 * @type {number}
+	 */
+	#pinchStartZoomLevel = 0;
 
 	/**
 	 * The x pixel coordinate at which the panning was started.
@@ -238,6 +282,15 @@ class Tour {
 	}
 
 	/**
+	 * The current applied zoom level.
+	 * 
+	 * @type {number}
+	 */
+	get zoomLevel() {
+		return this.#zoomLevel;
+	}
+
+	/**
 	 * Creates a tour.
 	 * 
 	 * @param {Object} options
@@ -253,6 +306,7 @@ class Tour {
 	 * @param {string} options.isPanningClass - The class that is added to the wrapper while the viewport is being panned.
 	 * @param {string} options.hasHistoryClass - The class that is added to the wrapper when history is available.
 	 * @param {string} options.hasZoomClass - The class that is added to the wrapper when zoom is available.
+	 * @param {boolean} options.ctrlWheel - Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
 	 * @param {function():void|null} options.initCallback - Callback function that is called after the tour has been initialized.
 	 * @param {function(TourScene):void|null} options.selectSceneCallback - 
 	 * @param {function():void|null} options.goToSceneCallback - Callback function that is called after the next scene is selected.
@@ -262,6 +316,8 @@ class Tour {
 	 * @param {function():void|null} options.zoomCallback - Callback function that is called after the viewport is zoomed to a different zoom level.
 	 * @param {function():void|null} options.panStartCallback - Callback function that is called after the panning has started.
 	 * @param {function():void|null} options.panEndCallback - Callback function that is called after the panning has ended.
+	 * @param {function():void|null} options.pinchStartCallback - Callback function that is called after the pinching has started.
+	 * @param {function():void|null} options.pinchEndCallback - Callback function that is called after the pinching has ended.
 	 * @returns {Tour}
 	 */
 	constructor(options) {
@@ -428,6 +484,33 @@ class Tour {
 	}
 
 	/**
+	 * Zooms the viewport to the specified zoom level while keeping the X and Y points stationary during the zoom.
+	 * 
+	 * @param {number} zoomLevel - The zoom level to zoom to.
+	 * @param {number} x - The X coordinate to keep stationary during the zoom.
+	 * @param {number} y - The Y coordinate to keep stationary during the zoom.
+	 * @returns {void}
+	 */
+	anchorZoomTo(zoomLevel, x, y) {
+		const rect = this.viewport.getBoundingClientRect();
+		const viewAbsX = x - rect.left;
+		const viewAbsY = y - rect.top;
+		const mapAbsX = viewAbsX + this.viewport.scrollLeft;
+		const mapAbsY = viewAbsY + this.viewport.scrollTop;
+		const mapRelX = mapAbsX / this.viewport.scrollWidth;
+		const mapRelY = mapAbsY / this.viewport.scrollHeight;
+		const viewRelX = viewAbsX / this.viewport.offsetWidth;
+		const viewRelY = viewAbsY / this.viewport.offsetHeight;
+		this.zoomTo(zoomLevel);
+		const newMapAbsY = mapRelY * this.viewport.scrollHeight;
+		const newMapAbsX = mapRelX * this.viewport.scrollWidth;
+		this.viewport.scrollTo({
+			top: newMapAbsY - (this.viewport.offsetHeight * viewRelY),
+			left: newMapAbsX - (this.viewport.offsetWidth * viewRelX)
+		});
+	}
+
+	/**
 	 * Scrolls the viewport to the positions defined by the X and Y relative offsets.
 	 * 
 	 * @param {number|null} offsetX - The X relative offset.
@@ -562,16 +645,6 @@ class Tour {
 	}
 
 	/**
-	 * Retrieves the clamped value of the specified zoom level to ensure it stays within the available range.
-	 * 
-	 * @param {number} zoomLevel - The zoom level to be clamped.
-	 * @returns {number} The clamped zoom level.
-	 */
-	#clampZoomLevel(zoomLevel) {
-		return Math.min(Math.max(0, zoomLevel), this.maxZoomLevel);
-	}
-
-	/**
 	 * Applies the currently set zoom level.
 	 * 
 	 * @returns {void}
@@ -622,6 +695,16 @@ class Tour {
 	}
 
 	/**
+	 * Retrieves the clamped value of the specified zoom level to ensure it stays within the available range.
+	 * 
+	 * @param {number} zoomLevel - The zoom level to be clamped.
+	 * @returns {number} The clamped zoom level.
+	 */
+	#clampZoomLevel(zoomLevel) {
+		return Math.min(Math.max(0, zoomLevel), this.maxZoomLevel);
+	}
+
+	/**
 	 * Converts the specified horizontal or vertical scroll position to an X or Y relative offset.
 	 * 
 	 * @param {number} scrollPosition - The scroll position to be converted.
@@ -650,6 +733,19 @@ class Tour {
 	}
 
 	/**
+	 * Retrieves the pinch distance between the two fingers.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {number} The distance between the two fingers.
+	 */
+	#getPinchDistance(event) {
+		if (event.touches.length !== 2) return 0;
+		const xDistance = event.touches[0].pageX - event.touches[1].pageX;
+		const yDistance = event.touches[0].pageY - event.touches[1].pageY;
+		return Math.hypot(xDistance, yDistance);
+	}
+
+	/**
 	 * Detects whether a tour scene trigger is clicked within the specified event and navigates to the scene if so.
 	 * 
 	 * @param {PointerEvent} event - The event to be handled.
@@ -672,7 +768,7 @@ class Tour {
 	 * @returns {void}
 	 */
 	#panStart(event) {
-		if(this.#isPanning) return;
+		if(this.#isPanning || this.#isPinching) return;
 		this.#isPanning = true;
 		this.#panStartY = event.pageY - this.viewport.offsetTop;
 		this.#panStartX = event.pageX - this.viewport.offsetLeft;
@@ -689,7 +785,7 @@ class Tour {
 	 * @returns {void}
 	 */
 	#panMove(event) {
-		if(!this.#isPanning) return;
+		if(!this.#isPanning || this.#isPinching) return;
 		let panCurrY = event.pageY - this.viewport.offsetTop;
 		let panCurrX = event.pageX - this.viewport.offsetLeft;
 		let panCurrScrollTop = panCurrY - this.#panStartY;
@@ -708,10 +804,86 @@ class Tour {
 	 * @returns {void}
 	 */
 	#panEnd(event) {
-		if(!this.#isPanning) return;
+		if(!this.#isPanning || this.#isPinching) return;
 		this.#isPanning = false;
 		this.wrapper.classList.remove(this.isPanningClass);
 		if (typeof(this.panEndCallback) == "function") this.panEndCallback();
+	}
+
+	/**
+	 * Starts the pinching.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#pinchStart(event) {
+		if (event.touches.length !== 2) return;
+		this.#isPanning = false;
+		this.#isPinching = true;
+		this.#pinchStartDistance = this.#getPinchDistance(event);
+		this.#pinchStartZoomLevel = this.#zoomLevel;
+		if (typeof(this.pinchStartCallback) == "function") this.pinchStartCallback();
+	}
+
+	/**
+	 * Moves the pinching.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#pinchMove(event) {
+		if (!this.#isPinching) return;
+		const zoomLevel = this.#getPinchZoomLevel(event);
+		if (this.#zoomLevel !== zoomLevel && zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
+			const y = ((event.touches[0].pageY + event.touches[1].pageY) / 2);
+			const x = ((event.touches[0].pageX + event.touches[1].pageX) / 2);
+			this.anchorZoomTo(zoomLevel, x, y);
+		}
+	}
+
+	/**
+	 * Retrieves the zoom level calculated from the start and the current pinch distances.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {number}
+	 */
+	#getPinchZoomLevel(event) {
+		const startDist = this.#pinchStartDistance;
+		const currDist = this.#getPinchDistance(event);
+		if (currDist < startDist) {
+			const zoomDiff = Math.floor(startDist / currDist);
+			return this.#pinchStartZoomLevel - zoomDiff;
+		} else {
+			const zoomDiff = Math.floor(currDist / startDist);
+			return this.#pinchStartZoomLevel + zoomDiff;
+		}
+	}
+
+	/**
+	 * Ends the pinching.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#pinchEnd(event) {
+		if (!this.#isPinching) return;
+		this.#isPinching = false;
+		if (typeof(this.pinchEndCallback) == "function") this.pinchEndCallback();
+	}
+
+	/**
+	 * Zooms the viewport on mouse wheel.
+	 * 
+	 * @param {WheelEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#wheelZoom(event) {
+		if (!event.ctrlKey && this.ctrlWheel) return;
+		event.preventDefault();
+		let zoomLevel = event.deltaY < 0 ? this.#zoomLevel + 1 : this.#zoomLevel - 1;
+		if (zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
+			this.anchorZoomTo(zoomLevel, event.x, event.y);
+		}
 	}
 
 	/**
@@ -720,10 +892,15 @@ class Tour {
 	 * @returns {void}
 	 */
 	#addEvents() {
+		this.wrapper.addEventListener("contextmenu", this);
 		this.wrapper.addEventListener("click", this);
-		this.viewport.addEventListener("pointerdown", this);
-		document.addEventListener("pointerup", this);
-		document.addEventListener("pointermove", this);
+		this.wrapper.addEventListener("wheel", this);
+		this.viewport.addEventListener("pointerdown", this, { passive: true });
+		this.viewport.addEventListener("touchstart", this, { passive: true });
+		document.addEventListener("pointerup", this, { passive: true });
+		document.addEventListener("pointermove", this, { passive: true });
+		document.addEventListener("touchmove", this, { passive: true });
+		document.addEventListener("touchend", this, { passive: true });
 	}
 
 	/**
@@ -749,6 +926,9 @@ class Tour {
 						this.#detectIsSceneTriggerClicked(event);
 				}
 				break;
+			case "wheel":
+				this.#wheelZoom(event);
+				break;
 			case "pointermove":
 				this.#panMove(event);
 				break;
@@ -757,6 +937,18 @@ class Tour {
 				break;
 			case "pointerup":
 				this.#panEnd(event);
+				break;
+			case "touchstart":
+				this.#pinchStart(event);
+				break;
+			case "touchmove":
+				this.#pinchMove(event);
+				break;
+			case "touchend":
+				this.#pinchEnd(event);
+				break;
+			case "contextmenu":
+				event.preventDefault();
 				break;
 		}
 	}
