@@ -106,7 +106,7 @@ class DateSelector {
 	selectedDate = null;
 
 	/**
-	 * Retrieves the earliest date from the interval start dates.
+	 * The earliest date from the interval start dates.
 	 * 
 	 * @type {Temporal.PlainDate}
 	 */
@@ -118,7 +118,7 @@ class DateSelector {
 	}
 
 	/**
-	 * Retrieves the latest date from the interval end dates.
+	 * The latest date from the interval end dates.
 	 * 
 	 * @type {Temporal.PlainDate}
 	 */

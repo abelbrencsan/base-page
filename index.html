@@ -36,7 +36,7 @@
 
 	<!-- Full-size notices -->
 	<ul class="notice-list notice-list--full">
-		<li class="notice-list-item notice-list-item--success" data-notice>
+		<!-- <li class="notice-list-item notice-list-item--success" data-notice>
 			<div class="notice-list-item-wrapper">
 				<p>This is a success notice.</p>
 				<button type="button" aria-label="Dismiss" title="Dismiss" data-notice-dismiss>
@@ -45,7 +45,7 @@
 					</svg>
 				</button>
 			</div>
-		</li>
+		</li> -->
 	</ul>
 
 	<!-- Navbar -->
@@ -154,7 +154,7 @@
 	</div>
 
 	<!-- Home slider -->
-	<div class="home-slider glider" data-home-slider hidden>
+	<div class="home-slider glider" data-home-slider>
 		<ul class="glider-list" data-home-slider-viewport>
 			<li data-home-slider-list-item>
 				<div class="home-slider-item glider-item">
@@ -228,6 +228,224 @@
 				</button>
 			</li>
 		</ul>
+	</div>
+
+	<!-- Sample tour -->
+	<div class="tour" data-tour hidden>
+		<div class="tour-viewport" data-tour-viewport>
+			<div id="scene-1" class="tour-scene tour-scene--map" data-tour-scene="map" data-tour-scene-top-left-coordinate="0,0" data-tour-scene-bottom-right-coordinate="5000,2500" data-tour-scene-effect="cloud">
+				<ul class="tour-scene-tile-list" data-tour-scene-tile-list data-tour-scene-map-tile-columns="1">
+					<li>
+						<picture>
+							<img src="/images/tour/maps/01.jpg" loading="lazy" width="2500" height="5000" alt="Lorem ipsum">
+						</picture>
+					</li>
+				</ul>
+				<ul class="tour-scene-layer-list"></ul>
+				<ul class="tour-scene-hotspot-list">
+					<li data-tour-scene-hotspot="690,1455" data-tour-scene-hotspot-tooltip="Scene 2">
+						<button type="button" aria-label="Scene 2" data-tour-scene-trigger="scene-2"></button>
+					</li>
+					<li data-tour-scene-hotspot="1510,670" data-tour-scene-hotspot-tooltip="Popover" data-tour-scene-hotspot-color="red">
+						<button type="button" popovertarget="demo-tour-popover" popovertargetaction="toggle" aria-label="Popover">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-information"></use>
+							</svg>
+						</button>
+					</li>
+				</ul>
+			</div>
+			<div id="scene-2" class="tour-scene tour-scene--field" data-tour-scene="field" data-tour-scene-top-left-coordinate="0,0" data-tour-scene-bottom-right-coordinate="850,3200">
+				<ul class="tour-scene-tile-list" data-tour-scene-tile-list>
+					<li>
+						<picture>
+							<img src="/images/tour/fields/01.jpg" loading="lazy" width="3200" height="850" alt="Lorem ipsum">
+						</picture>
+					</li>
+				</ul>
+				<ul class="tour-scene-hotspot-list">
+					<li data-tour-scene-hotspot="425,1610" data-tour-scene-hotspot-tooltip="Scene 3" data-tour-scene-hotspot-rotation="65,0">
+						<button type="button" aria-label="Scene 3" data-tour-scene-trigger="scene-3"></button>
+					</li>
+				</ul>
+			</div>
+			<div id="scene-3" class="tour-scene tour-scene--field" data-tour-scene="field" data-tour-scene-top-left-coordinate="0,0" data-tour-scene-bottom-right-coordinate="850,3200">
+				<ul class="tour-scene-tile-list" data-tour-scene-tile-list>
+					<li>
+						<picture>
+							<img src="/images/tour/fields/02.jpg" loading="lazy" width="3200" height="850" alt="Lorem ipsum">
+						</picture>
+					</li>
+				</ul>
+				<ul class="tour-scene-hotspot-list">
+					<li data-tour-scene-hotspot="425,1605" data-tour-scene-hotspot-tooltip="Scene 4" data-tour-scene-hotspot-rotation="65,0">
+						<button type="button" aria-label="Scene 4" data-tour-scene-trigger="scene-4"></button>
+					</li>
+				</ul>
+			</div>
+			<div id="scene-4" class="tour-scene tour-scene--field" data-tour-scene="field" data-tour-scene-top-left-coordinate="0,0" data-tour-scene-bottom-right-coordinate="850,3200">
+				<ul class="tour-scene-tile-list" data-tour-scene-tile-list>
+					<li>
+						<picture>
+							<img src="/images/tour/fields/03.jpg" loading="lazy" width="3200" height="850" alt="Lorem ipsum">
+						</picture>
+					</li>
+				</ul>
+				<ul class="tour-scene-hotspot-list">
+					<li data-tour-scene-hotspot="425,1600" data-tour-scene-hotspot-tooltip="Scene 5" data-tour-scene-hotspot-rotation="65,0">
+						<button type="button" aria-label="Scene 5" data-tour-scene-trigger="scene-5"></button>
+					</li>
+				</ul>
+			</div>
+			<div id="scene-5" class="tour-scene tour-scene--field" data-tour-scene="field" data-tour-scene-top-left-coordinate="0,0" data-tour-scene-bottom-right-coordinate="850,3200">
+				<ul class="tour-scene-tile-list" data-tour-scene-tile-list>
+					<li>
+						<picture>
+							<img src="/images/tour/fields/04.jpg" loading="lazy" width="3200" height="850" alt="Lorem ipsum">
+						</picture>
+					</li>
+				</ul>
+				<ul class="tour-scene-hotspot-list">
+					<li data-tour-scene-hotspot="425,1595" data-tour-scene-hotspot-tooltip="Scene 6" data-tour-scene-hotspot-rotation="65,0">
+						<button type="button" aria-label="Scene 6" data-tour-scene-trigger="scene-6"></button>
+					</li>
+				</ul>
+			</div>
+			<div id="scene-6" class="tour-scene tour-scene--field" data-tour-scene="field" data-tour-scene-top-left-coordinate="0,0" data-tour-scene-bottom-right-coordinate="850,3200">
+				<ul class="tour-scene-tile-list" data-tour-scene-tile-list>
+					<li>
+						<picture>
+							<img src="/images/tour/fields/05.jpg" loading="lazy" width="3200" height="850" alt="Lorem ipsum">
+						</picture>
+					</li>
+				</ul>
+				<ul class="tour-scene-hotspot-list">
+					<li data-tour-scene-hotspot="425,1570" data-tour-scene-hotspot-tooltip="Scene 4" data-tour-scene-hotspot-rotation="0,0" data-tour-scene-hotspot-color="blue">
+						<button type="button" popovertarget="demo-tour-popover" popovertargetaction="toggle" aria-label="Popover">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-information"></use>
+							</svg>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<ul class="tour-zoom-list">
+			<li>
+				<button type="button" aria-label="Zoom in" title="Zoom in" data-tour-zoom-in-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-add"></use>
+					</svg>
+				</button>
+			</li>
+			<li>
+				<button type="button" aria-label="Zoom out" title="Zoom out" data-tour-zoom-out-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-remove"></use>
+					</svg>
+				</button>
+			</li>
+		</ul>
+		<ul class="tour-action-list">
+			<li>
+				<button type="button" aria-label="Back to map" title="Back to map" data-tour-back-to-root-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-map"></use>
+					</svg>
+				</button>
+			</li>
+			<li>
+				<button type="button" aria-label="Go back" title="Go back" data-tour-back-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-arrow-undo"></use>
+					</svg>
+				</button>
+			</li>
+			<li>
+				<button type="button" aria-label="Mute" title="Mute" data-tour-mute-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-volume-mute"></use>
+					</svg>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-volume-high"></use>
+					</svg>
+				</button>
+			</li>
+			<li>
+				<button type="button" aria-label="Fullscreen" title="Fullscreen" data-tour-fullscreen-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-expand"></use>
+					</svg>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-contract"></use>
+					</svg>
+				</button>
+			</li>
+		</ul>
+		<div id="demo-tour-popover" class="tour-popover" popover="manual" data-tour-popover>
+			<ul class="tour-popover-action-list">
+				<li>
+					<button type="button" title="Like" aria-label="Like">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-heart"></use>
+						</svg>
+					</button>
+				</li>
+				<li>
+					<button type="button" popovertarget="demo-tour-popover" popovertargetaction="hide" title="Close" aria-label="Close">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-close"></use>
+						</svg>
+					</button>
+				</li>
+			</ul>
+			<header class="tour-popover-header">
+				<div class="tour-popover-header-intro">Pellentesque sit amet</div>
+				<h1>Lorem ipsum dolor sit amet consectetur adipiscing</h1>
+				<ul class="tour-popover-header-meta-list">
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-calendar"></use>
+						</svg> 2040.01.10
+					</li>
+					<li>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-bookmark"></use>
+						</svg> Himenaeos
+					</li>
+				</ul>
+			</header>
+			<a href="/images/gallery/01.jpg" class="image image--fit image--cover" data-dialog="image">
+				<picture>
+					<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+				</picture>
+			</a>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tempor ipsum et purus consequat venenatis. Suspendisse vel felis in dui gravida suscipit. In ornare efficitur eros eu auctor. Aenean iaculis nibh in nisi dignissim feugiat. Quisque iaculis risus ac nisl fermentum scelerisque. Donec luctus neque quis odio eleifend, sit amet feugiat dolor maximus. Curabitur quam quam, elementum ac faucibus sit amet, bibendum non nisi. Donec ut urna at leo hendrerit facilisis. Quisque ultricies neque sit amet nisi ullamcorper pharetra. Phasellus congue, purus et finibus cursus, libero eros ornare turpis, mattis egestas dui diam sed ex. Proin eu neque sit amet lectus vestibulum dignissim. Sed diam purus, laoreet vitae sem a, cursus bibendum neque. Nullam bibendum non purus in finibus. Vivamus tempus a ipsum a vehicula.</p>
+			<h2>Interdum et malesuada fames</h2>
+			<p>Phasellus risus ante, euismod sed gravida ut, egestas et nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque sit amet imperdiet nibh. Morbi id nulla non mauris sodales rutrum. Phasellus massa justo, scelerisque ut erat eget, luctus feugiat augue. Mauris facilisis urna interdum, aliquam erat eget, fringilla purus. Praesent volutpat volutpat libero, ut consequat nunc tristique consectetur. Proin eu mi quis ante malesuada aliquam in vitae odio. In hac habitasse platea dictumst.</p>
+			<a href="https://www.youtube.com/watch?v=aqz-KE-bpKQ" class="image image--fit image--cover image--cover--video" data-dialog="youtube">
+				<picture>
+					<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+				</picture>
+			</a>
+			<p>Sed at magna auctor, sollicitudin arcu non, mollis nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce porta nibh ac sapien euismod, vel pellentesque dui eleifend. Pellentesque pellentesque porta urna, vel pharetra justo molestie vel. Cras fringilla vel quam sed blandit. Quisque ullamcorper metus eu urna commodo, vitae dictum lorem volutpat. Nulla finibus metus eu nulla aliquam placerat.</p>
+			<h2>Vestibulum lectus quam</h2>
+			<p>Vestibulum ut ante tristique, porttitor nunc quis, mollis dolor. Nam sodales odio nec lorem finibus sollicitudin. Vestibulum vehicula dignissim ex, tempus consequat est accumsan ut. Phasellus rutrum eu nisl eget ullamcorper. Aliquam a ipsum in sem pretium ultricies. Nam ex quam, tincidunt non turpis ut, dignissim sollicitudin neque. Maecenas dapibus quis magna in finibus. Etiam ultrices vestibulum lorem, non congue ante suscipit id. Donec aliquam sapien ut eros ultrices, vel efficitur nulla convallis. Quisque tempus tincidunt enim non luctus. Fusce non interdum nisl. Vestibulum lectus quam, egestas eget tincidunt ut, tincidunt vel felis. </p>
+			<div class="tour-popover-cta">
+				<div class="tour-popover-cta-text">
+					<h2>Cras enim erat placerat hendrerit?</h2>
+					<p>Maecenas tempus, diam molestie malesuada fermentum, elit urna finibus justo, at molestie libero erat vestibulum justo.</p>
+				</div>
+				<ul class="tour-popover-cta-action-list button-list">
+					<li>
+						<a href="#" class="button button--primary" role="button">Maecenas tempus</a>
+					</li>
+					<li>
+						<button type="button" class="button" popovertarget="demo-tour-popover" popovertargetaction="hide">Back to tour</button>
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 
 	<!-- Layout section -->
@@ -452,11 +670,11 @@
 						<ul class="calendar-date-selector">
 							<li>
 								<label for="year">Year</label>
-								<select name="year" id="year" class="form-input form-input--select" data-calendar-year-selector></select>
+								<select name="calendarYear" id="calendarYear" class="form-input form-input--select" data-calendar-year-selector></select>
 							</li>
 							<li>
 								<label for="month">Month</label>
-								<select name="month" id="month" class="form-input form-input--select" data-calendar-month-selector></select>
+								<select name="calendarMonth" id="calendarMonth" class="form-input form-input--select" data-calendar-month-selector></select>
 							</li>
 						</ul>
 						<ul class="calendar-action-list">
@@ -501,7 +719,7 @@
 					<div class="live-filter" data-live-filter>
 						<div class="live-filter-form form-item">
 							<label class="form-label is-visually-hidden" for="filter">Live filter list</label>
-							<input type="input" name="filter" id="filter" class="form-input live-filter-input" data-live-filter-input>
+							<input type="text" name="filter" id="filter" class="form-input live-filter-input" data-live-filter-input>
 						</div>
 						<ul class="list-special live-filter-list">
 							<li data-live-filter-item>Albania</li>
@@ -517,13 +735,13 @@
 					</div>
 					<h2 class="heading-block">Basic information</h2>
 					<dl class="list-special">
-						<dt>Lorem ipsum</dt>
+						<dt>Lorem ipsum dolor</dt>
 						<dd>Lorem ipsum dolor amet</dd>
-						<dt>Lorem ipsum</dt>
+						<dt>Vivamus in erat</dt>
 						<dd>Lorem ipsum dolor amet</dd>
-						<dt>Lorem ipsum</dt>
+						<dt>Proin eget lectus eget</dt>
 						<dd>Lorem ipsum dolor amet</dd>
-						<dt>Lorem ipsum</dt>
+						<dt>Duis quis accumsan</dt>
 						<dd>Lorem ipsum dolor amet</dd>
 					</dl>
 				</main>
@@ -2120,121 +2338,6 @@
 
 			<!-- Section header -->
 			<header class="header header--section">
-				<h2>Tour</h2>
-				<p>Lorem ipsum dolor amet si</p>
-			</header>
-
-			<!-- Sample tour -->
-			<div class="tour" data-tour>
-				<div class="tour-viewport" data-tour-viewport>
-					<div class="tour-scene" data-tour-scene="scene-world" aria-label="World">
-						<picture>
-							<img src="/images/maps/01.jpg" loading="lazy" width="2800" height="1575" alt="Lorem ipsum">
-						</picture>
-						<!-- <ul class="tour-scene-layer-list">
-							<li>
-								<picture>
-									<img src="/images/maps/01-layer-01.png" loading="lazy" width="2800" height="1575" alt="Lorem ipsum">
-								</picture>
-							</li>
-						</ul> -->
-						<ul class="tour-scene-hotspot-list" data-hotspot-scene data-hotspot-scene-lower="0,0" data-hotspot-scene-upper="100,100">
-							<li data-hotspot="28,24">
-								<button type="button" class="tour-scene-hotspot" aria-label="Kimneian Empire" data-tour-scene-hotspot-tooltip="Kimneian Empire" data-tour-scene-trigger="scene-kimneian-empire"></button>
-							</li>
-							<li data-hotspot="44,56">
-								<button type="button" class="tour-scene-hotspot" aria-label="Kingdom of Tiertecasia" data-tour-scene-hotspot-tooltip="Kingdom of Tiertecasia" data-tour-scene-trigger="scene-kingdom-of-tiertecasia"></button>
-							</li>
-							<li data-hotspot="56,87">
-								<button type="button" class="tour-scene-hotspot" aria-label="Republic Of Modleters" data-tour-scene-hotspot-tooltip="Republic Of Modleters" data-tour-scene-trigger="scene-republic-of-modleters"></button>
-							</li>
-						</ul>
-					</div>
-					<div class="tour-scene" data-tour-scene="scene-kimneian-empire" aria-label="Kimneian Empire">
-						<picture>
-							<img src="/images/maps/02.jpg" loading="lazy" width="2800" height="1575" alt="Lorem ipsum">
-						</picture>
-						<ul class="tour-scene-hotspot-list">
-							<li style="left:84%;top:51%">
-								<button type="button" class="tour-scene-hotspot tour-scene-hotspot--purple" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Lenestos" data-tour-scene-hotspot-tooltip="Lenestos">
-									<svg class="icon" aria-hidden="true">
-										<use xlink:href="#icon-information"></use>
-									</svg>
-								</button>
-							</li>
-						</ul>
-					</div>
-					<div class="tour-scene" data-tour-scene="scene-kingdom-of-tiertecasia" aria-label="Kingdom of Tiertecasia">
-						<picture>
-							<img src="/images/maps/03.jpg" loading="lazy" width="2800" height="1575" alt="Lorem ipsum">
-						</picture>
-						<ul class="tour-scene-hotspot-list">
-							<li style="left:49%;top:35%">
-								<button type="button" class="tour-scene-hotspot tour-scene-hotspot--green" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Huegiguen" data-tour-scene-hotspot-tooltip="Huegiguen">
-									<svg class="icon" aria-hidden="true">
-										<use xlink:href="#icon-information"></use>
-									</svg>
-								</button>
-							</li>
-						</ul>
-					</div>
-					<div class="tour-scene" data-tour-scene="scene-republic-of-modleters" aria-label="Republic Of Modleters">
-						<picture>
-							<img src="/images/maps/04.jpg" loading="lazy" width="2800" height="1575" alt="Lorem ipsum">
-						</picture>
-						<ul class="tour-scene-hotspot-list">
-							<li style="left:53%;top:75%">
-								<button type="button" class="tour-scene-hotspot tour-scene-hotspot--red" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Brampton" data-tour-scene-hotspot-tooltip="Brampton">
-									<svg class="icon" aria-hidden="true">
-										<use xlink:href="#icon-information"></use>
-									</svg>
-								</button>
-							</li>
-							<li style="left:65%;top:15%">
-								<button type="button" class="tour-scene-hotspot" aria-label="Estelme" data-tour-scene-hotspot-tooltip="Estelme" data-tour-scene-trigger="scene-estelme"></button>
-							</li>
-						</ul>
-					</div>
-					<div class="tour-scene" data-tour-scene="scene-estelme" aria-label="Estelme">
-						<picture>
-							<img src="/images/maps/05.jpg" loading="lazy" width="2800" height="1575" alt="Lorem ipsum">
-						</picture>
-						<ul class="tour-scene-hotspot-list">
-							<li style="left:50%;top:58%">
-								<button type="button" class="tour-scene-hotspot tour-scene-hotspot--blue" popovertarget="demo-quickview" popovertargetaction="toggle" aria-label="Duzalohare Lake" data-tour-scene-hotspot-tooltip="Duzalohare Lake">
-									<svg class="icon" aria-hidden="true">
-										<use xlink:href="#icon-information"></use>
-									</svg>
-								</button>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<ul class="tour-zoom-trigger-list">
-					<li>
-						<button type="button" class="tour-zoom-trigger" aria-label="Zoom in" title="Zoom in" data-tour-zoom-in-trigger>
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-add"></use>
-							</svg>
-						</button>
-					</li>
-					<li>
-						<button type="button" class="tour-zoom-trigger" aria-label="Zoom out" title="Zoom out" data-tour-zoom-out-trigger>
-							<svg class="icon" aria-hidden="true">
-								<use xlink:href="#icon-remove"></use>
-							</svg>
-						</button>
-					</li>
-				</ul>
-				<button type="button" class="tour-back-trigger" aria-label="Go back" title="Go back" data-tour-back-trigger>
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-arrow-undo"></use>
-					</svg>
-				</button>
-			</div>
-
-			<!-- Section header -->
-			<header class="header header--section">
 				<h2>Memory game</h2>
 				<p>Lorem ipsum dolor amet si</p>
 			</header>
@@ -2636,6 +2739,7 @@
 				<p>Lorem ipsum dolor amet si</p>
 			</header>
 
+			<!-- Context nav -->
 			<nav class="context-nav">
 				<ul>
 					<li>
@@ -2676,6 +2780,51 @@
 					</li>
 				</ul>
 			</nav>
+
+			<!-- Section header -->
+			<header class="header header--section">
+				<h2>Preview</h2>
+				<p>Lorem ipsum dolor amet si</p>
+			</header>
+
+			<!-- Preview -->
+			<ul class="preview">
+				<li>
+					<a href="/images/gallery/01.jpg" class="image image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="0">
+						<picture>
+							<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li>
+					<a href="/images/gallery/02.jpg" class="image image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="1">
+						<picture>
+							<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li>
+					<a href="/images/gallery/03.jpg" class="image image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="2">
+						<picture>
+							<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li>
+					<a href="/images/gallery/04.jpg" class="image image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="3">
+						<picture>
+							<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+				<li data-preview-cta="+2">
+					<a href="/images/gallery/04.jpg" class="image image--cover" data-slideshow-trigger="#sample-slideshow" data-slideshow-trigger-index="3">
+						<picture>
+							<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</a>
+				</li>
+			</ul>
 
 		</div>
 	</section>
@@ -2791,21 +2940,42 @@
 				<li data-slideshow-glider-list-item>
 					<div class="glider-item">
 						<picture>
-							<img src="/images/gallery/01.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							<img src="/images/gallery/01.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 						</picture>
 					</div>
 				</li>
 				<li data-slideshow-glider-list-item>
 					<div class="glider-item">
 						<picture>
-							<img src="/images/gallery/02.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							<img src="/images/gallery/02.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 						</picture>
 					</div>
 				</li>
 				<li data-slideshow-glider-list-item>
 					<div class="glider-item">
 						<picture>
-							<img src="/images/gallery/03.jpg" loading="lazy" width="480" height="270" alt="Lorem ipsum">
+							<img src="/images/gallery/03.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</div>
+				</li>
+				<li data-slideshow-glider-list-item>
+					<div class="glider-item">
+						<picture>
+							<img src="/images/gallery/04.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</div>
+				</li>
+				<li data-slideshow-glider-list-item>
+					<div class="glider-item">
+						<picture>
+							<img src="/images/gallery/05.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
+						</picture>
+					</div>
+				</li>
+				<li data-slideshow-glider-list-item>
+					<div class="glider-item">
+						<picture>
+							<img src="/images/gallery/06.jpg" loading="lazy" width="1600" height="900" alt="Lorem ipsum">
 						</picture>
 					</div>
 				</li>

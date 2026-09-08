@@ -239,6 +239,63 @@ class Chart {
 	static types = ["bar", "line", "pie"];
 
 	/**
+	 * The size of the first dataset.
+	 * 
+	 * @returns {number}
+	 */
+	get datasetSize() {
+		if (!this.datasets.length) return 0;
+		return this.datasets[0].length;
+	}
+
+	/**
+	 * The highest value from the datasets.
+	 * 
+	 * @returns {number}
+	 */
+	get highestData() {
+		if (!this.datasets.length) return 0;
+		return Math.max(...[].concat(...this.datasets)) * this.axisMultiplier;
+	}
+
+	/**
+	 * The lowest value from the datasets.
+	 * 
+	 * @returns {number}
+	 */
+	get lowestData() {
+		if (!this.datasets.length) return 0;
+		return Math.min(...[].concat(...this.datasets));
+	}
+
+	/**
+	 * The labels between zero and the highest value.
+	 * 
+	 * @returns {number[]}
+	 */
+	get labels() {
+		let labels = [];
+		let highestData = this.highestData;
+		let digits = Math.ceil(Math.log10(highestData));
+		let factor = Math.pow(10, digits - 1);
+		let roundedHighestData = Math.ceil(highestData / factor) * factor;
+		while (roundedHighestData / factor < 6) factor = factor / 2;
+		for (let val = 0; val <= roundedHighestData; val += factor) {
+			labels.push(val);
+		}
+		return labels.reverse();
+	}
+
+	/**
+	 * Indicates whether the chart is a gauge pie chart.
+	 * 
+	 * @returns {boolean}
+	 */
+	get isPieGauge() {
+		return this.type == "pie" && this.isGauge
+	}
+
+	/**
 	 * Creates a chart.
 	 * 
 	 * @param {Object} options
@@ -326,63 +383,6 @@ class Chart {
 		this.wrapper.replaceChildren();
 		this.#drawChart();
 		if (typeof(this.updateCallback) == "function") this.updateCallback(this);
-	}
-
-	/**
-	 * Retrieves the size of the first dataset.
-	 * 
-	 * @returns {number}
-	 */
-	get datasetSize() {
-		if (!this.datasets.length) return 0;
-		return this.datasets[0].length;
-	}
-
-	/**
-	 * Retrieves the highest value from the datasets.
-	 * 
-	 * @returns {number}
-	 */
-	get highestData() {
-		if (!this.datasets.length) return 0;
-		return Math.max(...[].concat(...this.datasets)) * this.axisMultiplier;
-	}
-
-	/**
-	 * Retrieves the lowest value from the datasets.
-	 * 
-	 * @returns {number}
-	 */
-	get lowestData() {
-		if (!this.datasets.length) return 0;
-		return Math.min(...[].concat(...this.datasets));
-	}
-
-	/**
-	 * Retrieves the labels between zero and the highest value.
-	 * 
-	 * @returns {number[]}
-	 */
-	get labels() {
-		let labels = [];
-		let highestData = this.highestData;
-		let digits = Math.ceil(Math.log10(highestData));
-		let factor = Math.pow(10, digits - 1);
-		let roundedHighestData = Math.ceil(highestData / factor) * factor;
-		while (roundedHighestData / factor < 6) factor = factor / 2;
-		for (let val = 0; val <= roundedHighestData; val += factor) {
-			labels.push(val);
-		}
-		return labels.reverse();
-	}
-
-	/**
-	 * Retrieves whether the chart is a gauge pie chart.
-	 * 
-	 * @returns {boolean}
-	 */
-	get isPieGauge() {
-		return this.type == "pie" && this.isGauge
 	}
 
 	/**

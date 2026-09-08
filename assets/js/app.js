@@ -4,7 +4,6 @@ import { DateSelector, DateSelectorInterval } from "../js/date-selector.js";
 import { Dialog } from "../js/dialog.js";
 import { Dropdown } from "../js/dropdown.js";
 import { Glider } from "../js/glider.js";
-import { Hotspot, HotspotScene, Coordinate } from "../js/hotspot.js";
 import { IconManager } from "../js/icon-manager.js";
 import { LazyLoadDetector } from "../js/lazy-load-detector.js";
 import { LiveFilter, LiveFilterItem } from "../js/live-filter.js";
@@ -19,7 +18,7 @@ import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { SortableTree } from "../js/sortable-tree.js";
 import { Stepper } from "../js/stepper.js";
 import { Tab } from "../js/tab.js";
-import { Tour, TourScene, TourSceneTrigger } from "../js/tour.js";
+import { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneCoordinate, TourSceneTrigger, TourPopover } from "./tour.js";
 import { Validator } from "../js/validator.js";
 
 /**
@@ -192,13 +191,6 @@ class App {
 	tours = [];
 
 	/**
-	 * List of hotspot scenes.
-	 * 
-	 * @type {HotspotScene[]}
-	 */
-	hotspotScenes = [];
-
-	/**
 	 * List of memory games.
 	 * 
 	 * @type {MemoryGame[]}
@@ -280,7 +272,6 @@ class App {
 		this.#initSortableTrees();
 		this.#initSteppers();
 		this.#initTours();
-		this.#initHotspotScenes();
 		this.#initMemoryGames();
 		this.#initQuizzes();
 		this.#initLiveFilters();
@@ -645,17 +636,35 @@ class App {
 	 * @returns {void}
 	 */
 	#initTours() {
-		let elems = document.querySelectorAll("[data-tour]");
+		const elems = document.querySelectorAll("[data-tour]");
+		const footstepAudio = new Audio("../assets/sounds/tour/footstep.ogg");
+		const zoomAudio = new Audio("../assets/sounds/tour/zoom.ogg");
+		const togglePopoverAudio = new Audio("../assets/sounds/tour/toggle-popover.ogg");
 		elems.forEach((elem) => {
-			let tourScenes = this.#initTourScenes(elem);
-			const alertManager = this.alertManager;
+			const scenes = this.#initTourScenes(elem);
+			const sceneTriggers = this.#initTourSceneTriggers(elem);
+			const birdsAudio = new Audio("../assets/sounds/tour/birds.ogg");
+			const popovers = this.#initTourPopovers(elem);
 			this.tours.push(new Tour({
 				wrapper: elem,
 				viewport: elem.querySelector("[data-tour-viewport]"),
 				backTrigger: elem.querySelector("[data-tour-back-trigger]"),
+				scenes: scenes,
+				sceneTriggers: sceneTriggers,
+				popovers: popovers,
 				zoomInTrigger: elem.querySelector("[data-tour-zoom-in-trigger]"),
 				zoomOutTrigger: elem.querySelector("[data-tour-zoom-out-trigger]"),
-				scenes: tourScenes
+				backToRootTrigger: elem.querySelector("[data-tour-back-to-root-trigger]"),
+				fullscreenTrigger: elem.querySelector("[data-tour-fullscreen-trigger]"),
+				muteTrigger: elem.querySelector("[data-tour-mute-trigger]"),
+				backgroundAudio: birdsAudio,
+				changeSceneAudio: footstepAudio,
+				zoomAudio: zoomAudio,
+				openPopoverAudio: togglePopoverAudio,
+				closePopoverAudio: togglePopoverAudio,
+				popoverOpeningCallback: (tour, event) => {
+					tour.selectedScene.scrollToElem(event.source, tour.viewport);
+				}
 			}));
 		});
 	}
@@ -663,81 +672,132 @@ class App {
 	/**
 	 * Retrieves a list of tour scenes under the specified element.
 	 * 
-	 * @param {Element} tourElem - The wrapper element of the tour.
-	 * @returns {TourScene[]} The created tour scenes.
+	 * @param {Element} elem - The wrapper element.
+	 * @returns {(TourMapScene|TourFieldScene)[]} The created tour scenes.
 	 */
-	#initTourScenes(tourElem) {
+	#initTourScenes(elem) {
 		let tourScenes = [];
-		let tourSceneElems = tourElem.querySelectorAll("[data-tour-scene]");
+		let tourSceneElems = elem.querySelectorAll("[data-tour-scene]");
 		tourSceneElems.forEach((tourSceneElem) => {
-			let tourSceneTriggers = this.#initTourSceneTriggers(tourSceneElem);
-			tourScenes.push(new TourScene({
-				id: tourSceneElem.getAttribute("data-tour-scene"),
-				wrapper: tourSceneElem,
-				sceneTriggers: tourSceneTriggers,
-				zoomLevel: 2,
-				offsetX: tourSceneElem.getAttribute("data-tour-scene-offset-x") || 50,
-				offsetY: tourSceneElem.getAttribute("data-tour-scene-offset-y") || 50
-			}));
+			const sceneType = tourSceneElem.getAttribute("data-tour-scene");
+			switch (sceneType) {
+				case "map":
+					tourScenes.push(this.#createTourMapScene(tourSceneElem));
+					break;
+				case "field":
+					tourScenes.push(this.#createTourFieldScene(tourSceneElem));
+					break;
+			}
 		});
 		return tourScenes;
 	}
 
 	/**
-	 * Retrieves a list of tour scene triggers under the specified element.
+	 * Creates a map tour scene wrapped by the specified element.
 	 * 
-	 * @param {Element} tourSceneElem - The wrapper element of the tour scene.
-	 * @returns {TourSceneTrigger[]} The created tour scene triggers.
+	 * @param {Element} elem - The wrapper element.
+	 * @returns {TourMapScene} The created map tour scene.
 	 */
-	#initTourSceneTriggers(tourSceneElem) {
-		let tourSceneTriggers = [];
-		let tourSceneTriggerElems = tourSceneElem.querySelectorAll("[data-tour-scene-trigger]");
-		tourSceneTriggerElems.forEach((tourSceneTriggerElem) => {
-			tourSceneTriggers.push(new TourSceneTrigger({
-				targetId: tourSceneTriggerElem.getAttribute("data-tour-scene-trigger"),
-				trigger: tourSceneTriggerElem
-			}));
-		});
-		return tourSceneTriggers;
-	}
-
-	/**
-	 * Initializes the hotspot scenes.
-	 * 
-	 * @returns {void}
-	 */
-	#initHotspotScenes() {
-		const elems = document.querySelectorAll("[data-hotspot-scene]");
-		elems.forEach((elem) => {
-			const hotspots = this.#initHotspots(elem);
-			const lowerLimit = Coordinate.fromString(elem.getAttribute('data-hotspot-scene-lower'));
-			const upperLimit = Coordinate.fromString(elem.getAttribute('data-hotspot-scene-upper'));
-			this.hotspotScenes.push(new HotspotScene({
-				wrapper: elem,
-				lowerLimit: lowerLimit,
-				upperLimit: upperLimit,
-				hotspots: hotspots
-			}));
+	#createTourMapScene(elem) {
+		const hotspots = this.#initTourSceneHotspots(elem);
+		const coordinates = this.#parseTourSceneCoordinates(elem);
+		return new TourMapScene({
+			id: elem.id,
+			wrapper: elem,
+			tileList: elem.querySelector("[data-tour-scene-tile-list]"),
+			...coordinates,
+			hotspots: hotspots
 		});
 	}
 
 	/**
-	 * Initializes the hotspots under the specified element.
+	 * Creates a field tour scene wrapped by the specified element.
 	 * 
-	 * @param {Element} hotspotSceneElem - The wrapper element of the hotspot scene.
-	 * @returns {Hotspot[]} The created hotspots.
+	 * @param {Element} elem - The wrapper element.
+	 * @returns {TourFieldScene} The created field tour scene.
 	 */
-	#initHotspots(hotspotSceneElem) {
+	#createTourFieldScene(elem) {
+		const hotspots = this.#initTourSceneHotspots(elem);
+		const coordinates = this.#parseTourSceneCoordinates(elem);
+		return new TourFieldScene({
+			id: elem.id,
+			wrapper: elem,
+			tileList: elem.querySelector("[data-tour-scene-tile-list]"),
+			...coordinates,
+			hotspots: hotspots,
+		});
+	}
+
+	/**
+	 * Creates a list of tour scene hotspots under the specified element.
+	 * 
+	 * @param {Element} elem - The wrapper element.
+	 * @returns {TourSceneHotspot[]} The created tour scene hotspots.
+	 */
+	#initTourSceneHotspots(elem) {
 		let hotspots = [];
-		let hotspotElems = hotspotSceneElem.querySelectorAll("[data-hotspot]");
+		const hotspotElems = elem.querySelectorAll("[data-tour-scene-hotspot]");
 		hotspotElems.forEach((hotspotElem) => {
-			const coordinate = Coordinate.fromString(hotspotElem.getAttribute('data-hotspot'));
-			hotspots.push(new Hotspot({
+			const rawCoordinate = hotspotElem.getAttribute("data-tour-scene-hotspot") || "";
+			const rawRotations = hotspotElem.getAttribute("data-tour-scene-hotspot-rotation") || "";
+			hotspots.push(new TourSceneHotspot({
 				wrapper: hotspotElem,
-				coordinate: coordinate
+				coordinate: TourSceneCoordinate.fromString(rawCoordinate),
+				...TourSceneHotspot.rotationsFromString(rawRotations)
 			}));
 		});
 		return hotspots;
+	}
+
+	/**
+	 * Creates a list of tour scene triggers under the specified element.
+	 * 
+	 * @param {Element} elem - The wrapper element.
+	 * @returns {TourSceneTrigger[]} The created tour scene triggers.
+	 */
+	#initTourSceneTriggers(elem) {
+		let triggers = [];
+		const triggerElems = elem.querySelectorAll("[data-tour-scene-trigger]");
+		triggerElems.forEach((triggerElem) => {
+			const sceneId = triggerElem.getAttribute("data-tour-scene-trigger");
+			triggers.push(new TourSceneTrigger({
+				sceneId: sceneId,
+				trigger: triggerElem
+			}));
+		});
+		return triggers;
+	}
+
+	/**
+	 * Creates a list of tour popovers under the specified element.
+	 * 
+	 * @param {Element} elem - The wrapper element.
+	 * @returns {TourPopover[]} The created tour popovers.
+	 */
+	#initTourPopovers(elem) {
+		let popovers = [];
+		const popoverElems = elem.querySelectorAll("[data-tour-popover]");
+		popoverElems.forEach((popoverElem) => {
+			popovers.push(new TourPopover({
+				wrapper: popoverElem
+			}));
+		});
+		return popovers;
+	}
+
+	/**
+	 * Retrieves the parsed top-left and bottom-right tour scene coordinates from the specified element's attributes.
+	 * 
+	 * @param {Element} tourSceneElem - The element whose attributes contain the tour scene coordinates.
+	 * @returns {{topLeftCoordinate: TourSceneCoordinate, bottomRightCoordinate: TourSceneCoordinate}} An object containing the parsed top-left and bottom-right tour scene coordinates.
+	 */
+	#parseTourSceneCoordinates(elem) {
+		const rawTopLeft = elem.getAttribute("data-tour-scene-top-left-coordinate");
+		const rawBottomRight = elem.getAttribute("data-tour-scene-bottom-right-coordinate");
+		return {
+			topLeftCoordinate: TourSceneCoordinate.fromString(rawTopLeft),
+			bottomRightCoordinate: TourSceneCoordinate.fromString(rawBottomRight)
+		};
 	}
 
 	/**
@@ -746,11 +806,11 @@ class App {
 	 * @returns {void}
 	 */
 	#initMemoryGames() {
-		let cardFlipSoundEffect = new Audio("../assets/sounds/memory-game/card-flip.ogg");
-		let cardMatchSoundEffect = new Audio("../assets/sounds/memory-game/card-match.ogg");
-		let cardMismatchSoundEffect = new Audio("../assets/sounds/memory-game/card-mismatch.ogg");
-		let completeSoundEffect = new Audio("../assets/sounds/memory-game/complete.ogg");
-		let restartSoundEffect = new Audio("../assets/sounds/memory-game/restart.ogg");
+		let cardFlipAudio = new Audio("../assets/sounds/memory-game/card-flip.ogg");
+		let cardMatchAudio = new Audio("../assets/sounds/memory-game/card-match.ogg");
+		let cardMismatchAudio = new Audio("../assets/sounds/memory-game/card-mismatch.ogg");
+		let completeAudio = new Audio("../assets/sounds/memory-game/complete.ogg");
+		let restartAudio = new Audio("../assets/sounds/memory-game/restart.ogg");
 		let elems = document.querySelectorAll("[data-memory-game]");
 		elems.forEach((elem) => {
 			let cards = this.#initMemoryGameCards(elem);
@@ -763,29 +823,29 @@ class App {
 				moveCountIndicator: elem.querySelector("[data-memory-game-move-count-indicator]"),
 				timerIndicator: elem.querySelector("[data-memory-game-timer-indicator]"),
 				cardFlipCallback: () => {					
-					this.#playSoundEffect(cardFlipSoundEffect);
+					this.#playAudio(cardFlipAudio);
 				},
 				cardMatchCallback: (firstCard, secondCard, isCompleted) => {
 					if (!isCompleted) {
 						setTimeout(() => {
-							this.#playSoundEffect(cardMatchSoundEffect);
+							this.#playAudio(cardMatchAudio);
 						}, 300);
 					}
 				},
 				cardMismatchCallback: (firstCard, secondCard) => {
 					setTimeout(() => {
 						if ("vibrate" in navigator) navigator.vibrate(200);
-						this.#playSoundEffect(cardMismatchSoundEffect);
+						this.#playAudio(cardMismatchAudio);
 					}, 300);
 				},
 				completeCallback: (score, moveCount, timer) => {
 					setTimeout(() => {
-						this.#playSoundEffect(completeSoundEffect);
+						this.#playAudio(completeAudio);
 						this.dialogs[0].open();
 					}, 300);
 				},
 				restartCallback: () => {
-					this.#playSoundEffect(restartSoundEffect);
+					this.#playAudio(restartAudio);
 				}
 			}));
 		});
@@ -812,14 +872,14 @@ class App {
 	}
 
 	/**
-	 * Plays the specified sound effect once.
+	 * Plays the specified audio once.
 	 * 
-	 * @param {Audio} soundEffect - The sound effect to be played.
+	 * @param {HTMLAudioElement} audio - The audio to be played.
 	 * @returns {void}
 	 */
-	#playSoundEffect(soundEffect) {
-		soundEffect.play();
-		soundEffect.currentTime = 0;
+	#playAudio(audio) {
+		audio.play();
+		audio.currentTime = 0;
 	}
 
 	/**
@@ -993,7 +1053,6 @@ class App {
 				resetCallback: () => console.log("resetCallback")
 			}));
 		});
-		this.dateSelectors[0].selectDate(Temporal.Now.plainDateISO().add({ days: 700 }));
 	}
 
 	/**

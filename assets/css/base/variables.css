@@ -62,7 +62,7 @@
 	/* Font line heights */
 	--base-line-height: 1.5;
 	--fixed-line-height: 1.5;
-	--heading-line-height: 1.5;
+	--heading-line-height: 1.25;
 
 	/* Font letter spacing */
 	--base-letter-spacing: 0;
@@ -81,7 +81,7 @@
 	/* Initial colors */
 	--bg-color: #ffffff;
 	--body-bg-color: #ffffff;
-	--border-bg-color: #f5f7fb;
+	--border-bg-color: #f1f4fa;
 	--border-color: #e3e9f4;
 	--border-hover-color: #dadfea;
 	--fg-bold-color: #0a1019;

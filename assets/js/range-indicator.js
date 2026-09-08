@@ -43,6 +43,15 @@ class RangeIndicator {
 	isValueChangedCallback = null;
 
 	/**
+	* The current value of the range input.
+	* 
+	* @return {number} The value as a number.
+	*/
+	get inputValue() {
+		return Number(this.input.value);
+	}
+
+	/**
 	 * Creates a range indicator.
 	 * 
 	 * @param {Object} options
@@ -92,15 +101,6 @@ class RangeIndicator {
 		} else {
 			this.indicator.innerHTML = value;
 		}
-	}
-
-	/**
-	* Get the current value of the range input.
-	* 
-	* @return {number} The value as a number.
-	*/
-	get inputValue() {
-		return Number(this.input.value);
 	}
 
 	/**

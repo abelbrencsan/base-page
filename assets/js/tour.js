@@ -1,6 +1,6 @@
 /**
  * Tour
- * This class is designed to create image-based pannable and zoomable tours with multiple scenes.
+ * This class is designed to create virtual tours with multiple scenes.
  * 
  * @author Abel Brencsan
  * @license MIT License
@@ -8,7 +8,7 @@
 class Tour {
 
 	/**
-	 * The wrapper element that includes all the scenes and triggers.
+	 * The wrapper element that includes all the scenes and control triggers.
 	 * 
 	 * @type {HTMLElement}
 	 */
@@ -22,7 +22,7 @@ class Tour {
 	viewport;
 
 	/**
-	 * The trigger button that navigates back to the previous scene when clicked.
+	 * The trigger button that navigates back to the previous scene within the history when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
@@ -36,38 +36,88 @@ class Tour {
 	scenes;
 
 	/**
-	 * The zoom-in button that zooms the viewport to the next zoom level when clicked.
+	 * An array of triggers that navigate from one scene to another when clicked.
+	 * 
+	 * @type {TourSceneTrigger[]}
+	 */
+	sceneTriggers = [];
+
+	/**
+	 * An array of popovers that belong to the tour.
+	 * 
+	 * @type {TourPopover[]}
+	 */
+	popovers = [];
+
+	/**
+	 * The zoom-in trigger button that zooms the viewport to the next zoom level when clicked.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
 	zoomInTrigger = null;
 
 	/**
-	 * The zoom-out button that zooms the viewport to the previous zoom level when clicked.
+	 * The zoom-out trigger button that zooms the viewport to the previous zoom level when clicked.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
 	zoomOutTrigger = null;
 
 	/**
-	 * An array of classes added to the wrapper at the specified zoom level index.
+	 * The trigger button that navigates back to the first scene within the history when clicked.
 	 * 
-	 * @type {string[]}
+	 * @type {HTMLButtonElement|null}
 	 */
-	zoomLevelClasses = [
-		"tour--zoom-0",
-		"tour--zoom-1",
-		"tour--zoom-2",
-		"tour--zoom-3",
-		"tour--zoom-4",
-		"tour--zoom-5",
-		"tour--zoom-6",
-		"tour--zoom-7",
-		"tour--zoom-8",
-		"tour--zoom-9",
-		"tour--zoom-10",
-		"tour--zoom-11"
-	];
+	backToRootTrigger = null;
+
+	/**
+	 * The trigger button that toggles fullscreen mode when clicked.
+	 * 
+	 * @type {HTMLButtonElement|null}
+	 */
+	fullscreenTrigger = null;
+
+	/**
+	 * The trigger button that mutes or unmutes the audio when clicked.
+	 * 
+	 * @type {HTMLButtonElement|null}
+	 */
+	muteTrigger = null;
+
+	/**
+	 * The audio element played in a loop in the background.
+	 * 
+	 * @type {HTMLAudioElement|null}
+	 */
+	backgroundAudio = null;
+
+	/**
+	 * The audio element used when changing scenes.
+	 * 
+	 * @type {HTMLAudioElement|null}
+	 */
+	changeSceneAudio = null;
+
+	/**
+	 * The audio element played when the zoom-in or zoom-out trigger is clicked.
+	 * 
+	 * @type {HTMLAudioElement|null}
+	 */
+	zoomAudio = null;
+
+	/**
+	 * The audio element played when a popover is opened.
+	 * 
+	 * @type {HTMLAudioElement|null}
+	 */
+	openPopoverAudio = null;
+
+	/**
+	 * The audio element played when a popover is closed.
+	 * 
+	 * @type {HTMLAudioElement|null}
+	 */
+	closePopoverAudio = null;
 
 	/**
 	 * The class that is added to the wrapper after the tour has been initialized.
@@ -77,32 +127,53 @@ class Tour {
 	isInitializedClass = "is-initialized";
 
 	/**
-	 * The class that is added to the wrapper of the scene when it is selected.
+	 * The class that is added to the wrapper when the zoom is enabled for the selected scene.
 	 * 
 	 * @type {string}
 	 */
-	isSelectedClass = "is-selected";
+	hasZoomClass = "has-zoom";
 
 	/**
-	 * The class that is added to the wrapper while the viewport is being panned.
-	 * 
-	 * @type {string}
-	 */
-	isPanningClass = "is-panning";
-
-	/**
-	 * The class that is added to the wrapper when history is available.
+	 * The class that is added to the wrapper when previous scenes are available within the history.
 	 * 
 	 * @type {string}
 	 */
 	hasHistoryClass = "has-history";
 
 	/**
-	 * The class that is added to the wrapper when zoom is available.
+	 * The class that is added to the wrapper while the scene is being panned.
 	 * 
 	 * @type {string}
 	 */
-	hasZoomClass = "has-zoom";
+	isPanningClass = "is-panning";
+
+	/**
+	 * The class that is added to the wrapper while the scene is being pinched.
+	 * 
+	 * @type {string}
+	 */
+	isPinchingClass = "is-pinching";
+
+	/**
+	 * The class that is added to the wrapper when the fullscreen API is supported by the browser.
+	 * 
+	 * @type {string}
+	 */
+	hasFullscreenSupportClass = "has-fullscreen-support";
+
+	/**
+	 * The class that is added to the wrapper when the audio is muted.
+	 * 
+	 * @type {string}
+	 */
+	isMutedClass = "is-muted";
+
+	/**
+	 * The class that is added to the wrapper while a popover is open.
+	 * 
+	 * @type {string}
+	 */
+	hasOpenedPopoverClass = "has-opened-popover";
 
 	/**
 	 * Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
@@ -114,210 +185,147 @@ class Tour {
 	/**
 	 * Callback function that is called after the tour has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour):void|null}
 	 */
 	initCallback = null;
 
 	/**
-	 * Callback function that is called after a scene has been selected.
-	 * 
-	 * @type {function(TourScene):void|null}
-	 */
-	selectSceneCallback = null;
-
-	/**
 	 * Callback function that is called after the next scene is selected.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour,TourScene):void|null}
 	 */
 	goToSceneCallback = null;
 
 	/**
 	 * Callback function that is called after the previous scene is reverted.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour,TourScene):void|null}
 	 */
 	goBackCallback = null;
 
 	/**
-	 * Callback function that is called after the viewport is zoomed to the next zoom level.
+	 * Callback function that is called after the root scene is reverted.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour,TourScene):void|null}
 	 */
-	zoomInCallback = null;
+	goBackToRootCallback = null;
 
 	/**
-	 * Callback function that is called after the viewport is zoomed to the previous zoom level.
+	 * Callback function that is called after fullscreen mode is entered or exited.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour):void|null}
 	 */
-	zoomOutCallback = null;
+	fullscreenChangeCallback = null;
 
 	/**
-	 * Callback function that is called after the viewport is zoomed to a different zoom level.
+	 * Callback function that is called after the tour is muted.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour):void|null}
 	 */
-	zoomCallback = null;
+	muteCallback = null;
 
 	/**
-	 * Callback function that is called after the panning has started.
+	 * Callback function that is called after the tour is unmuted.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour):void|null}
 	 */
-	panStartCallback = null;
+	unmuteCallback = null;
 
 	/**
-	 * Callback function that is called after the panning has ended.
+	 * Callback function that is called while a popover is opening.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour,ToggleEvent):void|null}
 	 */
-	panEndCallback = null;
+	popoverOpeningCallback = null;
 
 	/**
-	 * Callback function that is called after the pinching has started.
+	 * Callback function that is called while a popover is closing.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour,ToggleEvent):void|null}
 	 */
-	pinchStartCallback = null;
+	popoverClosingCallback = null;
 
 	/**
-	 * Callback function that is called after the pinching has ended.
+	 * Callback function that is called after a scene trigger is clicked.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tour,TourSceneTrigger,PointerEvent):void|null}
 	 */
-	pinchEndCallback = null;
+	sceneTriggerClickCallback = null;
 
 	/**
-	 * List of previously opened scenes.
+	 * The currently selected scene.
 	 * 
-	 * @type {TourScene[]}
+	 * @type {TourScene|null}
 	 */
-	#sceneHistory = [];
+	selectedScene = null;
 
 	/**
-	 * List of zoom-levels recorded when a scene is added to the history.
-	 * 
-	 * @type {number[]}
-	 */
-	#zoomLevelHistory = [];
-
-	/**
-	 * List of X and Y relative offsets recorded when a scene is added to the history.
-	 * 
-	 * @type {[number, number][]}
-	 */
-	#offsetHistory = [];
-
-	/**
-	 * The current applied zoom level.
-	 * 
-	 * @type {number}
-	 */
-	#zoomLevel = 0;
-
-	/**
-	 * Indicates whether the viewport is currently being panned.
+	 * Indicates whether the selected scene is currently being panned.
 	 * 
 	 * @type {boolean}
 	 */
-	#isPanning = false;
+	isPanning = false;
 
 	/**
-	 * Indicates whether the viewport is currently being pinched.
+	 * Indicates whether the selected scene is currently being pinched.
 	 * 
 	 * @type {boolean}
 	 */
-	#isPinching = false;
+	isPinching = false;
 
 	/**
-	 * The distance between the two fingers when pinching has been started.
+	 * An array of previously visited scenes and their override settings.
 	 * 
-	 * @type {number}
+	 * @type {TourHistoryEntry[]}
 	 */
-	#pinchStartDistance = 0;
+	history = [];
 
 	/**
-	 * The zoom level when pinching has been started.
+	 * Indicates whether the audio is muted.
 	 * 
-	 * @type {number}
+	 * @type {boolean}
 	 */
-	#pinchStartZoomLevel = 0;
-
-	/**
-	 * The x pixel coordinate at which the panning was started.
-	 * 
-	 * @type {number}
-	 */
-	#panStartX = 0;
-
-	/**
-	 * The Y pixel coordinate at which the panning was started.
-	 * 
-	 * @type {number}
-	 */
-	#panStartY = 0;
-
-	/**
-	 * The horizontal scroll position of the viewport when the panning was started.
-	 * 
-	 * @type {number}
-	 */
-	#panStartScrollLeft = 0;
-
-	/**
-	 * The vertical scroll position of the viewport when the panning was started.
-	 * 
-	 * @type {number}
-	 */
-	#panStartScrollTop = 0;
-
-	/**
-	 * The maximum available zoom level.
-	 * 
-	 * @returns {number}
-	 */
-	get maxZoomLevel() {
-		return this.zoomLevelClasses.length - 1;
-	}
-
-	/**
-	 * The current applied zoom level.
-	 * 
-	 * @type {number}
-	 */
-	get zoomLevel() {
-		return this.#zoomLevel;
-	}
+	#isMuted = true;
 
 	/**
 	 * Creates a tour.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper - The wrapper element that includes all the scenes and triggers.
+	 * @param {HTMLElement} options.wrapper - The wrapper element that includes all the scenes and control triggers.
 	 * @param {HTMLElement} options.viewport - The viewport element that displays the scenes and can be panned and zoomed.
-	 * @param {HTMLButtonElement} options.backTrigger - The trigger button that navigates back to the previous scene when clicked.
+	 * @param {HTMLButtonElement} options.backTrigger - The trigger button that navigates back to the previous scene within the history when clicked.
 	 * @param {TourScene[]} options.scenes - An array of of scenes.
-	 * @param {HTMLButtonElement|null} options.zoomInTrigger - The zoom-in button that zooms the viewport to the next zoom level when clicked.
-	 * @param {HTMLButtonElement|null} options.zoomOutTrigger - The zoom-out button that zooms the viewport to the previous zoom level when clicked.
-	 * @param {string[]} options.zoomLevelClasses - An array of classes added to the wrapper at the specified zoom level index.
+	 * @param {TourSceneTrigger[]} options.sceneTriggers - An array of triggers that navigate from one scene to another when clicked.
+	 * @param {TourPopover[]} options.popovers - An array of popovers that belong to the tour.
+	 * @param {HTMLButtonElement|null} options.zoomInTrigger - The zoom-in trigger button that zooms the viewport to the next zoom level when clicked.
+	 * @param {HTMLButtonElement|null} options.zoomOutTrigger - The zoom-out trigger button that zooms the viewport to the previous zoom level when clicked.
+	 * @param {HTMLButtonElement|null} options.backToRootTrigger - The trigger button that navigates back to the first scene within the history when clicked.
+	 * @param {HTMLButtonElement|null} options.fullscreenTrigger - The trigger button that toggles fullscreen mode when clicked.
+	 * @param {HTMLButtonElement|null} options.muteTrigger - The trigger button that mutes or unmutes the audio when clicked.
+	 * @param {HTMLAudioElement|null} options.backgroundAudio - The audio element played in a loop in the background.
+	 * @param {HTMLAudioElement|null} options.changeSceneAudio - The audio element used when changing scenes.
+	 * @param {HTMLAudioElement|null} options.zoomAudio - The audio element played when the zoom-in or zoom-out trigger is clicked.
+	 * @param {HTMLAudioElement|null} options.openPopoverAudio - The audio element played when a popover is opened.
+	 * @param {HTMLAudioElement|null} options.closePopoverAudio - The audio element played when a popover is closed.
 	 * @param {string} options.isInitializedClass - The class that is added to the wrapper after the tour has been initialized.
-	 * @param {string} options.isSelectedClass - The class that is added to the wrapper of the scene when it is selected.
-	 * @param {string} options.isPanningClass - The class that is added to the wrapper while the viewport is being panned.
-	 * @param {string} options.hasHistoryClass - The class that is added to the wrapper when history is available.
-	 * @param {string} options.hasZoomClass - The class that is added to the wrapper when zoom is available.
+	 * @param {string} options.hasZoomClass - The class that is added to the wrapper when the zoom is enabled for the selected scene.
+	 * @param {string} options.hasHistoryClass - The class that is added to the wrapper when previous scenes are available within the history.
+	 * @param {string} options.isPanningClass - The class that is added to the viewport while the scene is being panned.
+	 * @param {string} options.isPinchingClass - The class that is added to the viewport while the scene is being pinched.
+	 * @param {string} options.hasFullscreenSupportClass - The class that is added to the wrapper when the fullscreen API is supported by the browser.
+	 * @param {string} options.isMutedClass - The class that is added to the wrapper when the audio is muted.
+	 * @param {string} options.hasOpenedPopoverClass - The class that is added to the wrapper while a popover is open.
 	 * @param {boolean} options.ctrlWheel - Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the tour has been initialized.
-	 * @param {function(TourScene):void|null} options.selectSceneCallback - 
-	 * @param {function():void|null} options.goToSceneCallback - Callback function that is called after the next scene is selected.
-	 * @param {function():void|null} options.goBackCallback - Callback function that is called after the previous scene is reverted.
-	 * @param {function():void|null} options.zoomInCallback - Callback function that is called after the viewport is zoomed to the next zoom level.
-	 * @param {function():void|null} options.zoomOutCallback - Callback function that is called after the viewport is zoomed to the previous zoom level.
-	 * @param {function():void|null} options.zoomCallback - Callback function that is called after the viewport is zoomed to a different zoom level.
-	 * @param {function():void|null} options.panStartCallback - Callback function that is called after the panning has started.
-	 * @param {function():void|null} options.panEndCallback - Callback function that is called after the panning has ended.
-	 * @param {function():void|null} options.pinchStartCallback - Callback function that is called after the pinching has started.
-	 * @param {function():void|null} options.pinchEndCallback - Callback function that is called after the pinching has ended.
+	 * @param {function(Tour):void|null} options.initCallback - Callback function that is called after the tour has been initialized.
+	 * @param {function(Tour,TourScene):void|null} options.goToSceneCallback - Callback function that is called after the next scene is selected.
+	 * @param {function(Tour,TourScene):void|null} options.goBackCallback - Callback function that is called after the previous scene is reverted.
+	 * @param {function(Tour,TourScene):void|null} options.goBackToRootCallback - Callback function that is called after the root scene is reverted.
+	 * @param {function(Tour):void|null} options.fullscreenChangeCallback - Callback function that is called after fullscreen mode is entered or exited.
+	 * @param {function(Tour):void|null} options.muteCallback - Callback function that is called after the tour is muted.
+	 * @param {function(Tour):void|null} options.unmuteCallback - Callback function that is called after the tour is unmuted.
+	 * @param {function(Tour,ToggleEvent):void|null} options.popoverOpeningCallback - Callback function that is called while a popover is opening.
+	 * @param {function(Tour,ToggleEvent):void|null} options.popoverClosingCallback - Callback function that is called while a popover is closing.
+	 * @param {function(Tour,TourSceneTrigger,PointerEvent):void|null} options.sceneTriggerClickCallback - Callback function that is called after a scene trigger is clicked.
 	 * @returns {Tour}
 	 */
 	constructor(options) {
@@ -326,6 +334,9 @@ class Tour {
 		let sceneIds = [];
 		if (!(options.wrapper instanceof HTMLElement)) {
 			throw "Tour \"wrapper\" must be an `HTMLElement`";
+		}
+		if (!(options.viewport instanceof HTMLElement)) {
+			throw "Tour \"viewport\" must be an `HTMLElement`";
 		}
 		if (!(options.backTrigger instanceof HTMLButtonElement)) {
 			throw "Tour \"backTrigger\" must be an `HTMLButtonElement`";
@@ -348,93 +359,120 @@ class Tour {
 		});
 
 		// Set fields from options
-		if (typeof(options) == "object") {
-			Object.entries(options).forEach(([key, value]) => {
-				this[key] = value;
-			});
-		}
+		this.wrapper = options.wrapper;
+		this.viewport = options.viewport;
+		this.backTrigger = options.backTrigger;
+		this.scenes = options.scenes;
+		if ("sceneTriggers" in options) this.sceneTriggers = options.sceneTriggers;
+		if ("popovers" in options) this.popovers = options.popovers;
+		if ("zoomInTrigger" in options) this.zoomInTrigger = options.zoomInTrigger;
+		if ("zoomOutTrigger" in options) this.zoomOutTrigger = options.zoomOutTrigger;
+		if ("backToRootTrigger" in options) this.backToRootTrigger = options.backToRootTrigger;
+		if ("fullscreenTrigger" in options) this.fullscreenTrigger = options.fullscreenTrigger;
+		if ("muteTrigger" in options) this.muteTrigger = options.muteTrigger;
+		if ("backgroundAudio" in options) this.backgroundAudio = options.backgroundAudio;
+		if ("changeSceneAudio" in options) this.changeSceneAudio = options.changeSceneAudio;
+		if ("zoomAudio" in options) this.zoomAudio = options.zoomAudio;
+		if ("openPopoverAudio" in options) this.openPopoverAudio = options.openPopoverAudio;
+		if ("closePopoverAudio" in options) this.closePopoverAudio = options.closePopoverAudio;
+		if ("isInitializedClass" in options) this.isInitializedClass = options.isInitializedClass;
+		if ("hasZoomClass" in options) this.hasZoomClass = options.hasZoomClass;
+		if ("hasHistoryClass" in options) this.hasHistoryClass = options.hasHistoryClass;
+		if ("isPanningClass" in options) this.isPanningClass = options.isPanningClass;
+		if ("isPinchingClass" in options) this.isPinchingClass = options.isPinchingClass;
+		if ("hasFullscreenSupportClass" in options) this.hasFullscreenSupportClass = options.hasFullscreenSupportClass;
+		if ("isMutedClass" in options) this.isMutedClass = options.isMutedClass;
+		if ("hasOpenedPopoverClass" in options) this.hasOpenedPopoverClass = options.hasOpenedPopoverClass;
+		if ("ctrlWheel" in options) this.ctrlWheel = options.ctrlWheel;
+		if ("initCallback" in options) this.initCallback = options.initCallback;
+		if ("goToSceneCallback" in options) this.goToSceneCallback = options.goToSceneCallback;
+		if ("goBackCallback" in options) this.goBackCallback = options.goBackCallback;
+		if ("goBackToRootCallback" in options) this.goBackToRootCallback = options.goBackToRootCallback;
+		if ("fullscreenChangeCallback" in options) this.fullscreenChangeCallback = options.fullscreenChangeCallback;
+		if ("muteCallback" in options) this.muteCallback = options.muteCallback;
+		if ("unmuteCallback" in options) this.unmuteCallback = options.unmuteCallback;
+		if ("popoverOpeningCallback" in options) this.popoverOpeningCallback = options.popoverOpeningCallback;
+		if ("popoverClosingCallback" in options) this.popoverClosingCallback = options.popoverClosingCallback;
+		if ("sceneTriggerClickCallback" in options) this.sceneTriggerClickCallback = options.sceneTriggerClickCallback;
 
 		// Initialize the tour
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		this.goToScene(this.scenes[0], false);
-		this.wrapper.setAttribute("tabindex", "0");
+		this.#changeScene(this.scenes[0]);
+		this.#detectFullscreenSupport();
+		this.#toggleMute();
+		this.viewport.setAttribute("tabindex", "0");
 		this.wrapper.classList.add(this.isInitializedClass);
-		if (this.maxZoomLevel) this.wrapper.classList.add(this.hasZoomClass);
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (this.backgroundAudio) this.backgroundAudio.loop = true; 
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
 	 * Navigates to the specified scene.
 	 * 
 	 * @param {TourScene} scene - The scene to navigate to.
-	 * @param {boolean} setFocus - Indicates whether to set focus to the scene after navigating.
 	 * @returns {void}
 	 */
-	goToScene(scene, setFocus = true) {
-		this.#addSceneToHistory(scene);
-		this.selectScene(scene, scene.offsetX, scene.offsetY, scene.zoomLevel);
-		if (setFocus) this.wrapper.focus();
-		if (typeof(this.goToSceneCallback) == "function") this.goToSceneCallback();
+	goToScene(scene) {
+		this.#changeScene(scene);
+		this.viewport.focus({ preventScroll: true });
+		if (typeof(this.goToSceneCallback) == "function") this.goToSceneCallback(this, scene);
 	}
 
 	/**
 	 * Navigates to the scene with the specified ID.
 	 * 
-	 * @param {string} id - The ID of the scene.
-	 * @param {boolean} setFocus - Indicates whether to set focus to the scene after navigating.
+	 * @param {string} id - The ID of the scene to navigate to.
 	 * @returns {void}
 	 */
-	goToSceneById(id, setFocus = true) {
-		let scene = this.getSceneById(id);
-		if (scene) this.goToScene(scene, setFocus);
+	goToSceneById(id) {
+		const scene = this.getSceneById(id);
+		if (scene) this.goToScene(scene);
 	}
 
 	/**
-	 * Navigates back the previous scene in the history within the tour.
+	 * Navigates back to the previous scene in the history.
 	 * 
 	 * @returns {void}
 	 */
 	goBack() {
-		let prevScene = this.#removeCurrentAndPopPrevSceneFromHistory();
-		let prevZoomLevel = this.#popPrevZoomLevelFromHistory();
-		let prevOffsets = this.#popPrevOffsetsFromHistory();
-		if (prevScene !== undefined && prevZoomLevel !== undefined && prevOffsets !== undefined) {
-			this.selectScene(prevScene, prevOffsets[0], prevOffsets[1], prevZoomLevel);
-			this.wrapper.focus();
-			if (typeof(this.goBackCallback) == "function") this.goBackCallback();
+		const history = this.history.pop();
+		if (history) {
+			this.#changeScene(history.scene, false, history.overrides);
+			if (!this.history.length) {
+				this.viewport.focus({ preventScroll: true });
+			}
+			if (typeof(this.goBackCallback) == "function") this.goBackCallback(this, history.scene);
 		}
 	}
 
 	/**
-	 * Selects the specified scene.
+	 * Navigates back through the history to the scene with the specified ID.
 	 * 
-	 * @param {TourScene} scene - The scene to be selected.
-	 * @param {number} offsetX - The X relative offset to which the scene is scrolled by default.
-	 * @param {number} offsetY - The Y relative offset to which the scene is scrolled by default.
-	 * @param {number} zoomLevel - The zoom level to which the scene is zoomed by default.
+	 * @param {string} sceneId - The ID of the scene to navigate back to.
 	 * @returns {void}
 	 */
-	selectScene(scene, offsetX, offsetY, zoomLevel) {
-		this.#applySceneAsSelected(scene);
-		this.zoomTo(zoomLevel);
-		this.scrollViewportByOffset(offsetX, offsetY);
-		this.#detectHasHistory();
-		if (typeof(this.selectSceneCallback) == "function") this.selectSceneCallback(scene);
+	goBackToScene(sceneId) {
+		while (this.history.length) {
+			this.goBack();
+			if (this.selectedScene.id == sceneId) return;
+		}
 	}
 
 	/**
-	 * Selects the scene by the specified ID.
+	 * Navigates back to the root scene in the history.
 	 * 
-	 * @param {string} id - The ID of the scene to be selected.
-	 * @param {number} offsetX - The X relative offset to which the scene is scrolled by default.
-	 * @param {number} offsetY - The Y relative offset to which the scene is scrolled by default.
-	 * @param {number} zoomLevel - The zoom level to which the scene is zoomed by default.
 	 * @returns {void}
 	 */
-	selectSceneById(id, offsetX, offsetY, zoomLevel) {
-		let scene = this.getSceneById(id);
-		if (scene) this.selectScene(scene, offsetX, offsetY, zoomLevel);
+	goBackToRoot() {
+		const history = this.history.shift();
+		if (history) {
+			this.history = [];
+			this.#changeScene(history.scene, false, history.overrides);
+			this.viewport.focus({ preventScroll: true });
+			if (typeof(this.goBackCallback) == "function") this.goBackCallback(this, history.scene);
+			if (typeof(this.goBackToRootCallback) == "function") this.goBackToRootCallback(this, history.scene);
+		}
 	}
 
 	/**
@@ -448,110 +486,652 @@ class Tour {
 	}
 
 	/**
-	 * Zooms the viewport to the next zoom level.
+	 * Indicates whether the scene with the specified ID is included within the history.
 	 * 
-	 * @returns {void}
+	 * @param {string} id - The ID of the scene.
+	 * @returns {boolean} `true` if the scene is included in the history; otherwise, `false`.
 	 */
-	zoomIn() {
-		this.zoomTo(this.#zoomLevel + 1);
-		if (typeof(this.zoomInCallback) == "function") this.zoomInCallback();
+	isHistoryIncludes(id) {
+		return this.history.some((history) => history.scene.id == id);
 	}
 
 	/**
-	 * Zooms the viewport to the previous zoom level.
+	 * Enters or exits fullscreen mode.
 	 * 
 	 * @returns {void}
 	 */
-	zoomOut() {
-		this.zoomTo(this.#zoomLevel - 1);
-		if (typeof(this.zoomOutCallback) == "function") this.zoomOutCallback();
+	toggleFullscreen() {
+		if (!this.wrapper.requestFullscreen) return;
+		if (document.fullscreenElement) {
+			document.exitFullscreen();
+		} else {
+			this.wrapper.requestFullscreen();
+		}
 	}
 
 	/**
-	 * Zooms the viewport to the specified zoom level.
+	 * Mutes the tour.
 	 * 
-	 * @param {number} zoomLevel - The zoom level to zoom to.
 	 * @returns {void}
 	 */
-	zoomTo(zoomLevel) {
-		let offsetX = this.#scrollToOffset(this.viewport.scrollLeft, false);
-		let offsetY = this.#scrollToOffset(this.viewport.scrollTop, true);
-		this.#zoomLevel = this.#clampZoomLevel(zoomLevel);
-		this.#applyCurrentZoomLevel();
-		this.scrollViewportByOffset(offsetX, offsetY);
-		this.#updateZoomTriggers();
-		if (typeof(this.zoomCallback) == "function") this.zoomCallback();
+	mute() {
+		this.#isMuted = true;
+		if (this.backgroundAudio) this.backgroundAudio.pause();
+		this.#toggleMute();
+		if (typeof(this.muteCallback) == "function") this.muteCallback(this);
 	}
 
 	/**
-	 * Zooms the viewport to the specified zoom level while keeping the X and Y points stationary during the zoom.
+	 * Unmutes the tour.
 	 * 
-	 * @param {number} zoomLevel - The zoom level to zoom to.
-	 * @param {number} x - The X coordinate to keep stationary during the zoom.
-	 * @param {number} y - The Y coordinate to keep stationary during the zoom.
 	 * @returns {void}
 	 */
-	anchorZoomTo(zoomLevel, x, y) {
-		const rect = this.viewport.getBoundingClientRect();
-		const viewAbsX = x - rect.left;
-		const viewAbsY = y - rect.top;
-		const mapAbsX = viewAbsX + this.viewport.scrollLeft;
-		const mapAbsY = viewAbsY + this.viewport.scrollTop;
-		const mapRelX = mapAbsX / this.viewport.scrollWidth;
-		const mapRelY = mapAbsY / this.viewport.scrollHeight;
-		const viewRelX = viewAbsX / this.viewport.offsetWidth;
-		const viewRelY = viewAbsY / this.viewport.offsetHeight;
-		this.zoomTo(zoomLevel);
-		const newMapAbsY = mapRelY * this.viewport.scrollHeight;
-		const newMapAbsX = mapRelX * this.viewport.scrollWidth;
-		this.viewport.scrollTo({
-			top: newMapAbsY - (this.viewport.offsetHeight * viewRelY),
-			left: newMapAbsX - (this.viewport.offsetWidth * viewRelX)
+	unmute() {
+		this.#isMuted = false;
+		if (this.backgroundAudio) this.backgroundAudio.play();
+		this.#toggleMute();
+		if (typeof(this.unmuteCallback) == "function") this.unmuteCallback(this);
+	}
+
+	/**
+	 * Plays the specified audio once.
+	 * 
+	 * @param {HTMLAudioElement} audio - The audio to be played.
+	 * @returns {void}
+	 */
+	playAudio(audio) {
+		if (this.#isMuted) return;
+		audio.play();
+		audio.currentTime = 0;
+	}
+
+	/**
+	 * Changes the current scene to the specified one.
+	 * 
+	 * @param {TourScene} selectedScene - The scene to be selected.
+	 * @param {boolean} addToHistory - Indicates whether to add the previous scene to the history.
+	 * @param {Map<string,any>} overrides - The override settings for the scene to be selected.
+	 * @returns {void}
+	 */
+	#changeScene(selectedScene, addToHistory = true, overrides = new Map()) {
+		if (this.selectedScene === selectedScene) return;
+		if (this.selectedScene !== null) {
+			if (addToHistory) {
+				this.history.push(new TourHistoryEntry({
+					scene: this.selectedScene,
+					overrides: this.selectedScene.getOverrides(this)
+				}));
+			}
+			this.selectedScene.deselect(this);
+		}
+		this.selectedScene = selectedScene;
+		this.selectedScene.select(this, overrides);
+		this.#toggleZoom();
+		this.#toggleHistory();
+		this.#toggleSceneTriggers();
+		if (this.changeSceneAudio) this.playAudio(this.changeSceneAudio);
+	}
+
+	/**
+	 * Enables or disables zoom for the selected scene.
+	 * 
+	 * @returns {void}
+	 */
+	#toggleZoom() {
+		if (this.selectedScene instanceof TourMapScene) {
+			this.wrapper.classList.add(this.hasZoomClass);
+			this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
+		} else {
+			this.wrapper.classList.remove(this.hasZoomClass);
+		}
+	}
+
+	/**
+	 * Enables or disables the zoom trigger buttons based on whether the maximum or minimum zoom level has been reached.
+	 * 
+	 * @param {boolean} isMax - Indicates whether the maximum zoom level is reached.
+	 * @param {boolean} isMin - Indicates whether the minimum zoom level is reached.
+	 * @returns {void}
+	 */
+	#toggleZoomTriggers(isMax, isMin) {
+		if (this.zoomInTrigger !== null) {
+			this.zoomInTrigger.toggleAttribute("disabled", isMax);
+		}
+		if (this.zoomOutTrigger !== null) {
+			this.zoomOutTrigger.toggleAttribute("disabled", isMin);
+		}
+	}
+
+	/**
+	 * Enables or disables the back trigger button based on whether any previous scene is available within the history.
+	 * 
+	 * @returns {void}
+	 */
+	#toggleHistory() {
+		const hasHistory = this.history.length;
+		this.wrapper.classList.toggle(this.hasHistoryClass, hasHistory);
+		this.backTrigger.toggleAttribute("disabled", !hasHistory);
+	}
+
+	/**
+	 * Adds or removes classes from the scene trigger buttons based on whether their scenes are active or included in the history.
+	 * 
+	 * @returns {void}
+	 */
+	#toggleSceneTriggers() {
+		this.sceneTriggers.forEach((sceneTrigger) => {
+			if (!this.selectedScene) return;
+			const isInHistory = this.isHistoryIncludes(sceneTrigger.sceneId);
+			const isSelected = sceneTrigger.sceneId == this.selectedScene.id;
+			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneInHistory, isInHistory);
+			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneSelected, isSelected);
 		});
 	}
 
 	/**
-	 * Scrolls the viewport to the positions defined by the X and Y relative offsets.
+	 * Detects whether the fullscreen API is supported by the browser.
 	 * 
-	 * @param {number|null} offsetX - The X relative offset.
-	 * @param {number|null} offsetY - The Y relative offset.
 	 * @returns {void}
 	 */
-	scrollViewportByOffset(offsetX, offsetY) {
-		this.viewport.scrollTo({
-			top: this.#offsetToScroll(offsetY, true),
-			left: this.#offsetToScroll(offsetX, false)
+	#detectFullscreenSupport() {
+		const hasSupport = typeof this.wrapper.requestFullscreen == "function";
+		this.wrapper.classList.toggle(this.hasFullscreenSupportClass, hasSupport);
+		if (this.fullscreenTrigger) {
+			this.fullscreenTrigger.toggleAttribute("disabled", !hasSupport);
+		}
+	}
+
+	/**
+	 * Toggles the mute class on the wrapper element based on whether the tour is muted.
+	 * 
+	 * @returns {void}
+	 */
+	#toggleMute() {
+		this.wrapper.classList.toggle(this.isMutedClass, this.#isMuted);
+	}
+
+	/**
+	 * Executes after the browser switches into or out of fullscreen mode.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isFullscreenChanged(event) {
+		this.popovers.forEach((popover) => popover.wrapper.hidePopover());
+		if (typeof(this.fullscreenChangeCallback) == "function") this.fullscreenChangeCallback(this);
+	}
+
+	/**
+	 * Executes before a popover opens.
+	 * 
+	 * @param {ToggleEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isPopoverOpening(event) {
+		this.popovers.forEach((popover) => popover.wrapper.hidePopover());
+		this.wrapper.classList.add(this.hasOpenedPopoverClass);
+		if (this.openPopoverAudio) this.playAudio(this.openPopoverAudio);
+		if (typeof(this.popoverOpeningCallback) == "function") this.popoverOpeningCallback(this, event);
+	}
+
+	/**
+	 * Executes before a popover closes.
+	 * 
+	 * @param {ToggleEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isPopoverClosing(event) {
+		this.wrapper.classList.remove(this.hasOpenedPopoverClass);
+		if (this.closePopoverAudio) this.playAudio(this.closePopoverAudio);
+		if (typeof(this.popoverClosingCallback) == "function") this.popoverClosingCallback(this, event);
+	}
+
+	/**
+	 * Executes after a scene trigger is clicked.
+	 * 
+	 * @param {TourSceneTrigger} sceneTrigger - The scene trigger that was clicked.
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isSceneTriggerClicked(sceneTrigger, event) {
+		if (typeof(this.sceneTriggerClickCallback) == "function") this.sceneTriggerClickCallback(this, sceneTrigger, event);
+	}
+
+	/**
+	 * Adds event listeners related to the tour.
+	 * 
+	 * @returns {void}
+	 */
+	#addEvents() {
+		this.wrapper.addEventListener("click", this);
+		this.wrapper.addEventListener("wheel", this);
+		this.wrapper.addEventListener("fullscreenchange", this);
+		this.viewport.addEventListener("pointerdown", this, { passive: true });
+		this.viewport.addEventListener("touchstart", this, { passive: true });
+		document.addEventListener("pointerup", this, { passive: true });
+		document.addEventListener("pointermove", this, { passive: true });
+		document.addEventListener("touchmove", this, { passive: true });
+		document.addEventListener("touchend", this, { passive: true });
+		this.popovers.forEach((popover) => {
+			popover.wrapper.addEventListener("beforetoggle", this);
 		});
 	}
 
 	/**
-	 * Scrolls the viewport to the defined scroll positions.
+	 * Handles events.
 	 * 
-	 * @param {number} scrollTop - The top scroll position.
-	 * @param {number} scrollLeft - The left scroll position.
+	 * @param {Event} event - The event to be handled.
 	 * @returns {void}
 	 */
-	scrollViewportTo(scrollTop, scrollLeft) {
-		this.viewport.scrollTo({
-			top: scrollTop,
-			left: scrollLeft
+	#handleEvents(event) {
+		switch (event.type) {
+			case "click":
+				this.sceneTriggers.forEach((sceneTrigger) => {
+					if (sceneTrigger.trigger == event.target) {
+						if (sceneTrigger.preferHistory && this.isHistoryIncludes(sceneTrigger.sceneId)) {
+							this.goBackToScene(sceneTrigger.sceneId);
+						} else {
+							this.goToSceneById(sceneTrigger.sceneId);
+						}
+						this.#isSceneTriggerClicked(sceneTrigger, event);
+					}
+				});
+				if (this.selectedScene instanceof TourMapScene) {
+					if (this.zoomInTrigger !== null && event.target == this.zoomInTrigger) {
+						this.selectedScene.zoomIn(this);
+						this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
+						if (this.zoomAudio) this.playAudio(this.zoomAudio);
+					}
+					if (this.zoomOutTrigger !== null && event.target == this.zoomOutTrigger) {
+						this.selectedScene.zoomOut(this);
+						this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
+						if (this.zoomAudio) this.playAudio(this.zoomAudio);
+					}
+				}
+				if (event.target == this.backTrigger) {
+					this.goBack();
+				}
+				if (event.target == this.backToRootTrigger) {
+					this.goBackToRoot();
+				}
+				if (event.target == this.fullscreenTrigger) {
+					this.toggleFullscreen();
+				}
+				if (event.target == this.muteTrigger) {
+					this.#isMuted ? this.unmute() : this.mute();
+				}
+				break;
+			case "wheel":
+				if (!event.ctrlKey && this.ctrlWheel) return;
+				event.preventDefault();
+				if (this.selectedScene instanceof TourMapScene) {
+					this.selectedScene.wheelZoom(this, event);
+					this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
+				}
+				break;
+			case "pointermove":
+				if (this.selectedScene !== null) {
+					this.selectedScene.panMove(this, event);
+				}
+				break;
+			case "pointerdown":
+				if (this.selectedScene !== null) {
+					this.selectedScene.panStart(this, event);
+				}
+				break;
+			case "pointerup":
+				if (this.selectedScene !== null) {
+					this.selectedScene.panEnd(this, event);
+				}
+				break;
+			case "touchstart":
+				if (this.selectedScene instanceof TourMapScene) {
+					this.selectedScene.pinchStart(this, event);
+				}
+				break;
+			case "touchmove":
+				if (this.selectedScene instanceof TourMapScene) {
+					this.selectedScene.pinchMove(this, event);
+					this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
+				}
+				break;
+			case "touchend":
+				if (this.selectedScene instanceof TourMapScene) {
+					this.selectedScene.pinchEnd(this, event);
+				}
+				break;
+			case "fullscreenchange":
+				this.#isFullscreenChanged(event);
+				break;
+			case "beforetoggle":
+				if (event.newState === "open") {
+					this.#isPopoverOpening(event);
+				} else {
+					this.#isPopoverClosing(event);
+				}
+				break;
+		}
+	}
+}
+
+/**
+ * Tour Scene
+ * This class is designed to create a scene within a tour.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourScene {
+
+	/**
+	 * The id of the scene.
+	 * 
+	 * @type {string}
+	 */
+	id;
+
+	/**
+	 * The wrapper element that contains the image tiles and the hotspots.
+	 * 
+	 * @type {HTMLElement}
+	 */
+	wrapper;
+
+	/**
+	 * The element that contains the image tiles.
+	 * 
+	 * @type {HTMLElement}
+	 */
+	tileList;
+
+	/**
+	 * The latitude and longitude of the scene's top-left corner, used to calculate the position of the included hotspots.
+	 * 
+	 * @type {TourSceneCoordinate}
+	 */
+	topLeftCoordinate;
+
+	/**
+	 * The latitude and longitude of the scene's bottom-right corner, used to calculate the position of the included hotspots.
+	 * 
+	 * @type {TourSceneCoordinate}
+	 */
+	bottomRightCoordinate;
+
+	/**
+	 * An array of hotspots within the scene.
+	 * 
+	 * @type {TourSceneHotspot[]}
+	 */
+	hotspots = [];
+
+	/**
+	 * The name of the CSS variable that defines the scene's aspect ratio.
+	 * 
+	 * @type {string}
+	 */
+	aspectRatioCSSVariable = "--tour-scene-aspect-ratio";
+
+	/**
+	 * The class that is added to the wrapper when the scene is selected.
+	 * 
+	 * @type {string}
+	 */
+	isSelectedClass = "is-selected";
+
+	/**
+	 * The class that is added to the wrapper when the image tiles within the scene are loaded.
+	 * 
+	 * @type {string}
+	 */
+	isLoadedClass = "is-loaded"
+
+	/**
+	 * The class that is added to the wrapper when the scene is vertical rather than horizontal.
+	 * 
+	 * @type {string}
+	 */
+	isVerticalClass = "is-vertical";
+
+	/**
+	 * Callback function that is called after the scene has been initialized.
+	 * 
+	 * @type {function(TourScene):void|null}
+	 */
+	initCallback = null;
+
+	/**
+	 * Callback function that is called after the scene is selected.
+	 * 
+	 * @type {function(TourScene,Tour):void|null}
+	 */
+	selectCallback = null;
+
+	/**
+	 * Callback function that is called after the scene is deselected.
+	 * 
+	 * @type {function(TourScene,Tour):void|null}
+	 */
+	deselectCallback = null;
+
+	/**
+	 * Callback function that is called after the panning has started.
+	 * 
+	 * @type {function(TourScene,Tour,PointerEvent):void|null}
+	 */
+	panStartCallback = null;
+
+	/**
+	 * Callback function that is called after the panning has ended.
+	 * 
+	 * @type {function(TourScene,Tour,PointerEvent):void|null}
+	 */
+	panEndCallback = null;
+
+	/**
+	 * The horizontal coordinate in pixels at which the panning was started.
+	 * 
+	 * @type {number}
+	 */
+	#panStartX = 0;
+
+	/**
+	 * The vertical coordinate in pixels at which the panning was started.
+	 * 
+	 * @type {number}
+	 */
+	#panStartY = 0;
+
+	/**
+	 * The horizontal scroll position of the viewport when the panning was started.
+	 * 
+	 * @type {number}
+	 */
+	#panStartScrollLeft = 0;
+
+	/**
+	 * The vertical scroll position of the viewport when the panning was started.
+	 * 
+	 * @type {number}
+	 */
+	#panStartScrollTop = 0;
+
+	/**
+	 * Indicates whether the scene is vertical rather than horizontal.
+	 * 
+	 * @type {boolean}
+	 */
+	get isVertical() {
+		const width = this.bottomRightCoordinate.long - this.topLeftCoordinate.long;
+		const height = this.bottomRightCoordinate.lat - this.topLeftCoordinate.lat;
+		return height > width;
+	}
+
+	/**
+	 * Creates a tour scene.
+	 * 
+	 * @param {Object} options
+	 * @param {string} options.id - The id of the scene.
+	 * @param {HTMLElement} options.wrapper - The wrapper element that contains the image tiles and the hotspots.
+	 * @param {HTMLElement} options.tileList - The element that contains the image tiles.
+	 * @param {TourSceneCoordinate} options.topLeftCoordinate - The latitude and longitude of the scene's top-left corner, used to calculate the position of the included hotspots.
+	 * @param {TourSceneCoordinate} options.bottomRightCoordinate - The latitude and longitude of the scene's bottom-right corner, used to calculate the position of the included hotspots.
+	 * @param {TourSceneHotspot[]} options.hotspots - An array of hotspots within the scene.
+	 * @param {string} options.aspectRatioCSSVariable - The name of the CSS variable that defines the scene's aspect ratio.
+	 * @param {string} options.isSelectedClass - The class that is added to the wrapper when the scene is selected.
+	 * @param {string} options.isLoadedClass - The class that is added to the wrapper when the image tiles within the scene are loaded.
+	 * @param {string} options.isVerticalClass - The class that is added to the wrapper when the scene is vertical rather than horizontal.
+	 * @param {function(TourScene):void|null} options.initCallback - Callback function that is called after the scene has been initialized.
+	 * @param {function(TourScene,Tour):void|null} options.selectCallback - Callback function that is called after the scene is selected.
+	 * @param {function(TourScene,Tour):void|null} options.deselectCallback - Callback function that is called after the scene is deselected.
+	 * @param {function(TourScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after the panning has started.
+	 * @param {function(TourScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after the panning has ended.
+	 * @returns {TourScene}
+	 */
+	constructor(options) {
+
+		// Test required options
+		if (typeof options.id !== "string") {
+			throw "Tour scene \"id\" must be a string";
+		}
+		if (!(options.wrapper instanceof HTMLElement)) {
+			throw "Tour scene \"wrapper\" must be an `HTMLElement`";
+		}
+		if (!(options.tileList instanceof HTMLElement)) {
+			throw "Tour scene \"tileList\" must be an `HTMLElement`";
+		}
+
+		// Set fields from options
+		this.id = options.id;
+		this.wrapper = options.wrapper;
+		this.tileList = options.tileList;
+		if ("topLeftCoordinate" in options) this.topLeftCoordinate = options.topLeftCoordinate;
+		if ("bottomRightCoordinate" in options) this.bottomRightCoordinate = options.bottomRightCoordinate;
+		if ("hotspots" in options) this.hotspots = options.hotspots;
+		if ("aspectRatioCSSVariable" in options) this.aspectRatioCSSVariable = options.aspectRatioCSSVariable;
+		if ("isSelectedClass" in options) this.isSelectedClass = options.isSelectedClass;
+		if ("isLoadedClass" in options) this.isLoadedClass = options.isLoadedClass;
+		if ("isVerticalClass" in options) this.isVerticalClass = options.isVerticalClass;
+		if ("initCallback" in options) this.initCallback = options.initCallback;
+		if ("selectCallback" in options) this.selectCallback = options.selectCallback;
+		if ("deselectCallback" in options) this.deselectCallback = options.deselectCallback;
+		if ("panStartCallback" in options) this.panStartCallback = options.panStartCallback;
+		if ("panEndCallback" in options) this.panEndCallback = options.panEndCallback;
+	
+		// Initialize the tour scene
+		if (this.isVertical) this.wrapper.classList.add(this.isVerticalClass);
+	}
+
+	/**
+	 * Selects the scene.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {Map<string,any>} overrides - The override settings for the scene.
+	 * @returns {void}
+	 */
+	select(tour, overrides = new Map()) {
+		this.wrapper.classList.add(this.isSelectedClass);
+		this.#setApectRatio();
+		this.#loadImageTiles();
+	}
+
+	/**
+	 * Deselects the scene.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {void}
+	 */
+	deselect(tour) {
+		this.wrapper.style.removeProperty(this.aspectRatioCSSVariable);
+		this.wrapper.classList.remove(this.isLoadedClass);
+		this.wrapper.classList.remove(this.isSelectedClass);
+	}
+
+	/**
+	 * Starts the panning.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	panStart(tour, event) {
+		if(tour.isPanning || tour.isPinching) return;
+		tour.isPanning = true;
+		this.#panStartX = event.pageX - tour.viewport.offsetLeft;
+		this.#panStartY = event.pageY - tour.viewport.offsetTop;
+		this.#panStartScrollLeft = tour.viewport.scrollLeft;
+		this.#panStartScrollTop = tour.viewport.scrollTop;
+		tour.wrapper.classList.add(tour.isPanningClass);
+		if (typeof(this.panStartCallback) == "function") this.panStartCallback(this, tour, event);
+	}
+
+	/**
+	 * Moves the panning.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	panMove(tour, event) {
+		if(!tour.isPanning || tour.isPinching) return;
+		const panCurrX = event.pageX - tour.viewport.offsetLeft;
+		const panCurrY = event.pageY - tour.viewport.offsetTop;
+		const panCurrScrollLeft = panCurrX - this.#panStartX;
+		const panCurrScrollTop = panCurrY - this.#panStartY;
+		tour.viewport.scrollTo({
+			left: this.#panStartScrollLeft - panCurrScrollLeft,
+			top: this.#panStartScrollTop - panCurrScrollTop,
+			behavior: "instant"
 		});
 	}
 
 	/**
-	 * Scrolls the viewport to the specified element.
+	 * Ends the panning.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	panEnd(tour, event) {
+		if(!tour.isPanning || tour.isPinching) return;
+		tour.isPanning = false;
+		tour.wrapper.classList.remove(tour.isPanningClass);
+		if (typeof(this.panEndCallback) == "function") this.panEndCallback(this, tour, event);
+	}
+
+	/**
+	 * Updates the hotspots' positions.
+	 * 
+	 * @returns {void}
+	 */
+	updateHotspots() {
+		this.hotspots.forEach((hotspot) => hotspot.update(this));
+	}
+
+	/**
+	 * Retrieves the override settings of the current state that can be saved in the tour history and retrieved when the scene is reverted.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {Map<string,any>} The override settings.
+	 */
+	getOverrides(tour) {
+		return new Map();
+	}
+
+	/**
+	 * Scrolls the scene to the specified element.
 	 * 
 	 * @param {Element} elem - The element to scroll the viewport to.
+	 * @param {HTMLElement} viewport - The viewport element that is scrolled.
 	 * @param {string} behavior - The behavior of the scroll.
 	 * @returns {void}
 	 */
-	scrollViewportToElem(elem, behavior = "smooth") {
-		if (!this.viewport.contains(elem)) return;
-		let viewport = this.viewport;
-		let viewportRect = viewport.getBoundingClientRect();
-		let elemRect = elem.getBoundingClientRect();
-		let top = elemRect.top - (viewportRect.top - viewport.scrollTop);
-		let left = elemRect.left - (viewportRect.left - viewport.scrollLeft);
+	scrollToElem(elem, viewport, behavior = "smooth") {
+		if (!viewport.contains(elem)) return;
+		const elemRect = elem.getBoundingClientRect();
+		const viewportRect = viewport.getBoundingClientRect();
+		const top = elemRect.top - (viewportRect.top - viewport.scrollTop);
+		const left = elemRect.left - (viewportRect.left - viewport.scrollLeft);
 		viewport.scrollTo({
 			top: top - (viewport.offsetHeight / 2),
 			left: left - (viewport.offsetWidth / 2),
@@ -560,138 +1140,464 @@ class Tour {
 	}
 
 	/**
-	 * Applies the specified scene as selected.
+	 * Scrolls the scene to the absolute positions corresponding to the specified relative horizontal and vertical offsets.
 	 * 
-	 * @param {TourScene} selectedScene - The selected scene.
+	 * @param {number} offsetX - The relative horizontal offset.
+	 * @param {number} offsetY - The relative vertical offset.
+	 * @param {HTMLElement} viewport - The viewport element that is scrolled and defines the limits of the absolute scroll positions.
 	 * @returns {void}
 	 */
-	#applySceneAsSelected(selectedScene) {
-		this.scenes.forEach((scene) => {
-			scene.wrapper.classList.remove(this.isSelectedClass);
-			if (scene == selectedScene) {
-				scene.wrapper.classList.add(this.isSelectedClass);
-			}
+	scrollToOffset(offsetX, offsetY, viewport) {
+		viewport.scrollTo({
+			left: this.convertToXScroll(offsetX, viewport),
+			top: this.convertToYScroll(offsetY, viewport)
 		});
 	}
 
 	/**
-	 * Adds the specified scene to the history.
+	 * Converts the specified relative horizontal offset into an absolute horizontal scroll position.
 	 * 
-	 * @param {TourScene} scene - The scene to be added.
+	 * @param {number} offsetX - The relative horizontal offset to be converted.
+	 * @param {HTMLElement} viewport - The viewport element that defines the limits of the absolute scroll positions.
+	 * @returns {number} The converted absolute horizontal scroll position.
+	 */
+	convertToXScroll(offsetX, viewport) {
+		return this.#convertToScroll(offsetX, false, viewport);
+	}
+
+	/**
+	 * Converts the specified relative vertical offset into an absolute vertical scroll position.
+	 * 
+	 * @param {number} offsetY - The relative vertical offset to be converted.
+	 * @param {HTMLElement} viewport - The viewport element that defines the limits of the absolute scroll positions.
+	 * @returns {number} The converted absolute vertical scroll position.
+	 */
+	convertToYScroll(offsetY, viewport) {
+		return this.#convertToScroll(offsetY, true, viewport);
+	}
+
+	/**
+	 * Converts the specified absolute horizontal scroll position into a relative horizontal offset.
+	 * 
+	 * @param {number} scrollLeft - The absolute horizontal scroll position to be converted.
+	 * @param {HTMLElement} viewport - The viewport element that defines the limits of the absolute scroll positions.
+	 * @returns {number} The converted relative horizontal offset.
+	 */
+	convertToXOffset(scrollLeft, viewport) {
+		return this.#convertToOffset(scrollLeft, false, viewport);
+	}
+
+	/**
+	 * Converts the specified absolute vertical scroll position into a relative vertical offset.
+	 * 
+	 * @param {number} scrollTop - The absolute vertical scroll position to be converted.
+	 * @param {HTMLElement} viewport - The viewport element that defines the limits of the absolute scroll positions.
+	 * @returns {number} The converted relative vertical offset.
+	 */
+	convertToYOffset(scrollTop, viewport) {
+		return this.#convertToOffset(scrollTop, true, viewport);
+	}
+
+	/**
+	 * Converts the specified relative offset into an absolute scroll position.
+	 * 
+	 * @param {number} offset - The relative offset to be converted.
+	 * @param {boolean} isVertical - Indicates whether the relative offset is vertical or horizontal.
+	 * @param {HTMLElement} viewport - The viewport element that defines the limits of the absolute scroll positions.
+	 * @returns {number} The converted absolute scroll position.
+	 */
+	#convertToScroll(offset, isVertical, viewport) {
+		const absOffset = isVertical ? viewport.offsetHeight : viewport.offsetWidth;
+		const absScroll = isVertical ? viewport.scrollHeight : viewport.scrollWidth;
+		return ((offset / 100) * absScroll) - (absOffset / 2);
+	}
+
+	/**
+	 * Converts the specified absolute scroll position into a relative offset.
+	 * 
+	 * @param {number} scroll - The absolute scroll position to be converted.
+	 * @param {boolean} isVertical - Indicates whether the scroll position is vertical or horizontal.
+	 * @param {HTMLElement} viewport - The viewport element that defines the limits of the absolute scroll positions.
+	 * @returns {number} The converted relative offset.
+	 */
+	#convertToOffset(scroll, isVertical, viewport) {
+		const absOffset = isVertical ? viewport.offsetHeight : viewport.offsetWidth;
+		const absScroll = isVertical ? viewport.scrollHeight : viewport.scrollWidth;
+		return ((scroll + (absOffset / 2)) / absScroll) * 100;
+	}
+
+	/**
+	 * Sets the wrapper's CSS variable to the scene's aspect ratio.
+	 * 
 	 * @returns {void}
 	 */
-	#addSceneToHistory(scene) {
-		this.#sceneHistory.push(scene);
-		this.#zoomLevelHistory.push(this.#zoomLevel);
-		this.#offsetHistory.push([
-			this.#scrollToOffset(this.viewport.scrollLeft, false),
-			this.#scrollToOffset(this.viewport.scrollTop, true)
+	#setApectRatio() {
+		const aspectRatio = this.tileList.scrollWidth / this.tileList.scrollHeight;
+		this.wrapper.style.setProperty(this.aspectRatioCSSVariable, aspectRatio);
+	}
+
+	/**
+	 * Loads all image tiles.
+	 * 
+	 * @returns {void}
+	 */
+	#loadImageTiles() {
+		const images = Array.from(this.tileList.querySelectorAll("img"));
+		images.forEach((img) => img.loading = "eager");
+		const loadImages = images
+			.filter((image) => !image.complete)
+			.map((image) => {
+				return new Promise((resolve) => {
+					image.onload = image.onerror = resolve;
+				})
+			});
+		Promise.all(loadImages).then(() => {
+			this.wrapper.classList.add(this.isLoadedClass);
+		});
+	}
+}
+
+/**
+ * Tour Map Scene
+ * This class is designed to create a scene within a tour that displays a pannable and zoomable map.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourMapScene extends TourScene {
+
+	/**
+	 * The maximum available zoom level for the scene.
+	 * 
+	 * @type {number}
+	 */
+	maxZoomLevel = 8;
+
+	/**
+	 * The initial zoom level applied when the scene is selected.
+	 * 
+	 * @type {number}
+	 */
+	zoomLevel = 0;
+
+	/**
+	 * The relative horizontal offset in percent to which the scene is scrolled by default.
+	 * 
+	 * @type {number}
+	 */
+	offsetX = 50;
+
+	/**
+	 * The relative vertical offset in percent to which the scene is scrolled by default.
+	 * 
+	 * @type {number}
+	 */
+	offsetY = 50;
+
+	/**
+	 * The name of the attribute added to the wrapper whose value contains the current zoom level.
+	 * 
+	 * @type {string}
+	 */
+	zoomLevelAttribute = "data-scene-tour-zoom-level";
+
+	/**
+	 * Callback function that is called after the scene is zoomed to the next zoom level.
+	 * 
+	 * @type {function(TourMapScene,Tour):void|null}
+	 */
+	zoomInCallback = null;
+
+	/**
+	 * Callback function that is called after the scene is zoomed to the previous zoom level.
+	 * 
+	 * @type {function(TourMapScene,Tour):void|null}
+	 */
+	zoomOutCallback = null;
+
+	/**
+	 * Callback function that is called after the scene is zoomed to a different zoom level.
+	 * 
+	 * @type {function(TourMapScene,Tour,number):void|null}
+	 */
+	zoomCallback = null;
+
+	/**
+	 * Callback function that is called after the pinching has started.
+	 * 
+	 * @type {function(TourMapScene,Tour,TouchEvent):void|null}
+	 */
+	pinchStartCallback = null;
+
+	/**
+	 * Callback function that is called after the pinching has ended.
+	 * 
+	 * @type {function(TourMapScene,Tour,TouchEvent):void|null}
+	 */
+	pinchEndCallback = null;
+
+	/**
+	 * The current zoom level.
+	 * 
+	 * @type {number}
+	 */
+	#currentZoomLevel = 0;
+
+	/**
+	 * The distance between the two fingers when pinching has been started.
+	 * 
+	 * @type {number}
+	 */
+	#pinchStartDistance = 0;
+
+	/**
+	 * The zoom level when pinching has been started.
+	 * 
+	 * @type {number}
+	 */
+	#pinchStartZoomLevel = 0;
+
+	/**
+	 * An array indicating whether the maximum and minimum zoom levels have been reached.
+	 * 
+	 * @type {[boolean, boolean]}
+	 */
+	get zoomLimits() {
+		return [
+			this.#currentZoomLevel >= this.maxZoomLevel,
+			this.#currentZoomLevel < 1
+		]
+	}
+
+	/**
+	 * Creates a tour scene that displays a pannable and zoomable map.
+	 * 
+	 * @param {Object} options
+	 * @param {string} options.id - The id of the scene.
+	 * @param {HTMLElement} options.wrapper - The wrapper element that contains the image tiles and the hotspots.
+	 * @param {HTMLElement} options.tileList - The element that contains the image tiles.
+	 * @param {TourSceneCoordinate} options.topLeftCoordinate - The latitude and longitude of the scene's top-left corner, used to calculate the position of the included hotspots.
+	 * @param {TourSceneCoordinate} options.bottomRightCoordinate - The latitude and longitude of the scene's bottom-right corner, used to calculate the position of the included hotspots.
+	 * @param {TourSceneHotspot[]} options.hotspots - An array of hotspots within the scene.
+	 * @param {string} options.aspectRatioCSSVariable - The name of the CSS variable that defines the scene's aspect ratio.
+	 * @param {string} options.isSelectedClass - The class that is added to the wrapper when the scene is selected.
+	 * @param {string} options.isLoadedClass - The class that is added to the wrapper when the image tiles within the scene are loaded.
+	 * @param {string} options.isVerticalClass - The class that is added to the wrapper when the scene is vertical rather than horizontal.
+	 * @param {number} options.maxZoomLevel - The maximum available zoom level for the scene.
+	 * @param {number} options.zoomLevel - The initial zoom level applied when the scene is selected.
+	 * @param {number} options.offsetX - The relative horizontal offset in percent to which the scene is scrolled by default.
+	 * @param {number} options.offsetY - The relative vertical offset in percent to which the scene is scrolled by default.
+	 * @param {string} options.zoomLevelAttribute - The name of the attribute added to the wrapper whose value contains the current zoom level.
+	 * @param {function(TourMapScene):void|null} options.initCallback - Callback function that is called after the scene has been initialized.
+	 * @param {function(TourMapScene,Tour):void|null} options.selectCallback - Callback function that is called after the scene is selected.
+	 * @param {function(TourMapScene,Tour):void|null} options.deselectCallback - Callback function that is called after the scene is deselected.
+	 * @param {function(TourMapScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after the panning has started.
+	 * @param {function(TourMapScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after the panning has ended.
+	 * @param {function(TourMapScene,Tour):void|null} options.zoomInCallback - Callback function that is called after the scene is zoomed to the next zoom level.
+	 * @param {function(TourMapScene,Tour):void|null} options.zoomOutCallback - Callback function that is called after the scene is zoomed to the previous zoom level.
+	 * @param {function(TourMapScene,Tour,number):void|null} options.zoomCallback - Callback function that is called after the scene is zoomed to a different zoom level.
+	 * @param {function(TourMapScene,Tour,TouchEvent):void|null} options.pinchStartCallback - Callback function that is called after the pinching has started.
+	 * @param {function(TourMapScene,Tour,TouchEvent):void|null} options.pinchEndCallback - Callback function that is called after the pinching has ended.
+	 * @returns {TourMapScene}
+	 */
+	constructor(options) {
+
+		// Initialize the parent
+		super(options);
+
+		// Set fields from options
+		if ("maxZoomLevel" in options) this.maxZoomLevel = options.maxZoomLevel;
+		if ("zoomLevel" in options) this.zoomLevel = options.zoomLevel;
+		if ("offsetX" in options) this.offsetX = options.offsetX;
+		if ("offsetY" in options) this.offsetY = options.offsetY;
+		if ("zoomLevelAttribute" in options) this.zoomLevelAttribute = options.zoomLevelAttribute;
+		if ("zoomInCallback" in options) this.zoomInCallback = options.zoomInCallback;
+		if ("zoomOutCallback" in options) this.zoomOutCallback = options.zoomOutCallback;
+		if ("zoomCallback" in options) this.zoomCallback = options.zoomCallback;
+		if ("pinchStartCallback" in options) this.pinchStartCallback = options.pinchStartCallback;
+		if ("pinchEndCallback" in options) this.pinchEndCallback = options.pinchEndCallback;
+
+		// Initialize the map tour scene
+		this.#currentZoomLevel = this.zoomLevel;
+		super.updateHotspots();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+
+	/**
+	 * Selects the scene.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {Map<string,any>} overrides - The override settings for the scene.
+	 * @returns {void}
+	 */
+	select(tour, overrides = new Map()) {
+		super.select(tour);
+		const zoomLevel = overrides.get("currentZoomLevel") ?? this.zoomLevel;
+		const offsetX = overrides.get("offsetX") ?? this.offsetX;
+		const offsetY = overrides.get("offsetY") ?? this.offsetY;
+		this.zoomTo(zoomLevel, tour);
+		tour.viewport.scrollTo({
+			left: this.convertToXScroll(offsetX, tour.viewport),
+			top: this.convertToYScroll(offsetY, tour.viewport)
+		});
+		if (typeof(this.selectCallback) == "function") this.selectCallback(this, tour);
+	}
+
+	/**
+	 * Deselects the scene.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {void}
+	 */
+	deselect(tour) {
+		super.deselect(tour);
+		this.wrapper.removeAttribute(this.zoomLevelAttribute);
+		if (typeof(this.deselectCallback) == "function") this.deselectCallback(this, tour);
+	}
+
+	/**
+	 * Zooms to the next zoom level.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {void}
+	 */
+	zoomIn(tour) {
+		this.zoomTo(this.#currentZoomLevel + 1, tour);
+		if (typeof(this.zoomInCallback) == "function") this.zoomInCallback(this, tour);
+	}
+
+	/**
+	 * Zooms to the previous zoom level.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {void}
+	 */
+	zoomOut(tour) {
+		this.zoomTo(this.#currentZoomLevel - 1, tour);
+		if (typeof(this.zoomOutCallback) == "function") this.zoomOutCallback(this, tour);
+	}
+
+	/**
+	 * Zooms to the specified zoom level.
+	 * 
+	 * @param {number} zoomLevel - The zoom level to apply.
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {void}
+	 */
+	zoomTo(zoomLevel, tour) {
+		const viewport = tour.viewport;
+		const offsetX = this.convertToXOffset(viewport.scrollLeft, viewport);
+		const offsetY = this.convertToYOffset(viewport.scrollTop, viewport);
+		this.#currentZoomLevel = this.#clampZoomLevel(zoomLevel);
+		this.wrapper.setAttribute(this.zoomLevelAttribute, this.#currentZoomLevel);
+		this.scrollToOffset(offsetX, offsetY, viewport);
+		if (typeof(this.zoomCallback) == "function") this.zoomCallback(this, tour, this.#currentZoomLevel);
+	}
+
+	/**
+	 * Zooms to the specified zoom level while keeping the X and Y points stationary during the zoom.
+	 * 
+	 * @param {number} zoomLevel - The zoom level to apply
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {number} x - The X coordinate to keep stationary during the zoom.
+	 * @param {number} y - The Y coordinate to keep stationary during the zoom.
+	 * @returns {void}
+	 */
+	anchorZoomTo(zoomLevel, tour, x, y) {
+		const viewport = tour.viewport;
+		const rect = viewport.getBoundingClientRect();
+		const viewAbsX = x - rect.left;
+		const viewAbsY = y - rect.top;
+		const mapAbsX = viewAbsX + viewport.scrollLeft;
+		const mapAbsY = viewAbsY + viewport.scrollTop;
+		const mapRelX = mapAbsX / viewport.scrollWidth;
+		const mapRelY = mapAbsY / viewport.scrollHeight;
+		const viewRelX = viewAbsX / viewport.offsetWidth;
+		const viewRelY = viewAbsY / viewport.offsetHeight;
+		this.zoomTo(zoomLevel, tour);
+		const newMapAbsX = mapRelX * viewport.scrollWidth;
+		const newMapAbsY = mapRelY * viewport.scrollHeight;
+		viewport.scrollTo({
+			left: newMapAbsX - (viewport.offsetWidth * viewRelX),
+			top: newMapAbsY - (viewport.offsetHeight * viewRelY)	
+		});
+	}
+
+	/**
+	 * Zooms on mouse wheel.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {WheelEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	wheelZoom(tour, event) {
+		const zoomLevel = event.deltaY < 0 ? this.#currentZoomLevel + 1 : this.#currentZoomLevel - 1;
+		if (zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
+			this.anchorZoomTo(zoomLevel, tour, event.x, event.y);
+		}
+	}
+
+	/**
+	 * Starts the pinching.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	pinchStart(tour, event) {
+		if (event.touches.length !== 2) return;
+		tour.isPinching = true;
+		tour.isPanning = false;
+		this.#pinchStartDistance = this.#getPinchDistance(event);
+		this.#pinchStartZoomLevel = this.#currentZoomLevel;
+		tour.wrapper.classList.add(tour.isPinchingClass);
+		if (typeof(this.pinchStartCallback) == "function") this.pinchStartCallback(this, tour, event);
+	}
+
+	/**
+	 * Moves the pinching.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	pinchMove(tour, event) {
+		if (!tour.isPinching) return;
+		const zoomLevel = this.#getPinchZoomLevel(event);
+		if (this.#currentZoomLevel !== zoomLevel && zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
+			const y = ((event.touches[0].pageY + event.touches[1].pageY) / 2);
+			const x = ((event.touches[0].pageX + event.touches[1].pageX) / 2);
+			this.anchorZoomTo(zoomLevel, tour, x, y);
+		}
+	}
+
+	/**
+	 * Ends the pinching.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	pinchEnd(tour, event) {
+		if (!tour.isPinching) return;
+		tour.isPinching = false;
+		tour.wrapper.classList.remove(tour.isPinchingClass);
+		if (typeof(this.pinchEndCallback) == "function") this.pinchEndCallback(this, tour, event);
+	}
+
+	/**
+	 * Retrieves the override settings of the current state that can be saved in the tour history and retrieved when the scene is reverted.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {Map<string,any>} The override settings.
+	 */
+	getOverrides(tour) {
+		const viewport = tour.viewport;
+		return new Map([
+			["offsetX", this.convertToXOffset(viewport.scrollLeft, viewport)],
+			["offsetY", this.convertToYOffset(viewport.scrollTop, viewport)],
+			["currentZoomLevel", this.#currentZoomLevel]
 		]);
-	}
-
-	/**
-	 * Removes the current scene from the scene history and retrieves the previous one.
-	 * 
-	 * @returns {TourScene|undefined} The previous scene, or `undefined` if no previous scene is available.
-	 */
-	#removeCurrentAndPopPrevSceneFromHistory() {
-		this.#sceneHistory.pop();
-		if (this.#sceneHistory.length) {
-			return this.#sceneHistory[this.#sceneHistory.length - 1];
-		}
-	}
-
-	/**
-	 * Removes and retrieves the zoom-level of the previous scene from the zoom level history.
-	 * 
-	 * @returns {number|undefined} The previous zoom level, or `undefined` if no previous zoom level is available.
-	 */
-	#popPrevZoomLevelFromHistory() {
-		return this.#zoomLevelHistory.pop();
-	}
-
-	/**
-	 * Removes and retrieves the X and Y offsets of the previous scene from the offset history.
-	 * 
-	 * @returns {[number, number][]|undefined} The previous X and Y offsets, or `undefined` if no previous X and Y offsets are available.
-	 */
-	#popPrevOffsetsFromHistory() {
-		return this.#offsetHistory.pop();
-	}
-
-	/**
-	 * Detects whether history is available for the tour.
-	 * 
-	 * @returns {void}
-	 */
-	#detectHasHistory() {
-		this.#updateBackTrigger();
-		this.wrapper.classList.remove(this.hasHistoryClass);
-		if (this.#sceneHistory.length > 1) {
-			this.wrapper.classList.add(this.hasHistoryClass);
-		}
-	}
-
-	/**
-	 * Disables the back trigger when history is not available for the tour.
-	 * 
-	 * @returns {void}
-	 */
-	#updateBackTrigger() {
-		this.backTrigger.removeAttribute("disabled");
-		if (this.#sceneHistory.length < 2) {
-			this.backTrigger.setAttribute("disabled", "disabled");
-		}
-	}
-
-	/**
-	 * Applies the currently set zoom level.
-	 * 
-	 * @returns {void}
-	 */
-	#applyCurrentZoomLevel() {
-		this.zoomLevelClasses.forEach((zoomLevelClass, index) => {
-			this.wrapper.classList.remove(zoomLevelClass);
-			if (this.#zoomLevel == index) {
-				this.wrapper.classList.add(zoomLevelClass);
-			}
-		});
-	}
-
-	/**
-	 * Disables the zoom-in and zoom-out triggers when the maximum or minimum zoom level is reached.
-	 * 
-	 * @returns {void}
-	 */
-	#updateZoomTriggers() {
-		this.#updateZoomInTrigger();
-		this.#updateZoomOutTrigger();
-	}
-
-	/**
-	 * Disables the zoom-in trigger when the maximum zoom level is reached.
-	 * 
-	 * @returns {void}
-	 */
-	#updateZoomInTrigger() {
-		if (!this.zoomInTrigger) return;
-		this.zoomInTrigger.removeAttribute("disabled");
-		if (this.#zoomLevel >= this.maxZoomLevel) {
-			this.zoomInTrigger.setAttribute("disabled", "disabled");
-		}
-	}
-
-	/**
-	 * Disables the zoom-out trigger when the minimum zoom level is reached.
-	 * 
-	 * @returns {void}
-	 */
-	#updateZoomOutTrigger() {
-		if (!this.zoomOutTrigger) return;
-		this.zoomOutTrigger.removeAttribute("disabled");
-		if (this.#zoomLevel < 1) {
-			this.zoomOutTrigger.setAttribute("disabled", "disabled");
-		}
 	}
 
 	/**
@@ -705,34 +1611,6 @@ class Tour {
 	}
 
 	/**
-	 * Converts the specified horizontal or vertical scroll position to an X or Y relative offset.
-	 * 
-	 * @param {number} scrollPosition - The scroll position to be converted.
-	 * @param {boolean} isVertical - Indicates whether the scroll position is vertical or horizontal.
-	 * @returns {number} The converted relative offset.
-	 */
-	#scrollToOffset(scrollPosition, isVertical = false) {
-		let viewport = this.viewport;
-		let offset = isVertical ? viewport.offsetHeight : viewport.offsetWidth;
-		let scroll = isVertical ? viewport.scrollHeight : viewport.scrollWidth;
-		return ((scrollPosition + (offset / 2)) / scroll) * 100;
-	}
-
-	/**
-	 * Converts the specified X or Y relative offset to a horizontal or vertical scroll position.
-	 * 
-	 * @param {number} offsetPosition - The relative offset to be converted.
-	 * @param {boolean} isVertical - Indicates whether the relative offset is vertical or horizontal.
-	 * @returns {number} The converted scroll position.
-	 */
-	#offsetToScroll(offsetPosition, isVertical = false) {
-		let viewport = this.viewport;
-		let offset = isVertical ? viewport.offsetHeight : viewport.offsetWidth;
-		let scroll = isVertical ? viewport.scrollHeight : viewport.scrollWidth;
-		return ((offsetPosition / 100) * scroll) - (offset / 2);
-	}
-
-	/**
 	 * Retrieves the pinch distance between the two fingers.
 	 * 
 	 * @param {TouchEvent} event - The event to be handled.
@@ -743,102 +1621,6 @@ class Tour {
 		const xDistance = event.touches[0].pageX - event.touches[1].pageX;
 		const yDistance = event.touches[0].pageY - event.touches[1].pageY;
 		return Math.hypot(xDistance, yDistance);
-	}
-
-	/**
-	 * Detects whether a tour scene trigger is clicked within the specified event and navigates to the scene if so.
-	 * 
-	 * @param {PointerEvent} event - The event to be handled.
-	 * @returns {void}
-	 */
-	#detectIsSceneTriggerClicked(event) {
-		this.scenes.forEach((scene) => {
-			scene.sceneTriggers.forEach((sceneTrigger) => {
-				if (sceneTrigger.trigger == event.target) {
-					this.goToSceneById(sceneTrigger.targetId);
-				}
-			});
-		});
-	}
-
-	/**
-	 * Starts the panning.
-	 * 
-	 * @param {PointerEvent} event - The event to be handled.
-	 * @returns {void}
-	 */
-	#panStart(event) {
-		if(this.#isPanning || this.#isPinching) return;
-		this.#isPanning = true;
-		this.#panStartY = event.pageY - this.viewport.offsetTop;
-		this.#panStartX = event.pageX - this.viewport.offsetLeft;
-		this.#panStartScrollTop = this.viewport.scrollTop;
-		this.#panStartScrollLeft = this.viewport.scrollLeft;
-		this.wrapper.classList.add(this.isPanningClass);
-		if (typeof(this.panStartCallback) == "function") this.panStartCallback();
-	}
-
-	/**
-	 * Moves the panning.
-	 * 
-	 * @param {PointerEvent} event - The event to be handled.
-	 * @returns {void}
-	 */
-	#panMove(event) {
-		if(!this.#isPanning || this.#isPinching) return;
-		let panCurrY = event.pageY - this.viewport.offsetTop;
-		let panCurrX = event.pageX - this.viewport.offsetLeft;
-		let panCurrScrollTop = panCurrY - this.#panStartY;
-		let panCurrScrollLeft = panCurrX - this.#panStartX;
-		this.viewport.scrollTo({
-			top: this.#panStartScrollTop - panCurrScrollTop,
-			left: this.#panStartScrollLeft - panCurrScrollLeft,
-			behavior: "instant"
-		});
-	}
-
-	/**
-	 * Ends the panning.
-	 * 
-	 * @param {PointerEvent} event - The event to be handled.
-	 * @returns {void}
-	 */
-	#panEnd(event) {
-		if(!this.#isPanning || this.#isPinching) return;
-		this.#isPanning = false;
-		this.wrapper.classList.remove(this.isPanningClass);
-		if (typeof(this.panEndCallback) == "function") this.panEndCallback();
-	}
-
-	/**
-	 * Starts the pinching.
-	 * 
-	 * @param {TouchEvent} event - The event to be handled.
-	 * @returns {void}
-	 */
-	#pinchStart(event) {
-		if (event.touches.length !== 2) return;
-		this.#isPanning = false;
-		this.#isPinching = true;
-		this.#pinchStartDistance = this.#getPinchDistance(event);
-		this.#pinchStartZoomLevel = this.#zoomLevel;
-		if (typeof(this.pinchStartCallback) == "function") this.pinchStartCallback();
-	}
-
-	/**
-	 * Moves the pinching.
-	 * 
-	 * @param {TouchEvent} event - The event to be handled.
-	 * @returns {void}
-	 */
-	#pinchMove(event) {
-		if (!this.#isPinching) return;
-		const zoomLevel = this.#getPinchZoomLevel(event);
-		if (this.#zoomLevel !== zoomLevel && zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
-			const y = ((event.touches[0].pageY + event.touches[1].pageY) / 2);
-			const x = ((event.touches[0].pageX + event.touches[1].pageX) / 2);
-			this.anchorZoomTo(zoomLevel, x, y);
-		}
 	}
 
 	/**
@@ -858,49 +1640,535 @@ class Tour {
 			return this.#pinchStartZoomLevel + zoomDiff;
 		}
 	}
+}
+
+/**
+ * Tour Field Scene
+ * This class is designed to create a scene within a tour that displays a vertically pannable field.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourFieldScene extends TourScene {
 
 	/**
-	 * Ends the pinching.
+	 * The relative horizontal or vertical offset in percent to which the scene is scrolled by default.
 	 * 
-	 * @param {TouchEvent} event - The event to be handled.
-	 * @returns {void}
+	 * @type {number}
 	 */
-	#pinchEnd(event) {
-		if (!this.#isPinching) return;
-		this.#isPinching = false;
-		if (typeof(this.pinchEndCallback) == "function") this.pinchEndCallback();
+	offset = 50;
+
+	/**
+	 * Creates a tour scene that displays a vertically pannable field.
+	 * 
+	 * @param {Object} options
+	 * @param {string} options.id - The id of the scene.
+	 * @param {HTMLElement} options.wrapper - The wrapper element that contains the image tiles and the hotspots.
+	 * @param {HTMLElement} options.tileList - The element that contains the image tiles.
+	 * @param {TourSceneCoordinate} options.topLeftCoordinate - The latitude and longitude of the scene's top-left corner, used to calculate the position of the included hotspots.
+	 * @param {TourSceneCoordinate} options.bottomRightCoordinate - The latitude and longitude of the scene's bottom-right corner, used to calculate the position of the included hotspots.
+	 * @param {TourSceneHotspot[]} options.hotspots - An array of hotspots within the scene.
+	 * @param {string} options.aspectRatioCSSVariable - The name of the CSS variable that defines the scene's aspect ratio.
+	 * @param {string} options.isSelectedClass - The class that is added to the wrapper when the scene is selected.
+	 * @param {string} options.isLoadedClass - The class that is added to the wrapper when the image tiles within the scene are loaded.
+	 * @param {string} options.isVerticalClass - The class that is added to the wrapper when the scene is vertical rather than horizontal.
+	 * @param {number} options.offset - The relative horizontal or vertical offset in percent to which the scene is scrolled by default.
+	 * @param {function(TourFieldScene):void|null} options.initCallback - Callback function that is called after the scene has been initialized.
+	 * @param {function(TourFieldScene,Tour):void|null} options.selectCallback - Callback function that is called after the scene is selected.
+	 * @param {function(TourFieldScene,Tour):void|null} options.deselectCallback - Callback function that is called after the scene is deselected.
+	 * @param {function(TourFieldScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after the panning has started.
+	 * @param {function(TourFieldScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after the panning has ended.
+	 * @returns {TourFieldScene}
+	 */
+	constructor(options) {
+
+		// Initialize the parent
+		super(options);
+
+		// Set fields from options
+		if ("offset" in options) this.offset = options.offset;
+
+		// Initialize the field tour scene
+		super.updateHotspots();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
-	 * Zooms the viewport on mouse wheel.
+	 * Selects the scene.
 	 * 
-	 * @param {WheelEvent} event - The event to be handled.
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {Map<string,any>} overrides - The override settings for the scene.
 	 * @returns {void}
 	 */
-	#wheelZoom(event) {
-		if (!event.ctrlKey && this.ctrlWheel) return;
-		event.preventDefault();
-		let zoomLevel = event.deltaY < 0 ? this.#zoomLevel + 1 : this.#zoomLevel - 1;
-		if (zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
-			this.anchorZoomTo(zoomLevel, event.x, event.y);
+	select(tour, overrides = new Map()) {
+		super.select(tour);
+		const offset = overrides.get("offset") ?? this.offset;
+		tour.viewport.scrollTo({
+			left: this.convertToXScroll(offset, tour.viewport),
+			top: this.convertToYScroll(offset, tour.viewport)
+		});
+		if (typeof(this.selectCallback) == "function") this.selectCallback(this, tour);
+	}
+
+	/**
+	 * Deselects the scene.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {void}
+	 */
+	deselect(tour) {
+		super.deselect(tour);
+		if (typeof(this.deselectCallback) == "function") this.deselectCallback(this, tour);
+	}
+
+	/**
+	 * Retrieves the override settings of the current state that can be saved in the tour history and retrieved when the scene is reverted.
+	 * 
+	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @returns {Map<string,any>} The override settings.
+	 */
+	getOverrides(tour) {
+		const viewport = tour.viewport;
+		const offsetY = this.convertToYOffset(viewport.scrollTop, viewport);
+		const offsetX = this.convertToXOffset(viewport.scrollLeft, viewport);
+		return new Map([
+			["offset", this.isVertical ? offsetY : offsetX]
+		]);
+	}
+}
+
+/**
+ * Tour Scene Hotspot
+ * This class is designed to create a hotspot that can be displayed at a specified coordinate within a tour scene.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourSceneHotspot {
+
+	/**
+	 * The wrapper element whose position is set by the hotspot's coordinate within the area defined by the scene's top-left and bottom-right coordinates.
+	 * 
+	 * @type {HTMLElement}
+	 */
+	wrapper;
+
+	/**
+	 * The coordinate of the hotspot.
+	 * 
+	 * @type {TourSceneCoordinate}
+	 */
+	coordinate;
+
+	/**
+	 * The angle of the rotation on the x-axis (horizontal) in degrees.
+	 * 
+	 * @type {number}
+	 */
+	rotateX = 0;
+	
+	/**
+	 * The angle of the rotation on the y-axis (vertical) in degrees.
+	 * 
+	 * @type {number}
+	 */
+	rotateY = 0;
+
+	/**
+	 * The name of the CSS variable to which the X-axis rotation is assigned (horizontal).
+	 * 
+	 * @type {string}
+	 */
+	rotateXCSSVariable = "--tour-scene-hotspot-rotate-x";
+
+	/**
+	 * The name of the CSS variable to which the Y-axis rotation is assigned (vertical).
+	 * 
+	 * @type {string}
+	 */
+	rotateYCSSVariable = "--tour-scene-hotspot-rotate-y";
+	
+	/**
+	 * Callback function that is called after the hotspot has been initialized.
+	 * 
+	 * @type {function(TourSceneHotspot):void|null}
+	 */
+	initCallback = null;
+
+	/**
+	 * Callback function that is called after the hotspot has been updated.
+	 * 
+	 * @type {function(TourSceneHotspot,TourScene):void|null}
+	 */
+	updateCallback = null;
+
+	/**
+	 * Creates a tour scene hotspot.
+	 * 
+	 * @param {Object} options
+	 * @param {HTMLElement} options.wrapper - The wrapper element whose position is set by the hotspot's coordinate within the area defined by the scene's top-left and bottom-right coordinates.
+	 * @param {TourSceneCoordinate} options.coordinate - The coordinate of the hotspot.
+	 * @param {number} options.rotateX - The angle of the rotation on the x-axis (horizontal) in degrees.
+	 * @param {number} options.rotateY - The angle of the rotation on the y-axis (vertical) in degrees.
+	 * @param {number} options.rotateXCSSVariable - The name of the CSS variable to which the X-axis rotation is assigned (horizontal).
+	 * @param {number} options.rotateYCSSVariable - The name of the CSS variable to which the Y-axis rotation is assigned (vertical).
+	 * @param {function(TourSceneHotspot):void|null} options.initCallback - Callback function that is called after the hotspot has been initialized.
+	 * @param {function(TourSceneHotspot,TourScene):void|null} options.updateCallback - Callback function that is called after the hotspot has been updated.
+	 * @returns {TourSceneHotspot}
+	 */
+	constructor(options) {
+
+		// Test required options
+		if (!(options.wrapper instanceof HTMLElement)) {
+			throw "Tour scene hotspot \"wrapper\" must be an `HTMLElement`";
+		}
+		if (!(options.coordinate instanceof TourSceneCoordinate)) {
+			throw "Tour scene hotspot \"coordinate\" must be a `TourSceneCoordinate`";
+		}
+
+		// Set fields from options
+		this.wrapper = options.wrapper;
+		this.coordinate = options.coordinate;
+		if ("rotateX" in options) this.rotateX = options.rotateX;
+		if ("rotateY" in options) this.rotateY = options.rotateY;
+		if ("rotateXCSSVariable" in options) this.rotateXCSSVariable = options.rotateXCSSVariable;
+		if ("rotateYCSSVariable" in options) this.rotateYCSSVariable = options.rotateYCSSVariable;
+		if ("initCallback" in options) this.initCallback = options.initCallback;
+		if ("updateCallback" in options) this.updateCallback = options.updateCallback;
+
+		// Initialize the tour scene hotspot
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+
+	/**
+	 * Updates the hotspot's position based on the area defined by the specified scene's top-left and bottom-right coordinates.
+	 * 
+	 * @param {TourScene} scene - The scene whose coordinates define the positioning area.
+	 * @returns {void}
+	 */
+	update(scene) {
+		const topLeft = scene.topLeftCoordinate;
+		const bottomRight = scene.bottomRightCoordinate;
+		const lat = this.normalizePosition(this.coordinate.lat, topLeft.lat, bottomRight.lat);
+		const long = this.normalizePosition(this.coordinate.long, topLeft.long, bottomRight.long);
+		this.wrapper.style.top = `${lat * 100}%`;
+		this.wrapper.style.left = `${long * 100}%`;
+		this.wrapper.style.setProperty(this.rotateXCSSVariable, `${this.rotateX}deg`);
+		this.wrapper.style.setProperty(this.rotateYCSSVariable, `${this.rotateY}deg`);
+		if (typeof(this.updateCallback) == "function") this.updateCallback(this, scene);
+	}
+
+	/**
+	 * Normalizes the specified position between the minimum and maximum range.
+	 * 
+	 * @param {number} value - The position to be normalized.
+	 * @param {number} min - The minimum value of the range.
+	 * @param {number} max - The maximum value of the range.
+	 * @returns {number} The normalized position between 0 and 1.
+	 */
+	normalizePosition(value, min, max) {
+		const isReverse = min >= max;
+		if (isReverse) {
+			[min, max] = [max, min];
+		}
+		const clampedValue = Math.max(min, Math.min(max, value));
+		const relativeValue = (clampedValue - min) / (max - min);
+		return isReverse ? 1 - relativeValue : relativeValue;
+	}
+
+	/**
+	 * Parses the X- and Y-axis rotations from the specified comma-separated string.
+	 * 
+	 * @param {string} raw - The raw, comma-seperated string.
+	 * @returns {{rotateX:number,rotateY:number}} An object containing the parsed X- and Y-axis rotations.
+	 */
+	static rotationsFromString(raw) {
+		const values = raw.split(",").map((val) => parseFloat(val));
+		if (values.length == 2) {
+			return {
+				rotateX: values[0],
+				rotateY: values[1]
+			};
+		} else {
+			return {
+				rotateX: 0,
+				rotateY: 0
+			};
 		}
 	}
+}
+
+/**
+ * Tour Scene Trigger
+ * This class is designed to create a trigger that navigates from one tour screen to another when clicked.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourSceneTrigger {
 
 	/**
-	 * Adds event listeners related to the tour.
+	 * The ID of the target scene to navigate to when the trigger is clicked.
+	 * 
+	 * @type {string}
+	 */
+	sceneId;
+
+	/**
+	 * The trigger button that navigates to the target scene when clicked.
+	 * 
+	 * @type {HTMLButtonElement}
+	 */
+	trigger;
+
+	/**
+	 * Indicates whether to restore the scene from the history when it is already included; otherwise, navigates to the scene and adds the current scene to the history.
+	 * 
+	 * @type {boolean}
+	 */
+	preferHistory = false;
+
+	/**
+	 * The class that is added to the trigger while its scene is included in the history.
+	 * 
+	 * @type {string}
+	 */
+	isSceneInHistory = "is-scene-in-history";
+
+	/**
+	 * The class that is added to the trigger while its scene is selected.
+	 * 
+	 * @type {string}
+	 */
+	isSceneSelected = "is-scene-selected";
+
+	/**
+	 * Callback function that is called after the trigger has been initialized.
+	 * 
+	 * @type {function(TourSceneTrigger):void|null}
+	 */
+	initCallback = null;
+
+	/**
+	 * Creates a tour scene trigger.
+	 * 
+	 * @param {Object} options
+	 * @param {string} options.sceneId - The ID of the target scene to navigate to when the trigger is clicked.
+	 * @param {HTMLButtonElement} options.trigger - The trigger button that navigates to the target scene when clicked.
+	 * @param {boolean} options.preferHistory - Indicates whether to restore the scene from the history when it is already included; otherwise, navigates to the scene and adds the current scene to the history.
+	 * @param {string} options.isSceneInHistory - The class that is added to the trigger while its scene is included in the history.
+	 * @param {string} options.isSceneSelected - The class that is added to the trigger while its scene is selected.
+	 * @param {function(TourSceneTrigger):void|null} options.initCallback - Callback function that is called after the trigger has been initialized.
+	 * @returns {TourSceneTrigger}
+	 */
+	constructor(options) {
+
+		// Test required options
+		if (typeof options.sceneId !== "string") {
+			throw "Tour scene trigger \"sceneId\" must be a string";
+		}
+		if (!(options.trigger instanceof HTMLButtonElement)) {
+			throw "Tour scene trigger \"trigger\" must be an `HTMLButtonElement`";
+		}
+
+		// Set fields from options
+		this.sceneId = options.sceneId;
+		this.trigger = options.trigger;
+		if ("preferHistory" in options) this.preferHistory = options.preferHistory;
+		if ("isSceneInHistory" in options) this.isSceneInHistory = options.isSceneInHistory;
+		if ("isSceneSelected" in options) this.isSceneSelected = options.isSceneSelected;
+		if ("initCallback" in options) this.initCallback = options.initCallback;
+
+		// Initialize the tour scene trigger
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+}
+
+/**
+ * Tour Scene Coordinate
+ * This class represents a latitude and a longitude within a tour scene.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourSceneCoordinate {
+
+	/**
+	 * The latitude of the coordinate.
+	 * 
+	 * @type {number}
+	 */
+	lat = 0;
+
+	/**
+	 * The longitude of the coordinate.
+	 * 
+	 * @type {number}
+	 */
+	long = 0;
+
+	/**
+	 * Creates a new tour scene coordinate.
+	 * 
+	 * @param {number} lat - The latitude of the coordinate.
+	 * @param {number} long - The longitude of the coordinate.
+	 * @returns {TourSceneCoordinate}
+	 */
+	constructor(lat = 0, long = 0) {
+		this.lat = lat;
+		this.long = long;
+	}
+
+	/**
+	 * Creates a new tour scene coordinate from the specified comma-seperated string.
+	 * 
+	 * @param {string} raw - The raw, comma-seperated string.
+	 * @returns {TourSceneCoordinate} The created coordinate.
+	 */
+	static fromString(raw) {
+		const values = raw.split(",").map((val) => parseFloat(val));
+		return values.length == 2 ? new this(...values) : new this(0, 0);
+	}
+}
+
+/**
+ * Tour History Entry
+ * This class represents an entry within a tour history.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourHistoryEntry {
+
+	/**
+	 * The visited scene.
+	 * 
+	 * @type {TourScene}
+	 */
+	scene;
+
+	/**
+	 * The override settings for the scene to be restored when the history entry is reverted.
+	 * 
+	 * @type {Map<string,any>}
+	 */
+	overrides = new Map();
+
+	/**
+	 * Creates a new tour history entry.
+	 * 
+	 * @param {Object} options
+	 * @param {TourScene} options.scene - The visited scene.
+	 * @param {Map<string,any>} options.overrides - The override settings for the scene to be restored when the history entry is reverted.
+	 * @returns {TourHistoryEntry}
+	 */
+	constructor(options) {
+
+		// Test required options
+		if (!(options.scene instanceof TourScene)) {
+			throw "Tour history entry \"scene\" must be a `TourScene`";
+		}
+
+		// Set fields from options
+		this.scene = options.scene;
+		if ("overrides" in options) this.overrides = options.overrides;
+	}
+}
+
+/**
+ * Tour Popover
+ * This class represents a popover within a tour.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourPopover {
+
+	/**
+	 * The wrapper element that contains the content.
+	 * 
+	 * @type {HTMLElement}
+	 */
+	wrapper;
+	
+	/**
+	 * Callback function that is called after the popover has been initialized.
+	 * 
+	 * @type {function(TourPopover):void|null}
+	 */
+	initCallback = null;
+
+	/**
+	 * Callback function that is called while the popover is opening.
+	 * 
+	 * @type {function(TourPopover,ToggleEvent):void|null}
+	 */
+	openingCallback = null;
+
+	/**
+	 * Callback function that is called while the popover is closing.
+	 * 
+	 * @type {function(TourPopover,ToggleEvent):void|null}
+	 */
+	closingCallback = null;
+
+	/**
+	 * Creates a tour popover.
+	 * 
+	 * @param {Object} options
+	 * @param {HTMLElement} options.wrapper - The wrapper element that contains the content.
+	 * @param {function(TourPopover):void|null} options.initCallback - Callback function that is called after the popover has been initialized.
+	 * @param {function(TourPopover,ToggleEvent):void|null} options.openingCallback - Callback function that is called while the popover is opening.
+	 * @param {function(TourPopover,ToggleEvent):void|null} options.closingCallback - Callback function that is called while the popover is closing.
+	 * @returns {TourPopover}
+	 */
+	constructor(options) {
+
+		// Test required options
+		if (!(options.wrapper instanceof HTMLElement)) {
+			throw "Tour popover \"wrapper\" must be an `HTMLElement`";
+		}
+
+		// Set fields from options
+		this.wrapper = options.wrapper;
+		if ("initCallback" in options) this.initCallback = options.initCallback;
+		if ("openingCallback" in options) this.openingCallback = options.openingCallback;
+		if ("closingCallback" in options) this.closingCallback = options.closingCallback;
+
+		// Initialize the tour popover
+		this.handleEvent = (event) => this.#handleEvents(event);
+		this.#addEvents();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+
+	/**
+	 * Executes before the popover opens.
+	 * 
+	 * @param {ToggleEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isOpening(event) {
+		if (typeof(this.openingCallback) == "function") this.openingCallback(this, event);
+	}
+
+	/**
+	 * Executes before the popover closes.
+	 * 
+	 * @param {ToggleEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isClosing(event) {
+		this.wrapper.scrollTop = 0;
+		if (typeof(this.closingCallback) == "function") this.closingCallback(this, event);
+	}
+
+	/**
+	 * Adds event listeners related to the tour popover.
 	 * 
 	 * @returns {void}
 	 */
 	#addEvents() {
-		this.wrapper.addEventListener("contextmenu", this);
-		this.wrapper.addEventListener("click", this);
-		this.wrapper.addEventListener("wheel", this);
-		this.viewport.addEventListener("pointerdown", this, { passive: true });
-		this.viewport.addEventListener("touchstart", this, { passive: true });
-		document.addEventListener("pointerup", this, { passive: true });
-		document.addEventListener("pointermove", this, { passive: true });
-		document.addEventListener("touchmove", this, { passive: true });
-		document.addEventListener("touchend", this, { passive: true });
+		this.wrapper.addEventListener("beforetoggle", this);
 	}
 
 	/**
@@ -911,201 +2179,15 @@ class Tour {
 	 */
 	#handleEvents(event) {
 		switch (event.type) {
-			case "click":
-				switch (event.target) {
-					case this.backTrigger:
-						this.goBack();
-						break;
-					case this.zoomInTrigger:
-						this.zoomIn();
-						break;
-					case this.zoomOutTrigger:
-						this.zoomOut();
-						break;
-					default:
-						this.#detectIsSceneTriggerClicked(event);
+			case "beforetoggle":
+				if (event.newState === "open") {
+					this.#isOpening(event);
+				} else {
+					this.#isClosing(event);
 				}
 				break;
-			case "wheel":
-				this.#wheelZoom(event);
-				break;
-			case "pointermove":
-				this.#panMove(event);
-				break;
-			case "pointerdown":
-				this.#panStart(event);
-				break;
-			case "pointerup":
-				this.#panEnd(event);
-				break;
-			case "touchstart":
-				this.#pinchStart(event);
-				break;
-			case "touchmove":
-				this.#pinchMove(event);
-				break;
-			case "touchend":
-				this.#pinchEnd(event);
-				break;
-			case "contextmenu":
-				event.preventDefault();
-				break;
 		}
 	}
 }
 
-/**
- * Tour scene
- * This class is designed to create a scene within a tour.
- * 
- * @author Abel Brencsan
- * @license MIT License
- */
-class TourScene {
-
-	/**
-	 * The id of the tour scene.
-	 * 
-	 * @type {string}
-	 */
-	id;
-
-	/**
-	 * The wrapper element that contains the image and the hotspots for interaction.
-	 * 
-	 * @type {HTMLElement}
-	 */
-	wrapper;
-
-	/**
-	 * An array of triggers that navigate to another tour scene when clicked.
-	 * 
-	 * @type {TourSceneTrigger[]}
-	 */
-	sceneTriggers;
-
-	/**
-	 * The initial zoom level applied when the tour scene is selected.
-	 * 
-	 * @type {number}
-	 */
-	zoomLevel = 0;
-
-	/**
-	 * The X relative offset to which the tour scene is scrolled by default.
-	 * 
-	 * @type {number}
-	 */
-	offsetX = 50;
-
-	/**
-	 * The Y relative offset to which the tour scene is scrolled by default.
-	 * 
-	 * @type {number}
-	 */
-	offsetY = 50;
-
-	/**
-	 * Callback function that is called after the tour scene has been initialized.
-	 * 
-	 * @type {function():void|null}
-	 */
-	initCallback = null;
-
-	/**
-	 * Creates a tour scene.
-	 * 
-	 * @param {Object} options
-	 * @param {string} options.id - The id of the tour scene.
-	 * @param {HTMLElement} options.wrapper - The wrapper element that contains the image and the hotspots for interaction.
-	 * @param {TourSceneTrigger[]} options.sceneTriggers - An array of triggers that navigate to another tour scene when clicked.
-	 * @param {number} options.zoomLevel - The initial zoom level applied when the tour scene is selected.
-	 * @param {number} options.offsetX - The X relative offset to which the tour scene is scrolled by default.
-	 * @param {number} options.offsetY - The Y relative offset to which the tour scene is scrolled by default.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the tour scene has been initialized.
-	 * @returns {TourScene}
-	 */
-	constructor(options) {
-
-		// Test required options
-		if (typeof options.id !== "string") {
-			throw "Tour scene \"id\" must be a string";
-		}
-		if (!(options.wrapper instanceof HTMLElement)) {
-			throw "Tour scene \"wrapper\" must be an `HTMLElement`";
-		}
-
-		// Set fields from options
-		if (typeof(options) == "object") {
-			Object.entries(options).forEach(([key, value]) => {
-				this[key] = value;
-			});
-		}
-
-		// Initialize the tour scene
-		if (typeof(this.initCallback) == "function") this.initCallback();
-	}
-}
-
-/**
- * Tour scene trigger
- * This class is designed to create a trigger for a scene within a tour.
- * 
- * @author Abel Brencsan
- * @license MIT License
- */
-class TourSceneTrigger {
-
-	/**
-	 * The ID of the target tour scene.
-	 * 
-	 * @type {string}
-	 */
-	targetId;
-
-	/**
-	 * The trigger button that navigates to the tour scene specified by the target ID.
-	 * 
-	 * @type {HTMLButtonElement}
-	 */
-	trigger;
-
-	/**
-	 * Callback function that is called after the tour scene trigger has been initialized.
-	 * 
-	 * @type {function():void|null}
-	 */
-	initCallback = null;
-
-	/**
-	 * Creates a tour scene trigger.
-	 * 
-	 * @param {Object} options
-	 * @param {string} options.targetId - The ID of the target tour scene.
-	 * @param {HTMLButtonElement} options.trigger - The trigger button that navigates to the tour scene specified by the target ID.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the tour scene trigger has been initialized.
-	 * @returns {TourSceneTrigger}
-	 */
-	constructor(options) {
-
-		// Test required options
-		if (typeof options.targetId !== "string") {
-			throw "Tour scene trigger \"targetId\" must be a string";
-		}
-		if (!(options.trigger instanceof HTMLButtonElement)) {
-			throw "Tour scene trigger \"trigger\" must be an `HTMLButtonElement`";
-		}
-
-		// Set fields from options
-		if (typeof(options) == "object") {
-			Object.entries(options).forEach(([key, value]) => {
-				this[key] = value;
-			});
-		}
-
-		// Initialize the tour scene trigger
-		if (typeof(this.initCallback) == "function") this.initCallback();
-	}
-}
-
-export { Tour, TourScene, TourSceneTrigger };
+export { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneTrigger, TourSceneCoordinate, TourHistoryEntry, TourPopover }

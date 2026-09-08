@@ -209,6 +209,16 @@ class Validator {
 	}
 
 	/**
+	 * Enables all submit buttons within the form.
+	 * 
+	 * @returns {void}
+	 */
+	enableSubmitButtons() {
+		this.#enableInnerSubmitButtons();
+		this.#enableOuterSubmitButtons();
+	}
+
+	/**
 	 * Retrieves the type of the first error that occurred during input validation.
 	 * 
 	 * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input - The input element whose error type to be retrieved.
@@ -289,6 +299,31 @@ class Validator {
 	}
 
 	/**
+	 * Enables all submit buttons located inside the form.
+	 * 
+	 * @returns {void}
+	 */
+	#enableInnerSubmitButtons() {
+		const buttons = this.form.querySelectorAll("button[type=submit]");
+		buttons.forEach((button) => {
+			button.classList.remove(this.isDisabledClass);
+		});
+	}
+
+	/**
+	 * Enables all submit buttons located outside the form.
+	 * 
+	 * @returns {void}
+	 */
+	#enableOuterSubmitButtons() {
+		if (this.form.id == "") return;
+		const buttons = document.querySelectorAll(`button[form=${this.form.id}]`);
+		buttons.forEach((button) => {
+			button.classList.remove(this.isDisabledClass);
+		});
+	}
+
+	/**
 	 * Adds event listeners related to the validator.
 	 * 
 	 * @returns {void}
@@ -296,6 +331,7 @@ class Validator {
 	#addEvents() {
 		this.form.addEventListener("submit", this);
 		this.form.addEventListener("input", this);
+		window.addEventListener("pagehide", this);
 	}
 
 	/**
@@ -322,6 +358,9 @@ class Validator {
 						if (typeof(this.submitCallback) == "function") this.submitCallback();
 					}
 				} 
+				break;
+			case "pagehide":
+				this.enableSubmitButtons();
 				break;
 		}
 	}

@@ -8,56 +8,56 @@
 class Quiz {
 
 	/**
-	 * Represents the wrapper element that includes all the questions.
+	 * The wrapper element that includes all the questions.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	wrapper;
 
 	/**
-	 * List of questions.
+	 * An array of questions.
 	 * 
 	 * @type {QuizQuestion[]}
 	 */
 	questions;
 
 	/**
-	 * Represents the trigger that jumps to the next question when clicked.
+	 * The trigger that jumps to the next question when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
 	nextTrigger;
 
 	/**
-	 * Represents the trigger buttons that start or restart the quiz when clicked.
+	 * The trigger buttons that start or restart the quiz when clicked.
 	 * 
 	 * @type {HTMLButtonElement[]}
 	 */
 	startTriggers = [];
 
 	/**
-	 * Represents an indicator where the current score is displayed.
+	 * The element where the current score is displayed.
 	 * 
 	 * @type {HTMLElement|null}
 	 */
 	scoreIndicator = null;
 
 	/**
-	 * Represents an indicator where the current and total number of questions are displayed.
+	 * The element where the current and total number of questions are displayed.
 	 * 
 	 * @type {HTMLElement|null}
 	 */
 	questionCountIndicator = null;
 
 	/**
-	 * Represents an indicator where the current number of elapsed seconds is displayed since the quiz started.
+	 * The element where the current number of elapsed seconds is displayed since the quiz started.
 	 * 
 	 * @type {HTMLElement|null}
 	 */
 	timerIndicator = null;
 
 	/**
-	 * Represents a progress indicator where the current quiz completion progress is displayed.
+	 * The progess element where the current quiz completion progress is displayed.
 	 * 
 	 * @type {HTMLProgressElement|null}
 	 */
@@ -127,14 +127,7 @@ class Quiz {
 	completeCallback = null;
 
 	/**
-	 * Callback function that is called after the quiz has been destroyed.
-	 * 
-	 * @type {function():void|null}
-	 */
-	destroyCallback = null;
-
-	/**
-	 * List of results for the answered questions.
+	 * An array of results for the answered questions.
 	 * 
 	 * @type {QuizQuestionResult[]}
 	 */
@@ -176,27 +169,44 @@ class Quiz {
 	isDisabled = false;
 
 	/**
+	 * Indicates whether the quiz has started but has not been completed yet.
+	 * 
+	 * @returns {boolean} `true` if the quiz is active; otherwise, `false`.
+	 */
+	get isActive() {
+		return this.activeIndex !== null && this.intervalId !== null;
+	}
+
+	/**
+	 * The current score.
+	 * 
+	 * @type {number} The current score.
+	 */
+	get score() {
+		return this.questionResults.reduce((acc, result) => result.points + acc, 0);
+	}
+
+	/**
 	 * Creates a quiz.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper
-	 * @param {QuizQuestion[]} options.questions
-	 * @param {HTMLButtonElement} options.nextTrigger
-	 * @param {HTMLButtonElement[]} options.startTriggers
-	 * @param {HTMLElement|null} options.scoreIndicator
-	 * @param {HTMLElement|null} options.questionCountIndicator
-	 * @param {HTMLElement|null} options.timerIndicator
-	 * @param {HTMLProgressElement|null} options.progressIndicator
-	 * @param {string} options.isActiveClass
-	 * @param {string} options.isCompletedClass
-	 * @param {function(number,number):string} options.questionCountFormat
-	 * @param {number} options.disableDelay
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.startCallback
-	 * @param {function(QuizQuestionResult):void|null} options.questionAnsweredCallback
-	 * @param {function(QuizQuestion):void|null} options.questionErrorCallback
-	 * @param {function(number,number,QuizQuestionResult[]):void} options.completeCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The wrapper element that includes all the questions.
+	 * @param {QuizQuestion[]} options.questions - An array of questions.
+	 * @param {HTMLButtonElement} options.nextTrigger - The trigger that jumps to the next question when clicked.
+	 * @param {HTMLButtonElement[]} options.startTriggers - The trigger buttons that start or restart the quiz when clicked.
+	 * @param {HTMLElement|null} options.scoreIndicator - The element where the current score is displayed.
+	 * @param {HTMLElement|null} options.questionCountIndicator - The element where the current and total number of questions are displayed.
+	 * @param {HTMLElement|null} options.timerIndicator - The element where the current number of elapsed seconds is displayed since the quiz started.
+	 * @param {HTMLProgressElement|null} options.progressIndicator - The progess element where the current quiz completion progress is displayed.
+	 * @param {string} options.isActiveClass - The class that is added to the wrapper when the quiz has started and remains until it is completed.
+	 * @param {string} options.isCompletedClass - The class that is added to the wrapper after all questions have been answered.
+	 * @param {function(number,number):string} options.questionCountFormat - The format in which the question count is displayed within the indicator.
+	 * @param {number} options.disableDelay - The delay in milliseconds after the quiz is re-enabled after a missing or invalid answer.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the quiz has been initialized.
+	 * @param {function():void|null} options.startCallback - Callback function that is called after the quiz has been started.
+	 * @param {function(QuizQuestionResult):void|null} options.questionAnsweredCallback - Callback function that is called after a question is answered.
+	 * @param {function(QuizQuestion):void|null} options.questionErrorCallback - Callback function that is called after an answer is missing or invalid within the question. 
+	 * @param {function(number,number,QuizQuestionResult[]):void|null} options.completeCallback - Callback function that is called after the quiz has been completed.
 	 * @returns {Quiz}
 	 */
 	constructor(options) {
@@ -278,7 +288,7 @@ class Quiz {
 	/**
 	 * Retrieves the question at the specified index.
 	 * 
-	 * @returns {QuizQuestion|undefined}
+	 * @returns {QuizQuestion|undefined} The question at the specified index, or `undefined` if no question exists at that index.
 	 */
 	getQuestionByIndex(index) {
 		return this.questions.find((question, i) => i == index);
@@ -319,41 +329,10 @@ class Quiz {
 	}
 
 	/**
-	 * Destroys the quiz.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.reset();
-		this.#removeEvents();
-		this.questions.forEach((question) => question.wrapper.removeAttribute("tabindex"));
-		this.questions.forEach((question) => question.destroy());
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
-	 * Indicates whether the quiz has started but has not been completed yet.
-	 * 
-	 * @returns {boolean}
-	 */
-	get isActive() {
-		return this.activeIndex !== null && this.intervalId !== null;
-	}
-
-	/**
-	 * Retrieves the current score.
-	 * 
-	 * @type {number}
-	 */
-	get score() {
-		return this.questionResults.reduce((acc, result) => result.points + acc, 0);
-	}
-
-	/**
 	 * Processes the specified question if it is answered and the answer is valid.
 	 * 
-	 * @param {QuizQuestion} question
-	 * @returns {QuizQuestionResult|undefined}
+	 * @param {QuizQuestion} question - The question to be processed.
+	 * @returns {QuizQuestionResult|undefined} The question result, or `undefined` if the question has not been answered or the answer is invalid.
 	 */
 	#processQuestion(question) {
 		if (question.checkedOptions.length) {
@@ -374,8 +353,8 @@ class Quiz {
 	/**
 	 * Evaluates the validity of the specified question.
 	 * 
-	 * @param {QuizQuestion} question
-	 * @returns {QuizQuestionResult|undefined}
+	 * @param {QuizQuestion} question - The question whose validity to be evaluated.
+	 * @returns {QuizQuestionResult|undefined} The question result, or `undefined` if an invalid option is checked or the minimum number of points is not earned.
 	 */
 	#evaluateQuestion(question) {
 		if (question.hasInvalidCheckedOption || question.points < question.minPoints) return;
@@ -388,7 +367,7 @@ class Quiz {
 	/**
 	 * Sets the question at the specified index as active.
 	 * 
-	 * @param {number} index
+	 * @param {number} index - The index of the question to be set as active.
 	 * @returns {void}
 	 */
 	#setQuestionAsActive(index) {
@@ -421,7 +400,7 @@ class Quiz {
 	/**
 	 * Disables the quiz temporary.
 	 * 
-	 * @param {QuizQuestion} question
+	 * @param {QuizQuestion} question - The question to be disabled.
 	 * @returns {void}
 	 */
 	#disableTemporary(question) {
@@ -543,18 +522,6 @@ class Quiz {
 	}
 
 	/**
-	 * Removes event listeners related to the quiz.
-	 * 
-	 * @returns {void}
-	 */
-	#removeEvents() {
-		this.nextTrigger.removeEventListener("click", this);
-		this.startTriggers.forEach((startTrigger) => {
-			startTrigger.removeEventListener("click", this);
-		});
-	}
-
-	/**
 	 * Handles events.
 	 * 
 	 * @param {Event} event - The event to be handled.
@@ -583,14 +550,14 @@ class Quiz {
 class QuizQuestion {
 
 	/**
-	 * Represents the wrapper element that includes the options for the question.
+	 * The wrapper element that includes the options for the question.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	wrapper;
 
 	/**
-	 * List of options for the question.
+	 * An array of options for the question.
 	 * 
 	 * @type {QuizQuestionOption[]}
 	 */
@@ -654,27 +621,46 @@ class QuizQuestion {
 	invalidAnswerCallback = null;
 
 	/**
-	 * Callback function that is called after the question has been destroyed.
+	 * The checked options.
 	 * 
-	 * @type {function():void|null}
+	 * @returns {QuizQuestionOption[]}
 	 */
-	destroyCallback = null;
+	get checkedOptions() {
+		return this.options.filter((option) => option.input.checked);
+	}
+
+	/**
+	 * The total points for the checked options.
+	 * 
+	 * @returns {number}
+	 */
+	get points() {
+		return this.checkedOptions.reduce((acc, option) => option.points + acc, 0);
+	}
+
+	/**
+	 * Indicates whether any invalid option is checked within the question.
+	 * 
+	 * @type {boolean}
+	 */
+	get hasInvalidCheckedOption() {
+		return this.checkedOptions.some((option) => option.isInvalid, 0);
+	}
 
 	/**
 	 * Creates a quiz question.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLElement} options.wrapper
-	 * @param {QuizQuestionOption[]} options.options
-	 * @param {number} options.minPoints
-	 * @param {string} options.isActiveClass
-	 * @param {string} options.isAnswerMissingClass
-	 * @param {string} options.isAnswerInvalidClass
-	 * @param {function():void} options.initCallback
-	 * @param {function(QuizQuestionResult):void|null} options.answeredCallback
-	 * @param {function():void} options.missingAnswerCallback
-	 * @param {function():void} options.invalidAnswerCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLElement} options.wrapper - The wrapper element that includes the options for the question.
+	 * @param {QuizQuestionOption[]} options.options - An array of options for the question.
+	 * @param {number} options.minPoints - The minimum points required to pass the question; otherwise, it becomes invalid.
+	 * @param {string} options.isActiveClass - The class that is added to the question wrapper when it is active.
+	 * @param {string} options.isAnswerMissingClass - The class that is added to the wrapper when the question is processed and no option is selected as the answer.
+	 * @param {string} options.isAnswerInvalidClass - The class added to the wrapper when the question is processed and and the answer is invalid.
+	 * @param {function():void} options.initCallback - Callback function that is called after the question has been initialized.
+	 * @param {function(QuizQuestionResult):void|null} options.answeredCallback - Callback function that is called after the question has been answered.
+	 * @param {function():void} options.missingAnswerCallback - Callback function that is called after the question is processed and no option is selected as the answer.
+	 * @param {function():void} options.invalidAnswerCallback - Callback function that is called after the question is processed and one or more selected options are invalid.
 	 * @returns {QuizQuestion}
 	 */
 	constructor(options) {
@@ -756,51 +742,13 @@ class QuizQuestion {
 	/**
 	 * Resets the question.
 	 * 
-	 * @param {boolean} keepActive
+	 * @param {boolean} keepActive - Indicates whether to keep the active question.
 	 * @returns {void}
 	 */
 	reset(keepActive = false) {
 		if (!keepActive) this.wrapper.classList.remove(this.isActiveClass);
 		this.wrapper.classList.remove(this.isAnswerMissingClass);
 		this.wrapper.classList.remove(this.isAnswerInvalidClass);
-	}
-
-	/**
-	 * Destroys the question.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		this.reset();
-		this.options.forEach((option) => option.destroy());
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
-	 * Retrieves the checked options.
-	 * 
-	 * @returns {QuizQuestionOption[]}
-	 */
-	get checkedOptions() {
-		return this.options.filter((option) => option.input.checked);
-	}
-
-	/**
-	 * Retrieves the total points for the checked options.
-	 * 
-	 * @returns {number}
-	 */
-	get points() {
-		return this.checkedOptions.reduce((acc, option) => option.points + acc, 0);
-	}
-
-	/**
-	 * Indicates whether any invalid option is checked within the question.
-	 * 
-	 * @type {boolean}
-	 */
-	get hasInvalidCheckedOption() {
-		return this.checkedOptions.some((option) => option.isInvalid, 0);
 	}
 }
 
@@ -814,7 +762,7 @@ class QuizQuestion {
 class QuizQuestionOption {
 
 	/**
-	 * Represents the checkbox or radio input whose value is added to the score when the question is processed.
+	 * The checkbox or radio input whose value is added to the score when the question is processed.
 	 * 
 	 * @type {HTMLInputElement}
 	 */
@@ -835,20 +783,21 @@ class QuizQuestionOption {
 	initCallback = null;
 
 	/**
-	 * Callback function that is called after the option has been destroyed.
+	 * The points for the option.
 	 * 
-	 * @type {function():void|null}
+	 * @returns {number}
 	 */
-	destroyCallback = null;
+	get points() {
+		return parseFloat(this.input.value);
+	}
 
 	/**
 	 * Creates a quiz question option.
 	 * 
 	 * @param {Object} options
-	 * @param {HTMLInputElement} options.input
-	 * @param {boolean} options.isInvalid
-	 * @param {function():void} options.initCallback
-	 * @param {function():void} options.destroyCallback
+	 * @param {HTMLInputElement} options.input - The checkbox or radio input whose value is added to the score when the question is processed.
+	 * @param {boolean} options.isInvalid - Indicates whether the question becomes invalid when this option is selected as the answer.
+	 * @param {function():void|null} options.initCallback - Callback function that is called after the option has been initialized.
 	 * @returns {QuizQuestionOption}
 	 */
 	constructor(options) {
@@ -877,24 +826,6 @@ class QuizQuestionOption {
 	uncheck() {
 		this.input.checked = false;
 	}
-
-	/**
-	 * Destroys the option.
-	 * 
-	 * @returns {void}
-	 */
-	destroy() {
-		if (typeof(this.destroyCallback) == "function") this.destroyCallback();
-	}
-
-	/**
-	 * Retrieves the points for the option.
-	 * 
-	 * @returns {number}
-	 */
-	get points() {
-		return parseFloat(this.input.value);
-	}
 }
 
 /**
@@ -914,18 +845,27 @@ class QuizQuestionResult {
 	question;
 
 	/**
-	 * The options that were checked when the question was processed.
+	 * An array of options that were checked when the question was processed.
 	 * 
 	 * @type {QuizQuestionOption[]}
 	 */
 	checkedOptions;
 
 	/**
+	 * The total points for the checked options.
+	 * 
+	 * @returns {number}
+	 */
+	get points() {
+		return this.checkedOptions.reduce((acc, option) => option.points + acc, 0);
+	}
+
+	/**
 	 * Creates a quiz question result.
 	 * 
 	 * @param {Object} options
-	 * @param {QuizQuestion} options.question
-	 * @param {QuizQuestionOption[]} options.checkedOptions
+	 * @param {QuizQuestion} options.question - The question which is answered.
+	 * @param {QuizQuestionOption[]} options.checkedOptions - An array of options that were checked when the question was processed.
 	 * @returns {QuizQuestionResult}
 	 */
 	constructor(options) {
@@ -952,15 +892,6 @@ class QuizQuestionResult {
 				this[key] = value;
 			});
 		}
-	}
-
-	/**
-	 * Retrieves the total points for the checked options.
-	 * 
-	 * @returns {number}
-	 */
-	get points() {
-		return this.checkedOptions.reduce((acc, option) => option.points + acc, 0);
 	}
 }
 

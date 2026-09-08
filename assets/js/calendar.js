@@ -162,7 +162,7 @@ class Calendar {
 	#yDown = null;
 
 	/**
-	 * Retrieves the current date.
+	 * The current date.
 	 * 
 	 * @type {Temporal.PlainDate}
 	 */
@@ -171,7 +171,7 @@ class Calendar {
 	}
 
 	/**
-	 * Retrieves the year and month of the current date.
+	 * The year and month of the current date.
 	 * 
 	 * @type {Temporal.PlainYearMonth}
 	 */
@@ -180,7 +180,7 @@ class Calendar {
 	}
 
 	/**
-	 * Retrieves the earliest date from the interval start dates.
+	 * The earliest date from the interval start dates.
 	 * 
 	 * @type {Temporal.PlainDate}
 	 */
@@ -192,7 +192,7 @@ class Calendar {
 	}
 
 	/**
-	 * Retrieves the latest date from the interval end dates.
+	 * The latest date from the interval end dates.
 	 * 
 	 * @type {Temporal.PlainDate}
 	 */

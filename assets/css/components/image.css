@@ -96,7 +96,6 @@ a.image {
 			top: 0;
 			transition: opacity var(--image-cover-transition);
 			width: 100%;
-			z-index: 1;
 		}
 
 		&.image--cover--video {

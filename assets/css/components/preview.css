@@ -1,0 +1,154 @@
+/*!
+ * Preview CSS component
+ * Author: Abel Brencsan
+ * Licensed under the MIT license
+ */
+
+/* Preview component prototype */
+ul.preview {
+	--preview-item-cta-bg-color: var(--scheme-dark-bg-color);
+	--preview-item-cta-fg-color: var(--scheme-dark-fg-color);
+	display: grid;
+	grid-gap: calc(var(--grid-gap) * 0.25);
+	grid-template-columns: repeat(3, 1fr);
+	list-style: none;
+	margin-bottom: var(--element-margin);
+	padding-left: 0;
+
+	> li {
+		padding-left: 0;
+		position: relative;
+
+		div.image, a.image {
+			height: 100%;
+			margin-bottom: 0;
+
+			img, canvas {
+				height: 100%;
+				object-fit: cover;
+				width: 100%;
+			}
+		}
+
+		&[data-preview-cta] {
+
+			&:after {
+				align-items: center;
+				background-color: var(--preview-item-cta-bg-color);
+				border-radius: var(--border-radius);
+				bottom: 0.5rem;
+				color: var(--preview-item-cta-fg-color);
+				content: attr(data-preview-cta);
+				display: flex;
+				font-size: var(--normal-font-size);
+				font-weight: var(--bold-font-weight);
+				justify-content: center;
+				padding: 0.4em 0.6em;
+				pointer-events: none;
+				position: absolute;
+				right: 0.5rem;
+			}
+		}
+	}
+
+	&:has(> :last-child:nth-child(1)) {
+		grid-template-columns: repeat(1, 1fr);
+	}
+
+	&:has(> :last-child:nth-child(2)) {
+		grid-template-columns: repeat(2, 1fr);
+
+		> li {
+
+			&:first-child {
+				grid-column: 1 / 2;
+			}
+		}
+	}
+
+	&:has(> :last-child:nth-child(3)) {
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+
+		> li {
+
+			&:first-child {
+				grid-column: 1 / 3;
+				grid-row: 1 / 3;
+			}
+		}
+	}
+
+	&:has(> :last-child:nth-child(4)) {
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(3, 1fr);
+
+		> li {
+
+			&:first-child {
+				grid-column: 1 / 4;
+				grid-row: 1 / 4;
+			}
+		}
+	}
+
+	&:has(> :last-child:nth-child(5)) {
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+
+		> li {
+
+			&:first-child {
+				grid-column: 1 / 3;
+				grid-row: 1 / 3;
+			}
+		}
+	}
+
+	@media (max-width: 32em) {
+		grid-template-columns: repeat(2, 1fr);
+
+		&:has(> :last-child:nth-child(3)) {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(1, 1fr);
+
+			> li {
+
+				&:first-child {
+					grid-column: 1 / 3;
+					grid-row: 1 / 2;
+				}
+			}
+		}
+
+		&:has(> :last-child:nth-child(4)) {
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: repeat(1, 1fr);
+
+			> li {
+
+				&:first-child {
+					grid-column: 1 / 4;
+					grid-row: 1 / 2;
+				}
+			}
+		}
+
+		&:has(> :last-child:nth-child(5)) {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(1, 1fr);
+
+			> li {
+
+				&:first-child {
+					grid-column: 1 / 3;
+					grid-row: 1 / 2;
+				}
+			}
+		}
+	}
+}
+
+/* Preview component extensions */
+ul.preview {
+}
