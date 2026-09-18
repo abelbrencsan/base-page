@@ -154,7 +154,7 @@
 	</div>
 
 	<!-- Home slider -->
-	<div class="home-slider glider" data-home-slider>
+	<div class="home-slider glider" data-home-slider hidden>
 		<ul class="glider-list" data-home-slider-viewport>
 			<li data-home-slider-list-item>
 				<div class="home-slider-item glider-item">
@@ -231,13 +231,28 @@
 	</div>
 
 	<!-- Sample tour -->
-	<div class="tour" data-tour hidden>
+	<div id="sample-tour" class="tour" data-tour>
 		<div class="tour-viewport" data-tour-viewport>
 			<div id="scene-1" class="tour-scene tour-scene--map" data-tour-scene="map" data-tour-scene-top-left-coordinate="0,0" data-tour-scene-bottom-right-coordinate="5000,2500" data-tour-scene-effect="cloud">
-				<ul class="tour-scene-tile-list" data-tour-scene-tile-list data-tour-scene-map-tile-columns="1">
+				<ul class="tour-scene-tile-list" data-tour-scene-tile-list data-tour-scene-map-tile-columns="2">
 					<li>
 						<picture>
-							<img src="/images/tour/maps/01.jpg" loading="lazy" width="2500" height="5000" alt="Lorem ipsum">
+							<img src="/images/tour/maps/01-0-0.jpg" loading="lazy" width="1250" height="2500" alt="Lorem ipsum">
+						</picture>
+					</li>
+					<li>
+						<picture>
+							<img src="/images/tour/maps/01-1-0.jpg" loading="lazy" width="1250" height="2500" alt="Lorem ipsum">
+						</picture>
+					</li>
+					<li>
+						<picture>
+							<img src="/images/tour/maps/01-0-1.jpg" loading="lazy" width="1250" height="2500" alt="Lorem ipsum">
+						</picture>
+					</li>
+					<li>
+						<picture>
+							<img src="/images/tour/maps/01-1-1.jpg" loading="lazy" width="1250" height="2500" alt="Lorem ipsum">
 						</picture>
 					</li>
 				</ul>
@@ -246,10 +261,17 @@
 					<li data-tour-scene-hotspot="690,1455" data-tour-scene-hotspot-tooltip="Scene 2">
 						<button type="button" aria-label="Scene 2" data-tour-scene-trigger="scene-2"></button>
 					</li>
-					<li data-tour-scene-hotspot="1510,670" data-tour-scene-hotspot-tooltip="Popover" data-tour-scene-hotspot-color="red">
+					<li data-tour-scene-hotspot="1650,870" data-tour-scene-hotspot-tooltip="Popover" data-tour-scene-hotspot-color="red" data-tour-scene-hotspot-required-item-ids="1">
 						<button type="button" popovertarget="demo-tour-popover" popovertargetaction="toggle" aria-label="Popover">
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-information"></use>
+							</svg>
+						</button>
+					</li>
+					<li data-tour-scene-hotspot="2400,900" data-tour-scene-hotspot-color="yellow">
+						<button type="button" aria-label="Key" data-tour-inventory-trigger="1">
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-key"></use>
 							</svg>
 						</button>
 					</li>
@@ -362,12 +384,12 @@
 				</button>
 			</li>
 			<li>
-				<button type="button" aria-label="Mute" title="Mute" data-tour-mute-trigger>
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-volume-mute"></use>
-					</svg>
+				<button type="button" aria-label="Mute" title="Mute" data-audio-manager-mute-trigger>
 					<svg class="icon" aria-hidden="true">
 						<use xlink:href="#icon-volume-high"></use>
+					</svg>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-volume-mute"></use>
 					</svg>
 				</button>
 			</li>
@@ -2361,11 +2383,25 @@
 						</svg><span class="is-visually-hidden">Timer:</span> <span data-memory-game-timer-indicator>-</span>
 					</li>
 				</ul>
-				<button type="button" class="memory-game-restart-trigger" data-memory-game-restart-trigger aria-label="Restart" title="Restart">
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-refresh"></use>
-					</svg> Restart
-				</button>
+				<ul class="memory-game-trigger-list">
+					<li>
+						<button type="button" data-audio-manager-mute-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-volume-high"></use>
+							</svg>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-volume-mute"></use>
+							</svg> Audio
+						</button>
+					</li>
+					<li>
+						<button type="button" data-memory-game-restart-trigger>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-refresh"></use>
+							</svg> Restart
+						</button>
+					</li>
+				</ul>
 				<ul class="memory-game-card-list" data-memory-game-list>
 					<li>
 						<button class="memory-game-card" data-memory-game-card="card-1">
@@ -2547,23 +2583,37 @@
 			<!-- Quiz -->
 			<div class="quiz" data-quiz>
 				<progress class="quiz-progress progress" value="0" max="3" aria-hidden="true" data-quiz-progress-indicator></progress>
-				<ul class="quiz-state-list">
-					<li>
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-help-circle"></use>
-						</svg><span class="is-visually-hidden">Questions:</span> <span data-quiz-question-count-indicator>-/-</span>
-					</li>
-					<li>
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-medal"></use>
-						</svg><span class="is-visually-hidden">Score:</span> <span data-quiz-score-indicator>-</span>
-					</li>
-					<li>
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-timer"></use>
-						</svg><span class="is-visually-hidden">Timer:</span> <span data-quiz-timer-indicator>-</span>
-					</li>
-				</ul>
+				<div class="quiz-info">
+					<ul class="quiz-info-state-list">
+						<li>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-help-circle"></use>
+							</svg><span class="is-visually-hidden">Questions:</span> <span data-quiz-question-count-indicator>-/-</span>
+						</li>
+						<li>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-medal"></use>
+							</svg><span class="is-visually-hidden">Score:</span> <span data-quiz-score-indicator>-</span>
+						</li>
+						<li>
+							<svg class="icon" aria-hidden="true">
+								<use xlink:href="#icon-timer"></use>
+							</svg><span class="is-visually-hidden">Timer:</span> <span data-quiz-timer-indicator>-</span>
+						</li>
+					</ul>
+					<ul class="quiz-info-trigger-list">
+						<li>
+							<button type="button" data-audio-manager-mute-trigger>
+								<svg class="icon" aria-hidden="true">
+									<use xlink:href="#icon-volume-high"></use>
+								</svg>
+								<svg class="icon" aria-hidden="true">
+									<use xlink:href="#icon-volume-mute"></use>
+								</svg> Audio
+							</button>
+						</li>
+					</ul>
+				</div>
 				<div class="quiz-intro">
 					<h3>Phasellus vehicula nunc et tortor lobortis?</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget congue tortor, a tempus nisi. Etiam sollicitudin est id leo suscipit, sed bibendum nisi tincidunt.</p>

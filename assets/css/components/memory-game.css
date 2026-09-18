@@ -10,17 +10,20 @@ div.memory-game {
 	--memory-game-card-flip-transition: var(--memory-game-card-flip-transition-duration) ease;
 	display: grid;
 	grid-gap: var(--grid-gap);
-	grid-template-areas: "state restart-trigger" "cards cards";
+	grid-template-areas: "state triggers" "cards cards";
 	grid-template-columns: 1fr auto;
 	margin-bottom: var(--element-margin);
 
-	ul.memory-game-state-list {
+	ul.memory-game-state-list, ul.memory-game-trigger-list {
 		display: flex;
 		flex-flow: row wrap;
-		grid-area: state;
 		list-style: none;
 		margin-bottom: var(--block-margin);
 		padding-left: 0;
+	}
+
+	ul.memory-game-state-list {
+		grid-area: state;
 
 		> li {
 			align-items: center;
@@ -46,27 +49,54 @@ div.memory-game {
 		}
 	}
 
-	button.memory-game-restart-trigger, button.memory-game-card {
-		background-color: transparent;
-		border: none;
-		cursor: pointer;
-		padding: 0;
-	}
+	ul.memory-game-trigger-list {
+		grid-area: triggers;
 
-	button.memory-game-restart-trigger {
-		align-items: center;
-		color: inherit;
-		display: flex;
-		grid-area: restart-trigger;
+		> li {
+			padding-left: 0.5rem;
 
-		svg.icon {
-			margin-right: 0.25rem;
-		}
+			> button {
+				align-items: center;
+				background-color: transparent;
+				border: none;
+				color: inherit;
+				cursor: pointer;
+				display: flex;
+				line-height: 1;
+				padding: 0;
 
-		@media (hover: hover) {
+				svg.icon {
+					margin-right: 0.25rem;
 
-			&:hover, &:active {
-				color: var(--link-color);
+					&:nth-of-type(2) {
+						display: none;
+					}
+				}
+
+				&.is-muted {
+
+					svg.icon {
+
+						&:first-of-type {
+							display: none;
+						}
+
+						&:nth-of-type(2) {
+							display: block;
+						}
+					}
+				}
+
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						color: var(--link-color);
+					}
+				}
+			}
+
+			&:first-child {
+				padding-left: 0;
 			}
 		}
 	}
@@ -86,7 +116,11 @@ div.memory-game {
 	}
 
 	button.memory-game-card {
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
 		display: block;
+		padding: 0;
 		position: relative;
 
 		span.memory-game-card-front, span.memory-game-card-back {
@@ -177,26 +211,11 @@ div.memory-game {
 	}
 
 	@media (max-width: 32em) {
-		grid-template-areas: "state" "cards" "restart-trigger";
+		grid-template-areas: "state" "cards" "triggers";
 		grid-template-columns: 1fr;
 
-		ul.memory-game-state-list {
+		ul.memory-game-state-list, ul.memory-game-trigger-list {
 			justify-content: center;
-
-			> li {
-				/*display: block;*/
-				/*flex: 1;*/
-				/*text-align: center;*/
-
-				svg.icon {
-					/*display: block;*/
-					/*margin: 0 auto;*/
-				}
-			}
-		}
-
-		button.memory-game-restart-trigger {
-			margin: 0 auto;
 		}
 
 		ul.memory-game-card-list {

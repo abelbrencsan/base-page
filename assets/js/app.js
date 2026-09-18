@@ -1,4 +1,5 @@
 import { AlertManager } from "../js/alert-manager.js";
+import { AudioManager } from "../js/audio-manager.js";
 import { Calendar, CalendarInterval } from "../js/calendar.js";
 import { DateSelector, DateSelectorInterval } from "../js/date-selector.js";
 import { Dialog } from "../js/dialog.js";
@@ -18,7 +19,7 @@ import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { SortableTree } from "../js/sortable-tree.js";
 import { Stepper } from "../js/stepper.js";
 import { Tab } from "../js/tab.js";
-import { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneCoordinate, TourSceneTrigger, TourPopover } from "./tour.js";
+import { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneCoordinate, TourSceneTrigger, TourInventoryTrigger, TourPopover } from "./tour.js";
 import { Validator } from "../js/validator.js";
 
 /**
@@ -91,6 +92,18 @@ class App {
 	 * @type {PopupManager}
 	 */
 	popupManager = new PopupManager();
+
+	/**
+	 * Audio manager for the application.
+	 * 
+	 * @type {AudioManager}
+	 */
+	audioManager = new AudioManager({
+		backgroundSounds: [
+			new Audio("../assets/sounds/bird-chirping.ogg"),
+			new Audio("../assets/sounds/ambient.ogg")
+		]
+	});
 
 	/**
 	 * List of gliders.
@@ -258,6 +271,8 @@ class App {
 
 		// Initialize the application
 		this.#initPopups(options.popupConfigs);
+		this.#initAudioManagerMuteTriggers();
+		this.#fetchAudioFiles();
 		this.#initGliders();
 		this.#initRolls();
 		this.#initScrollTables();
@@ -329,6 +344,31 @@ class App {
 				}));
 			}
 		});
+	}
+
+	/**
+	 * Initializes the mute triggers for the audio manager.
+	 * 
+	 * @returns {void}
+	 */
+	#initAudioManagerMuteTriggers() {
+		const muteTriggers = document.querySelectorAll("button[data-audio-manager-mute-trigger]");
+		muteTriggers.forEach((muteTrigger) => {
+			this.audioManager.addMuteTrigger(muteTrigger);
+		});
+	}
+
+	/**
+	 * Fetches the audio files and stores them as audio buffers.
+	 * 
+	 * @returns {void}
+	 */
+	#fetchAudioFiles() {
+		this.audioManager.fetchAudioFile("../assets/sounds/flip.ogg", "flip");
+		this.audioManager.fetchAudioFile("../assets/sounds/select.ogg", "select");
+		this.audioManager.fetchAudioFile("../assets/sounds/error.ogg", "error");
+		this.audioManager.fetchAudioFile("../assets/sounds/achieve.ogg", "achieve");
+		this.audioManager.fetchAudioFile("../assets/sounds/click.ogg", "click");
 	}
 
 	/**
@@ -637,34 +677,55 @@ class App {
 	 */
 	#initTours() {
 		const elems = document.querySelectorAll("[data-tour]");
-		const footstepAudio = new Audio("../assets/sounds/tour/footstep.ogg");
-		const zoomAudio = new Audio("../assets/sounds/tour/zoom.ogg");
-		const togglePopoverAudio = new Audio("../assets/sounds/tour/toggle-popover.ogg");
 		elems.forEach((elem) => {
 			const scenes = this.#initTourScenes(elem);
 			const sceneTriggers = this.#initTourSceneTriggers(elem);
-			const birdsAudio = new Audio("../assets/sounds/tour/birds.ogg");
+			const inventoryTriggers = this.#initTourInventoryTriggers(elem);
 			const popovers = this.#initTourPopovers(elem);
 			this.tours.push(new Tour({
+				id: elem.id,
 				wrapper: elem,
 				viewport: elem.querySelector("[data-tour-viewport]"),
 				backTrigger: elem.querySelector("[data-tour-back-trigger]"),
 				scenes: scenes,
 				sceneTriggers: sceneTriggers,
+				inventoryTriggers: inventoryTriggers,
 				popovers: popovers,
 				zoomInTrigger: elem.querySelector("[data-tour-zoom-in-trigger]"),
 				zoomOutTrigger: elem.querySelector("[data-tour-zoom-out-trigger]"),
 				backToRootTrigger: elem.querySelector("[data-tour-back-to-root-trigger]"),
 				fullscreenTrigger: elem.querySelector("[data-tour-fullscreen-trigger]"),
-				muteTrigger: elem.querySelector("[data-tour-mute-trigger]"),
-				backgroundAudio: birdsAudio,
-				changeSceneAudio: footstepAudio,
-				zoomAudio: zoomAudio,
-				openPopoverAudio: togglePopoverAudio,
-				closePopoverAudio: togglePopoverAudio,
-				popoverOpeningCallback: (tour, event) => {
-					tour.selectedScene.scrollToElem(event.source, tour.viewport);
-				}
+				changeSceneCallback: (tour, scene) => {
+					this.audioManager.play("click");
+				},
+				popoverOpenedCallback: (tour, event) => {
+					this.audioManager.play("flip");
+				},
+				popoverClosedCallback: (tour, event) => {
+					this.audioManager.play("flip");
+				},
+				zoomCallback: (tour, scene, zoomLevel, isInitial) => {
+					if (!isInitial) this.audioManager.play("click");
+				},
+				inventoryTriggerClickCallback: (tour, event) => {
+					this.audioManager.play("achieve");
+				},
+				// popoverOpenedCallback: (tour, event) => {
+				// 	if (window.matchMedia(App.breakpoints['small']).matches) return;
+				// 	if (!tour.selectedScene) return;
+				// 	const popoverWidth = event.target.offsetWidth;
+				// 	const elemRect = event.source.getBoundingClientRect();
+				// 	const wrapperRect = tour.wrapper.getBoundingClientRect();
+				// 	const leftLimit = ((wrapperRect.right - (elemRect.right + popoverWidth)) * -1) + (elemRect.width * 2);
+				// 	if (elemRect.left + popoverWidth > wrapperRect.right) {
+				// 		setTimeout(() => {
+				// 			tour.viewport.scrollBy({
+				// 				left: leftLimit,
+				// 				behavior: "smooth"
+				// 			});
+				// 		}, 600);
+				// 	}
+				// }
 			}));
 		});
 	}
@@ -740,9 +801,11 @@ class App {
 		hotspotElems.forEach((hotspotElem) => {
 			const rawCoordinate = hotspotElem.getAttribute("data-tour-scene-hotspot") || "";
 			const rawRotations = hotspotElem.getAttribute("data-tour-scene-hotspot-rotation") || "";
+			const rawRequiredItemIds = hotspotElem.getAttribute("data-tour-scene-hotspot-required-item-ids") || "";
 			hotspots.push(new TourSceneHotspot({
 				wrapper: hotspotElem,
 				coordinate: TourSceneCoordinate.fromString(rawCoordinate),
+				requiredItemIds: TourSceneHotspot.idsFromString(rawRequiredItemIds),
 				...TourSceneHotspot.rotationsFromString(rawRotations)
 			}));
 		});
@@ -763,6 +826,25 @@ class App {
 			triggers.push(new TourSceneTrigger({
 				sceneId: sceneId,
 				trigger: triggerElem
+			}));
+		});
+		return triggers;
+	}
+
+	/**
+	 * Creates a list of tour inventory triggers under the specified element.
+	 * 
+	 * @param {Element} elem - The wrapper element.
+	 * @returns {TourInventoryTrigger[]} The created tour inventory triggers.
+	 */
+	#initTourInventoryTriggers(elem) {
+		let triggers = [];
+		const triggerElems = elem.querySelectorAll("[data-tour-inventory-trigger]");
+		triggerElems.forEach((triggerElem) => {
+			const itemId = parseInt(triggerElem.getAttribute("data-tour-inventory-trigger"));
+			triggers.push(new TourInventoryTrigger({
+				trigger: triggerElem,
+				itemId: itemId
 			}));
 		});
 		return triggers;
@@ -806,14 +888,9 @@ class App {
 	 * @returns {void}
 	 */
 	#initMemoryGames() {
-		let cardFlipAudio = new Audio("../assets/sounds/memory-game/card-flip.ogg");
-		let cardMatchAudio = new Audio("../assets/sounds/memory-game/card-match.ogg");
-		let cardMismatchAudio = new Audio("../assets/sounds/memory-game/card-mismatch.ogg");
-		let completeAudio = new Audio("../assets/sounds/memory-game/complete.ogg");
-		let restartAudio = new Audio("../assets/sounds/memory-game/restart.ogg");
-		let elems = document.querySelectorAll("[data-memory-game]");
+		const elems = document.querySelectorAll("[data-memory-game]");
 		elems.forEach((elem) => {
-			let cards = this.#initMemoryGameCards(elem);
+			const cards = this.#initMemoryGameCards(elem);
 			this.memoryGames.push(new MemoryGame({
 				wrapper: elem,
 				cardList: elem.querySelector("[data-memory-game-list]"),
@@ -822,30 +899,30 @@ class App {
 				scoreIndicator: elem.querySelector("[data-memory-game-score-indicator]"),
 				moveCountIndicator: elem.querySelector("[data-memory-game-move-count-indicator]"),
 				timerIndicator: elem.querySelector("[data-memory-game-timer-indicator]"),
-				cardFlipCallback: () => {					
-					this.#playAudio(cardFlipAudio);
+				cardFlipCallback: (memoryGame) => {
+					this.audioManager.play("flip");
 				},
-				cardMatchCallback: (firstCard, secondCard, isCompleted) => {
+				cardMatchCallback: (memoryGame, firstCard, secondCard, isCompleted) => {
 					if (!isCompleted) {
 						setTimeout(() => {
-							this.#playAudio(cardMatchAudio);
+							this.audioManager.play("select");
 						}, 300);
 					}
 				},
-				cardMismatchCallback: (firstCard, secondCard) => {
+				cardMismatchCallback: (memoryGame, firstCard, secondCard) => {
 					setTimeout(() => {
 						if ("vibrate" in navigator) navigator.vibrate(200);
-						this.#playAudio(cardMismatchAudio);
+						this.audioManager.play("error");
 					}, 300);
 				},
-				completeCallback: (score, moveCount, timer) => {
+				completeCallback: (memoryGame, score, moveCount, timer) => {
 					setTimeout(() => {
-						this.#playAudio(completeAudio);
+						this.audioManager.play("achieve");
 						this.dialogs[0].open();
 					}, 300);
 				},
-				restartCallback: () => {
-					this.#playAudio(restartAudio);
+				restartCallback: (memoryGame) => {
+					this.audioManager.play("click");
 				}
 			}));
 		});
@@ -859,7 +936,7 @@ class App {
 	 */
 	#initMemoryGameCards(elem) {
 		let cards = [];
-		let cardElems = elem.querySelectorAll("[data-memory-game-card]");
+		const cardElems = elem.querySelectorAll("[data-memory-game-card]");
 		cardElems.forEach((cardElem) => {
 			cards.push(new MemoryGameCard({
 				id: cardElem.getAttribute("data-memory-game-card"),
@@ -869,17 +946,6 @@ class App {
 			}));
 		});
 		return cards;
-	}
-
-	/**
-	 * Plays the specified audio once.
-	 * 
-	 * @param {HTMLAudioElement} audio - The audio to be played.
-	 * @returns {void}
-	 */
-	#playAudio(audio) {
-		audio.play();
-		audio.currentTime = 0;
 	}
 
 	/**
@@ -900,7 +966,18 @@ class App {
 				questionCountIndicator: elem.querySelector("[data-quiz-question-count-indicator]"),
 				timerIndicator: elem.querySelector("[data-quiz-timer-indicator]"),
 				progressIndicator: elem.querySelector("[data-quiz-progress-indicator]"),
-				completeCallback: (score, timer, questionResults) => {
+				startCallback: (quiz) => {
+					this.audioManager.play("flip");
+				},
+				questionAnsweredCallback: (quiz, result) => {
+					const isLastQuestion = quiz.activeIndex >= quiz.questions.length - 1;
+					if (!isLastQuestion) this.audioManager.play("select");
+				},
+				questionErrorCallback: (quiz, question) => {
+					this.audioManager.play("error");
+				},
+				completeCallback: (quiz, score, timer, results) => {
+					this.audioManager.play("achieve");
 					let rateElem = elem.querySelector("[data-quiz-result-rate]");
 					if (rateElem) {
 						rateElem.innerHTML = `<h3>You achieved a score of ${score}!</h3>`;
@@ -943,7 +1020,10 @@ class App {
 		optionElems.forEach((optionElem) => {
 			options.push(new QuizQuestionOption({
 				input: optionElem,
-				isInvalid: optionElem.value === "0"
+				isInvalid: optionElem.value === "0",
+				checkCallback: (option) => {
+					this.audioManager.play("click");
+				}
 			}));
 		});
 		return options;

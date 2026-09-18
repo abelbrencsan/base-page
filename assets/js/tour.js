@@ -1,3 +1,5 @@
+import { Wishlist } from "../js/wishlist.js";
+
 /**
  * Tour
  * This class is designed to create virtual tours with multiple scenes.
@@ -8,6 +10,13 @@
 class Tour {
 
 	/**
+	 * The id of the tour.
+	 * 
+	 * @type {string}
+	 */
+	id;
+
+	/**
 	 * The wrapper element that includes all the scenes and control triggers.
 	 * 
 	 * @type {HTMLElement}
@@ -15,14 +24,14 @@ class Tour {
 	wrapper;
 
 	/**
-	 * The viewport element that displays the scenes and can be panned and zoomed.
+	 * The viewport element that displays the scenes and can be panned, pinched, and zoomed.
 	 * 
 	 * @type {HTMLElement}
 	 */
 	viewport;
 
 	/**
-	 * The trigger button that navigates back to the previous scene within the history when clicked.
+	 * The trigger that navigates back to the previous scene within the history when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
@@ -33,7 +42,7 @@ class Tour {
 	 * 
 	 * @type {TourScene[]}
 	 */
-	scenes;
+	scenes = [];
 
 	/**
 	 * An array of triggers that navigate from one scene to another when clicked.
@@ -43,6 +52,13 @@ class Tour {
 	sceneTriggers = [];
 
 	/**
+	 * An array of triggers that that adds items to the inventory when clicked.
+	 * 
+	 * @type {TourInventoryTrigger[]}
+	 */
+	inventoryTriggers = [];
+
+	/**
 	 * An array of popovers that belong to the tour.
 	 * 
 	 * @type {TourPopover[]}
@@ -50,74 +66,32 @@ class Tour {
 	popovers = [];
 
 	/**
-	 * The zoom-in trigger button that zooms the viewport to the next zoom level when clicked.
+	 * The zoom-in trigger that zooms the viewport to the next zoom level when clicked.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
 	zoomInTrigger = null;
 
 	/**
-	 * The zoom-out trigger button that zooms the viewport to the previous zoom level when clicked.
+	 * The zoom-out trigger that zooms the viewport to the previous zoom level when clicked.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
 	zoomOutTrigger = null;
 
 	/**
-	 * The trigger button that navigates back to the first scene within the history when clicked.
+	 * The trigger that navigates back to the first scene within the history when clicked.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
 	backToRootTrigger = null;
 
 	/**
-	 * The trigger button that toggles fullscreen mode when clicked.
+	 * The trigger that toggles fullscreen mode when clicked.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
 	fullscreenTrigger = null;
-
-	/**
-	 * The trigger button that mutes or unmutes the audio when clicked.
-	 * 
-	 * @type {HTMLButtonElement|null}
-	 */
-	muteTrigger = null;
-
-	/**
-	 * The audio element played in a loop in the background.
-	 * 
-	 * @type {HTMLAudioElement|null}
-	 */
-	backgroundAudio = null;
-
-	/**
-	 * The audio element used when changing scenes.
-	 * 
-	 * @type {HTMLAudioElement|null}
-	 */
-	changeSceneAudio = null;
-
-	/**
-	 * The audio element played when the zoom-in or zoom-out trigger is clicked.
-	 * 
-	 * @type {HTMLAudioElement|null}
-	 */
-	zoomAudio = null;
-
-	/**
-	 * The audio element played when a popover is opened.
-	 * 
-	 * @type {HTMLAudioElement|null}
-	 */
-	openPopoverAudio = null;
-
-	/**
-	 * The audio element played when a popover is closed.
-	 * 
-	 * @type {HTMLAudioElement|null}
-	 */
-	closePopoverAudio = null;
 
 	/**
 	 * The class that is added to the wrapper after the tour has been initialized.
@@ -141,14 +115,14 @@ class Tour {
 	hasHistoryClass = "has-history";
 
 	/**
-	 * The class that is added to the wrapper while the scene is being panned.
+	 * The class that is added to the wrapper while the selected scene is being panned.
 	 * 
 	 * @type {string}
 	 */
 	isPanningClass = "is-panning";
 
 	/**
-	 * The class that is added to the wrapper while the scene is being pinched.
+	 * The class that is added to the wrapper while the selected scene is being pinched.
 	 * 
 	 * @type {string}
 	 */
@@ -160,13 +134,6 @@ class Tour {
 	 * @type {string}
 	 */
 	hasFullscreenSupportClass = "has-fullscreen-support";
-
-	/**
-	 * The class that is added to the wrapper when the audio is muted.
-	 * 
-	 * @type {string}
-	 */
-	isMutedClass = "is-muted";
 
 	/**
 	 * The class that is added to the wrapper while a popover is open.
@@ -181,6 +148,13 @@ class Tour {
 	 * @type {boolean}
 	 */
 	ctrlWheel = true;
+
+	/**
+	 * Indicates whether to store the inventory in local storage rather than in memory.
+	 * 
+	 * @type {boolean}
+	 */
+	storeInventory = false;
 
 	/**
 	 * Callback function that is called after the tour has been initialized.
@@ -211,6 +185,13 @@ class Tour {
 	goBackToRootCallback = null;
 
 	/**
+	 * Callback function that is called after the current scene is changed to the next one.
+	 * 
+	 * @type {function(Tour,TourScene):void|null}
+	 */
+	changeSceneCallback = null;
+
+	/**
 	 * Callback function that is called after fullscreen mode is entered or exited.
 	 * 
 	 * @type {function(Tour):void|null}
@@ -218,32 +199,39 @@ class Tour {
 	fullscreenChangeCallback = null;
 
 	/**
-	 * Callback function that is called after the tour is muted.
+	 * Callback function that is called after the inventory has changed.
 	 * 
 	 * @type {function(Tour):void|null}
 	 */
-	muteCallback = null;
+	inventoryChangeCallback = null;
 
 	/**
-	 * Callback function that is called after the tour is unmuted.
-	 * 
-	 * @type {function(Tour):void|null}
-	 */
-	unmuteCallback = null;
-
-	/**
-	 * Callback function that is called while a popover is opening.
+	 * Callback function that is called before a popover is opening.
 	 * 
 	 * @type {function(Tour,ToggleEvent):void|null}
 	 */
 	popoverOpeningCallback = null;
 
 	/**
-	 * Callback function that is called while a popover is closing.
+	 * Callback function that is called before a popover is closing.
 	 * 
 	 * @type {function(Tour,ToggleEvent):void|null}
 	 */
 	popoverClosingCallback = null;
+
+	/**
+	 * Callback function that is called after a popover is opened.
+	 * 
+	 * @type {function(Tour,ToggleEvent):void|null}
+	 */
+	popoverOpenedCallback = null;
+
+	/**
+	 * Callback function that is called after a popover is closed.
+	 * 
+	 * @type {function(Tour,ToggleEvent):void|null}
+	 */
+	popoverClosedCallback = null;
 
 	/**
 	 * Callback function that is called after a scene trigger is clicked.
@@ -253,11 +241,67 @@ class Tour {
 	sceneTriggerClickCallback = null;
 
 	/**
-	 * The currently selected scene.
+	 * Callback function that is called after an inventory trigger is clicked.
 	 * 
-	 * @type {TourScene|null}
+	 * @type {function(Tour,TourInventoryTrigger,PointerEvent):void|null}
 	 */
-	selectedScene = null;
+	inventoryTriggerClickCallback = null;
+
+	/**
+	 * Callback function that is called after panning the selected scene has started.
+	 * 
+	 * @type {function(Tour,TourScene,PointerEvent):void|null}
+	 */
+	panStartCallback = null;
+
+	/**
+	 * Callback function that is called after panning the selected scene has ended.
+	 * 
+	 * @type {function(Tour,TourScene,PointerEvent):void|null}
+	 */
+	panEndCallback = null;
+
+	/**
+	 * Callback function that is called after the selected scene is zoomed to the next zoom level.
+	 * 
+	 * @type {function(Tour,TourMapScene):void|null}
+	 */
+	zoomInCallback = null;
+
+	/**
+	 * Callback function that is called after the selected scene is zoomed to the previous zoom level.
+	 * 
+	 * @type {function(Tour,TourMapScene):void|null}
+	 */
+	zoomOutCallback = null;
+
+	/**
+	 * Callback function that is called after the selected scene is zoomed to a different zoom level.
+	 * 
+	 * @type {function(Tour,TourMapScene,number,boolean):void|null}
+	 */
+	zoomCallback = null;
+
+	/**
+	 * Callback function that is called after pinching the selected scene has started.
+	 * 
+	 * @type {function(Tour,TourMapScene,TouchEvent):void|null}
+	 */
+	pinchStartCallback = null;
+
+	/**
+	 * Callback function that is called after pinching the selected scene has ended.
+	 * 
+	 * @type {function(Tour,TourMapScene,TouchEvent):void|null}
+	 */
+	pinchEndCallback = null;
+
+	/**
+	 * The inventory that allows items to be collected within the tour.
+	 * 
+	 * @type {Wishlist}
+	 */
+	inventory;
 
 	/**
 	 * Indicates whether the selected scene is currently being panned.
@@ -274,64 +318,107 @@ class Tour {
 	isPinching = false;
 
 	/**
+	 * The selected scene.
+	 * 
+	 * @type {TourScene|null}
+	 */
+	#selectedScene = null;
+
+	/**
 	 * An array of previously visited scenes and their override settings.
 	 * 
 	 * @type {TourHistoryEntry[]}
 	 */
-	history = [];
+	#history = [];
 
 	/**
-	 * Indicates whether the audio is muted.
+	 * Indicates whether wheel zoom is temporarily locked to prevent zooming too quickly on touchpads.
 	 * 
 	 * @type {boolean}
 	 */
-	#isMuted = true;
+	#isWheelZoomLocked = false;
+
+	/**
+	 * The selected scene.
+	 * 
+	 * @type {TourScene|null}
+	 */
+	get selectedScene() {
+		return this.#selectedScene;
+	}
+
+	/**
+	 * An array of previously visited scenes and their override settings.
+	 * 
+	 * @type {TourHistoryEntry[]}
+	 */
+	get history() {
+		return this.#history;
+	}
+
+	/**
+	 * The current zoom level of the selected scene.
+	 * 
+	 * @type {number}
+	 */
+	get currentZoomLevel() {
+		if (!(this.#selectedScene instanceof TourMapScene)) return 0;
+		return this.#selectedScene.currentZoomLevel;
+	}
 
 	/**
 	 * Creates a tour.
 	 * 
 	 * @param {Object} options
+	 * @param {string} options.id - The id of the tour.
 	 * @param {HTMLElement} options.wrapper - The wrapper element that includes all the scenes and control triggers.
-	 * @param {HTMLElement} options.viewport - The viewport element that displays the scenes and can be panned and zoomed.
-	 * @param {HTMLButtonElement} options.backTrigger - The trigger button that navigates back to the previous scene within the history when clicked.
+	 * @param {HTMLElement} options.viewport - The viewport element that displays the scenes and can be panned, pinched, and zoomed.
+	 * @param {HTMLButtonElement} options.backTrigger - The trigger that navigates back to the previous scene within the history when clicked.
 	 * @param {TourScene[]} options.scenes - An array of of scenes.
 	 * @param {TourSceneTrigger[]} options.sceneTriggers - An array of triggers that navigate from one scene to another when clicked.
+	 * @param {TourInventoryTrigger[]} options.inventoryTriggers - An array of triggers that that adds items to the inventory when clicked.
 	 * @param {TourPopover[]} options.popovers - An array of popovers that belong to the tour.
-	 * @param {HTMLButtonElement|null} options.zoomInTrigger - The zoom-in trigger button that zooms the viewport to the next zoom level when clicked.
-	 * @param {HTMLButtonElement|null} options.zoomOutTrigger - The zoom-out trigger button that zooms the viewport to the previous zoom level when clicked.
-	 * @param {HTMLButtonElement|null} options.backToRootTrigger - The trigger button that navigates back to the first scene within the history when clicked.
-	 * @param {HTMLButtonElement|null} options.fullscreenTrigger - The trigger button that toggles fullscreen mode when clicked.
-	 * @param {HTMLButtonElement|null} options.muteTrigger - The trigger button that mutes or unmutes the audio when clicked.
-	 * @param {HTMLAudioElement|null} options.backgroundAudio - The audio element played in a loop in the background.
-	 * @param {HTMLAudioElement|null} options.changeSceneAudio - The audio element used when changing scenes.
-	 * @param {HTMLAudioElement|null} options.zoomAudio - The audio element played when the zoom-in or zoom-out trigger is clicked.
-	 * @param {HTMLAudioElement|null} options.openPopoverAudio - The audio element played when a popover is opened.
-	 * @param {HTMLAudioElement|null} options.closePopoverAudio - The audio element played when a popover is closed.
+	 * @param {HTMLButtonElement|null} options.zoomInTrigger - The zoom-in trigger that zooms the viewport to the next zoom level when clicked.
+	 * @param {HTMLButtonElement|null} options.zoomOutTrigger - The zoom-out trigger that zooms the viewport to the previous zoom level when clicked.
+	 * @param {HTMLButtonElement|null} options.backToRootTrigger - The trigger that navigates back to the first scene within the history when clicked.
+	 * @param {HTMLButtonElement|null} options.fullscreenTrigger - The trigger that toggles fullscreen mode when clicked.
 	 * @param {string} options.isInitializedClass - The class that is added to the wrapper after the tour has been initialized.
 	 * @param {string} options.hasZoomClass - The class that is added to the wrapper when the zoom is enabled for the selected scene.
 	 * @param {string} options.hasHistoryClass - The class that is added to the wrapper when previous scenes are available within the history.
-	 * @param {string} options.isPanningClass - The class that is added to the viewport while the scene is being panned.
-	 * @param {string} options.isPinchingClass - The class that is added to the viewport while the scene is being pinched.
+	 * @param {string} options.isPanningClass - The class that is added to the wrapper while the selected scene is being panned.
+	 * @param {string} options.isPinchingClass - The class that is added to the wrapper while the selected scene is being pinched.
 	 * @param {string} options.hasFullscreenSupportClass - The class that is added to the wrapper when the fullscreen API is supported by the browser.
-	 * @param {string} options.isMutedClass - The class that is added to the wrapper when the audio is muted.
 	 * @param {string} options.hasOpenedPopoverClass - The class that is added to the wrapper while a popover is open.
 	 * @param {boolean} options.ctrlWheel - Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
+	 * @param {boolean} options.storeInventory - Indicates whether to store the inventory in local storage rather than in memory.
 	 * @param {function(Tour):void|null} options.initCallback - Callback function that is called after the tour has been initialized.
 	 * @param {function(Tour,TourScene):void|null} options.goToSceneCallback - Callback function that is called after the next scene is selected.
 	 * @param {function(Tour,TourScene):void|null} options.goBackCallback - Callback function that is called after the previous scene is reverted.
 	 * @param {function(Tour,TourScene):void|null} options.goBackToRootCallback - Callback function that is called after the root scene is reverted.
+	 * @param {function(Tour,TourScene):void|null} options.changeSceneCallback - Callback function that is called after the current scene is changed to the next one.
 	 * @param {function(Tour):void|null} options.fullscreenChangeCallback - Callback function that is called after fullscreen mode is entered or exited.
-	 * @param {function(Tour):void|null} options.muteCallback - Callback function that is called after the tour is muted.
-	 * @param {function(Tour):void|null} options.unmuteCallback - Callback function that is called after the tour is unmuted.
-	 * @param {function(Tour,ToggleEvent):void|null} options.popoverOpeningCallback - Callback function that is called while a popover is opening.
-	 * @param {function(Tour,ToggleEvent):void|null} options.popoverClosingCallback - Callback function that is called while a popover is closing.
+	 * @param {function(Tour):void|null} options.inventoryChangeCallback - Callback function that is called after the inventory has changed.
+	 * @param {function(Tour,ToggleEvent):void|null} options.popoverOpeningCallback - Callback function that is called before a popover is opening.
+	 * @param {function(Tour,ToggleEvent):void|null} options.popoverClosingCallback - Callback function that is called before a popover is closing.
+	 * @param {function(Tour,ToggleEvent):void|null} options.popoverOpenedCallback - Callback function that is called after a popover is opened.
+	 * @param {function(Tour,ToggleEvent):void|null} options.popoverClosedCallback - Callback function that is called after a popover is closed.
 	 * @param {function(Tour,TourSceneTrigger,PointerEvent):void|null} options.sceneTriggerClickCallback - Callback function that is called after a scene trigger is clicked.
+	 * @param {function(Tour,TourInventoryTrigger,PointerEvent):void|null} options.inventoryTriggerClickCallback - Callback function that is called after an inventory trigger is clicked.
+	 * @param {function(Tour,TourScene,PointerEvent):void|null} options.panStartCallback - Callback function that is called after panning the selected scene has started.
+	 * @param {function(Tour,TourScene,PointerEvent):void|null} options.panEndCallback - Callback function that is called after panning the selected scene has ended.
+	 * @param {function(Tour,TourMapScene):void|null} options.zoomInCallback - Callback function that is called after the selected scene is zoomed to the next zoom level.
+	 * @param {function(Tour,TourMapScene):void|null} options.zoomOutCallback - Callback function that is called after the selected scene is zoomed to the previous zoom level.
+	 * @param {function(Tour,TourMapScene,number,boolean):void|null} options.zoomCallback - Callback function that is called after the selected scene is zoomed to a different zoom level.
+	 * @param {function(Tour,TourMapScene,TouchEvent):void|null} options.pinchStartCallback - Callback function that is called after pinching the selected scene has started.
+	 * @param {function(Tour,TourMapScene,TouchEvent):void|null} options.pinchEndCallback - Callback function that is called after pinching the selected scene has ended.
 	 * @returns {Tour}
 	 */
 	constructor(options) {
 
 		// Test required options
-		let sceneIds = [];
+		if (typeof options.id !== "string") {
+			throw "Tour \"id\" must be a string";
+		}
 		if (!(options.wrapper instanceof HTMLElement)) {
 			throw "Tour \"wrapper\" must be an `HTMLElement`";
 		}
@@ -341,69 +428,58 @@ class Tour {
 		if (!(options.backTrigger instanceof HTMLButtonElement)) {
 			throw "Tour \"backTrigger\" must be an `HTMLButtonElement`";
 		}
-		if (!(options.scenes instanceof Array)) {
-			throw 'Tour \"scenes\" must be an `array`';
-		}
-		if (options.scenes.length == 0) {
-			throw 'Tour \"scenes\" must include at least one scene';
-		}
-		options.scenes.forEach((scene) => {
-			if (!(scene instanceof TourScene)) {
-				throw 'Tour scene must be a `TourScene`';
-			}
-			if (sceneIds.includes(scene.id)) {
-				throw 'Tour scene ids must be unique';
-			} else {
-				sceneIds.push(scene.id);
-			}
-		});
 
 		// Set fields from options
+		this.id = options.id;
 		this.wrapper = options.wrapper;
 		this.viewport = options.viewport;
 		this.backTrigger = options.backTrigger;
-		this.scenes = options.scenes;
+		if ("scenes" in options) this.scenes = options.scenes;
 		if ("sceneTriggers" in options) this.sceneTriggers = options.sceneTriggers;
+		if ("inventoryTriggers" in options) this.inventoryTriggers = options.inventoryTriggers;
 		if ("popovers" in options) this.popovers = options.popovers;
 		if ("zoomInTrigger" in options) this.zoomInTrigger = options.zoomInTrigger;
 		if ("zoomOutTrigger" in options) this.zoomOutTrigger = options.zoomOutTrigger;
 		if ("backToRootTrigger" in options) this.backToRootTrigger = options.backToRootTrigger;
 		if ("fullscreenTrigger" in options) this.fullscreenTrigger = options.fullscreenTrigger;
-		if ("muteTrigger" in options) this.muteTrigger = options.muteTrigger;
-		if ("backgroundAudio" in options) this.backgroundAudio = options.backgroundAudio;
-		if ("changeSceneAudio" in options) this.changeSceneAudio = options.changeSceneAudio;
-		if ("zoomAudio" in options) this.zoomAudio = options.zoomAudio;
-		if ("openPopoverAudio" in options) this.openPopoverAudio = options.openPopoverAudio;
-		if ("closePopoverAudio" in options) this.closePopoverAudio = options.closePopoverAudio;
 		if ("isInitializedClass" in options) this.isInitializedClass = options.isInitializedClass;
 		if ("hasZoomClass" in options) this.hasZoomClass = options.hasZoomClass;
 		if ("hasHistoryClass" in options) this.hasHistoryClass = options.hasHistoryClass;
 		if ("isPanningClass" in options) this.isPanningClass = options.isPanningClass;
 		if ("isPinchingClass" in options) this.isPinchingClass = options.isPinchingClass;
 		if ("hasFullscreenSupportClass" in options) this.hasFullscreenSupportClass = options.hasFullscreenSupportClass;
-		if ("isMutedClass" in options) this.isMutedClass = options.isMutedClass;
 		if ("hasOpenedPopoverClass" in options) this.hasOpenedPopoverClass = options.hasOpenedPopoverClass;
 		if ("ctrlWheel" in options) this.ctrlWheel = options.ctrlWheel;
+		if ("storeInventory" in options) this.storeInventory = options.storeInventory;
 		if ("initCallback" in options) this.initCallback = options.initCallback;
 		if ("goToSceneCallback" in options) this.goToSceneCallback = options.goToSceneCallback;
 		if ("goBackCallback" in options) this.goBackCallback = options.goBackCallback;
 		if ("goBackToRootCallback" in options) this.goBackToRootCallback = options.goBackToRootCallback;
+		if ("changeSceneCallback" in options) this.changeSceneCallback = options.changeSceneCallback;
 		if ("fullscreenChangeCallback" in options) this.fullscreenChangeCallback = options.fullscreenChangeCallback;
-		if ("muteCallback" in options) this.muteCallback = options.muteCallback;
-		if ("unmuteCallback" in options) this.unmuteCallback = options.unmuteCallback;
+		if ("inventoryChangeCallback" in options) this.inventoryChangeCallback = options.inventoryChangeCallback;
 		if ("popoverOpeningCallback" in options) this.popoverOpeningCallback = options.popoverOpeningCallback;
 		if ("popoverClosingCallback" in options) this.popoverClosingCallback = options.popoverClosingCallback;
+		if ("popoverOpenedCallback" in options) this.popoverOpenedCallback = options.popoverOpenedCallback;
+		if ("popoverClosedCallback" in options) this.popoverClosedCallback = options.popoverClosedCallback;
 		if ("sceneTriggerClickCallback" in options) this.sceneTriggerClickCallback = options.sceneTriggerClickCallback;
+		if ("inventoryTriggerClickCallback" in options) this.inventoryTriggerClickCallback = options.inventoryTriggerClickCallback;
+		if ("panStartCallback" in options) this.panStartCallback = options.panStartCallback;
+		if ("panEndCallback" in options) this.panEndCallback = options.panEndCallback;
+		if ("zoomInCallback" in options) this.zoomInCallback = options.zoomInCallback;
+		if ("zoomOutCallback" in options) this.zoomOutCallback = options.zoomOutCallback;
+		if ("zoomCallback" in options) this.zoomCallback = options.zoomCallback;
+		if ("pinchStartCallback" in options) this.pinchStartCallback = options.pinchStartCallback;
+		if ("pinchEndCallback" in options) this.pinchEndCallback = options.pinchEndCallback;
 
 		// Initialize the tour
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		this.#changeScene(this.scenes[0]);
+		this.#initInventory();
 		this.#detectFullscreenSupport();
-		this.#toggleMute();
 		this.viewport.setAttribute("tabindex", "0");
 		this.wrapper.classList.add(this.isInitializedClass);
-		if (this.backgroundAudio) this.backgroundAudio.loop = true; 
+		if (this.scenes.length) this.#changeScene(this.scenes[0]);
 		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
@@ -411,11 +487,12 @@ class Tour {
 	 * Navigates to the specified scene.
 	 * 
 	 * @param {TourScene} scene - The scene to navigate to.
+	 * @param {boolean} focus - Indicates whether to set focus to the viewport after the scene is selected.
 	 * @returns {void}
 	 */
-	goToScene(scene) {
+	goToScene(scene, focus = true) {
 		this.#changeScene(scene);
-		this.viewport.focus({ preventScroll: true });
+		if (focus) this.viewport.focus({ preventScroll: true });
 		if (typeof(this.goToSceneCallback) == "function") this.goToSceneCallback(this, scene);
 	}
 
@@ -423,11 +500,12 @@ class Tour {
 	 * Navigates to the scene with the specified ID.
 	 * 
 	 * @param {string} id - The ID of the scene to navigate to.
+	 * @param {boolean} focus - Indicates whether to set focus to the viewport after the scene is selected.
 	 * @returns {void}
 	 */
-	goToSceneById(id) {
+	goToSceneById(id, focus = true) {
 		const scene = this.getSceneById(id);
-		if (scene) this.goToScene(scene);
+		if (scene) this.goToScene(scene, focus);
 	}
 
 	/**
@@ -436,10 +514,10 @@ class Tour {
 	 * @returns {void}
 	 */
 	goBack() {
-		const history = this.history.pop();
+		const history = this.#history.pop();
 		if (history) {
 			this.#changeScene(history.scene, false, history.overrides);
-			if (!this.history.length) {
+			if (!this.#history.length) {
 				this.viewport.focus({ preventScroll: true });
 			}
 			if (typeof(this.goBackCallback) == "function") this.goBackCallback(this, history.scene);
@@ -453,9 +531,10 @@ class Tour {
 	 * @returns {void}
 	 */
 	goBackToScene(sceneId) {
-		while (this.history.length) {
+		const index = this.#history.findIndex((history) => history.scene.id == sceneId);
+		if (index !== -1) {
+			this.#history = this.#history.slice(0, index + 1);
 			this.goBack();
-			if (this.selectedScene.id == sceneId) return;
 		}
 	}
 
@@ -465,14 +544,48 @@ class Tour {
 	 * @returns {void}
 	 */
 	goBackToRoot() {
-		const history = this.history.shift();
+		const history = this.#history.shift();
 		if (history) {
-			this.history = [];
+			this.#history = [];
 			this.#changeScene(history.scene, false, history.overrides);
 			this.viewport.focus({ preventScroll: true });
 			if (typeof(this.goBackCallback) == "function") this.goBackCallback(this, history.scene);
 			if (typeof(this.goBackToRootCallback) == "function") this.goBackToRootCallback(this, history.scene);
 		}
+	}
+
+	/**
+	 * Zooms to the next zoom level.
+	 * 
+	 * @returns {void}
+	 */
+	zoomIn() {
+		if (!(this.#selectedScene instanceof TourMapScene)) return;
+		this.#selectedScene.zoomIn(this);
+		this.#toggleZoomTriggers(...this.#selectedScene.zoomLimits);
+	}
+
+	/**
+	 * Zooms to the previous zoom level.
+	 * 
+	 * @returns {void}
+	 */
+	zoomOut() {
+		if (!(this.#selectedScene instanceof TourMapScene)) return;
+		this.#selectedScene.zoomOut(this);
+		this.#toggleZoomTriggers(...this.#selectedScene.zoomLimits);
+	}
+
+	/**
+	 * Zooms to the specified zoom level.
+	 * 
+	 * @param {number} zoomLevel - The zoom level to apply.
+	 * @returns {void}
+	 */
+	zoomTo(zoomLevel) {
+		if (!(this.#selectedScene instanceof TourMapScene)) return;
+		this.#selectedScene.zoomTo(this, zoomLevel);
+		this.#toggleZoomTriggers(...this.#selectedScene.zoomLimits);
 	}
 
 	/**
@@ -492,7 +605,29 @@ class Tour {
 	 * @returns {boolean} `true` if the scene is included in the history; otherwise, `false`.
 	 */
 	isHistoryIncludes(id) {
-		return this.history.some((history) => history.scene.id == id);
+		return this.#history.some((history) => history.scene.id == id);
+	}
+
+	/**
+	 * Scrolls the viewport to the specified element.
+	 * 
+	 * @param {Element} elem - The element to scroll the viewport to.
+	 * @param {string} behavior - The behavior of the scroll.
+	 * @param {number} additionalX - The additional absolute horizontal scroll position to be added.
+	 * @param {number} additionalY - The additional absolute vertical scroll position to be added.
+	 * @returns {void}
+	 */
+	scrollToElem(elem, behavior = "smooth", additionalX = 0, additionalY = 0) {
+		if (!this.viewport.contains(elem)) return;
+		const elemRect = elem.getBoundingClientRect();
+		const viewportRect = this.viewport.getBoundingClientRect();
+		const left = elemRect.left - (viewportRect.left - this.viewport.scrollLeft);
+		const top = elemRect.top - (viewportRect.top - this.viewport.scrollTop);
+		this.viewport.scrollTo({
+			left: left - (this.viewport.offsetWidth / 2) + additionalX,
+			top: top - (this.viewport.offsetHeight / 2) + additionalY,
+			behavior: behavior
+		});
 	}
 
 	/**
@@ -510,42 +645,6 @@ class Tour {
 	}
 
 	/**
-	 * Mutes the tour.
-	 * 
-	 * @returns {void}
-	 */
-	mute() {
-		this.#isMuted = true;
-		if (this.backgroundAudio) this.backgroundAudio.pause();
-		this.#toggleMute();
-		if (typeof(this.muteCallback) == "function") this.muteCallback(this);
-	}
-
-	/**
-	 * Unmutes the tour.
-	 * 
-	 * @returns {void}
-	 */
-	unmute() {
-		this.#isMuted = false;
-		if (this.backgroundAudio) this.backgroundAudio.play();
-		this.#toggleMute();
-		if (typeof(this.unmuteCallback) == "function") this.unmuteCallback(this);
-	}
-
-	/**
-	 * Plays the specified audio once.
-	 * 
-	 * @param {HTMLAudioElement} audio - The audio to be played.
-	 * @returns {void}
-	 */
-	playAudio(audio) {
-		if (this.#isMuted) return;
-		audio.play();
-		audio.currentTime = 0;
-	}
-
-	/**
 	 * Changes the current scene to the specified one.
 	 * 
 	 * @param {TourScene} selectedScene - The scene to be selected.
@@ -554,22 +653,23 @@ class Tour {
 	 * @returns {void}
 	 */
 	#changeScene(selectedScene, addToHistory = true, overrides = new Map()) {
-		if (this.selectedScene === selectedScene) return;
-		if (this.selectedScene !== null) {
+		if (this.#selectedScene === selectedScene) return;
+		this.popovers.forEach((popover) => popover.wrapper.hidePopover());
+		if (this.#selectedScene !== null) {
 			if (addToHistory) {
-				this.history.push(new TourHistoryEntry({
-					scene: this.selectedScene,
-					overrides: this.selectedScene.getOverrides(this)
+				this.#history.push(new TourHistoryEntry({
+					scene: this.#selectedScene,
+					overrides: this.#selectedScene.getOverrides(this)
 				}));
 			}
-			this.selectedScene.deselect(this);
+			this.#selectedScene.deselect(this);
 		}
-		this.selectedScene = selectedScene;
-		this.selectedScene.select(this, overrides);
+		this.#selectedScene = selectedScene;
+		this.#selectedScene.select(this, overrides);
 		this.#toggleZoom();
 		this.#toggleHistory();
 		this.#toggleSceneTriggers();
-		if (this.changeSceneAudio) this.playAudio(this.changeSceneAudio);
+		if (typeof(this.changeSceneCallback) == "function") this.changeSceneCallback(this, selectedScene);
 	}
 
 	/**
@@ -578,16 +678,16 @@ class Tour {
 	 * @returns {void}
 	 */
 	#toggleZoom() {
-		if (this.selectedScene instanceof TourMapScene) {
+		if (this.#selectedScene instanceof TourMapScene) {
 			this.wrapper.classList.add(this.hasZoomClass);
-			this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
+			this.#toggleZoomTriggers(...this.#selectedScene.zoomLimits);
 		} else {
 			this.wrapper.classList.remove(this.hasZoomClass);
 		}
 	}
 
 	/**
-	 * Enables or disables the zoom trigger buttons based on whether the maximum or minimum zoom level has been reached.
+	 * Enables or disables the zoom triggers based on whether the maximum or minimum zoom level has been reached.
 	 * 
 	 * @param {boolean} isMax - Indicates whether the maximum zoom level is reached.
 	 * @param {boolean} isMin - Indicates whether the minimum zoom level is reached.
@@ -603,28 +703,28 @@ class Tour {
 	}
 
 	/**
-	 * Enables or disables the back trigger button based on whether any previous scene is available within the history.
+	 * Enables or disables the back trigger based on whether any previous scene is available within the history.
 	 * 
 	 * @returns {void}
 	 */
 	#toggleHistory() {
-		const hasHistory = this.history.length;
+		const hasHistory = this.#history.length;
 		this.wrapper.classList.toggle(this.hasHistoryClass, hasHistory);
 		this.backTrigger.toggleAttribute("disabled", !hasHistory);
 	}
 
 	/**
-	 * Adds or removes classes from the scene trigger buttons based on whether their scenes are active or included in the history.
+	 * Adds or removes classes from the scene triggers based on whether their scenes are active or included in the history.
 	 * 
 	 * @returns {void}
 	 */
 	#toggleSceneTriggers() {
 		this.sceneTriggers.forEach((sceneTrigger) => {
-			if (!this.selectedScene) return;
+			if (!this.#selectedScene) return;
 			const isInHistory = this.isHistoryIncludes(sceneTrigger.sceneId);
-			const isSelected = sceneTrigger.sceneId == this.selectedScene.id;
-			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneInHistory, isInHistory);
-			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneSelected, isSelected);
+			const isSelected = sceneTrigger.sceneId == this.#selectedScene.id;
+			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneInHistoryClass, isInHistory);
+			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneSelectedClass, isSelected);
 		});
 	}
 
@@ -642,12 +742,156 @@ class Tour {
 	}
 
 	/**
-	 * Toggles the mute class on the wrapper element based on whether the tour is muted.
+	 * Initializes the inventory.
 	 * 
 	 * @returns {void}
 	 */
-	#toggleMute() {
-		this.wrapper.classList.toggle(this.isMutedClass, this.#isMuted);
+	#initInventory() {
+		this.inventory = new Wishlist({
+			storageKeyName: this.storeInventory ? this.id : null,
+			initCallback: (inventory) => this.#isInventoryChanged(inventory),
+			updateCallback: (inventory) => this.#isInventoryChanged(inventory),
+			clearCallback: (inventory) => this.#isInventoryChanged(inventory)
+		});
+	}
+
+	/**
+	 * Executes after the inventory has changed.
+	 * 
+	 * @param {Wishlist} inventory - The updated inventory.
+	 * @returns {void}
+	 */
+	#isInventoryChanged(inventory) {
+		this.scenes.forEach((scene) => {
+			scene.hotspots.forEach((hotspot) => {
+				hotspot.toggleAvailability(inventory);
+			});
+		});
+		this.inventoryTriggers.forEach((inventoryTrigger) => {
+			inventoryTrigger.toggleVisibility(inventory);
+		});
+		if (typeof(this.inventoryChangeCallback) == "function") this.inventoryChangeCallback(this);
+	}
+
+	/**
+	 * Executes after a scene trigger is clicked.
+	 * 
+	 * @param {TourSceneTrigger} sceneTrigger - The scene trigger that was clicked.
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isSceneTriggerClicked(sceneTrigger, event) {
+		if (sceneTrigger.preferHistory && this.isHistoryIncludes(sceneTrigger.sceneId)) {
+			this.goBackToScene(sceneTrigger.sceneId);
+		} else {
+			this.goToSceneById(sceneTrigger.sceneId);
+		}
+		if (typeof(this.sceneTriggerClickCallback) == "function") this.sceneTriggerClickCallback(this, sceneTrigger, event);
+	}
+
+	/**
+	 * Executes after an inventory trigger is clicked.
+	 * 
+	 * @param {TourInventoryTrigger} inventoryTrigger - The inventory trigger that was clicked.
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isInventoryTriggerClicked(inventoryTrigger, event) {
+		this.inventory.add(inventoryTrigger.itemId, inventoryTrigger.data);
+		if (typeof(this.inventoryTriggerClickCallback) == "function") this.inventoryTriggerClickCallback(this, inventoryTrigger, event);
+	}
+
+	/**
+	 * Zooms the selected scene on mouse wheel.
+	 * 
+	 * @param {WheelEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#wheelZoom(event) {
+		if ((!event.ctrlKey && this.ctrlWheel) || !(this.#selectedScene instanceof TourMapScene)) return;
+		event.preventDefault();
+		if (!this.#isWheelZoomLocked) {
+			this.#selectedScene.wheelZoom(this, event);
+			this.#toggleZoomTriggers(...this.#selectedScene.zoomLimits);
+			this.#lockWheelZoom();
+		}
+	}
+
+	/**
+	 * Locks the wheel zoom temporary to prevent zooming too quickly on touchpads.
+	 * 
+	 * @returns {void}
+	 */
+	#lockWheelZoom() {
+		this.#isWheelZoomLocked = true;
+		setTimeout(() => this.#isWheelZoomLocked = false, 50);
+	}
+
+	/**
+	 * Starts the panning on the selected scene.
+	 * 
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#panStart(event) {
+		if (!this.#selectedScene) return;
+		this.#selectedScene.panStart(this, event);
+	}
+
+	/**
+	 * Moves the panning on the selected scene.
+	 * 
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#panMove(event) {
+		if (!this.#selectedScene) return;
+		this.#selectedScene.panMove(this, event);
+	}
+
+	/**
+	 * Ends the panning on the selected scene.
+	 * 
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#panEnd(event) {
+		if (!this.#selectedScene) return;
+		this.#selectedScene.panEnd(this, event);
+	}
+
+	/**
+	 * Starts the pinching on the selected scene.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#pinchStart(event) {
+		if (!(this.#selectedScene instanceof TourMapScene)) return;
+		this.#selectedScene.pinchStart(this, event);
+	}
+
+	/**
+	 * Moves the pinching on the selected scene.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#pinchMove(event) {
+		if (!(this.#selectedScene instanceof TourMapScene)) return;
+		this.#selectedScene.pinchMove(this, event);
+		this.#toggleZoomTriggers(...this.#selectedScene.zoomLimits);
+	}
+
+	/**
+	 * Ends the pinching on the selected scene.
+	 * 
+	 * @param {TouchEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#pinchEnd(event) {
+		if (!(this.#selectedScene instanceof TourMapScene)) return;
+		this.#selectedScene.pinchEnd(this, event);
 	}
 
 	/**
@@ -669,8 +913,6 @@ class Tour {
 	 */
 	#isPopoverOpening(event) {
 		this.popovers.forEach((popover) => popover.wrapper.hidePopover());
-		this.wrapper.classList.add(this.hasOpenedPopoverClass);
-		if (this.openPopoverAudio) this.playAudio(this.openPopoverAudio);
 		if (typeof(this.popoverOpeningCallback) == "function") this.popoverOpeningCallback(this, event);
 	}
 
@@ -681,20 +923,29 @@ class Tour {
 	 * @returns {void}
 	 */
 	#isPopoverClosing(event) {
-		this.wrapper.classList.remove(this.hasOpenedPopoverClass);
-		if (this.closePopoverAudio) this.playAudio(this.closePopoverAudio);
 		if (typeof(this.popoverClosingCallback) == "function") this.popoverClosingCallback(this, event);
 	}
 
 	/**
-	 * Executes after a scene trigger is clicked.
+	 * Executes after a popover is opened.
 	 * 
-	 * @param {TourSceneTrigger} sceneTrigger - The scene trigger that was clicked.
-	 * @param {PointerEvent} event - The event to be handled.
+	 * @param {ToggleEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
-	#isSceneTriggerClicked(sceneTrigger, event) {
-		if (typeof(this.sceneTriggerClickCallback) == "function") this.sceneTriggerClickCallback(this, sceneTrigger, event);
+	#isPopoverOpen(event) {
+		this.wrapper.classList.add(this.hasOpenedPopoverClass);
+		if (typeof(this.popoverOpenedCallback) == "function") this.popoverOpenedCallback(this, event);
+	}
+
+	/**
+	 * Executes after a popover is closed.
+	 * 
+	 * @param {ToggleEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isPopoverClosed(event) {
+		this.wrapper.classList.remove(this.hasOpenedPopoverClass);
+		if (typeof(this.popoverClosedCallback) == "function") this.popoverClosedCallback(this, event);
 	}
 
 	/**
@@ -714,6 +965,7 @@ class Tour {
 		document.addEventListener("touchend", this, { passive: true });
 		this.popovers.forEach((popover) => {
 			popover.wrapper.addEventListener("beforetoggle", this);
+			popover.wrapper.addEventListener("toggle", this);
 		});
 	}
 
@@ -728,25 +980,19 @@ class Tour {
 			case "click":
 				this.sceneTriggers.forEach((sceneTrigger) => {
 					if (sceneTrigger.trigger == event.target) {
-						if (sceneTrigger.preferHistory && this.isHistoryIncludes(sceneTrigger.sceneId)) {
-							this.goBackToScene(sceneTrigger.sceneId);
-						} else {
-							this.goToSceneById(sceneTrigger.sceneId);
-						}
 						this.#isSceneTriggerClicked(sceneTrigger, event);
 					}
 				});
-				if (this.selectedScene instanceof TourMapScene) {
-					if (this.zoomInTrigger !== null && event.target == this.zoomInTrigger) {
-						this.selectedScene.zoomIn(this);
-						this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
-						if (this.zoomAudio) this.playAudio(this.zoomAudio);
+				this.inventoryTriggers.forEach((inventoryTrigger) => {
+					if (inventoryTrigger.trigger == event.target) {
+						this.#isInventoryTriggerClicked(inventoryTrigger, event);
 					}
-					if (this.zoomOutTrigger !== null && event.target == this.zoomOutTrigger) {
-						this.selectedScene.zoomOut(this);
-						this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
-						if (this.zoomAudio) this.playAudio(this.zoomAudio);
-					}
+				});
+				if (event.target == this.zoomInTrigger) {
+					this.zoomIn();
+				}
+				if (event.target == this.zoomOutTrigger) {
+					this.zoomOut();
 				}
 				if (event.target == this.backTrigger) {
 					this.goBack();
@@ -757,48 +1003,27 @@ class Tour {
 				if (event.target == this.fullscreenTrigger) {
 					this.toggleFullscreen();
 				}
-				if (event.target == this.muteTrigger) {
-					this.#isMuted ? this.unmute() : this.mute();
-				}
 				break;
 			case "wheel":
-				if (!event.ctrlKey && this.ctrlWheel) return;
-				event.preventDefault();
-				if (this.selectedScene instanceof TourMapScene) {
-					this.selectedScene.wheelZoom(this, event);
-					this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
-				}
+				this.#wheelZoom(event);
 				break;
 			case "pointermove":
-				if (this.selectedScene !== null) {
-					this.selectedScene.panMove(this, event);
-				}
+				this.#panMove(event);
 				break;
 			case "pointerdown":
-				if (this.selectedScene !== null) {
-					this.selectedScene.panStart(this, event);
-				}
+				this.#panStart(event);
 				break;
 			case "pointerup":
-				if (this.selectedScene !== null) {
-					this.selectedScene.panEnd(this, event);
-				}
+				this.#panEnd(event);
 				break;
 			case "touchstart":
-				if (this.selectedScene instanceof TourMapScene) {
-					this.selectedScene.pinchStart(this, event);
-				}
+				this.#pinchStart(event);
 				break;
 			case "touchmove":
-				if (this.selectedScene instanceof TourMapScene) {
-					this.selectedScene.pinchMove(this, event);
-					this.#toggleZoomTriggers(...this.selectedScene.zoomLimits);
-				}
+				this.#pinchMove(event);
 				break;
 			case "touchend":
-				if (this.selectedScene instanceof TourMapScene) {
-					this.selectedScene.pinchEnd(this, event);
-				}
+				this.#pinchEnd(event);
 				break;
 			case "fullscreenchange":
 				this.#isFullscreenChanged(event);
@@ -808,6 +1033,13 @@ class Tour {
 					this.#isPopoverOpening(event);
 				} else {
 					this.#isPopoverClosing(event);
+				}
+				break;
+			case "toggle":
+				if (event.newState === "open") {
+					this.#isPopoverOpen(event);
+				} else {
+					this.#isPopoverClosed(event);
 				}
 				break;
 		}
@@ -915,14 +1147,14 @@ class TourScene {
 	deselectCallback = null;
 
 	/**
-	 * Callback function that is called after the panning has started.
+	 * Callback function that is called after panning the scene has started.
 	 * 
 	 * @type {function(TourScene,Tour,PointerEvent):void|null}
 	 */
 	panStartCallback = null;
 
 	/**
-	 * Callback function that is called after the panning has ended.
+	 * Callback function that is called after panning the scene has ended.
 	 * 
 	 * @type {function(TourScene,Tour,PointerEvent):void|null}
 	 */
@@ -984,8 +1216,8 @@ class TourScene {
 	 * @param {function(TourScene):void|null} options.initCallback - Callback function that is called after the scene has been initialized.
 	 * @param {function(TourScene,Tour):void|null} options.selectCallback - Callback function that is called after the scene is selected.
 	 * @param {function(TourScene,Tour):void|null} options.deselectCallback - Callback function that is called after the scene is deselected.
-	 * @param {function(TourScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after the panning has started.
-	 * @param {function(TourScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after the panning has ended.
+	 * @param {function(TourScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after panning the scene has started.
+	 * @param {function(TourScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after panning the scene has ended.
 	 * @returns {TourScene}
 	 */
 	constructor(options) {
@@ -1063,6 +1295,7 @@ class TourScene {
 		this.#panStartScrollTop = tour.viewport.scrollTop;
 		tour.wrapper.classList.add(tour.isPanningClass);
 		if (typeof(this.panStartCallback) == "function") this.panStartCallback(this, tour, event);
+		if (typeof(tour.panStartCallback) == "function") tour.panStartCallback(tour, this, event);
 	}
 
 	/**
@@ -1097,6 +1330,7 @@ class TourScene {
 		tour.isPanning = false;
 		tour.wrapper.classList.remove(tour.isPanningClass);
 		if (typeof(this.panEndCallback) == "function") this.panEndCallback(this, tour, event);
+		if (typeof(tour.panEndCallback) == "function") tour.panEndCallback(tour, this, event);
 	}
 
 	/**
@@ -1116,27 +1350,6 @@ class TourScene {
 	 */
 	getOverrides(tour) {
 		return new Map();
-	}
-
-	/**
-	 * Scrolls the scene to the specified element.
-	 * 
-	 * @param {Element} elem - The element to scroll the viewport to.
-	 * @param {HTMLElement} viewport - The viewport element that is scrolled.
-	 * @param {string} behavior - The behavior of the scroll.
-	 * @returns {void}
-	 */
-	scrollToElem(elem, viewport, behavior = "smooth") {
-		if (!viewport.contains(elem)) return;
-		const elemRect = elem.getBoundingClientRect();
-		const viewportRect = viewport.getBoundingClientRect();
-		const top = elemRect.top - (viewportRect.top - viewport.scrollTop);
-		const left = elemRect.left - (viewportRect.left - viewport.scrollLeft);
-		viewport.scrollTo({
-			top: top - (viewport.offsetHeight / 2),
-			left: left - (viewport.offsetWidth / 2),
-			behavior: behavior
-		});
 	}
 
 	/**
@@ -1318,19 +1531,19 @@ class TourMapScene extends TourScene {
 	/**
 	 * Callback function that is called after the scene is zoomed to a different zoom level.
 	 * 
-	 * @type {function(TourMapScene,Tour,number):void|null}
+	 * @type {function(TourMapScene,Tour,number,boolean):void|null}
 	 */
 	zoomCallback = null;
 
 	/**
-	 * Callback function that is called after the pinching has started.
+	 * Callback function that is called after pinching the scene has started.
 	 * 
 	 * @type {function(TourMapScene,Tour,TouchEvent):void|null}
 	 */
 	pinchStartCallback = null;
 
 	/**
-	 * Callback function that is called after the pinching has ended.
+	 * Callback function that is called after pinching the scene has ended.
 	 * 
 	 * @type {function(TourMapScene,Tour,TouchEvent):void|null}
 	 */
@@ -1344,18 +1557,27 @@ class TourMapScene extends TourScene {
 	#currentZoomLevel = 0;
 
 	/**
-	 * The distance between the two fingers when pinching has been started.
+	 * The distance between the two fingers when pinching was started.
 	 * 
 	 * @type {number}
 	 */
 	#pinchStartDistance = 0;
 
 	/**
-	 * The zoom level when pinching has been started.
+	 * The zoom level when pinching was started.
 	 * 
 	 * @type {number}
 	 */
 	#pinchStartZoomLevel = 0;
+
+	/**
+	 * The current zoom level.
+	 * 
+	 * @type {number}
+	 */
+	get currentZoomLevel() {
+		return this.#currentZoomLevel
+	}
 
 	/**
 	 * An array indicating whether the maximum and minimum zoom levels have been reached.
@@ -1391,13 +1613,13 @@ class TourMapScene extends TourScene {
 	 * @param {function(TourMapScene):void|null} options.initCallback - Callback function that is called after the scene has been initialized.
 	 * @param {function(TourMapScene,Tour):void|null} options.selectCallback - Callback function that is called after the scene is selected.
 	 * @param {function(TourMapScene,Tour):void|null} options.deselectCallback - Callback function that is called after the scene is deselected.
-	 * @param {function(TourMapScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after the panning has started.
-	 * @param {function(TourMapScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after the panning has ended.
+	 * @param {function(TourMapScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after panning the scene has started.
+	 * @param {function(TourMapScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after panning the scene has ended.
 	 * @param {function(TourMapScene,Tour):void|null} options.zoomInCallback - Callback function that is called after the scene is zoomed to the next zoom level.
 	 * @param {function(TourMapScene,Tour):void|null} options.zoomOutCallback - Callback function that is called after the scene is zoomed to the previous zoom level.
-	 * @param {function(TourMapScene,Tour,number):void|null} options.zoomCallback - Callback function that is called after the scene is zoomed to a different zoom level.
-	 * @param {function(TourMapScene,Tour,TouchEvent):void|null} options.pinchStartCallback - Callback function that is called after the pinching has started.
-	 * @param {function(TourMapScene,Tour,TouchEvent):void|null} options.pinchEndCallback - Callback function that is called after the pinching has ended.
+	 * @param {function(TourMapScene,Tour,number,boolean):void|null} options.zoomCallback - Callback function that is called after the scene is zoomed to a different zoom level.
+	 * @param {function(TourMapScene,Tour,TouchEvent):void|null} options.pinchStartCallback - Callback function that is called after pinching the scene has started.
+	 * @param {function(TourMapScene,Tour,TouchEvent):void|null} options.pinchEndCallback - Callback function that is called after pinching the scene has ended.
 	 * @returns {TourMapScene}
 	 */
 	constructor(options) {
@@ -1435,7 +1657,7 @@ class TourMapScene extends TourScene {
 		const zoomLevel = overrides.get("currentZoomLevel") ?? this.zoomLevel;
 		const offsetX = overrides.get("offsetX") ?? this.offsetX;
 		const offsetY = overrides.get("offsetY") ?? this.offsetY;
-		this.zoomTo(zoomLevel, tour);
+		this.zoomTo(tour, zoomLevel, true);
 		tour.viewport.scrollTo({
 			left: this.convertToXScroll(offsetX, tour.viewport),
 			top: this.convertToYScroll(offsetY, tour.viewport)
@@ -1462,8 +1684,9 @@ class TourMapScene extends TourScene {
 	 * @returns {void}
 	 */
 	zoomIn(tour) {
-		this.zoomTo(this.#currentZoomLevel + 1, tour);
+		this.zoomTo(tour, this.#currentZoomLevel + 1);
 		if (typeof(this.zoomInCallback) == "function") this.zoomInCallback(this, tour);
+		if (typeof(tour.zoomInCallback) == "function") tour.zoomInCallback(tour, this);
 	}
 
 	/**
@@ -1473,37 +1696,40 @@ class TourMapScene extends TourScene {
 	 * @returns {void}
 	 */
 	zoomOut(tour) {
-		this.zoomTo(this.#currentZoomLevel - 1, tour);
+		this.zoomTo(tour, this.#currentZoomLevel - 1);
 		if (typeof(this.zoomOutCallback) == "function") this.zoomOutCallback(this, tour);
+		if (typeof(tour.zoomOutCallback) == "function") tour.zoomOutCallback(tour, this);
 	}
 
 	/**
 	 * Zooms to the specified zoom level.
 	 * 
-	 * @param {number} zoomLevel - The zoom level to apply.
 	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {number} zoomLevel - The zoom level to apply.
+	 * @param {boolean} isInitial - Indicates whether the zoom was applied initially when the scene was selected rather than manually later.
 	 * @returns {void}
 	 */
-	zoomTo(zoomLevel, tour) {
+	zoomTo(tour, zoomLevel, isInitial = false) {
 		const viewport = tour.viewport;
 		const offsetX = this.convertToXOffset(viewport.scrollLeft, viewport);
 		const offsetY = this.convertToYOffset(viewport.scrollTop, viewport);
 		this.#currentZoomLevel = this.#clampZoomLevel(zoomLevel);
 		this.wrapper.setAttribute(this.zoomLevelAttribute, this.#currentZoomLevel);
 		this.scrollToOffset(offsetX, offsetY, viewport);
-		if (typeof(this.zoomCallback) == "function") this.zoomCallback(this, tour, this.#currentZoomLevel);
+		if (typeof(this.zoomCallback) == "function") this.zoomCallback(this, tour, this.#currentZoomLevel, isInitial);
+		if (typeof(tour.zoomCallback) == "function") tour.zoomCallback(tour, this, this.#currentZoomLevel, isInitial);
 	}
 
 	/**
 	 * Zooms to the specified zoom level while keeping the X and Y points stationary during the zoom.
 	 * 
-	 * @param {number} zoomLevel - The zoom level to apply
 	 * @param {Tour} tour - The tour to which the scene belongs.
+	 * @param {number} zoomLevel - The zoom level to apply
 	 * @param {number} x - The X coordinate to keep stationary during the zoom.
 	 * @param {number} y - The Y coordinate to keep stationary during the zoom.
 	 * @returns {void}
 	 */
-	anchorZoomTo(zoomLevel, tour, x, y) {
+	anchorZoomTo(tour, zoomLevel, x, y) {
 		const viewport = tour.viewport;
 		const rect = viewport.getBoundingClientRect();
 		const viewAbsX = x - rect.left;
@@ -1514,7 +1740,7 @@ class TourMapScene extends TourScene {
 		const mapRelY = mapAbsY / viewport.scrollHeight;
 		const viewRelX = viewAbsX / viewport.offsetWidth;
 		const viewRelY = viewAbsY / viewport.offsetHeight;
-		this.zoomTo(zoomLevel, tour);
+		this.zoomTo(tour, zoomLevel);
 		const newMapAbsX = mapRelX * viewport.scrollWidth;
 		const newMapAbsY = mapRelY * viewport.scrollHeight;
 		viewport.scrollTo({
@@ -1533,7 +1759,7 @@ class TourMapScene extends TourScene {
 	wheelZoom(tour, event) {
 		const zoomLevel = event.deltaY < 0 ? this.#currentZoomLevel + 1 : this.#currentZoomLevel - 1;
 		if (zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
-			this.anchorZoomTo(zoomLevel, tour, event.x, event.y);
+			this.anchorZoomTo(tour, zoomLevel, event.x, event.y);
 		}
 	}
 
@@ -1552,6 +1778,7 @@ class TourMapScene extends TourScene {
 		this.#pinchStartZoomLevel = this.#currentZoomLevel;
 		tour.wrapper.classList.add(tour.isPinchingClass);
 		if (typeof(this.pinchStartCallback) == "function") this.pinchStartCallback(this, tour, event);
+		if (typeof(tour.pinchStartCallback) == "function") tour.pinchStartCallback(tour, this, event);
 	}
 
 	/**
@@ -1567,7 +1794,7 @@ class TourMapScene extends TourScene {
 		if (this.#currentZoomLevel !== zoomLevel && zoomLevel <= this.maxZoomLevel && zoomLevel >= 0) {
 			const y = ((event.touches[0].pageY + event.touches[1].pageY) / 2);
 			const x = ((event.touches[0].pageX + event.touches[1].pageX) / 2);
-			this.anchorZoomTo(zoomLevel, tour, x, y);
+			this.anchorZoomTo(tour, zoomLevel, x, y);
 		}
 	}
 
@@ -1583,6 +1810,7 @@ class TourMapScene extends TourScene {
 		tour.isPinching = false;
 		tour.wrapper.classList.remove(tour.isPinchingClass);
 		if (typeof(this.pinchEndCallback) == "function") this.pinchEndCallback(this, tour, event);
+		if (typeof(tour.pinchEndCallback) == "function") tour.pinchEndCallback(tour, this, event);
 	}
 
 	/**
@@ -1644,7 +1872,7 @@ class TourMapScene extends TourScene {
 
 /**
  * Tour Field Scene
- * This class is designed to create a scene within a tour that displays a vertically pannable field.
+ * This class is designed to create a scene within a tour that displays a horizontally or vertically pannable field.
  * 
  * @author Abel Brencsan
  * @license MIT License
@@ -1659,7 +1887,7 @@ class TourFieldScene extends TourScene {
 	offset = 50;
 
 	/**
-	 * Creates a tour scene that displays a vertically pannable field.
+	 * Creates a tour scene that displays a horizontally or vertically pannable field.
 	 * 
 	 * @param {Object} options
 	 * @param {string} options.id - The id of the scene.
@@ -1676,8 +1904,8 @@ class TourFieldScene extends TourScene {
 	 * @param {function(TourFieldScene):void|null} options.initCallback - Callback function that is called after the scene has been initialized.
 	 * @param {function(TourFieldScene,Tour):void|null} options.selectCallback - Callback function that is called after the scene is selected.
 	 * @param {function(TourFieldScene,Tour):void|null} options.deselectCallback - Callback function that is called after the scene is deselected.
-	 * @param {function(TourFieldScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after the panning has started.
-	 * @param {function(TourFieldScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after the panning has ended.
+	 * @param {function(TourFieldScene,Tour,PointerEvent):void|null} options.panStartCallback - Callback function that is called after panning the scene has started.
+	 * @param {function(TourFieldScene,Tour,PointerEvent):void|null} options.panEndCallback - Callback function that is called after panning the scene has ended.
 	 * @returns {TourFieldScene}
 	 */
 	constructor(options) {
@@ -1761,6 +1989,13 @@ class TourSceneHotspot {
 	coordinate;
 
 	/**
+	 * The IDs of the inventory items that are required to be collected to make the hotspot available.
+	 * 
+	 * @type {number[]}
+	 */
+	requiredItemIds = [];
+
+	/**
 	 * The angle of the rotation on the x-axis (horizontal) in degrees.
 	 * 
 	 * @type {number}
@@ -1773,6 +2008,13 @@ class TourSceneHotspot {
 	 * @type {number}
 	 */
 	rotateY = 0;
+
+	/**
+	 * The class that is added to the wrapper when the hotspot is unavailable.
+	 * 
+	 * @type {string}
+	 */
+	isUnavailableClass = "is-unavailable"
 
 	/**
 	 * The name of the CSS variable to which the X-axis rotation is assigned (horizontal).
@@ -1803,17 +2045,27 @@ class TourSceneHotspot {
 	updateCallback = null;
 
 	/**
+	 * Callback function that is called after the hotspot has been enabled or disabled based on the required inventory items.
+	 * 
+	 * @type {function(TourSceneHotspot,Wishlist,boolean):void|null}
+	 */
+	toggleAvailabilityCallback = null;
+
+	/**
 	 * Creates a tour scene hotspot.
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper - The wrapper element whose position is set by the hotspot's coordinate within the area defined by the scene's top-left and bottom-right coordinates.
 	 * @param {TourSceneCoordinate} options.coordinate - The coordinate of the hotspot.
+	 * @param {number[]} options.requiredItemIds - The IDs of the inventory items that are required to be collected to make the hotspot available.
 	 * @param {number} options.rotateX - The angle of the rotation on the x-axis (horizontal) in degrees.
 	 * @param {number} options.rotateY - The angle of the rotation on the y-axis (vertical) in degrees.
-	 * @param {number} options.rotateXCSSVariable - The name of the CSS variable to which the X-axis rotation is assigned (horizontal).
-	 * @param {number} options.rotateYCSSVariable - The name of the CSS variable to which the Y-axis rotation is assigned (vertical).
+	 * @param {string} options.isUnavailableClass - The class that is added to the wrapper when the hotspot is unavailable.
+	 * @param {string} options.rotateXCSSVariable - The name of the CSS variable to which the X-axis rotation is assigned (horizontal).
+	 * @param {string} options.rotateYCSSVariable - The name of the CSS variable to which the Y-axis rotation is assigned (vertical).
 	 * @param {function(TourSceneHotspot):void|null} options.initCallback - Callback function that is called after the hotspot has been initialized.
 	 * @param {function(TourSceneHotspot,TourScene):void|null} options.updateCallback - Callback function that is called after the hotspot has been updated.
+	 * @param {function(TourSceneHotspot,Wishlist,boolean):void|null} options.toggleAvailabilityCallback - Callback function that is called after the hotspot has been enabled or disabled based on the required inventory items.
 	 * @returns {TourSceneHotspot}
 	 */
 	constructor(options) {
@@ -1829,12 +2081,15 @@ class TourSceneHotspot {
 		// Set fields from options
 		this.wrapper = options.wrapper;
 		this.coordinate = options.coordinate;
+		if ("requiredItemIds" in options) this.requiredItemIds = options.requiredItemIds;
 		if ("rotateX" in options) this.rotateX = options.rotateX;
 		if ("rotateY" in options) this.rotateY = options.rotateY;
+		if ("isUnavailableClass" in options) this.isUnavailableClass = options.isUnavailableClass;
 		if ("rotateXCSSVariable" in options) this.rotateXCSSVariable = options.rotateXCSSVariable;
 		if ("rotateYCSSVariable" in options) this.rotateYCSSVariable = options.rotateYCSSVariable;
 		if ("initCallback" in options) this.initCallback = options.initCallback;
 		if ("updateCallback" in options) this.updateCallback = options.updateCallback;
+		if ("toggleAvailabilityCallback" in options) this.toggleAvailabilityCallback = options.toggleAvailabilityCallback;
 
 		// Initialize the tour scene hotspot
 		if (typeof(this.initCallback) == "function") this.initCallback(this);
@@ -1877,6 +2132,19 @@ class TourSceneHotspot {
 	}
 
 	/**
+	 * Enables or disables the hotspot based on whether all the required inventory items are collected.
+	 * 
+	 * @param {Wishlist} inventory - The inventory to be checked.
+	 * @returns {void}
+	 */
+	toggleAvailability(inventory) {
+		const isUnavailable = !this.requiredItemIds.every((id) => inventory.includes(id));
+		this.wrapper.classList.toggle(this.isUnavailableClass, isUnavailable);
+		this.wrapper.querySelectorAll("button").forEach((button) => button.disabled = isUnavailable);
+		if (typeof(this.toggleAvailabilityCallback) == "function") this.toggleAvailabilityCallback(this, inventory, isUnavailable);
+	}
+
+	/**
 	 * Parses the X- and Y-axis rotations from the specified comma-separated string.
 	 * 
 	 * @param {string} raw - The raw, comma-seperated string.
@@ -1895,6 +2163,16 @@ class TourSceneHotspot {
 				rotateY: 0
 			};
 		}
+	}
+
+	/**
+	 * Parses the numeric IDs from the specified comma-separated string.
+	 * 
+	 * @param {string} raw - The raw, comma-seperated string.
+	 * @returns {number[]} The parsed numeric IDs.
+	 */
+	static idsFromString(raw) {
+		return raw.split(",").map((val) => parseInt(val)).filter((val) => !isNaN(val));
 	}
 }
 
@@ -1915,7 +2193,7 @@ class TourSceneTrigger {
 	sceneId;
 
 	/**
-	 * The trigger button that navigates to the target scene when clicked.
+	 * The trigger that navigates to the target scene when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
@@ -1933,14 +2211,14 @@ class TourSceneTrigger {
 	 * 
 	 * @type {string}
 	 */
-	isSceneInHistory = "is-scene-in-history";
+	isSceneInHistoryClass = "is-scene-in-history";
 
 	/**
 	 * The class that is added to the trigger while its scene is selected.
 	 * 
 	 * @type {string}
 	 */
-	isSceneSelected = "is-scene-selected";
+	isSceneSelectedClass = "is-scene-selected";
 
 	/**
 	 * Callback function that is called after the trigger has been initialized.
@@ -1954,10 +2232,10 @@ class TourSceneTrigger {
 	 * 
 	 * @param {Object} options
 	 * @param {string} options.sceneId - The ID of the target scene to navigate to when the trigger is clicked.
-	 * @param {HTMLButtonElement} options.trigger - The trigger button that navigates to the target scene when clicked.
+	 * @param {HTMLButtonElement} options.trigger - The trigger that navigates to the target scene when clicked.
 	 * @param {boolean} options.preferHistory - Indicates whether to restore the scene from the history when it is already included; otherwise, navigates to the scene and adds the current scene to the history.
-	 * @param {string} options.isSceneInHistory - The class that is added to the trigger while its scene is included in the history.
-	 * @param {string} options.isSceneSelected - The class that is added to the trigger while its scene is selected.
+	 * @param {string} options.isSceneInHistoryClass - The class that is added to the trigger while its scene is included in the history.
+	 * @param {string} options.isSceneSelectedClass - The class that is added to the trigger while its scene is selected.
 	 * @param {function(TourSceneTrigger):void|null} options.initCallback - Callback function that is called after the trigger has been initialized.
 	 * @returns {TourSceneTrigger}
 	 */
@@ -1975,12 +2253,101 @@ class TourSceneTrigger {
 		this.sceneId = options.sceneId;
 		this.trigger = options.trigger;
 		if ("preferHistory" in options) this.preferHistory = options.preferHistory;
-		if ("isSceneInHistory" in options) this.isSceneInHistory = options.isSceneInHistory;
-		if ("isSceneSelected" in options) this.isSceneSelected = options.isSceneSelected;
+		if ("isSceneInHistoryClass" in options) this.isSceneInHistoryClass = options.isSceneInHistoryClass;
+		if ("isSceneSelectedClass" in options) this.isSceneSelectedClass = options.isSceneSelectedClass;
 		if ("initCallback" in options) this.initCallback = options.initCallback;
 
 		// Initialize the tour scene trigger
 		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+}
+
+/**
+ * Tour Inventory Trigger
+ * This class is designed to create a trigger that adds an item to the inventory when clicked.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourInventoryTrigger {
+
+	/**
+	 * The trigger that needs to be clicked to add the inventory item to the inventory.
+	 * 
+	 * @type {HTMLButtonElement}
+	 */
+	trigger;
+
+	/**
+	 * The ID of the inventory item to be added when the trigger is clicked.
+	 * 
+	 * @type {number}
+	 */
+	itemId;
+
+	/**
+	 * Any additional data that belongs to the inventory item.
+	 * 
+	 * @type {any}
+	 */
+	data = null;
+
+	/**
+	 * Callback function that is called after the trigger has been initialized.
+	 * 
+	 * @type {function(TourInventoryTrigger):void|null}
+	 */
+	initCallback = null;
+
+	/**
+	 * Callback function that is called after the trigger has been shown or hidden.
+	 * 
+	 * @type {function(TourInventoryTrigger,Wishlist,boolean):void|null}
+	 */
+	toggleVisibilityCallback = null;
+
+	/**
+	 * Creates a tour inventory trigger.
+	 * 
+	 * @param {Object} options
+	 * @param {HTMLButtonElement} options.trigger - The trigger that needs to be clicked to add the inventory item to the inventory.
+	 * @param {number} options.itemId - The ID of the inventory item to be added when the trigger is clicked.
+	 * @param {any} options.data - Any additional data that belongs to the inventory item.
+	 * @param {function(TourInventoryTrigger):void|null} options.initCallback - Callback function that is called after the trigger has been initialized.
+	 * @param {function(TourInventoryTrigger,Wishlist,boolean):void|null} options.toggleVisibilityCallback - Callback function that is called after the trigger has been shown or hidden.
+	 * @returns {TourInventoryTrigger}
+	 */
+	constructor(options) {
+
+		// Test required options
+		if (!(options.trigger instanceof HTMLButtonElement)) {
+			throw "Tour inventory trigger \"trigger\" must be an `HTMLButtonElement`";
+		}
+		if (typeof options.itemId !== "number") {
+			throw "Tour inventory trigger \"itemId\" must be a number";
+		}
+
+		// Set fields from options
+		this.trigger = options.trigger;
+		this.itemId = options.itemId;
+		if ("data" in options) this.data = options.data;
+		if ("initCallback" in options) this.initCallback = options.initCallback;
+		if ("toggleVisibilityCallback" in options) this.toggleVisibilityCallback = options.toggleVisibilityCallback;
+
+		// Initialize the tour inventory trigger
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+
+	/**
+	 * Displays or hides the trigger based on whether the inventory item has already been collected.
+	 * 
+	 * @param {Wishlist} inventory - The inventory to be checked.
+	 * @returns {void}
+	 */
+	toggleVisibility(inventory) {
+		const isHidden = inventory.includes(this.itemId);
+		this.trigger.toggleAttribute("hidden", isHidden);
+		if (typeof(this.toggleVisibilityCallback) == "function") this.toggleVisibilityCallback(this, inventory, isHidden);
 	}
 }
 
@@ -2090,6 +2457,13 @@ class TourPopover {
 	 * @type {HTMLElement}
 	 */
 	wrapper;
+
+	/**
+	 * The class that is added to the trigger that opened the popover.
+	 * 
+	 * @type {string}
+	 */
+	isActiveTriggerClass = "is-active";
 	
 	/**
 	 * Callback function that is called after the popover has been initialized.
@@ -2099,27 +2473,51 @@ class TourPopover {
 	initCallback = null;
 
 	/**
-	 * Callback function that is called while the popover is opening.
+	 * Callback function that is called before the popover is opening.
 	 * 
 	 * @type {function(TourPopover,ToggleEvent):void|null}
 	 */
 	openingCallback = null;
 
 	/**
-	 * Callback function that is called while the popover is closing.
+	 * Callback function that is called before the popover is closing.
 	 * 
 	 * @type {function(TourPopover,ToggleEvent):void|null}
 	 */
 	closingCallback = null;
 
 	/**
+	 * Callback function that is called after the popover is opened.
+	 * 
+	 * @type {function(TourPopover,ToggleEvent):void|null}
+	 */
+	openedCallback = null;
+
+	/**
+	 * Callback function that is called after the popover is closed.
+	 * 
+	 * @type {function(TourPopover,ToggleEvent):void|null}
+	 */
+	closedCallback = null;
+
+	/**
+	 * The trigger that opened the popover.
+	 * 
+	 * @type {HTMLButtonElement|null}
+	 */
+	#activeTrigger = null;
+
+	/**
 	 * Creates a tour popover.
 	 * 
 	 * @param {Object} options
 	 * @param {HTMLElement} options.wrapper - The wrapper element that contains the content.
+	 * @param {string} options.isActiveTriggerClass - The class that is added to the trigger that opened the popover.
 	 * @param {function(TourPopover):void|null} options.initCallback - Callback function that is called after the popover has been initialized.
-	 * @param {function(TourPopover,ToggleEvent):void|null} options.openingCallback - Callback function that is called while the popover is opening.
-	 * @param {function(TourPopover,ToggleEvent):void|null} options.closingCallback - Callback function that is called while the popover is closing.
+	 * @param {function(TourPopover,ToggleEvent):void|null} options.openingCallback - Callback function that is called before the popover is opening.
+	 * @param {function(TourPopover,ToggleEvent):void|null} options.closingCallback - Callback function that is called before the popover is closing.
+	 * @param {function(TourPopover,ToggleEvent):void|null} options.openedCallback - Callback function that is called after the popover is opened.
+	 * @param {function(TourPopover,ToggleEvent):void|null} options.closedCallback - Callback function that is called after the popover is closed.
 	 * @returns {TourPopover}
 	 */
 	constructor(options) {
@@ -2131,9 +2529,12 @@ class TourPopover {
 
 		// Set fields from options
 		this.wrapper = options.wrapper;
+		if ("isActiveTriggerClass" in options) this.isActiveTriggerClass = options.isActiveTriggerClass;
 		if ("initCallback" in options) this.initCallback = options.initCallback;
 		if ("openingCallback" in options) this.openingCallback = options.openingCallback;
 		if ("closingCallback" in options) this.closingCallback = options.closingCallback;
+		if ("openedCallback" in options) this.openedCallback = options.openedCallback;
+		if ("closedCallback" in options) this.closedCallback = options.closedCallback;
 
 		// Initialize the tour popover
 		this.handleEvent = (event) => this.#handleEvents(event);
@@ -2148,6 +2549,10 @@ class TourPopover {
 	 * @returns {void}
 	 */
 	#isOpening(event) {
+		if (event.source) {
+			this.#activeTrigger = event.source;
+			this.#activeTrigger.classList.add(this.isActiveTriggerClass);
+		}
 		if (typeof(this.openingCallback) == "function") this.openingCallback(this, event);
 	}
 
@@ -2159,7 +2564,31 @@ class TourPopover {
 	 */
 	#isClosing(event) {
 		this.wrapper.scrollTop = 0;
+		if (this.#activeTrigger) {
+			this.#activeTrigger.classList.remove(this.isActiveTriggerClass);
+			this.#activeTrigger = null;
+		}
 		if (typeof(this.closingCallback) == "function") this.closingCallback(this, event);
+	}
+
+	/**
+	 * Executes after the popover is opened.
+	 * 
+	 * @param {ToggleEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isOpen(event) {
+		if (typeof(this.openedCallback) == "function") this.openedCallback(this, event);
+	}
+
+	/**
+	 * Executes after the popover is closed.
+	 * 
+	 * @param {ToggleEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isClosed(event) {
+		if (typeof(this.closedCallback) == "function") this.closedCallback(this, event);
 	}
 
 	/**
@@ -2169,6 +2598,7 @@ class TourPopover {
 	 */
 	#addEvents() {
 		this.wrapper.addEventListener("beforetoggle", this);
+		this.wrapper.addEventListener("toggle", this);
 	}
 
 	/**
@@ -2186,8 +2616,15 @@ class TourPopover {
 					this.#isClosing(event);
 				}
 				break;
+			case "toggle":
+				if (event.newState === "open") {
+					this.#isOpen(event);
+				} else {
+					this.#isClosed(event);
+				}
+				break;
 		}
 	}
 }
 
-export { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneTrigger, TourSceneCoordinate, TourHistoryEntry, TourPopover }
+export { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneTrigger, TourInventoryTrigger, TourSceneCoordinate, TourHistoryEntry, TourPopover }

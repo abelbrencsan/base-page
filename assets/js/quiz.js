@@ -29,7 +29,7 @@ class Quiz {
 	nextTrigger;
 
 	/**
-	 * The trigger buttons that start or restart the quiz when clicked.
+	 * The triggers that start or restart the quiz when clicked.
 	 * 
 	 * @type {HTMLButtonElement[]}
 	 */
@@ -94,35 +94,35 @@ class Quiz {
 	/**
 	 * Callback function that is called after the quiz has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Quiz):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the quiz has been started.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Quiz):void|null}
 	 */
 	startCallback = null;
 
 	/**
 	 * Callback function that is called after a question is answered.
 	 * 
-	 * @type {function(QuizQuestionResult):void|null}
+	 * @type {function(Quiz,QuizQuestionResult):void|null}
 	 */
 	questionAnsweredCallback = null;
 
 	/**
 	 * Callback function that is called after an answer is missing or invalid within the question. 
 	 * 
-	 * @type {function(QuizQuestion):void|null}
+	 * @type {function(Quiz,QuizQuestion):void|null}
 	 */
 	questionErrorCallback = null;
 
 	/**
 	 * Callback function that is called after the quiz has been completed.
 	 * 
-	 * @type {function(number,number,QuizQuestionResult[]):void|null}
+	 * @type {function(Quiz,number,number,QuizQuestionResult[]):void|null}
 	 */
 	completeCallback = null;
 
@@ -131,42 +131,42 @@ class Quiz {
 	 * 
 	 * @type {QuizQuestionResult[]}
 	 */
-	questionResults = [];
+	#questionResults = [];
 
 	/**
-	 * The currently active question.
+	 * The index of the currently active question.
 	 * 
 	 * @type {number|null}
 	 */
-	activeIndex = null;
+	#activeIndex = null;
 
 	/**
 	 * The number of seconds elapsed since the quiz started.
 	 * 
 	 * @type {number}
 	 */
-	timer = 0;
+	#timer = 0;
 
 	/**
 	 * The ID of the interval created to count the number of elapsed seconds since the squiz started.
 	 * 
 	 * @type {number|null}
 	 */
-	intervalId = null;
+	#intervalId = null;
 
 	/**
 	 * Indicates whether the timer is paused.
 	 * 
 	 * @type {boolean}
 	 */
-	isTimerPaused = false;
+	#isTimerPaused = false;
 
 	/**
 	 * Indicates whether the quiz is temporarily disabled.
 	 * 
 	 * @type {boolean}
 	 */
-	isDisabled = false;
+	#isDisabled = false;
 
 	/**
 	 * Indicates whether the quiz has started but has not been completed yet.
@@ -174,7 +174,7 @@ class Quiz {
 	 * @returns {boolean} `true` if the quiz is active; otherwise, `false`.
 	 */
 	get isActive() {
-		return this.activeIndex !== null && this.intervalId !== null;
+		return this.#activeIndex !== null && this.#intervalId !== null;
 	}
 
 	/**
@@ -183,7 +183,34 @@ class Quiz {
 	 * @type {number} The current score.
 	 */
 	get score() {
-		return this.questionResults.reduce((acc, result) => result.points + acc, 0);
+		return this.#questionResults.reduce((acc, result) => result.points + acc, 0);
+	}
+
+	/**
+	 * The index of the currently active question.
+	 * 
+	 * @type {number|null}
+	 */
+	get activeIndex() {
+		return this.#activeIndex;
+	}
+
+	/**
+	 * The number of seconds elapsed since the quiz started.
+	 * 
+	 * @type {number}
+	 */
+	get timer() {
+		return this.#timer;
+	}
+
+	/**
+	 * Indicates whether the timer is paused.
+	 * 
+	 * @type {boolean}
+	 */
+	get isTimerPaused() {
+		return this.#isTimerPaused;
 	}
 
 	/**
@@ -193,7 +220,7 @@ class Quiz {
 	 * @param {HTMLElement} options.wrapper - The wrapper element that includes all the questions.
 	 * @param {QuizQuestion[]} options.questions - An array of questions.
 	 * @param {HTMLButtonElement} options.nextTrigger - The trigger that jumps to the next question when clicked.
-	 * @param {HTMLButtonElement[]} options.startTriggers - The trigger buttons that start or restart the quiz when clicked.
+	 * @param {HTMLButtonElement[]} options.startTriggers - The triggers that start or restart the quiz when clicked.
 	 * @param {HTMLElement|null} options.scoreIndicator - The element where the current score is displayed.
 	 * @param {HTMLElement|null} options.questionCountIndicator - The element where the current and total number of questions are displayed.
 	 * @param {HTMLElement|null} options.timerIndicator - The element where the current number of elapsed seconds is displayed since the quiz started.
@@ -202,11 +229,11 @@ class Quiz {
 	 * @param {string} options.isCompletedClass - The class that is added to the wrapper after all questions have been answered.
 	 * @param {function(number,number):string} options.questionCountFormat - The format in which the question count is displayed within the indicator.
 	 * @param {number} options.disableDelay - The delay in milliseconds after the quiz is re-enabled after a missing or invalid answer.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the quiz has been initialized.
-	 * @param {function():void|null} options.startCallback - Callback function that is called after the quiz has been started.
-	 * @param {function(QuizQuestionResult):void|null} options.questionAnsweredCallback - Callback function that is called after a question is answered.
-	 * @param {function(QuizQuestion):void|null} options.questionErrorCallback - Callback function that is called after an answer is missing or invalid within the question. 
-	 * @param {function(number,number,QuizQuestionResult[]):void|null} options.completeCallback - Callback function that is called after the quiz has been completed.
+	 * @param {function(Quiz):void|null} options.initCallback - Callback function that is called after the quiz has been initialized.
+	 * @param {function(Quiz):void|null} options.startCallback - Callback function that is called after the quiz has been started.
+	 * @param {function(Quiz,QuizQuestionResult):void|null} options.questionAnsweredCallback - Callback function that is called after a question is answered.
+	 * @param {function(Quiz,QuizQuestion):void|null} options.questionErrorCallback - Callback function that is called after an answer is missing or invalid within the question. 
+	 * @param {function(Quiz,number,number,QuizQuestionResult[]):void|null} options.completeCallback - Callback function that is called after the quiz has been completed.
 	 * @returns {Quiz}
 	 */
 	constructor(options) {
@@ -241,7 +268,7 @@ class Quiz {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.questions.forEach((question) => question.wrapper.setAttribute("tabindex", "0"));
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -250,12 +277,12 @@ class Quiz {
 	 * @returns {void}
 	 */
 	start() {
-		if (this.isDisabled) return;
+		if (this.#isDisabled) return;
 		this.reset();
 		this.wrapper.classList.add(this.isActiveClass);
 		this.#startTimer();
 		this.#setQuestionAsActive(0);
-		if (typeof(this.startCallback) == "function") this.startCallback();
+		if (typeof(this.startCallback) == "function") this.startCallback(this);
 	}
 
 	/**
@@ -264,23 +291,23 @@ class Quiz {
 	 * @returns {void}
 	 */
 	goToNextQuestion() {
-		if (!this.isActive || this.isDisabled) return;
-		let currentQuestion = this.getQuestionByIndex(this.activeIndex);
+		if (!this.isActive || this.#isDisabled) return;
+		let currentQuestion = this.getQuestionByIndex(this.#activeIndex);
 		if (currentQuestion) {
 			currentQuestion.reset(true);
 			let questionResult = this.#processQuestion(currentQuestion);
 			if (questionResult) {
-				this.questionResults.push(questionResult);
-				if (typeof(this.questionAnsweredCallback) == "function") this.questionAnsweredCallback(questionResult);
-				if (this.activeIndex + 1 < this.questions.length) {
-					this.#setQuestionAsActive(this.activeIndex + 1);
+				this.#questionResults.push(questionResult);
+				if (typeof(this.questionAnsweredCallback) == "function") this.questionAnsweredCallback(this, questionResult);
+				if (this.#activeIndex + 1 < this.questions.length) {
+					this.#setQuestionAsActive(this.#activeIndex + 1);
 				} else {
 					this.#complete();
 				}
 			} else {
 				currentQuestion.wrapper.focus();
 				if ("vibrate" in navigator) navigator.vibrate(200);
-				if (typeof(this.questionErrorCallback) == "function") this.questionErrorCallback(currentQuestion);
+				if (typeof(this.questionErrorCallback) == "function") this.questionErrorCallback(this, currentQuestion);
 			}
 		}
 	}
@@ -300,7 +327,7 @@ class Quiz {
 	 * @returns {void}
 	 */
 	pauseTimer() {
-		this.isTimerPaused = true;
+		this.#isTimerPaused = true;
 	}
 
 	/**
@@ -309,7 +336,7 @@ class Quiz {
 	 * @returns {void}
 	 */
 	resumeTimer() {
-		this.isTimerPaused = false;
+		this.#isTimerPaused = false;
 	}
 
 	/**
@@ -376,7 +403,7 @@ class Quiz {
 			if (i == index) {
 				question.setAsActive();
 				question.wrapper.focus();
-				this.activeIndex = index;
+				this.#activeIndex = index;
 				this.#updateIndicators();
 			}
 		});
@@ -391,10 +418,10 @@ class Quiz {
 		this.wrapper.classList.remove(this.isActiveClass);
 		this.wrapper.classList.add(this.isCompletedClass);
 		this.questions.forEach((question) => question.reset());
-		this.activeIndex = null;
+		this.#activeIndex = null;
 		this.#updateIndicators();
 		this.#stopTimer();
-		if (typeof(this.completeCallback) == "function") this.completeCallback(this.score, this.timer, this.questionResults);
+		if (typeof(this.completeCallback) == "function") this.completeCallback(this, this.score, this.#timer, this.#questionResults);
 	}
 
 	/**
@@ -404,10 +431,10 @@ class Quiz {
 	 * @returns {void}
 	 */
 	#disableTemporary(question) {
-		this.isDisabled = true;
+		this.#isDisabled = true;
 		this.nextTrigger.setAttribute("disabled", "disabled");
 		setTimeout(() => {
-			this.isDisabled = false;
+			this.#isDisabled = false;
 			this.nextTrigger.removeAttribute("disabled");
 			question.wrapper.classList.remove(question.isAnswerMissingClass);
 			question.wrapper.classList.remove(question.isAnswerInvalidClass);
@@ -420,10 +447,10 @@ class Quiz {
 	 * @returns {void}
 	 */
 	#startTimer() {
-		if (this.intervalId) return;
-		this.intervalId = setInterval(() => {
-			if (!this.isTimerPaused) {
-				this.timer++;
+		if (this.#intervalId) return;
+		this.#intervalId = setInterval(() => {
+			if (!this.#isTimerPaused) {
+				this.#timer++;
 				this.#updateTimerIndicator();
 			}
 		}, 1000);
@@ -435,10 +462,10 @@ class Quiz {
 	 * @returns {void}
 	 */
 	#stopTimer() {
-		if (!this.intervalId) return;
-		clearInterval(this.intervalId);
-		this.intervalId = null;
-		this.isTimerPaused = false;
+		if (!this.#intervalId) return;
+		clearInterval(this.#intervalId);
+		this.#intervalId = null;
+		this.#isTimerPaused = false;
 	}
 
 	/**
@@ -470,7 +497,7 @@ class Quiz {
 	 */
 	#updateQuestionCountIndicator() {
 		if (!this.questionCountIndicator) return;
-		this.questionCountIndicator.innerHTML = this.questionCountFormat(this.activeIndex + 1, this.questions.length);
+		this.questionCountIndicator.innerHTML = this.questionCountFormat(this.#activeIndex + 1, this.questions.length);
 	}
 
 	/**
@@ -480,7 +507,7 @@ class Quiz {
 	 */
 	#updateTimerIndicator() {
 		if (!this.timerIndicator) return;
-		this.timerIndicator.innerHTML = this.timer;
+		this.timerIndicator.innerHTML = this.#timer;
 	}
 
 	/**
@@ -490,7 +517,7 @@ class Quiz {
 	 */
 	#updateProgressIndicator() {
 		if (!this.progressIndicator) return;
-		this.progressIndicator.value = this.questionResults.length;
+		this.progressIndicator.value = this.#questionResults.length;
 		this.progressIndicator.max = this.questions.length;
 	}
 
@@ -500,11 +527,11 @@ class Quiz {
 	 * @returns {void}
 	 */
 	#resetState() {
-		this.questionResults = [];
-		this.activeIndex = null;
-		this.timer = 0;
-		this.isDisabled = false;
-		this.isTimerPaused = false;
+		this.#questionResults = [];
+		this.#activeIndex = null;
+		this.#timer = 0;
+		this.#isDisabled = false;
+		this.#isTimerPaused = false;
 		this.#stopTimer();
 		this.#updateIndicators();
 	}
@@ -595,28 +622,28 @@ class QuizQuestion {
 	/**
 	 * Callback function that is called after the question has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(QuizQuestion):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the question has been answered.
 	 * 
-	 * @type {function(QuizQuestionResult):void|null}
+	 * @type {function(QuizQuestion,QuizQuestionResult):void|null}
 	 */
 	answeredCallback = null;
 
 	/**
 	 * Callback function that is called after the question is processed and no option is selected as the answer.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(QuizQuestion):void|null}
 	 */
 	missingAnswerCallback = null;
 
 	/**
 	 * Callback function that is called after the question is processed and one or more selected options are invalid.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(QuizQuestion):void|null}
 	 */
 	invalidAnswerCallback = null;
 
@@ -657,10 +684,10 @@ class QuizQuestion {
 	 * @param {string} options.isActiveClass - The class that is added to the question wrapper when it is active.
 	 * @param {string} options.isAnswerMissingClass - The class that is added to the wrapper when the question is processed and no option is selected as the answer.
 	 * @param {string} options.isAnswerInvalidClass - The class added to the wrapper when the question is processed and and the answer is invalid.
-	 * @param {function():void} options.initCallback - Callback function that is called after the question has been initialized.
-	 * @param {function(QuizQuestionResult):void|null} options.answeredCallback - Callback function that is called after the question has been answered.
-	 * @param {function():void} options.missingAnswerCallback - Callback function that is called after the question is processed and no option is selected as the answer.
-	 * @param {function():void} options.invalidAnswerCallback - Callback function that is called after the question is processed and one or more selected options are invalid.
+	 * @param {function(QuizQuestion):void} options.initCallback - Callback function that is called after the question has been initialized.
+	 * @param {function(QuizQuestion,QuizQuestionResult):void|null} options.answeredCallback - Callback function that is called after the question has been answered.
+	 * @param {function(QuizQuestion):void} options.missingAnswerCallback - Callback function that is called after the question is processed and no option is selected as the answer.
+	 * @param {function(QuizQuestion):void} options.invalidAnswerCallback - Callback function that is called after the question is processed and one or more selected options are invalid.
 	 * @returns {QuizQuestion}
 	 */
 	constructor(options) {
@@ -689,7 +716,7 @@ class QuizQuestion {
 		}
 
 		// Initialize the quiz question
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -716,7 +743,7 @@ class QuizQuestion {
 	 * @returns {void}
 	 */
 	isAnswered() {
-		if (typeof(this.answeredCallback) == "function") this.answeredCallback();
+		if (typeof(this.answeredCallback) == "function") this.answeredCallback(this);
 	}
 
 	/**
@@ -726,7 +753,7 @@ class QuizQuestion {
 	 */
 	isAnswerMissing() {
 		this.wrapper.classList.add(this.isAnswerMissingClass);
-		if (typeof(this.missingAnswerCallback) == "function") this.missingAnswerCallback();
+		if (typeof(this.missingAnswerCallback) == "function") this.missingAnswerCallback(this);
 	}
 
 	/**
@@ -736,7 +763,7 @@ class QuizQuestion {
 	 */
 	isAnswerInvalid() {
 		this.wrapper.classList.add(this.isAnswerInvalidClass);
-		if (typeof(this.invalidAnswerCallback) == "function") this.invalidAnswerCallback();
+		if (typeof(this.invalidAnswerCallback) == "function") this.invalidAnswerCallback(this);
 	}
 
 	/**
@@ -778,9 +805,16 @@ class QuizQuestionOption {
 	/**
 	 * Callback function that is called after the option has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(QuizQuestionOption):void|null}
 	 */
 	initCallback = null;
+
+	/**
+	 * Callback function that is called after the option has been checked.
+	 * 
+	 * @type {function(QuizQuestionOption):void|null}
+	 */
+	checkCallback = null;
 
 	/**
 	 * The points for the option.
@@ -797,7 +831,8 @@ class QuizQuestionOption {
 	 * @param {Object} options
 	 * @param {HTMLInputElement} options.input - The checkbox or radio input whose value is added to the score when the question is processed.
 	 * @param {boolean} options.isInvalid - Indicates whether the question becomes invalid when this option is selected as the answer.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the option has been initialized.
+	 * @param {function(QuizQuestionOption):void|null} options.initCallback - Callback function that is called after the option has been initialized.
+	 * @param {function(QuizQuestionOption):void|null} options.checkCallback - Callback function that is called after the option has been checked.
 	 * @returns {QuizQuestionOption}
 	 */
 	constructor(options) {
@@ -815,7 +850,9 @@ class QuizQuestionOption {
 		}
 
 		// Initialize the quiz question option
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		this.handleEvent = (event) => this.#handleEvents(event);
+		this.#addEvents();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -825,6 +862,29 @@ class QuizQuestionOption {
 	 */
 	uncheck() {
 		this.input.checked = false;
+	}
+
+	/**
+	 * Adds event listeners related to the quiz question option.
+	 * 
+	 * @returns {void}
+	 */
+	#addEvents() {
+		this.input.addEventListener("input", this);
+	}
+
+	/**
+	 * Handles events.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#handleEvents(event) {
+		switch (event.type) {
+			case "input":
+				if (typeof(this.checkCallback) == "function") this.checkCallback(this);
+				break;
+		}
 	}
 }
 

@@ -29,7 +29,7 @@ class MemoryGame {
 	cards;
 
 	/**
-	 * The trigger button that restarts the memory game when clicked.
+	 * The trigger that restarts the memory game when clicked.
 	 * 
 	 * @type {HTMLButtonElement|null}
 	 */
@@ -108,42 +108,42 @@ class MemoryGame {
 	/**
 	 * Callback function that is called after the memory game has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(MemoryGame):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after a card has been flipped.
 	 * 
-	 * @type {function(MemoryGameCard):void|null}
+	 * @type {function(MemoryGame,MemoryGameCard):void|null}
 	 */
 	cardFlipCallback = null;
 
 	/**
 	 * Callback function that is called after the two cards have been matched.
 	 * 
-	 * @type {function(MemoryGameCard, MemoryGameCard, boolean):void|null}
+	 * @type {function(MemoryGame,MemoryGameCard,MemoryGameCard,boolean):void|null}
 	 */
 	cardMatchCallback = null;
 
 	/**
 	 * Callback function that is called after the two cards have been mismatched.
 	 * 
-	 * @type {function(MemoryGameCard, MemoryGameCard):void|null}
+	 * @type {function(MemoryGame,MemoryGameCard,MemoryGameCard):void|null}
 	 */
 	cardMismatchCallback = null;
 
 	/**
 	 * Callback function that is called after all the cards have been matched with their pairs.
 	 * 
-	 * @type {function(number, number, number):void|null}
+	 * @type {function(MemoryGame,number,number,number):void|null}
 	 */
 	completeCallback = null;
 
 	/**
 	 * Callback function that is called after the memory game has been restarted.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(MemoryGame):void|null}
 	 */
 	restartCallback = null;
 
@@ -152,42 +152,69 @@ class MemoryGame {
 	 * 
 	 * @type {number}
 	 */
-	score = 0;
+	#score = 0;
 
 	/**
 	 * The current number of card flips.
 	 * 
 	 * @type {number}
 	 */
-	moveCount = 0;
+	#moveCount = 0;
 
 	/**
 	 * The number of elapsed seconds since the first flip.
 	 * 
 	 * @type {number}
 	 */
-	timer = 0;
+	#timer = 0;
 
 	/**
 	 * The flipped card that is being attempted to be paired with another card after it is flipped.
 	 * 
 	 * @type {MemoryGameCard|null}
 	 */
-	flippedCard = null;
+	#flippedCard = null;
 
 	/**
 	 * Indicates whether the flipping is disabled.
 	 * 
 	 * @type {boolean}
 	 */
-	hasFlippingCard = false;
+	#hasFlippingCard = false;
 
 	/**
 	 * The ID of the interval created to count the number of elapsed seconds since the first flip.
 	 * 
 	 * @type {number|null}
 	 */
-	intervalId = null;
+	#intervalId = null;
+
+	/**
+	 * The current number of found pairs.
+	 * 
+	 * @type {number}
+	 */
+	get score() {
+		return this.#score;
+	}
+
+	/**
+	 * The current number of card flips.
+	 * 
+	 * @type {number}
+	 */
+	get moveCount() {
+		return this.#moveCount;
+	}
+
+	/**
+	 * The number of elapsed seconds since the first flip.
+	 * 
+	 * @type {number}
+	 */
+	get timer() {
+		return this.#timer;
+	}
 
 	/**
 	 * Indicates whether the game is completed.
@@ -195,7 +222,7 @@ class MemoryGame {
 	 * @returns {boolean} `true` if the game is completed; otherwise, `false`.
 	 */
 	get isCompleted() {
-		return this.score >= this.cards.length / 2;
+		return this.#score >= this.cards.length / 2;
 	}
 
 	/**
@@ -205,7 +232,7 @@ class MemoryGame {
 	 * @param {HTMLElement} options.wrapper - The wrapper element that that contains the elements of the game.
 	 * @param {HTMLUListElement} options.cardList - The list element that includes the cards.
 	 * @param {MemoryGameCard[]} options.cards - An array of cards to be paired.
-	 * @param {HTMLButtonElement|null} options.restartTrigger - The trigger button that restarts the memory game when clicked.
+	 * @param {HTMLButtonElement|null} options.restartTrigger - The trigger that restarts the memory game when clicked.
 	 * @param {HTMLElement|null} options.scoreIndicator - The element where the current number of found pairs is displayed.
 	 * @param {HTMLElement|null} options.moveCountIndicator - The element where the current number of card flips is displayed.
 	 * @param {HTMLElement|null} options.timerIndicator - The element where the number of elapsed seconds is displayed since the first flip.
@@ -216,12 +243,12 @@ class MemoryGame {
 	 * @param {string} options.isCardMismatchedClass - The class that is added to the card trigger when it is mismatched with the other selected card.
 	 * @param {string} options.hasFlippingCardClass - The class that is added to the wrapper while a card is being flipped.
 	 * @param {string} options.isCompletedClass - The class that is added to the wrapper when all card pairs have been found.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the memory game has been initialized.
-	 * @param {function(MemoryGameCard):void|null} options.cardFlipCallback - Callback function that is called after a card has been flipped.
-	 * @param {function(MemoryGameCard, MemoryGameCard, boolean):void|null} options.cardMatchCallback - Callback function that is called after the two cards have been matched.
-	 * @param {function(MemoryGameCard, MemoryGameCard):void|null} options.cardMismatchCallback - Callback function that is called after the two cards have been mismatched.
-	 * @param {function(number, number, number):void|null} options.completeCallback - Callback function that is called after all the cards have been matched with their pairs.
-	 * @param {function():void|null} options.restartCallback - Callback function that is called after the memory game has been restarted.
+	 * @param {function(MemoryGame):void|null} options.initCallback - Callback function that is called after the memory game has been initialized.
+	 * @param {function(MemoryGame,MemoryGameCard):void|null} options.cardFlipCallback - Callback function that is called after a card has been flipped.
+	 * @param {function(MemoryGame,MemoryGameCard,MemoryGameCard,boolean):void|null} options.cardMatchCallback - Callback function that is called after the two cards have been matched.
+	 * @param {function(MemoryGame,MemoryGameCard,MemoryGameCard):void|null} options.cardMismatchCallback - Callback function that is called after the two cards have been mismatched.
+	 * @param {function(MemoryGame,number,number,number):void|null} options.completeCallback - Callback function that is called after all the cards have been matched with their pairs.
+	 * @param {function(MemoryGame):void|null} options.restartCallback - Callback function that is called after the memory game has been restarted.
 	 * @returns {MemoryGame}
 	 */
 	constructor(options) {
@@ -257,7 +284,7 @@ class MemoryGame {
 		this.#addEvents();
 		this.shuffleCards();
 		this.#updateIndicators();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -268,16 +295,16 @@ class MemoryGame {
 	 */
 	flipCard(card) {
 		if (card.trigger.classList.contains(this.isCardFlippedClass)) return;
-		if (this.flippedCard == card) return; 
-		if (this.hasFlippingCard) return;
+		if (this.#flippedCard == card) return; 
+		if (this.#hasFlippingCard) return;
 		this.#applyCardAsFlipped(card);
 		this.#startTimer();
-		if (this.flippedCard === null) {
+		if (this.#flippedCard === null) {
 			this.#selectFirstCard(card);
 		} else {
 			this.#incrementMoveCount();
-			this.#matchCards(this.flippedCard, card);
-			this.flippedCard = null;
+			this.#matchCards(this.#flippedCard, card);
+			this.#flippedCard = null;
 		}
 	}
 
@@ -289,7 +316,7 @@ class MemoryGame {
 	restart() {
 		this.reset();
 		this.shuffleCards();
-		if (typeof(this.restartCallback) == "function") this.restartCallback();
+		if (typeof(this.restartCallback) == "function") this.restartCallback(this);
 	}
 
 	/**
@@ -322,7 +349,7 @@ class MemoryGame {
 	 * @returns {void}
 	 */
 	#selectFirstCard(card) {
-		this.flippedCard = card;
+		this.#flippedCard = card;
 	}
 
 	/**
@@ -351,7 +378,7 @@ class MemoryGame {
 		this.#applyCardAsPaired(firstCard);
 		this.#applyCardAsPaired(secondCard);
 		this.#incrementScore();
-		if (typeof(this.cardMatchCallback) == "function") this.cardMatchCallback(firstCard, secondCard, this.isCompleted);
+		if (typeof(this.cardMatchCallback) == "function") this.cardMatchCallback(this, firstCard, secondCard, this.isCompleted);
 		if (this.isCompleted)this.#complete();
 	}
 
@@ -363,7 +390,7 @@ class MemoryGame {
 	#complete() {
 		this.wrapper.classList.add(this.isCompletedClass);
 		this.#stopTimer();
-		if (typeof(this.completeCallback) == "function") this.completeCallback(this.score, this.moveCount, this.timer);
+		if (typeof(this.completeCallback) == "function") this.completeCallback(this, this.#score, this.#moveCount, this.#timer);
 	}
 
 	/**
@@ -376,7 +403,7 @@ class MemoryGame {
 	#mismatchCards(firstCard, secondCard) {
 		this.#applyCardAsMismatched(firstCard);
 		this.#applyCardAsMismatched(secondCard);
-		this.hasFlippingCard = true;
+		this.#hasFlippingCard = true;
 		this.wrapper.classList.add(this.hasFlippingCardClass);
 		this.cards.forEach((card) => {
 			card.trigger.setAttribute("disabled", "disabled");
@@ -384,7 +411,7 @@ class MemoryGame {
 		setTimeout(() => {
 			this.#resetCards(true);
 		}, this.flipCardBackDelay);
-		if (typeof(this.cardMismatchCallback) == "function") this.cardMismatchCallback(firstCard, secondCard);
+		if (typeof(this.cardMismatchCallback) == "function") this.cardMismatchCallback(this, firstCard, secondCard);
 	}
 
 	/**
@@ -396,7 +423,7 @@ class MemoryGame {
 	#applyCardAsFlipped(card) {
 		card.trigger.classList.add(this.isCardFlippedClass);
 		card.trigger.setAttribute("disabled", "disabled");
-		if (typeof(this.cardFlipCallback) == "function") this.cardFlipCallback(card);
+		if (typeof(this.cardFlipCallback) == "function") this.cardFlipCallback(this, card);
 	}
 
 	/**
@@ -425,12 +452,12 @@ class MemoryGame {
 	 * @returns {void}
 	 */
 	#startTimer() {
-		if (this.intervalId) return;
-		this.intervalId = setInterval(() => {
-			if (this.timeLimit && this.timeLimit <= this.timer + 1) {
+		if (this.#intervalId) return;
+		this.#intervalId = setInterval(() => {
+			if (this.timeLimit && this.timeLimit <= this.#timer + 1) {
 				this.#complete();
 			} else {
-				this.timer++;
+				this.#timer++;
 				this.#updateTimerIndicator();
 			}
 		}, 1000);
@@ -442,9 +469,9 @@ class MemoryGame {
 	 * @returns {void}
 	 */
 	#stopTimer() {
-		if (!this.intervalId) return;
-		clearInterval(this.intervalId);
-		this.intervalId = null;
+		if (!this.#intervalId) return;
+		clearInterval(this.#intervalId);
+		this.#intervalId = null;
 	}
 
 	/**
@@ -453,7 +480,7 @@ class MemoryGame {
 	 * @returns {void}
 	 */
 	#incrementMoveCount() {
-		this.moveCount++;
+		this.#moveCount++;
 		this.#updateMoveCountIndicator();
 	}
 
@@ -463,7 +490,7 @@ class MemoryGame {
 	 * @returns {void}
 	 */
 	#incrementScore() {
-		this.score++;
+		this.#score++;
 		this.#updateScoreIndicator();
 	}
 
@@ -474,10 +501,10 @@ class MemoryGame {
 	 */
 	#resetState() {
 		this.wrapper.classList.remove(this.isCompletedClass);
-		this.score = 0;
-		this.moveCount = 0;
-		this.timer = 0;
-		this.flippedCard = null;
+		this.#score = 0;
+		this.#moveCount = 0;
+		this.#timer = 0;
+		this.#flippedCard = null;
 		this.#stopTimer();
 		this.#updateIndicators();
 	}
@@ -490,7 +517,7 @@ class MemoryGame {
 	 */
 	#resetCards(keepPaired) {
 		this.wrapper.classList.remove(this.hasFlippingCardClass);
-		this.hasFlippingCard = false;
+		this.#hasFlippingCard = false;
 		this.cards.forEach((card) => {
 			card.trigger.classList.remove(this.isCardFlippedClass);
 			card.trigger.classList.remove(this.isCardMismatchedClass);
@@ -534,7 +561,7 @@ class MemoryGame {
 	 */
 	#updateScoreIndicator() {
 		if (!this.scoreIndicator) return;
-		this.scoreIndicator.innerHTML = this.score;
+		this.scoreIndicator.innerHTML = this.#score;
 	}
 
 	/**
@@ -544,7 +571,7 @@ class MemoryGame {
 	 */
 	#updateMoveCountIndicator() {
 		if (!this.moveCountIndicator) return;
-		this.moveCountIndicator.innerHTML = this.moveCount;
+		this.moveCountIndicator.innerHTML = this.#moveCount;
 	}
 
 	/**
@@ -554,7 +581,7 @@ class MemoryGame {
 	 */
 	#updateTimerIndicator() {
 		if (!this.timerIndicator) return;
-		this.timerIndicator.innerHTML = this.timer;
+		this.timerIndicator.innerHTML = this.#timer;
 	}
 
 	/**
@@ -610,7 +637,7 @@ class MemoryGameCard {
 	id;
 
 	/**
-	 * The trigger button that flips the card when clicked.
+	 * The trigger that flips the card when clicked.
 	 * 
 	 * @type {HTMLButtonElement}
 	 */
@@ -633,7 +660,7 @@ class MemoryGameCard {
 	/**
 	 * Callback function that is called after the memory game card has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(MemoryGameCard):void|null}
 	 */
 	initCallback = null;
 
@@ -642,10 +669,10 @@ class MemoryGameCard {
 	 * 
 	 * @param {Object} options
 	 * @param {string} options.id - The id of the memory game card.
-	 * @param {HTMLButtonElement} options.trigger - The trigger button that flips the card when clicked.
+	 * @param {HTMLButtonElement} options.trigger - The trigger that flips the card when clicked.
 	 * @param {HTMLElement} options.frontView - The front view of the card, which is displayed when it is flipped.
 	 * @param {HTMLElement} options.backView - The back view of the card, which is displayed when it is not flipped.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the memory game card has been initialized.
+	 * @param {function(MemoryGameCard):void|null} options.initCallback - Callback function that is called after the memory game card has been initialized.
 	 * @returns {MemoryGameCard}
 	 */
 	constructor(options) {
@@ -672,7 +699,7 @@ class MemoryGameCard {
 		}
 
 		// Initialize the memory game card
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 }
 

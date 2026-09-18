@@ -38,35 +38,35 @@ class Wishlist {
 	/**
 	 * Callback function that is called after the wishlist has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Wishlist):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after an item is added to the wishlist.
 	 * 
-	 * @type {function(number):void|null}
+	 * @type {function(Wishlist,number):void|null}
 	 */
 	addCallback = null;
 
 	/**
 	 * Callback function that is called after an item is removed from the wishlist.
 	 * 
-	 * @type {function(number):void|null}
+	 * @type {function(Wishlist,number):void|null}
 	 */
 	removeCallback = null;
 
 	/**
 	 * Callback function that is called after an item is added to or removed from the wishlist.
 	 * 
-	 * @type {function(number):void|null}
+	 * @type {function(Wishlist,number):void|null}
 	 */
 	updateCallback = null;
 
 	/**
 	 * Callback function that is called after the wishlist has been cleared.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Wishlist):void|null}
 	 */
 	clearCallback = null;
 
@@ -85,11 +85,11 @@ class Wishlist {
 	 * @param {{elem:HTMLButtonElement,id:number,data:any}[]} options.triggers - Triggers that add or remove their related item from the wishlist on click.
 	 * @param {{id:number,data:any}[]|null} options.initialData - The initial data from which the initial items are added to the wishlist (overwrites existing local storage).
 	 * @param {string} options.triggerAddedClass - The class added to the trigger elements when their related item is added to the wishlist.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the wishlist has been initialized.
-	 * @param {function(number):void|null} options.addCallback - Callback function that is called after an item is added to the wishlist.
-	 * @param {function(number):void|null} options.removeCallback - Callback function that is called after an item is removed from the wishlist.
-	 * @param {function(number):void|null} options.updateCallback - Callback function that is called after an item is added to or removed from the wishlist.
-	 * @param {function():void|null} options.clearCallback - Callback function that is called after the wishlist has been cleared.
+	 * @param {function(Wishlist):void|null} options.initCallback - Callback function that is called after the wishlist has been initialized.
+	 * @param {function(Wishlist,number):void|null} options.addCallback - Callback function that is called after an item is added to the wishlist.
+	 * @param {function(Wishlist,number):void|null} options.removeCallback - Callback function that is called after an item is removed from the wishlist.
+	 * @param {function(Wishlist,number):void|null} options.updateCallback - Callback function that is called after an item is added to or removed from the wishlist.
+	 * @param {function(Wishlist):void|null} options.clearCallback - Callback function that is called after the wishlist has been cleared.
 	 * @returns {Wishlist}
 	 */
 	constructor(options) {
@@ -105,7 +105,7 @@ class Wishlist {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.#load();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -117,17 +117,16 @@ class Wishlist {
 	 * @returns {void}
 	 */
 	add(id, data = null, skipCallback = false) {
-		if (!this.includes(id)) {
-			this.items.push(new WishlistItem({
-				id: id,
-				data: data
-			}));
-			this.#saveStorageData();
-			this.#updateTriggers();
-			if (!skipCallback) {
-				if (typeof(this.addCallback) == "function") this.addCallback(id);
-				if (typeof(this.updateCallback) == "function") this.updateCallback(id);
-			}
+		if (this.includes(id)) return;
+		this.items.push(new WishlistItem({
+			id: id,
+			data: data
+		}));
+		this.#saveStorageData();
+		this.#updateTriggers();
+		if (!skipCallback) {
+			if (typeof(this.addCallback) == "function") this.addCallback(this, id);
+			if (typeof(this.updateCallback) == "function") this.updateCallback(this, id);
 		}
 	}
 
@@ -139,12 +138,13 @@ class Wishlist {
 	 * @returns {void}
 	 */
 	remove(id, skipCallback = false) {
+		if (!this.includes(id)) return;
 		this.items = this.items.filter((item) => item.id != id);
 		this.#saveStorageData();
 		this.#updateTriggers();
 		if (!skipCallback) {
-			if (typeof(this.removeCallback) == "function") this.removeCallback(id);
-			if (typeof(this.updateCallback) == "function") this.updateCallback(id);
+			if (typeof(this.removeCallback) == "function") this.removeCallback(this, id);
+			if (typeof(this.updateCallback) == "function") this.updateCallback(this, id);
 		}	
 	}
 
@@ -195,7 +195,7 @@ class Wishlist {
 		this.#removeStorageData();
 		this.#updateTriggers();
 		if (!skipCallback) {
-			if (typeof(this.clearCallback) == "function") this.clearCallback();
+			if (typeof(this.clearCallback) == "function") this.clearCallback(this);
 		}
 	}
 
