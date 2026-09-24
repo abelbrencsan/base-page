@@ -115,21 +115,21 @@ class Calendar {
 	/**
 	 * Callback function that is called after the calendar has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Calendar):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the date has been selected.
 	 * 
-	 * @type {function(Temporal.PlainDate):void|null}
+	 * @type {function(Calendar,Temporal.PlainDate):void|null}
 	 */
 	selectCallback = null;
 
 	/**
 	 * Callback function that is called after the selected date has been reset.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Calendar):void|null}
 	 */
 	resetCallback = null;
 
@@ -222,9 +222,9 @@ class Calendar {
 	 * @param {string} options.isSelectedClass - The class that is added to the day button for the selected date.
 	 * @param {string} options.dayButtonAttribute - The name of the attribute added to day buttons and whose value contains the date.
 	 * @param {HTMLButtonElement|null} options.currentMonthTrigger - The button element that sets the active year and month to the current year and month when clicked.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the calendar has been initialized.
-	 * @param {function(Temporal.PlainDate):void|null} options.selectCallback - Callback function that is called after the date has been selected.
-	 * @param {function():void|null} options.resetCallback - Callback function that is called after the selected date has been reset.
+	 * @param {function(Calendar):void|null} options.initCallback - Callback function that is called after the calendar has been initialized.
+	 * @param {function(Calendar,Temporal.PlainDate):void|null} options.selectCallback - Callback function that is called after the date has been selected.
+	 * @param {function(Calendar):void|null} options.resetCallback - Callback function that is called after the selected date has been reset.
 	 * @returns {Calendar}
 	 */
 	constructor(options) {
@@ -268,7 +268,7 @@ class Calendar {
 		this.#createYearMonthOptions();
 		this.#addEvents();
 		this.goToCurrentYearMonth();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -335,7 +335,7 @@ class Calendar {
 		this.#validateDate(date);
 		this.selectedDate = date;
 		this.goToSelectedYearMonth();
-		if (typeof(this.selectCallback) == "function") this.selectCallback(this.selectedDate);
+		if (typeof(this.selectCallback) == "function") this.selectCallback(this, this.selectedDate);
 	}
 
 	/**
@@ -346,7 +346,7 @@ class Calendar {
 	resetSelectedDate() {
 		this.selectedDate = null;
 		this.#renderActiveYearMonth();
-		if (typeof(this.resetCallback) == "function") this.resetCallback();
+		if (typeof(this.resetCallback) == "function") this.resetCallback(this);
 	}
 
 	/**
@@ -746,7 +746,7 @@ class CalendarInterval {
 	/**
 	 * Callback function that is called after the calendar interval has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(CalendarInterval):void|null}
 	 */
 	initCallback = null;
 
@@ -757,7 +757,7 @@ class CalendarInterval {
 	 * @param {Temporal.PlainDate} options.from - The date at which the interval starts.
 	 * @param {Temporal.PlainDate} options.to - The date at which the interval ends.
 	 * @param {number[]} options.weekdays - The weekdays on which the interval applies.
-	 * @param {function():void} options.initCallback - Callback function that is called after the calendar interval has been initialized.
+	 * @param {function(CalendarInterval):void} options.initCallback - Callback function that is called after the calendar interval has been initialized.
 	 * @returns {CalendarInterval}
 	 */
 	constructor(options) {
@@ -781,7 +781,7 @@ class CalendarInterval {
 		}
 
 		// Initialize the calendar interval.
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 }
 

@@ -151,7 +151,7 @@ class IndexPage extends Page {
 	 * @returns {void}
 	 */
 	#initHomeSlider() {
-		let elem = document.querySelector("[data-home-slider]");
+		const elem = document.querySelector("[data-home-slider]");
 		if (elem) {
 			this.mainSlider = new Glider({
 				wrapper: elem,
@@ -163,12 +163,12 @@ class IndexPage extends Page {
 				autoplayTrigger: elem.querySelector("[data-home-slider-autoplay-trigger]"),
 				stopAutoplayCallback: function() {
 					if (!this.autoplayTrigger) return;
-					let icon = this.autoplayTrigger.querySelector("svg.icon use");
+					const icon = this.autoplayTrigger.querySelector("svg.icon use");
 					if (icon) icon.setAttribute("xlink:href", "#icon-play");
 				},
 				startAutoplayCallback: function() {
 					if (!this.autoplayTrigger) return;
-					let icon = this.autoplayTrigger.querySelector("svg.icon use");
+					const icon = this.autoplayTrigger.querySelector("svg.icon use");
 					if (icon) icon.setAttribute("xlink:href", "#icon-pause");
 				}
 			});
@@ -182,10 +182,10 @@ class IndexPage extends Page {
 	 * @returns {void}
 	 */  
 	#updateChartLabels(chart) {
-		let labelList = chart.wrapper.nextElementSibling;
+		const labelList = chart.wrapper.nextElementSibling;
 		labelList.replaceChildren();
 		chart.labels.forEach((label) => {
-			let listItem = document.createElement("li");
+			const listItem = document.createElement("li");
 			listItem.innerText = label.toLocaleString("en-US");
 			labelList.append(listItem);
 		});

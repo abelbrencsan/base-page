@@ -83,7 +83,7 @@ class Slideshow {
 	/**
 	 * Callback function that is called after the slideshow has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Slideshow):void|null}
 	 */
 	initCallback = null;
 
@@ -115,7 +115,7 @@ class Slideshow {
 	 * @param {HTMLElement[]} options.gliderItems - An array of items that are gliding within the slideshow glider viewport.
 	 * @param {SlideshowTrigger[]} options.triggers - An array of slideshow triggers that open the dialog on click.
 	 * @param {string[]} options.customClasses - Custom classes to be added to the slideshow dialog.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the slideshow has been initialized.
+	 * @param {function(Slideshow):void|null} options.initCallback - Callback function that is called after the slideshow has been initialized.
 	 * @returns {Slideshow}
 	 */
 	constructor(options) {
@@ -157,7 +157,7 @@ class Slideshow {
 		this.#addEvents();
 		this.#createGlider();
 		this.#createDialog();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**

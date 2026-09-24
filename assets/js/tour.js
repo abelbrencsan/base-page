@@ -4,6 +4,7 @@ import { Wishlist } from "../js/wishlist.js";
  * Tour
  * This class is designed to create virtual tours with multiple scenes.
  * 
+ * @import { AudioPlayer } from "../js/audio-player.js"
  * @author Abel Brencsan
  * @license MIT License
  */
@@ -38,6 +39,13 @@ class Tour {
 	backTrigger;
 
 	/**
+	 * The built-in audio player for playing and stopping audio during the tour.
+	 * 
+	 * @type {AudioPlayer|null}
+	 */
+	audioPlayer = null;
+
+	/**
 	 * An array of of scenes.
 	 * 
 	 * @type {TourScene[]}
@@ -52,11 +60,18 @@ class Tour {
 	sceneTriggers = [];
 
 	/**
-	 * An array of triggers that that adds items to the inventory when clicked.
+	 * An array of triggers that that add items to the inventory when clicked.
 	 * 
 	 * @type {TourInventoryTrigger[]}
 	 */
 	inventoryTriggers = [];
+
+	/**
+	 * An array of triggers that load an audio source into the audio player when clicked.
+	 * 
+	 * @type {TourAudioPlayerTrigger[]}
+	 */
+	audioPlayerTriggers = [];
 
 	/**
 	 * An array of popovers that belong to the tour.
@@ -141,6 +156,20 @@ class Tour {
 	 * @type {string}
 	 */
 	hasOpenedPopoverClass = "has-opened-popover";
+
+	/**
+	 * The class that is added to the audio player trigger while its audio is playing.
+	 * 
+	 * @type {string}
+	 */
+	isAudioPlayingClass = "is-playing";
+
+	/**
+	 * The class that is added to the wrapper while audio is playing in the audio player.
+	 * 
+	 * @type {string}
+	 */
+	hasPlayingAudioPlayingClass = "has-playing-audio";
 
 	/**
 	 * Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
@@ -246,6 +275,13 @@ class Tour {
 	 * @type {function(Tour,TourInventoryTrigger,PointerEvent):void|null}
 	 */
 	inventoryTriggerClickCallback = null;
+
+	/**
+	 * Callback function that is called after an audio player trigger is clicked.
+	 * 
+	 * @type {function(Tour,TourAudioPlayerTrigger,PointerEvent):void|null}
+	 */
+	audioPlayerTriggerClickCallback = null;
 
 	/**
 	 * Callback function that is called after panning the selected scene has started.
@@ -374,9 +410,11 @@ class Tour {
 	 * @param {HTMLElement} options.wrapper - The wrapper element that includes all the scenes and control triggers.
 	 * @param {HTMLElement} options.viewport - The viewport element that displays the scenes and can be panned, pinched, and zoomed.
 	 * @param {HTMLButtonElement} options.backTrigger - The trigger that navigates back to the previous scene within the history when clicked.
+	 * @param {AudioPlayer|null} options.audioPlayer - The built-in audio player for playing and stopping audio during the tour.
 	 * @param {TourScene[]} options.scenes - An array of of scenes.
 	 * @param {TourSceneTrigger[]} options.sceneTriggers - An array of triggers that navigate from one scene to another when clicked.
 	 * @param {TourInventoryTrigger[]} options.inventoryTriggers - An array of triggers that that adds items to the inventory when clicked.
+	 * @param {TourAudioPlayerTrigger[]} options.audioPlayerTriggers - An array of triggers that load an audio source into the audio player when clicked.
 	 * @param {TourPopover[]} options.popovers - An array of popovers that belong to the tour.
 	 * @param {HTMLButtonElement|null} options.zoomInTrigger - The zoom-in trigger that zooms the viewport to the next zoom level when clicked.
 	 * @param {HTMLButtonElement|null} options.zoomOutTrigger - The zoom-out trigger that zooms the viewport to the previous zoom level when clicked.
@@ -389,6 +427,8 @@ class Tour {
 	 * @param {string} options.isPinchingClass - The class that is added to the wrapper while the selected scene is being pinched.
 	 * @param {string} options.hasFullscreenSupportClass - The class that is added to the wrapper when the fullscreen API is supported by the browser.
 	 * @param {string} options.hasOpenedPopoverClass - The class that is added to the wrapper while a popover is open.
+	 * @param {string} options.isAudioPlayingClass - The class that is added to the audio player trigger while its audio is playing.
+	 * @param {string} options.hasPlayingAudioPlayingClass - The class that is added to the wrapper while audio is playing in the audio player.
 	 * @param {boolean} options.ctrlWheel - Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
 	 * @param {boolean} options.storeInventory - Indicates whether to store the inventory in local storage rather than in memory.
 	 * @param {function(Tour):void|null} options.initCallback - Callback function that is called after the tour has been initialized.
@@ -404,6 +444,7 @@ class Tour {
 	 * @param {function(Tour,ToggleEvent):void|null} options.popoverClosedCallback - Callback function that is called after a popover is closed.
 	 * @param {function(Tour,TourSceneTrigger,PointerEvent):void|null} options.sceneTriggerClickCallback - Callback function that is called after a scene trigger is clicked.
 	 * @param {function(Tour,TourInventoryTrigger,PointerEvent):void|null} options.inventoryTriggerClickCallback - Callback function that is called after an inventory trigger is clicked.
+	 * @param {function(Tour,TourAudioPlayerTrigger,PointerEvent):void|null} options.audioPlayerTriggerClickCallback - Callback function that is called after an audio player trigger is clicked.
 	 * @param {function(Tour,TourScene,PointerEvent):void|null} options.panStartCallback - Callback function that is called after panning the selected scene has started.
 	 * @param {function(Tour,TourScene,PointerEvent):void|null} options.panEndCallback - Callback function that is called after panning the selected scene has ended.
 	 * @param {function(Tour,TourMapScene):void|null} options.zoomInCallback - Callback function that is called after the selected scene is zoomed to the next zoom level.
@@ -434,9 +475,11 @@ class Tour {
 		this.wrapper = options.wrapper;
 		this.viewport = options.viewport;
 		this.backTrigger = options.backTrigger;
+		if ("audioPlayer" in options) this.audioPlayer = options.audioPlayer;
 		if ("scenes" in options) this.scenes = options.scenes;
 		if ("sceneTriggers" in options) this.sceneTriggers = options.sceneTriggers;
 		if ("inventoryTriggers" in options) this.inventoryTriggers = options.inventoryTriggers;
+		if ("audioPlayerTriggers" in options) this.audioPlayerTriggers = options.audioPlayerTriggers;
 		if ("popovers" in options) this.popovers = options.popovers;
 		if ("zoomInTrigger" in options) this.zoomInTrigger = options.zoomInTrigger;
 		if ("zoomOutTrigger" in options) this.zoomOutTrigger = options.zoomOutTrigger;
@@ -449,6 +492,8 @@ class Tour {
 		if ("isPinchingClass" in options) this.isPinchingClass = options.isPinchingClass;
 		if ("hasFullscreenSupportClass" in options) this.hasFullscreenSupportClass = options.hasFullscreenSupportClass;
 		if ("hasOpenedPopoverClass" in options) this.hasOpenedPopoverClass = options.hasOpenedPopoverClass;
+		if ("isAudioPlayingClass" in options) this.isAudioPlayingClass = options.isAudioPlayingClass;
+		if ("hasPlayingAudioPlayingClass" in options) this.hasPlayingAudioPlayingClass = options.hasPlayingAudioPlayingClass;
 		if ("ctrlWheel" in options) this.ctrlWheel = options.ctrlWheel;
 		if ("storeInventory" in options) this.storeInventory = options.storeInventory;
 		if ("initCallback" in options) this.initCallback = options.initCallback;
@@ -464,6 +509,7 @@ class Tour {
 		if ("popoverClosedCallback" in options) this.popoverClosedCallback = options.popoverClosedCallback;
 		if ("sceneTriggerClickCallback" in options) this.sceneTriggerClickCallback = options.sceneTriggerClickCallback;
 		if ("inventoryTriggerClickCallback" in options) this.inventoryTriggerClickCallback = options.inventoryTriggerClickCallback;
+		if ("audioPlayerTriggerClickCallback" in options) this.audioPlayerTriggerClickCallback = options.audioPlayerTriggerClickCallback;
 		if ("panStartCallback" in options) this.panStartCallback = options.panStartCallback;
 		if ("panEndCallback" in options) this.panEndCallback = options.panEndCallback;
 		if ("zoomInCallback" in options) this.zoomInCallback = options.zoomInCallback;
@@ -669,6 +715,7 @@ class Tour {
 		this.#toggleZoom();
 		this.#toggleHistory();
 		this.#toggleSceneTriggers();
+		if (this.audioPlayer) this.audioPlayer.abort();
 		if (typeof(this.changeSceneCallback) == "function") this.changeSceneCallback(this, selectedScene);
 	}
 
@@ -799,6 +846,30 @@ class Tour {
 	#isInventoryTriggerClicked(inventoryTrigger, event) {
 		this.inventory.add(inventoryTrigger.itemId, inventoryTrigger.data);
 		if (typeof(this.inventoryTriggerClickCallback) == "function") this.inventoryTriggerClickCallback(this, inventoryTrigger, event);
+	}
+
+	/**
+	 * Executes after an audio player trigger is clicked.
+	 * 
+	 * @param {TourAudioPlayerTrigger} audioPlayerTrigger - The audio player trigger that was clicked.
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isAudioPlayerTriggerClicked(audioPlayerTrigger, event) {
+		if (!this.audioPlayer) return;
+		const oldTrigger = this.audioPlayerTriggers.find((trigger) => {
+			return trigger.trigger.classList.contains(this.isAudioPlayingClass)
+		});
+		if (oldTrigger) {
+			oldTrigger.trigger.classList.remove(this.isAudioPlayingClass);
+		}
+		if (oldTrigger == audioPlayerTrigger) {
+			this.audioPlayer.abort();
+		} else {
+			this.audioPlayer.load(audioPlayerTrigger.source);
+			audioPlayerTrigger.trigger.classList.add(this.isAudioPlayingClass);
+		}
+		if (typeof(this.audioPlayerTriggerClickCallback) == "function") this.audioPlayerTriggerClickCallback(this, audioPlayerTrigger, event);
 	}
 
 	/**
@@ -949,6 +1020,42 @@ class Tour {
 	}
 
 	/**
+	 * Executes after the audio player has been loaded.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isAudioPlayerLoaded(event) {
+		if (!this.audioPlayer) return;
+		this.audioPlayer.play();
+		this.wrapper.classList.add(this.hasPlayingAudioPlayingClass);
+	}
+
+	/**
+	 * Executes after the audio player has been aborted.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isAudioPlayerAborted(event) {
+		this.wrapper.classList.remove(this.hasPlayingAudioPlayingClass);
+		this.audioPlayerTriggers.forEach((audioPlayerTrigger) => {
+			audioPlayerTrigger.trigger.classList.remove(this.isAudioPlayingClass);
+		});
+	}
+
+	/**
+	 * Executes after the audio player has been ended.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isAudioPlayerEnded(event) {
+		if (!this.audioPlayer) return;
+		this.audioPlayer.abort();
+	}
+
+	/**
 	 * Adds event listeners related to the tour.
 	 * 
 	 * @returns {void}
@@ -967,6 +1074,11 @@ class Tour {
 			popover.wrapper.addEventListener("beforetoggle", this);
 			popover.wrapper.addEventListener("toggle", this);
 		});
+		if (this.audioPlayer) {
+			this.audioPlayer.audio.addEventListener("loadedmetadata", this);
+			this.audioPlayer.audio.addEventListener("abort", this);
+			this.audioPlayer.audio.addEventListener("ended", this);
+		}
 	}
 
 	/**
@@ -986,6 +1098,11 @@ class Tour {
 				this.inventoryTriggers.forEach((inventoryTrigger) => {
 					if (inventoryTrigger.trigger == event.target) {
 						this.#isInventoryTriggerClicked(inventoryTrigger, event);
+					}
+				});
+				this.audioPlayerTriggers.forEach((audioPlayerTrigger) => {
+					if (audioPlayerTrigger.trigger == event.target) {
+						this.#isAudioPlayerTriggerClicked(audioPlayerTrigger, event);
 					}
 				});
 				if (event.target == this.zoomInTrigger) {
@@ -1041,6 +1158,15 @@ class Tour {
 				} else {
 					this.#isPopoverClosed(event);
 				}
+				break;
+			case "loadedmetadata":
+				this.#isAudioPlayerLoaded(event);
+				break;
+			case "abort":
+				this.#isAudioPlayerAborted(event);
+				break;
+			case "ended":
+				this.#isAudioPlayerEnded(event);
 				break;
 		}
 	}
@@ -1829,7 +1955,7 @@ class TourMapScene extends TourScene {
 	}
 
 	/**
-	 * Retrieves the clamped value of the specified zoom level to ensure it stays within the available range.
+	 * Retrieves the clamped value of the specified zoom level to ensure it stays within the allowed range.
 	 * 
 	 * @param {number} zoomLevel - The zoom level to be clamped.
 	 * @returns {number} The clamped zoom level.
@@ -2352,6 +2478,65 @@ class TourInventoryTrigger {
 }
 
 /**
+ * Tour Audio Player Trigger
+ * This class is designed to create a trigger that loads an audio source into the audio player when clicked.
+ * 
+ * @author Abel Brencsan
+ * @license MIT License
+ */
+class TourAudioPlayerTrigger {
+
+	/**
+	 * The trigger that needs to be clicked to load the audio source into the audio player.
+	 * 
+	 * @type {HTMLButtonElement}
+	 */
+	trigger;
+
+	/**
+	 * The source of the audio to be loaded.
+	 * 
+	 * @type {string}
+	 */
+	source;
+
+	/**
+	 * Callback function that is called after the trigger has been initialized.
+	 * 
+	 * @type {function(TourAudioPlayerTrigger):void|null}
+	 */
+	initCallback = null;
+
+	/**
+	 * Creates a tour audio player trigger.
+	 * 
+	 * @param {Object} options
+	 * @param {HTMLButtonElement} options.trigger - The trigger that needs to be clicked to load the audio source into the audio player.
+	 * @param {string} options.source - The source of the audio to be loaded.
+	 * @param {function(TourAudioPlayerTrigger):void|null} options.initCallback - Callback function that is called after the trigger has been initialized.
+	 * @returns {TourAudioPlayerTrigger}
+	 */
+	constructor(options) {
+
+		// Test required options
+		if (!(options.trigger instanceof HTMLButtonElement)) {
+			throw "Tour audio player trigger \"trigger\" must be an `HTMLButtonElement`";
+		}
+		if (typeof options.source !== "string") {
+			throw "Tour audio player trigger \"source\" must be a string";
+		}
+
+		// Set fields from options
+		this.trigger = options.trigger;
+		this.source = options.source;
+		if ("initCallback" in options) this.initCallback = options.initCallback;
+
+		// Initialize the tour audio player trigger
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+}
+
+/**
  * Tour Scene Coordinate
  * This class represents a latitude and a longitude within a tour scene.
  * 
@@ -2563,7 +2748,6 @@ class TourPopover {
 	 * @returns {void}
 	 */
 	#isClosing(event) {
-		this.wrapper.scrollTop = 0;
 		if (this.#activeTrigger) {
 			this.#activeTrigger.classList.remove(this.isActiveTriggerClass);
 			this.#activeTrigger = null;
@@ -2578,6 +2762,7 @@ class TourPopover {
 	 * @returns {void}
 	 */
 	#isOpen(event) {
+		this.wrapper.scrollTop = 0;
 		if (typeof(this.openedCallback) == "function") this.openedCallback(this, event);
 	}
 
@@ -2627,4 +2812,4 @@ class TourPopover {
 	}
 }
 
-export { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneTrigger, TourInventoryTrigger, TourSceneCoordinate, TourHistoryEntry, TourPopover }
+export { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneTrigger, TourInventoryTrigger, TourAudioPlayerTrigger, TourSceneCoordinate, TourHistoryEntry, TourPopover };

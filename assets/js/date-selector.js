@@ -66,35 +66,35 @@ class DateSelector {
 	/**
 	 * Callback function that is called after the date selector has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(DateSelector):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the date has been selected.
 	 * 
-	 * @type {function(Temporal.PlainDate):void|null}
+	 * @type {function(DateSelector,Temporal.PlainDate):void|null}
 	 */
 	selectCallback = null;
 
 	/**
 	 * Callback function that is called after the selected date has been reset.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(DateSelector):void|null}
 	 */
 	resetCallback = null;
 
 	/**
 	 * Callback function that is called after the year has been selected.
 	 * 
-	 * @type {function(number):void|null}
+	 * @type {function(DateSelector,number):void|null}
 	 */
 	selectYearCallback = null;
 
 	/**
 	 * Callback function that is called after the month has been selected.
 	 * 
-	 * @type {function(number, number):void|null}
+	 * @type {function(DateSelector,number,number):void|null}
 	 */
 	selectMonthCallback = null;
 
@@ -141,11 +141,11 @@ class DateSelector {
 	 * @param {function(number):string} options.yearLabel - The label of the select option for a year.
 	 * @param {function(Temporal.PlainYearMonth):string} options.monthLabel - The label of the select option for a month.
 	 * @param {function(Temporal.PlainDate):string} options.dayLabel - The label of the select option for a day.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the date selector has been initialized.
-	 * @param {function(Temporal.PlainDate):void|null} options.selectCallback - Callback function that is called after the date has been selected.
-	 * @param {function():void|null} options.resetCallback - Callback function that is called after the selected date has been reset.
-	 * @param {function(number):void|null} options.selectYearCallback - Callback function that is called after the year has been selected.
-	 * @param {function(number, number):void|null} options.selectMonthCallback - Callback function that is called after the month has been selected.
+	 * @param {function(DateSelector):void|null} options.initCallback - Callback function that is called after the date selector has been initialized.
+	 * @param {function(DateSelector,Temporal.PlainDate):void|null} options.selectCallback - Callback function that is called after the date has been selected.
+	 * @param {function(DateSelector):void|null} options.resetCallback - Callback function that is called after the selected date has been reset.
+	 * @param {function(DateSelector,number):void|null} options.selectYearCallback - Callback function that is called after the year has been selected.
+	 * @param {function(DateSelector,number,number):void|null} options.selectMonthCallback - Callback function that is called after the month has been selected.
 	 * @returns {DateSelector}
 	 */
 	constructor(options) {
@@ -178,7 +178,7 @@ class DateSelector {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#setYearSelector();
 		this.#addEvents();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -200,7 +200,7 @@ class DateSelector {
 	resetDate() {
 		if (this.selectedDate === null) return;
 		this.selectedDate = null;
-		if (typeof(this.resetCallback) == "function") this.resetCallback();
+		if (typeof(this.resetCallback) == "function") this.resetCallback(this);
 	}
 
 	/**
@@ -216,7 +216,7 @@ class DateSelector {
 				this.yearSelector.value = year.toString();
 			}
 			this.#setMonthSelector(year);
-			if (typeof(this.selectYearCallback) == "function") this.selectYearCallback(year);
+			if (typeof(this.selectYearCallback) == "function") this.selectYearCallback(this, year);
 		}
 	}
 
@@ -235,7 +235,7 @@ class DateSelector {
 				this.monthSelector.value = month.toString();
 			}
 			this.#setDaySelector(year, month);	
-			if (typeof(this.selectMonthCallback) == "function") this.selectMonthCallback(year, month);
+			if (typeof(this.selectMonthCallback) == "function") this.selectMonthCallback(this, year, month);
 		}
 	}
 
@@ -269,7 +269,7 @@ class DateSelector {
 	 */
 	#setSelectedDate(year, month, day) {
 		this.selectedDate = new Temporal.PlainDate(year, month, day);
-		if (typeof(this.selectCallback) == "function") this.selectCallback(this.selectedDate);
+		if (typeof(this.selectCallback) == "function") this.selectCallback(this, this.selectedDate);
 	}
 
 	/**
@@ -510,7 +510,7 @@ class DateSelectorInterval {
 	/**
 	 * Callback function that is called after the date selector interval has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(DateSelectorInterval):void|null}
 	 */
 	initCallback = null;
 
@@ -521,7 +521,7 @@ class DateSelectorInterval {
 	 * @param {Temporal.PlainDate} options.from - The date at which the interval starts.
 	 * @param {Temporal.PlainDate} options.to - The date at which the interval ends.
 	 * @param {number[]} options.weekdays - The weekdays on which the interval applies.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the date selector interval has been initialized.
+	 * @param {function(DateSelectorInterval):void|null} options.initCallback - Callback function that is called after the date selector interval has been initialized.
 	 * @returns {DateSelectorInterval}
 	 */
 	constructor(options) {
@@ -545,7 +545,7 @@ class DateSelectorInterval {
 		}
 
 		// Initialize the date selector interval.
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 }
 

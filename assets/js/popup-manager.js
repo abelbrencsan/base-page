@@ -26,21 +26,21 @@ class PopupManager {
 	/**
 	 * Callback function that is called after the popup manager has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(PopupManager):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after a popup is added to the popup manager.
 	 * 
-	 * @type {function(HTMLElement):void|null}
+	 * @type {function(PopupManager):void|null}
 	 */
 	addPopupCallback = null;
 
 	/**
 	 * Callback function that is called after a popup is removed from the popup manager.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(PopupManager):void|null}
 	 */
 	removePopupCallback = null;
 
@@ -90,9 +90,9 @@ class PopupManager {
 	 * @param {Object} options
 	 * @param {string} options.storageKeyName - The key name of the session storage where the viewed popups are stored.
 	 * @param {boolean} options.consent - The consent for popups to appear.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the popup manager has been initialized.
-	 * @param {function(HTMLElement):void|null} options.addPopupCallback - Callback function that is called after a popup is added to the popup manager.
-	 * @param {function():void|null} options.removePopupCallback - Callback function that is called after a popup is removed from the popup manager.
+	 * @param {function(PopupManager):void|null} options.initCallback - Callback function that is called after the popup manager has been initialized.
+	 * @param {function(PopupManager):void|null} options.addPopupCallback - Callback function that is called after a popup is added to the popup manager.
+	 * @param {function(PopupManager):void|null} options.removePopupCallback - Callback function that is called after a popup is removed from the popup manager.
 	 * @returns {PopupManager}
 	 */
 	constructor(options) {
@@ -120,7 +120,7 @@ class PopupManager {
 				});
 			});
 		});
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -143,7 +143,7 @@ class PopupManager {
 	addPopup(popup) {
 		this.observer.observe(popup.targetElement);
 		this.popups.push(popup);
-		if (typeof(this.addPopupCallback) == "function") this.addPopupCallback();
+		if (typeof(this.addPopupCallback) == "function") this.addPopupCallback(this);
 	}
 
 	/**
@@ -154,7 +154,7 @@ class PopupManager {
 	 */
 	removePopup(popup) {
 		this.popups = this.popups.filter(otherPopup => otherPopup !== popup);
-		if (typeof(this.removePopupCallback) == "function") this.removePopupCallback();
+		if (typeof(this.removePopupCallback) == "function") this.removePopupCallback(this);
 	}
 
 	/**
@@ -241,7 +241,7 @@ class PopupManagerPopup {
 	/**
 	 * Callback function that is called after the popup has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(PopupManagerPopup):void|null}
 	 */
 	initCallback = null;
 
@@ -253,7 +253,7 @@ class PopupManagerPopup {
 	 * @param {Dialog} options.dialog - The dialog to be displayed when the target element becomes visible.
 	 * @param {Element} options.targetElement - The dialog appears when the target element becomes visible in the viewport.
 	 * @param {boolean} options.onlyUpward - Indicates whether the dialog appears only if the target element becomes visible upon scrolling upward.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the popup has been initialized.
+	 * @param {function(PopupManagerPopup):void|null} options.initCallback - Callback function that is called after the popup has been initialized.
 	 * @returns {PopupManagerPopup}
 	 */
 	constructor(options) {
@@ -277,7 +277,7 @@ class PopupManagerPopup {
 		}
 
 		// Initialize the popup
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 }
 

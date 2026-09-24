@@ -24,21 +24,21 @@ class RangeIndicator {
 	/**
 	 * Function that is called to format the value.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(number):void|null}
 	 */
 	formatter = null;
 
 	/**
 	 * Callback function that is called after the range input has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(RangeIndicator):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the range input value has changed.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(RangeIndicator):void|null}
 	 */
 	isValueChangedCallback = null;
 
@@ -57,9 +57,9 @@ class RangeIndicator {
 	 * @param {Object} options
 	 * @param {HTMLElement} options.input - The range input element whose value is displayed in the indicator.
 	 * @param {HTMLElement} options.indicator - The indicator of the range input in which the value is displayed.
-	 * @param {function():void|null} options.formatter - Function that is called to format the value.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the range input has been initialized.
-	 * @param {function():void|null} options.isValueChangedCallback - Callback function that is called after the range input value has changed.
+	 * @param {function(number):void|null} options.formatter - Function that is called to format the value.
+	 * @param {function(RangeIndicator):void|null} options.initCallback - Callback function that is called after the range input has been initialized.
+	 * @param {function(RangeIndicator):void|null} options.isValueChangedCallback - Callback function that is called after the range input value has changed.
 	 * @returns {RangeIndicator}
 	 */
 	constructor(options) {
@@ -86,7 +86,7 @@ class RangeIndicator {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.updateIndicator();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -110,7 +110,7 @@ class RangeIndicator {
 	 */
 	#isValueChanged() {
 		this.updateIndicator();
-		if (typeof(this.isValueChangedCallback) == "function") this.isValueChangedCallback();
+		if (typeof(this.isValueChangedCallback) == "function") this.isValueChangedCallback(this);
 	}
 
 	/**

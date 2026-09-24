@@ -157,42 +157,42 @@ class Dialog {
 	/**
 	 * Callback function that is called after the dialog has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dialog):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called before the dialog has been opened.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dialog):void|null}
 	 */
 	beforeOpenCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been opened.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dialog):void|null}
 	 */
 	openCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been shown.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dialog):void|null}
 	 */
 	showCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been closed.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dialog):void|null}
 	 */
 	closeCallback = null;
 
 	/**
 	 * Callback function that is called after the dialog has been cancelled.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dialog):void|null}
 	 */
 	cancelCallback = null;
 
@@ -209,6 +209,15 @@ class Dialog {
 	 * @type {HTMLFormElement|null}
 	 */
 	closeForm = null;
+
+	/**
+	 * Indicates whether the dialog is open.
+	 * 
+	 * @type {boolean} `true` if the dialog is open; otherwise, `false`.
+	 */
+	get isOpened() {
+		return this == Dialog.activeInstance;
+	}
 
 	/**
 	 * Available dialog types.
@@ -249,12 +258,12 @@ class Dialog {
 	 * @param {string} options.isCloseableClass - The class that is added to the dialog if it is closeable.
 	 * @param {string} options.closeButtonHTML - The HTML content that is appended to the close button.
 	 * @param {string|null} options.closeButtonLabel - The label that is added to the close button.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the dialog has been initialized.
-	 * @param {function():void|null} options.beforeOpenCallback - Callback function that is called before the dialog has been opened.
-	 * @param {function():void|null} options.openCallback - Callback function that is called after the dialog has been opened.
-	 * @param {function():void|null} options.showCallback - Callback function that is called after the dialog has been shown.
-	 * @param {function():void|null} options.closeCallback - Callback function that is called after the dialog has been closed.
-	 * @param {function():void|null} options.cancelCallback - Callback function that is called after the dialog has been cancelled.
+	 * @param {function(Dialog):void|null} options.initCallback - Callback function that is called after the dialog has been initialized.
+	 * @param {function(Dialog):void|null} options.beforeOpenCallback - Callback function that is called before the dialog has been opened.
+	 * @param {function(Dialog):void|null} options.openCallback - Callback function that is called after the dialog has been opened.
+	 * @param {function(Dialog):void|null} options.showCallback - Callback function that is called after the dialog has been shown.
+	 * @param {function(Dialog):void|null} options.closeCallback - Callback function that is called after the dialog has been closed.
+	 * @param {function(Dialog):void|null} options.cancelCallback - Callback function that is called after the dialog has been cancelled.
 	 * @returns {Dialog}
 	 */
 	constructor(options) {
@@ -283,7 +292,7 @@ class Dialog {
 			trigger.classList.add(this.triggerClass);
 			trigger.addEventListener("click", this);
 		});
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -293,7 +302,7 @@ class Dialog {
 	 */
 	open() {
 		if (this == Dialog.activeInstance) return;
-		if (typeof(this.beforeOpenCallback) == "function") this.beforeOpenCallback();
+		if (typeof(this.beforeOpenCallback) == "function") this.beforeOpenCallback(this);
 		Dialog.closeActiveInstance();
 		Dialog.activeInstance = this;
 		this.triggers.forEach((trigger) => {
@@ -319,7 +328,7 @@ class Dialog {
 				this.#openDialog();
 				break;
 		}
-		if (typeof(this.openCallback) == "function") this.openCallback();
+		if (typeof(this.openCallback) == "function") this.openCallback(this);
 	}
 
 	/**
@@ -537,7 +546,7 @@ class Dialog {
 		this.#addCustomClasses();
 		if (this == Dialog.activeInstance) {
 			this.dialog.showModal();
-			if (typeof(this.showCallback) == "function") this.showCallback();
+			if (typeof(this.showCallback) == "function") this.showCallback(this);
 		}
 	}
 
@@ -593,7 +602,7 @@ class Dialog {
 				this.#isDialogClosed();
 				break;
 		}
-		if (typeof(this.closeCallback) == "function") this.closeCallback();
+		if (typeof(this.closeCallback) == "function") this.closeCallback(this);
 	}
 
 	/**
@@ -602,7 +611,7 @@ class Dialog {
 	 * @returns {void}
 	 */
 	#isCancelled() {
-		if (typeof(this.cancelCallback) == "function") this.cancelCallback();
+		if (typeof(this.cancelCallback) == "function") this.cancelCallback(this);
 	}
 
 	/**

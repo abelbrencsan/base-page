@@ -24,14 +24,14 @@ class LazyLoadDetector {
 	/**
 	 * Callback function that is called after the lazy load detector has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(LazyLoadDetector):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the element has been loaded.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(LazyLoadDetector):void|null}
 	 */
 	isLoadedCallback = null;
 
@@ -41,8 +41,8 @@ class LazyLoadDetector {
 	 * @param {Object} options
 	 * @param {HTMLImageElement} options.element - The image that is detected by the lazy load detector when it is loaded.
 	 * @param {string} options.isLoadedclassName - The class that is added to the element after it has been loaded.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the lazy load detector has been initialized.
-	 * @param {function():void|null} options.isLoadedCallback - Callback function that is called after the element has been loaded.
+	 * @param {function(LazyLoadDetector):void|null} options.initCallback - Callback function that is called after the lazy load detector has been initialized.
+	 * @param {function(LazyLoadDetector):void|null} options.isLoadedCallback - Callback function that is called after the element has been loaded.
 	 * @returns {LazyLoadDetector}
 	 */
 	constructor(options) {
@@ -66,7 +66,7 @@ class LazyLoadDetector {
 		} else {
 			this.#addEvents();
 		}
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -77,7 +77,7 @@ class LazyLoadDetector {
 	#isLoaded() {
 		this.#removeEvents();
 		this.element.classList.add(this.isLoadedclassName);
-		if (typeof(this.isLoadedCallback) == "function") this.isLoadedCallback();
+		if (typeof(this.isLoadedCallback) == "function") this.isLoadedCallback(this);
 	}
 
 	/**

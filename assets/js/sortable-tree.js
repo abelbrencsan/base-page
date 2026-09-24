@@ -122,42 +122,42 @@ class SortableTree {
 	/**
 	 * Callback function that is called after the sortable tree has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(SortableTree):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after dragging has started.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(SortableTree,boolean):void|null}
 	 */
 	isDraggingStartedCallback = null;
 
 	/**
 	 * Callback function that is called after the dragged node is over a valid drop target.
 	 * 
-	 * @type {function(HTMLElement):void|null}
+	 * @type {function(SortableTree,HTMLElement):void|null}
 	 */
 	isDraggedOverCallback = null;
 
 	/**
 	 * Callback function that is called after the dragging of a node has ended.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(SortableTree):void|null}
 	 */
 	isDraggingEndedCallback = null;
 
 	/**
 	 * Callback function that is called after the dragged node is dropped on a valid drop target.
 	 * 
-	 * @type {function(HTMLElement):void|null}
+	 * @type {function(SortableTree,HTMLElement):void|null}
 	 */
 	isDroppedCallback = null;
 
 	/**
 	 * Callback function that is called after a block is clicked.
 	 * 
-	 * @type {function(HTMLElement):void|null}
+	 * @type {function(SortableTree,HTMLElement):void|null}
 	 */
 	isBlockClickedCallback = null;
 
@@ -195,12 +195,12 @@ class SortableTree {
 	 * @param {HTMLElement|null} options.blocksWrapper - The blocks wrapper element.
 	 * @param {function(HTMLElement):string} options.getTransferData - A function that is called to retrieve the transfer data of the dragged node.
 	 * @param {function(HTMLElement):Element|null} options.createNodeFromBlock - A function that is called to retrieve the node to be added to the tree as a new tree node.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the sortable tree has been initialized.
-	 * @param {function():void|null} options.isDraggingStartedCallback - Callback function that is called after dragging has started.
-	 * @param {function(HTMLElement):void|null} options.isDraggedOverCallback - Callback function that is called after the dragged node is over a valid drop target.
-	 * @param {function():void|null} options.isDraggingEndedCallback - Callback function that is called after the dragging of a node has ended.
-	 * @param {function(HTMLElement):void|null} options.isDroppedCallback - Callback function that is called after the dragged node is dropped on a valid drop target.
-	 * @param {function(HTMLElement):void|null} options.isBlockClickedCallback - Callback function that is called after a block is clicked.
+	 * @param {function(SortableTree):void|null} options.initCallback - Callback function that is called after the sortable tree has been initialized.
+	 * @param {function(SortableTree,boolean):void|null} options.isDraggingStartedCallback - Callback function that is called after dragging has started.
+	 * @param {function(SortableTree,HTMLElement):void|null} options.isDraggedOverCallback - Callback function that is called after the dragged node is over a valid drop target.
+	 * @param {function(SortableTree):void|null} options.isDraggingEndedCallback - Callback function that is called after the dragging of a node has ended.
+	 * @param {function(SortableTree,HTMLElement):void|null} options.isDroppedCallback - Callback function that is called after the dragged node is dropped on a valid drop target.
+	 * @param {function(SortableTree,HTMLElement):void|null} options.isBlockClickedCallback - Callback function that is called after a block is clicked.
 	 * @returns {SortableTree}
 	 */
 	constructor(options) {
@@ -223,7 +223,7 @@ class SortableTree {
 		// Initialize the sortable tree
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -258,7 +258,7 @@ class SortableTree {
 			}
 			this.draggedNode.classList.add(this.isDraggingClass);
 			if ("vibrate" in navigator) navigator.vibrate(100);
-			if (typeof(this.isDraggingStartedCallback) == "function") this.isDraggingStartedCallback(isBlock);
+			if (typeof(this.isDraggingStartedCallback) == "function") this.isDraggingStartedCallback(this, isBlock);
 		}
 	}
 
@@ -288,7 +288,7 @@ class SortableTree {
 					this.isBelow = false;
 				}
 			}
-			if (typeof(this.isDraggedOverCallback) == "function") this.isDraggedOverCallback(dropTarget);
+			if (typeof(this.isDraggedOverCallback) == "function") this.isDraggedOverCallback(this, dropTarget);
 		}
 	}
 
@@ -309,7 +309,7 @@ class SortableTree {
 		this.draggedNode.classList.remove(this.isDraggingClass);
 		this.draggedNode = null;
 		this.isBelow = false;
-		if (typeof(this.isDraggingEndedCallback) == "function") this.isDraggingEndedCallback();
+		if (typeof(this.isDraggingEndedCallback) == "function") this.isDraggingEndedCallback(this);
 	}
 
 	/**
@@ -352,7 +352,7 @@ class SortableTree {
 			} else {
 				dropTarget.parentNode.insertBefore(draggedNode, dropTarget);
 			}
-			if (typeof(this.isDroppedCallback) == "function") this.isDroppedCallback(dropTarget);
+			if (typeof(this.isDroppedCallback) == "function") this.isDroppedCallback(this, dropTarget);
 		}
 	}
 
@@ -391,7 +391,7 @@ class SortableTree {
 			if (createdNode) {
 				this.wrapper.appendChild(createdNode);
 			}
-			if (typeof(this.isBlockClickedCallback) == "function") this.isBlockClickedCallback(block);
+			if (typeof(this.isBlockClickedCallback) == "function") this.isBlockClickedCallback(this, block);
 		}
 	}
 

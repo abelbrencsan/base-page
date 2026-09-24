@@ -87,21 +87,21 @@ class AlertManager {
 	/**
 	 * Callback function that is called after the alert manager has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(AlertManager):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after an alert is added.
 	 * 
-	 * @type {function(HTMLElement):void|null}
+	 * @type {function(AlertManager,HTMLElement):void|null}
 	 */
 	addAlertCallback = null;
 
 	/**
 	 * Callback function that is called after an alert is removed.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(AlertManager):void|null}
 	 */
 	removeAlertCallback = null;
 
@@ -143,9 +143,9 @@ class AlertManager {
 	 * @param {string} options.closeButtonHTML - The HTML content that is appended to the close button.
 	 * @param {string|null} options.closeButtonLabel - The label that is added to the close button.
 	 * @param {number} options.gap - The size, in pixels, between two alerts.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the alert manager has been initialized.
-	 * @param {function(HTMLElement):void|null} options.addAlertCallback - Callback function that is called after an alert is added.
-	 * @param {function():void|null} options.removeAlertCallback - Callback function that is called after an alert is removed.
+	 * @param {function(AlertManager):void|null} options.initCallback - Callback function that is called after the alert manager has been initialized.
+	 * @param {function(AlertManager,HTMLElement):void|null} options.addAlertCallback - Callback function that is called after an alert is added.
+	 * @param {function(AlertManager):void|null} options.removeAlertCallback - Callback function that is called after an alert is removed.
 	 * @returns {AlertManager}
 	 */
 	constructor(options) {
@@ -164,7 +164,7 @@ class AlertManager {
 
 		// Initialize the alert manager
 		this.handleEvent = (event) => this.#handleEvents(event);
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -183,7 +183,7 @@ class AlertManager {
 		alert.showPopover();
 		this.updatePositions();
 		if ("vibrate" in navigator) navigator.vibrate(200);
-		if (typeof(this.addAlertCallback) == "function") this.addAlertCallback(alert);
+		if (typeof(this.addAlertCallback) == "function") this.addAlertCallback(this, alert);
 	}
 
 	/**
@@ -197,7 +197,7 @@ class AlertManager {
 		elem.removeEventListener("toggle", this);
 		elem.remove();
 		this.updatePositions();
-		if (typeof(this.removeAlertCallback) == "function") this.removeAlertCallback();
+		if (typeof(this.removeAlertCallback) == "function") this.removeAlertCallback(this);
 	}
 
 	/**

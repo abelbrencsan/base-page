@@ -101,28 +101,28 @@ class Autocomplete {
 	/**
 	 * Callback function that is called after the autocomplete has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Autocomplete):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the autocomplete is opened.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Autocomplete):void|null}
 	 */
 	openCallback = null;
 
 	/**
 	 * Callback function that is called after the autocomplete is closed.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Autocomplete):void|null}
 	 */
 	closeCallback = null;
 
 	/**
 	 * Callback function that is called after a suggestion is selected.
 	 * 
-	 * @type {function(any):void|null}
+	 * @type {function(Autocomplete,any):void|null}
 	 */
 	selectCallback = null;
 
@@ -177,10 +177,10 @@ class Autocomplete {
 	 * @param {string} options.isOpenClass - The class added to the list element when the autocomplete is open.
 	 * @param {string} options.hasOpenAutocompleteClass -The class added to the input element when it has an open autocomplete. 
 	 * @param {string} options.isHighlightedClass -The class added to the list item when it is highlighted.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the autocomplete has been initialized.
-	 * @param {function():void|null} options.openCallback - Callback function that is called after the autocomplete is opened.
-	 * @param {function():void|null} options.closeCallback - Callback function that is called after the autocomplete is closed.
-	 * @param {function(any):void|null} options.selectCallback - Callback function that is called after a suggestion is selected.
+	 * @param {function(Autocomplete):void|null} options.initCallback - Callback function that is called after the autocomplete has been initialized.
+	 * @param {function(Autocomplete):void|null} options.openCallback - Callback function that is called after the autocomplete is opened.
+	 * @param {function(Autocomplete):void|null} options.closeCallback - Callback function that is called after the autocomplete is closed.
+	 * @param {function(Autocomplete,any):void|null} options.selectCallback - Callback function that is called after a suggestion is selected.
 	 * @returns {Autocomplete}
 	 */
 	constructor(options) {
@@ -214,7 +214,7 @@ class Autocomplete {
 		this.#createList();
 		this.#initInputAttributes();
 		this.#addEvents();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -383,7 +383,7 @@ class Autocomplete {
 	 */
 	#selectSuggestion(suggestion) {
 		this.input.value = this.renderInputValue(suggestion, this.input.value);
-		if (typeof(this.selectCallback) == "function") this.selectCallback(suggestion);
+		if (typeof(this.selectCallback) == "function") this.selectCallback(this, suggestion);
 	}
 
 	/**

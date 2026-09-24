@@ -38,7 +38,7 @@ class Reveal {
 	/**
 	 * Callback function that is called after the reveal has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Reveal):void|null}
 	 */
 	initCallback = null;
 
@@ -64,7 +64,7 @@ class Reveal {
 	 * @param {string} options.aboveViewportClass - The class that is added to an element that is above the viewport.
 	 * @param {string} options.belowViewportClass - The class that is added to an element that is below the viewport.
 	 * @param {string} options.inViewportClass - The class that is added to an element that is in the viewport.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the reveal has been initialized.
+	 * @param {function(Reveal):void|null} options.initCallback - Callback function that is called after the reveal has been initialized.
 	 * @returns {Reveal}
 	 */
 	constructor(options) {
@@ -79,7 +79,7 @@ class Reveal {
 		// Initialize the reveal
 		const observerOptions = { threshold: this.threshold };
 		this.#observer = new IntersectionObserver(this.reveal.bind(this), observerOptions);
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**

@@ -31,14 +31,14 @@ class Notice {
 	/**
 	 * Callback function that is called after the notice has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Notice):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the notice has been dismissed.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Notice):void|null}
 	 */
 	isDismissedCallback = null;
 
@@ -49,8 +49,8 @@ class Notice {
 	 * @param {HTMLElement} options.wrapper - The wrapper element.
 	 * @param {HTMLButtonElement} options.dismissButton - The button element that dismisses the notice.
 	 * @param {string} options.isDismissingClass - The class that is added to the notice element when it starts to be dismissed.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the notice has been initialized.
-	 * @param {function():void|null} options.isDismissedCallback - Callback function that is called after the notice has been dismissed.
+	 * @param {function(Notice):void|null} options.initCallback - Callback function that is called after the notice has been initialized.
+	 * @param {function(Notice):void|null} options.isDismissedCallback - Callback function that is called after the notice has been dismissed.
 	 * @returns {Notice}
 	 */
 	constructor(options) {
@@ -73,7 +73,7 @@ class Notice {
 		// Initialize the notice
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -94,7 +94,7 @@ class Notice {
 	isDismissed() {
 		this.#removeEvents();
 		this.wrapper.remove();
-		if (typeof(this.isDismissedCallback) == "function") this.isDismissedCallback();
+		if (typeof(this.isDismissedCallback) == "function") this.isDismissedCallback(this);
 	}
 
 

@@ -47,7 +47,7 @@ class ScrollTable {
 	/**
 	 * Callback function that is called after the scroll table has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(ScrollTable):void|null}
 	 */
 	initCallback = null;
 
@@ -67,7 +67,7 @@ class ScrollTable {
 	 * @param {HTMLElement} options.body - The body element whose scroll position synchronizes with the header.
 	 * @param {HTMLButtonElement|null} options.prevTrigger - The trigger element that scrolls the body backward when clicked.
 	 * @param {HTMLButtonElement|null} options.nextTrigger - The trigger element that scrolls the body forward when clicked.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the scroll table has been initialized.
+	 * @param {function(ScrollTable):void|null} options.initCallback - Callback function that is called after the scroll table has been initialized.
 	 * @returns {ScrollTable}
 	 */
 	constructor(options) {
@@ -94,7 +94,7 @@ class ScrollTable {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.#initGlider();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**

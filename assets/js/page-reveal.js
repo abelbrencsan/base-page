@@ -17,7 +17,7 @@ class PageReveal {
 	/**
 	 * Callback function that is called after the page reveal has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(PageReveal):void|null}
 	 */
 	initCallback = null;
 
@@ -26,7 +26,7 @@ class PageReveal {
 	 * 
 	 * @param {Object} options
 	 * @param {function(NavigationHistoryEntry, NavigationHistoryEntry):string} options.getType - The function that is called to retrieve the active view transition type.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the page reveal has been initialized.
+	 * @param {function(PageReveal):void|null} options.initCallback - Callback function that is called after the page reveal has been initialized.
 	 * @returns {PageReveal}
 	 */
 	constructor(options) {
@@ -41,7 +41,7 @@ class PageReveal {
 		// Initialize the page reveal
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**

@@ -38,14 +38,14 @@ class Router {
 	/**
 	 * Callback function that is called after the router has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Router):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called when no route was found.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Router):void|null}
 	 */
 	routeNotFoundCallback = null;
 
@@ -57,8 +57,8 @@ class Router {
 	 * @param {string} options.root - The root path that is prepended to every route.
 	 * @param {Node[]} options.triggers - An array of of route triggers.
 	 * @param {boolean} options.isHashMode - Indicates whether the router should use hashes instead of path names for routing.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the router has been initialized.
-	 * @param {function():void|null} options.routeNotFoundCallback - Callback function that is called when no route was found.
+	 * @param {function(Router):void|null} options.initCallback - Callback function that is called after the router has been initialized.
+	 * @param {function(Router):void|null} options.routeNotFoundCallback - Callback function that is called when no route was found.
 	 * @returns {Router}
 	 */
 	constructor(options) {
@@ -73,7 +73,7 @@ class Router {
 		// Initialize the router
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Router {
 		window.history.pushState(null, null, pushedUrl);
 		let selectedRoutes = this.#selectRoutes(pathname, usedUrl);
 		if (!selectedRoutes.length) {
-			if (typeof(this.routeNotFoundCallback) == "function") this.routeNotFoundCallback();
+			if (typeof(this.routeNotFoundCallback) == "function") this.routeNotFoundCallback(this);
 		}
 	}
 

@@ -45,7 +45,7 @@ class LiveFilter {
 	/**
 	 * Callback function that is called after the live filter has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(LiveFilter):void|null}
 	 */
 	initCallback = null;
 
@@ -58,7 +58,7 @@ class LiveFilter {
 	 * @param {LiveFilterItem[]} options.items - An array of items that can be filtered in real-time.
 	 * @param {string} options.isFilteredClass - The class that is added to the wrapper of the item when it is filtered out.
 	 * @param {string} options.hasFilteredClass - The class that is added to the wrapper when at least one item is filtered out.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the live filter has been initialized.
+	 * @param {function(LiveFilter):void|null} options.initCallback - Callback function that is called after the live filter has been initialized.
 	 * @returns {LiveFilter}
 	 */
 	constructor(options) {
@@ -87,7 +87,7 @@ class LiveFilter {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.filter();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**

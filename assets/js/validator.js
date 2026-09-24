@@ -74,35 +74,35 @@ class Validator {
 	/**
 	 * Callback function that is called after the validator been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Validator):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the form has been submitted.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Validator):void|null}
 	 */
 	submitCallback = null;
 
 	/**
 	 * Callback function that is called after an input field is validated as invalid inside the form.
 	 * 
-	 * @type {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void|null}
+	 * @type {function(Validator,HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void|null}
 	 */
 	invalidCallback = null;
 
 	/**
 	 * Callback function that is called after an input field is validated inside the form.
 	 * 
-	 * @type {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void|null}
+	 * @type {function(Validator,HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void|null}
 	 */
 	validCallback = null;
 
 	/**
 	 * Callback function that is called when all input fields are validated and one or more of them are invalid.
 	 * 
-	 * @type {function(Element[]):void|null}
+	 * @type {function(Validator,Element[]):void|null}
 	 */
 	hasInvalidCallback = null;
 
@@ -116,11 +116,11 @@ class Validator {
 	 * @param {string} options.isDisabledClass - The class that is added to the submit buttons when the form is submitted.
 	 * @param {Object<string, string>} options.messages - Error messages for different types of errors.
 	 * @param {Object<string, string>} options.messageAttrs - Attributes that hold custom error messages for different types of errors.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the validator been initialized.
-	 * @param {function():void|null} options.submitCallback - Callback function that is called after the form has been submitted.
-	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void|null} options.invalidCallback - Callback function that is called after an input field is validated as invalid inside the form.
-	 * @param {function(HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void|null} options.validCallback - Callback function that is called after an input field is validated inside the form.
-	 * @param {function(function(Element[]):void|null} options.hasInvalidCallback - Callback function that is called when all input fields are validated and one or more of them are invalid.
+	 * @param {function(Validator):void|null} options.initCallback - Callback function that is called after the validator been initialized.
+	 * @param {function(Validator):void|null} options.submitCallback - Callback function that is called after the form has been submitted.
+	 * @param {function(Validator,HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement, string, string):void|null} options.invalidCallback - Callback function that is called after an input field is validated as invalid inside the form.
+	 * @param {function(Validator,HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement):void|null} options.validCallback - Callback function that is called after an input field is validated inside the form.
+	 * @param {function(Validator,Element[]):void|null} options.hasInvalidCallback - Callback function that is called when all input fields are validated and one or more of them are invalid.
 	 * @returns {Validator}
 	 */
 	constructor(options) {
@@ -141,7 +141,7 @@ class Validator {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.form.setAttribute("novalidate", "novalidate");
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -193,7 +193,7 @@ class Validator {
 		});
 		if (invalidInputs.length) {
 			invalidInputs[0].focus();
-			if (typeof(this.hasInvalidCallback) == "function") this.hasInvalidCallback(invalidInputs);
+			if (typeof(this.hasInvalidCallback) == "function") this.hasInvalidCallback(this, invalidInputs);
 		}
 		return !invalidInputs.length;
 	}
@@ -259,7 +259,7 @@ class Validator {
 		let errorType = this.#getErrorType(input);
 		let message = this.#getErrorMessage(input, errorType);
 		input.classList.add(this.invalidInputClass);
-		if (typeof(this.invalidCallback) == "function") this.invalidCallback(input, message, errorType);
+		if (typeof(this.invalidCallback) == "function") this.invalidCallback(this, input, message, errorType);
 	}
 
 	/**
@@ -270,7 +270,7 @@ class Validator {
 	 */
 	#isInputValid(input) {
 		input.classList.add(this.validInputClass);
-		if (typeof(this.validCallback) == "function") this.validCallback(input);
+		if (typeof(this.validCallback) == "function") this.validCallback(this, input);
 	}
 
 	/**
@@ -355,7 +355,7 @@ class Validator {
 						}
 					} else {
 						this.disableSubmitButtons();
-						if (typeof(this.submitCallback) == "function") this.submitCallback();
+						if (typeof(this.submitCallback) == "function") this.submitCallback(this);
 					}
 				} 
 				break;

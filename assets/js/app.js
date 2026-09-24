@@ -1,5 +1,6 @@
 import { AlertManager } from "../js/alert-manager.js";
-import { AudioManager } from "../js/audio-manager.js";
+import { AudioManager, AudioManagerPlayTrigger } from "../js/audio-manager.js";
+import { AudioPlayer } from "../js/audio-player.js";
 import { Calendar, CalendarInterval } from "../js/calendar.js";
 import { DateSelector, DateSelectorInterval } from "../js/date-selector.js";
 import { Dialog } from "../js/dialog.js";
@@ -13,13 +14,12 @@ import { Notice } from "../js/notice.js";
 import { PopupManager, PopupManagerPopup } from "../js/popup-manager.js";
 import { Quiz, QuizQuestion, QuizQuestionOption } from "../js/quiz.js";
 import { RangeIndicator } from "../js/range-indicator.js";
-import { Router, Route } from "../js/router.js";
 import { ScrollTable } from "../js/scroll-table.js";
 import { Slideshow, SlideshowTrigger } from "../js/slideshow.js";
 import { SortableTree } from "../js/sortable-tree.js";
 import { Stepper } from "../js/stepper.js";
 import { Tab } from "../js/tab.js";
-import { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneCoordinate, TourSceneTrigger, TourInventoryTrigger, TourPopover } from "./tour.js";
+import { Tour, TourMapScene, TourFieldScene, TourSceneHotspot, TourSceneCoordinate, TourSceneTrigger, TourInventoryTrigger, TourAudioPlayerTrigger, TourPopover } from "./tour.js";
 import { Validator } from "../js/validator.js";
 
 /**
@@ -52,32 +52,14 @@ class App {
 	 */
 
 	/**
-	 * Icon manager for the apllication.
+	 * Icon manager for the application.
 	 * 
 	 * @type {IconManager}
 	 */
 	iconManager = new IconManager();
 
 	/**
-	 * Callback function that is called after the routing.
-	 * 
-	 * @type {function(Route,URL,RegExpMatchArray):void}
-	 */
-	routeCallback = (route, url, match) => {};
-
-	/**
-	 * Router for the application.
-	 * 
-	 * @type {Router}
-	 */
-	router = new Router({
-		routes: [],
-		triggers: Array.from(document.querySelectorAll("[data-route-trigger]")),
-		routeNotFoundCallback: () => {}
-	});
-
-	/**
-	 * Alert manager for the apllication.
+	 * Alert manager for the application.
 	 * 
 	 * @type {AlertManager}
 	 */
@@ -87,7 +69,7 @@ class App {
 	});
 
 	/**
-	 * Popup manager for the apllication.
+	 * Popup manager for the application.
 	 * 
 	 * @type {PopupManager}
 	 */
@@ -99,140 +81,149 @@ class App {
 	 * @type {AudioManager}
 	 */
 	audioManager = new AudioManager({
-		backgroundSounds: [
-			new Audio("../assets/sounds/bird-chirping.ogg"),
-			new Audio("../assets/sounds/ambient.ogg")
-		]
+		muteTriggers: this.#getAudioManagerMuteTriggers(),
+		playTriggers: this.#getAudioManagerPlayTriggers(),
+		backgroundAudio: new Map([
+			["birdChirping", new Audio("../assets/sounds/bird-chirping.ogg")],
+			["ambient", new Audio("../assets/sounds/ambient.ogg")]
+		])
 	});
 
 	/**
-	 * List of gliders.
+	 * Array of audio players.
+	 * 
+	 * @type {AudioPlayer[]}
+	 */
+	audioPlayers = [];
+
+	/**
+	 * Array of gliders.
 	 * 
 	 * @type {Glider[]}
 	 */
 	gliders = [];
 
 	/**
-	 * List of rolls.
+	 * Array of rolls.
 	 * 
 	 * @type {Glider[]}
 	 */
 	rolls = [];
 
 	/**
-	 * List of scroll tables.
+	 * Array of scroll tables.
 	 * 
 	 * @type {ScrollTable[]}
 	 */
 	scrollTables = [];
 
 	/**
-	 * List of navigation bar sub-navigations.
+	 * Array of navigation bar sub-navigations.
 	 * 
 	 * @type {Dropdown[]}
 	 */
 	navbarSubnavs = [];
 
 	/**
-	 * List of lazy load detectors.
+	 * Array of lazy load detectors.
 	 * 
 	 * @type {LazyLoadDetector[]}
 	 */
 	lazyLoadDetectors = [];
 
 	/**
-	 * List of dialogs.
+	 * Array of dialogs.
 	 * 
 	 * @type {Dialog[]}
 	 */
 	dialogs = [];
 
 	/**
-	 * List of slideshows.
+	 * Array of slideshows.
 	 * 
 	 * @type {Slideshow[]}
 	 */
 	slideshows = [];
 
 	/**
-	 * List of range indicators.
+	 * Array of range indicators.
 	 * 
 	 * @type {RangeIndicator[]}
 	 */
 	rangeIndicators = [];
 
 	/**
-	 * List of validators.
+	 * Array of validators.
 	 * 
 	 * @type {Validator[]}
 	 */
 	validators = [];
 
 	/**
-	 * List of notices.
+	 * Array of notices.
 	 * 
 	 * @type {Notice[]}
 	 */
 	notices = [];
 
 	/**
-	 * List of tabs.
+	 * Array of tabs.
 	 * 
 	 * @type {Tab[]}
 	 */
 	tabs = [];
 
 	/**
-	 * List of sortable tres.
+	 * Array of sortable trees.
 	 * 
 	 * @type {SortableTree[]}
 	 */
 	sortableTrees = [];
 
 	/**
-	 * List of steppers.
+	 * Array of steppers.
 	 * 
 	 * @type {Stepper[]}
 	 */
 	steppers = [];
 
 	/**
-	 * List of tours.
+	 * Array of tours.
 	 * 
 	 * @type {Tour[]}
 	 */
 	tours = [];
 
 	/**
-	 * List of memory games.
+	 * Array of memory games.
 	 * 
 	 * @type {MemoryGame[]}
 	 */
 	memoryGames = [];
 
 	/**
-	 * List of quizzes.
+	 * Array of quizzes.
 	 * 
 	 * @type {Quiz[]}
 	 */
 	quizzes = [];
 
 	/**
-	 * List of live filters.
+	 * Array of live filters.
 	 * 
 	 * @type {LiveFilter[]}
 	 */
 	liveFilters = [];
 
 	/**
-	 * List of calendars.
+	 * Array of calendars.
 	 * 
 	 * @type {Calendar[]}
 	 */
 	calendars = [];
 
 	/**
-	 * List of date selectors.
+	 * Array of date selectors.
 	 * 
 	 * @type {DateSelector[]}
 	 */
@@ -271,8 +262,8 @@ class App {
 
 		// Initialize the application
 		this.#initPopups(options.popupConfigs);
-		this.#initAudioManagerMuteTriggers();
-		this.#fetchAudioFiles();
+		this.#fetchAudioManagerAudioFiles();
+		this.#initAudioPlayers();
 		this.#initGliders();
 		this.#initRolls();
 		this.#initScrollTables();
@@ -330,7 +321,7 @@ class App {
 	 */
 	#initPopups(popupConfigs) {
 		popupConfigs.forEach((popupConfig) => {
-			let targetElement = document.querySelector(popupConfig.target);
+			const targetElement = document.querySelector(popupConfig.target);
 			if (targetElement) {
 				this.popupManager.addPopup(new PopupManagerPopup({
 					id: popupConfig.id,
@@ -347,23 +338,36 @@ class App {
 	}
 
 	/**
-	 * Initializes the mute triggers for the audio manager.
+	 * Retrieves an array of audio manager mute triggers.
 	 * 
-	 * @returns {void}
+	 * @returns {Element[]} The found audio manager mute triggers.
 	 */
-	#initAudioManagerMuteTriggers() {
-		const muteTriggers = document.querySelectorAll("button[data-audio-manager-mute-trigger]");
-		muteTriggers.forEach((muteTrigger) => {
-			this.audioManager.addMuteTrigger(muteTrigger);
+	#getAudioManagerMuteTriggers() {
+		const triggers = document.querySelectorAll("button[data-audio-manager-mute-trigger]");
+		return Array.from(triggers);
+	}
+
+	/**
+	 * Retrieves an array of initialized audio manager play triggers.
+	 * 
+	 * @returns {AudioManagerPlayTrigger[]} The initialized audio manager play triggers.
+	 */
+	#getAudioManagerPlayTriggers() {
+		const triggers = document.querySelectorAll("button[data-audio-manager-play-trigger]");
+		return Array.from(triggers).map((trigger) => {
+			return new AudioManagerPlayTrigger({
+				trigger: trigger,
+				audioName: trigger.getAttribute("data-audio-manager-play-trigger")
+			});
 		});
 	}
 
 	/**
-	 * Fetches the audio files and stores them as audio buffers.
+	 * Fetches the audio files for the audio manager and stores them as audio buffers.
 	 * 
 	 * @returns {void}
 	 */
-	#fetchAudioFiles() {
+	#fetchAudioManagerAudioFiles() {
 		this.audioManager.fetchAudioFile("../assets/sounds/flip.ogg", "flip");
 		this.audioManager.fetchAudioFile("../assets/sounds/select.ogg", "select");
 		this.audioManager.fetchAudioFile("../assets/sounds/error.ogg", "error");
@@ -372,12 +376,37 @@ class App {
 	}
 
 	/**
+	 * Initializes the audio players.
+	 * 
+	 * @returns {void}
+	 */
+	#initAudioPlayers() {
+		const elems = document.querySelectorAll("[data-audio-player]");
+		elems.forEach((elem) => {
+			this.audioPlayers.push(new AudioPlayer({
+				wrapper: elem,
+				playTrigger: elem.querySelector("[data-audio-player-play-trigger]"),
+				stopTrigger: elem.querySelector("[data-audio-player-stop-trigger]"),
+				seekRange: elem.querySelector("[data-audio-player-seek-range]"),
+				source: elem.getAttribute("data-audio-player"),
+				playCallback: (audioPlayer, event) => {
+					this.pauseAllAudioPlayer(audioPlayer);
+					this.#toggleAllBackgroundAudio();
+				},
+				pauseCallback: (audioPlayer, event) => {
+					this.#toggleAllBackgroundAudio();
+				}
+			}));
+		});
+	}
+
+	/**
 	 * Initializes the gliders.
 	 * 
 	 * @returns {void}
 	 */
 	#initGliders() {
-		let elems = document.querySelectorAll("[data-glider]");
+		const elems = document.querySelectorAll("[data-glider]");
 		elems.forEach((elem) => {
 			this.gliders.push(new Glider({
 				wrapper: elem,
@@ -395,7 +424,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initRolls() {
-		let elems = document.querySelectorAll("[data-roll]");
+		const elems = document.querySelectorAll("[data-roll]");
 		elems.forEach((elem) => {
 			this.rolls.push(new Glider({
 				wrapper: elem,
@@ -414,7 +443,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initScrollTables() {
-		let elems = document.querySelectorAll("[data-scroll-table]");
+		const elems = document.querySelectorAll("[data-scroll-table]");
 		elems.forEach((elem) => {
 			this.scrollTables.push(new ScrollTable({
 				wrapper: elem,
@@ -432,7 +461,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initNavbarSubnavs() {
-		let elems = document.querySelectorAll("[data-navbar-subnav]");
+		const elems = document.querySelectorAll("[data-navbar-subnav]");
 		elems.forEach((elem) => {
 			this.navbarSubnavs.push(new Dropdown({
 				element: elem.querySelector("[data-navbar-subnav-element]"),
@@ -447,7 +476,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initLazyLoadDetectors() {
-		let elems = document.querySelectorAll("img[loading=lazy]");
+		const elems = document.querySelectorAll("img[loading=lazy]");
 		elems.forEach((elem) => {
 			this.lazyLoadDetectors.push(new LazyLoadDetector({
 				element: elem
@@ -461,7 +490,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initDialogs() {
-		let elems = document.querySelectorAll("[data-dialog]");
+		const elems = document.querySelectorAll("[data-dialog]");
 		elems.forEach((elem) => {
 			this.dialogs.push(new Dialog({
 				type: elem.getAttribute("data-dialog"),
@@ -469,7 +498,14 @@ class App {
 				triggers: [elem],
 				description: elem.getAttribute("data-dialog-description") || "",
 				customClasses: Dialog.parseCustomClasses(elem, "data-dialog-classes"),
-				closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>"
+				closeButtonHTML: "<svg class=\"icon\" aria-hidden=\"true\"><use xlink:href=\"#icon-close\"></use></svg>",
+				openCallback: (dialog) => {
+					this.pauseAllAudioPlayer();
+					this.#toggleAllBackgroundAudio();
+				},
+				closeCallback: (dialog) => {
+					this.#toggleAllBackgroundAudio();
+				}
 			}));
 		});
 		this.#addDialogAdditionalTriggers();
@@ -481,11 +517,11 @@ class App {
 	 * @returns {void}
 	 */
 	#addDialogAdditionalTriggers() {
-		let triggerElems = document.querySelectorAll("[data-dialog-trigger]");
-		triggerElems.forEach((triggerElem) => {
+		const elems = document.querySelectorAll("[data-dialog-trigger]");
+		elems.forEach((elem) => {
 			this.dialogs.forEach((dialog) => {
-				if (dialog.source == triggerElem.getAttribute('data-dialog-trigger')) {
-					dialog.addTrigger(triggerElem);
+				if (dialog.source == elem.getAttribute('data-dialog-trigger')) {
+					dialog.addTrigger(elem);
 				}
 			});
 		});
@@ -497,7 +533,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initSlideshows() {
-		let elems = document.querySelectorAll("[data-slideshow]");
+		const elems = document.querySelectorAll("[data-slideshow]");
 		elems.forEach((elem) => {
 			this.slideshows.push(new Slideshow({
 				source: `#${elem.id}`,
@@ -518,13 +554,13 @@ class App {
 	 * @returns {void}
 	 */
 	#addSlideshowAdditionalTriggers() {
-		let triggerElems = document.querySelectorAll("[data-slideshow-trigger]");
-		triggerElems.forEach((triggerElem) => {
+		const elems = document.querySelectorAll("[data-slideshow-trigger]");
+		elems.forEach((elem) => {
 			this.slideshows.forEach((slideshow) => {
-				if (slideshow.source == triggerElem.getAttribute('data-slideshow-trigger')) {
+				if (slideshow.source == elem.getAttribute('data-slideshow-trigger')) {
 					slideshow.addTrigger(new SlideshowTrigger({
-						elem: triggerElem,
-						index: parseInt(triggerElem.getAttribute("data-slideshow-trigger-index")) || 0
+						elem: elem,
+						index: parseInt(elem.getAttribute("data-slideshow-trigger-index")) || 0
 					}));
 				}
 			});
@@ -537,13 +573,11 @@ class App {
 	 * @returns {void}
 	 */
 	#initRangeIndicators() {
-		let elems = document.querySelectorAll("[data-range]");
+		const elems = document.querySelectorAll("[data-range]");
 		elems.forEach((elem) => {
-			let input = elem.querySelector("input");
-			let indicator = elem.querySelector("[data-range-indicator]");
 			this.rangeIndicators.push(new RangeIndicator({
-				input: input,
-				indicator: indicator,
+				input: elem.querySelector("input"),
+				indicator: elem.querySelector("[data-range-indicator]"),
 				formatter: (value) => {
 					return value.toLocaleString("en-US");
 				}
@@ -557,29 +591,29 @@ class App {
 	 * @returns {void}
 	 */
 	#initValidators() {
-		let elems = document.querySelectorAll("[data-validator]");
+		const elems = document.querySelectorAll("[data-validator]");
 		elems.forEach((elem) => {
 			this.validators.push(new Validator({
 				form: elem,
-				invalidCallback: (input, message) => {
+				invalidCallback: (validator, input, message) => {
 					if (input.type == "hidden") return;
-					let formItem = input.closest("div.form-item");
+					const formItem = input.closest("div.form-item");
 					if (formItem) {
 						formItem.setAttribute("data-label", message);
 						formItem.classList.add("has-invalid-field");
 						formItem.classList.remove("has-valid-field");
 					}
 				},
-				validCallback: (input) => {
+				validCallback: (validator, input) => {
 					if (input.type == "hidden") return;
-					let formItem = input.closest("div.form-item");
+					const formItem = input.closest("div.form-item");
 					if (formItem) {
 						formItem.removeAttribute("data-label");
 						formItem.classList.remove("has-invalid-field");
 						formItem.classList.add("has-valid-field");
 					}
 				},
-				hasInvalidCallback: (elems) => {
+				hasInvalidCallback: (validator, elems) => {
 					this.alertManager.addAlert("One or more fields are invalid!", "error");
 				}
 			}));
@@ -592,7 +626,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initNotices() {
-		let elems = document.querySelectorAll("[data-notice]");
+		const elems = document.querySelectorAll("[data-notice]");
 		elems.forEach((elem) => {
 			this.notices.push(new Notice({
 				wrapper: elem,
@@ -607,7 +641,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initTabs() {
-		let elems = document.querySelectorAll("[data-tab]");
+		const elems = document.querySelectorAll("[data-tab]");
 		elems.forEach((elem) => {
 			this.tabs.push(new Tab({
 				wrapper: elem,
@@ -618,12 +652,12 @@ class App {
 	}
 
 	/**
-	 * Initializes the sortables tees.
+	 * Initializes the sortables trees.
 	 * 
 	 * @returns {void}
 	 */
 	#initSortableTrees() {
-		let elems = document.querySelectorAll("[data-sortable-tree]");
+		const elems = document.querySelectorAll("[data-sortable-tree]");
 		elems.forEach((elem) => {
 			this.sortableTrees.push(new SortableTree({
 				wrapper: elem,
@@ -656,7 +690,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initSteppers() {
-		let elems = document.querySelectorAll("[data-stepper]");
+		const elems = document.querySelectorAll("[data-stepper]");
 		elems.forEach((elem) => {
 			this.steppers.push(new Stepper({
 				input: elem.querySelector("[data-stepper-input]"),
@@ -678,18 +712,22 @@ class App {
 	#initTours() {
 		const elems = document.querySelectorAll("[data-tour]");
 		elems.forEach((elem) => {
-			const scenes = this.#initTourScenes(elem);
-			const sceneTriggers = this.#initTourSceneTriggers(elem);
-			const inventoryTriggers = this.#initTourInventoryTriggers(elem);
-			const popovers = this.#initTourPopovers(elem);
+			const audioPlayer = this.#getTourAudioPlayer(elem);
+			const scenes = this.#getTourScenes(elem);
+			const sceneTriggers = this.#getTourSceneTriggers(elem);
+			const inventoryTriggers = this.#getTourInventoryTriggers(elem);
+			const audioPlayerTriggers = this.#getTourAudioPlayerTriggers(elem);
+			const popovers = this.#getTourPopovers(elem);
 			this.tours.push(new Tour({
 				id: elem.id,
 				wrapper: elem,
 				viewport: elem.querySelector("[data-tour-viewport]"),
 				backTrigger: elem.querySelector("[data-tour-back-trigger]"),
+				audioPlayer: audioPlayer,
 				scenes: scenes,
 				sceneTriggers: sceneTriggers,
 				inventoryTriggers: inventoryTriggers,
+				audioPlayerTriggers: audioPlayerTriggers,
 				popovers: popovers,
 				zoomInTrigger: elem.querySelector("[data-tour-zoom-in-trigger]"),
 				zoomOutTrigger: elem.querySelector("[data-tour-zoom-out-trigger]"),
@@ -697,6 +735,11 @@ class App {
 				fullscreenTrigger: elem.querySelector("[data-tour-fullscreen-trigger]"),
 				changeSceneCallback: (tour, scene) => {
 					this.audioManager.play("click");
+					if (scene.id == "scene-1") {
+						this.audioManager.pauseBackgroundAudio("birdChirping");
+					} else {
+						this.audioManager.playBackgroundAudio("birdChirping");
+					}
 				},
 				popoverOpenedCallback: (tour, event) => {
 					this.audioManager.play("flip");
@@ -710,161 +753,189 @@ class App {
 				inventoryTriggerClickCallback: (tour, event) => {
 					this.audioManager.play("achieve");
 				},
-				// popoverOpenedCallback: (tour, event) => {
-				// 	if (window.matchMedia(App.breakpoints['small']).matches) return;
-				// 	if (!tour.selectedScene) return;
-				// 	const popoverWidth = event.target.offsetWidth;
-				// 	const elemRect = event.source.getBoundingClientRect();
-				// 	const wrapperRect = tour.wrapper.getBoundingClientRect();
-				// 	const leftLimit = ((wrapperRect.right - (elemRect.right + popoverWidth)) * -1) + (elemRect.width * 2);
-				// 	if (elemRect.left + popoverWidth > wrapperRect.right) {
-				// 		setTimeout(() => {
-				// 			tour.viewport.scrollBy({
-				// 				left: leftLimit,
-				// 				behavior: "smooth"
-				// 			});
-				// 		}, 600);
-				// 	}
-				// }
+				audioPlayerTriggerClickCallback: (tour, audioPlayerTrigger, event) => {
+					this.audioManager.play("click");
+				}
 			}));
 		});
 	}
 
 	/**
-	 * Retrieves a list of tour scenes under the specified element.
+	 * Retrieves the initialized audio player for the tour under the specified element.
 	 * 
 	 * @param {Element} elem - The wrapper element.
-	 * @returns {(TourMapScene|TourFieldScene)[]} The created tour scenes.
+	 * @returns {AudioPlayer|null} The initialized audio player, or `null` if no audio player was found.
 	 */
-	#initTourScenes(elem) {
-		let tourScenes = [];
-		let tourSceneElems = elem.querySelectorAll("[data-tour-scene]");
-		tourSceneElems.forEach((tourSceneElem) => {
-			const sceneType = tourSceneElem.getAttribute("data-tour-scene");
-			switch (sceneType) {
-				case "map":
-					tourScenes.push(this.#createTourMapScene(tourSceneElem));
-					break;
-				case "field":
-					tourScenes.push(this.#createTourFieldScene(tourSceneElem));
-					break;
-			}
-		});
-		return tourScenes;
+	#getTourAudioPlayer(elem) {
+		const audioPlayerElem = elem.querySelector("[data-tour-audio-player]");
+		if (audioPlayerElem) {
+			return new AudioPlayer({
+				wrapper: audioPlayerElem,
+				playTrigger: audioPlayerElem.querySelector("[data-tour-audio-player-play-trigger]"),
+				abortTrigger: audioPlayerElem.querySelector("[data-tour-audio-player-abort-trigger]"),
+				seekRange: audioPlayerElem.querySelector("[data-tour-audio-player-seek-range]"),
+				playCallback: (audioPlayer, event) => {
+					this.pauseAllAudioPlayer(audioPlayer);
+					this.#toggleAllBackgroundAudio();
+				},
+				pauseCallback: (audioPlayer, event) => {
+					this.#toggleAllBackgroundAudio();
+				},
+				abortCallback: (audioPlayer, event) => {
+					this.#toggleAllBackgroundAudio();
+				}
+			})
+		} else {
+			return null;
+		}
 	}
 
 	/**
-	 * Creates a map tour scene wrapped by the specified element.
+	 * Retrieves an array of initialized tour scenes under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element.
-	 * @returns {TourMapScene} The created map tour scene.
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {(TourMapScene|TourFieldScene)[]} The initialized tour scenes.
 	 */
-	#createTourMapScene(elem) {
-		const hotspots = this.#initTourSceneHotspots(elem);
-		const coordinates = this.#parseTourSceneCoordinates(elem);
+	#getTourScenes(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-tour-scene]");
+		return Array.from(elems).map((elem) => {
+			const sceneType = elem.getAttribute("data-tour-scene");
+			switch (sceneType) {
+				case "map":
+					return this.#getTourMapScene(elem);
+				case "field":
+					return this.#getTourFieldScene(elem);
+			}
+		});
+	}
+
+	/**
+	 * Retrieves an initialized map-type tour scene wrapped by the specified element.
+	 * 
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourMapScene} The initialized map-type tour scene.
+	 */
+	#getTourMapScene(wrapperElem) {
+		const hotspots = this.#getTourSceneHotspots(wrapperElem);
+		const coordinates = this.#parseTourSceneCoordinates(wrapperElem);
 		return new TourMapScene({
-			id: elem.id,
-			wrapper: elem,
-			tileList: elem.querySelector("[data-tour-scene-tile-list]"),
+			id: wrapperElem.id,
+			wrapper: wrapperElem,
+			tileList: wrapperElem.querySelector("[data-tour-scene-tile-list]"),
 			...coordinates,
 			hotspots: hotspots
 		});
 	}
 
 	/**
-	 * Creates a field tour scene wrapped by the specified element.
+	 * Retrieves an initialized field-type tour scene wrapped by the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element.
-	 * @returns {TourFieldScene} The created field tour scene.
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourFieldScene} The initialized field-type tour scene.
 	 */
-	#createTourFieldScene(elem) {
-		const hotspots = this.#initTourSceneHotspots(elem);
-		const coordinates = this.#parseTourSceneCoordinates(elem);
+	#getTourFieldScene(wrapperElem) {
+		const hotspots = this.#getTourSceneHotspots(wrapperElem);
+		const coordinates = this.#parseTourSceneCoordinates(wrapperElem);
 		return new TourFieldScene({
-			id: elem.id,
-			wrapper: elem,
-			tileList: elem.querySelector("[data-tour-scene-tile-list]"),
+			id: wrapperElem.id,
+			wrapper: wrapperElem,
+			tileList: wrapperElem.querySelector("[data-tour-scene-tile-list]"),
 			...coordinates,
 			hotspots: hotspots,
 		});
 	}
 
 	/**
-	 * Creates a list of tour scene hotspots under the specified element.
+	 * Retrieves an array of initialized tour scene hotspots under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element.
-	 * @returns {TourSceneHotspot[]} The created tour scene hotspots.
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourSceneHotspot[]} The initialized tour scene hotspots.
 	 */
-	#initTourSceneHotspots(elem) {
-		let hotspots = [];
-		const hotspotElems = elem.querySelectorAll("[data-tour-scene-hotspot]");
-		hotspotElems.forEach((hotspotElem) => {
-			const rawCoordinate = hotspotElem.getAttribute("data-tour-scene-hotspot") || "";
-			const rawRotations = hotspotElem.getAttribute("data-tour-scene-hotspot-rotation") || "";
-			const rawRequiredItemIds = hotspotElem.getAttribute("data-tour-scene-hotspot-required-item-ids") || "";
-			hotspots.push(new TourSceneHotspot({
-				wrapper: hotspotElem,
+	#getTourSceneHotspots(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-tour-scene-hotspot]");
+		return Array.from(elems).map((elem) => {
+			const rawCoordinate = elem.getAttribute("data-tour-scene-hotspot") || "";
+			const rawRotations = elem.getAttribute("data-tour-scene-hotspot-rotation") || "";
+			const rawRequiredItemIds = elem.getAttribute("data-tour-scene-hotspot-required-item-ids") || "";
+			return new TourSceneHotspot({
+				wrapper: elem,
 				coordinate: TourSceneCoordinate.fromString(rawCoordinate),
 				requiredItemIds: TourSceneHotspot.idsFromString(rawRequiredItemIds),
 				...TourSceneHotspot.rotationsFromString(rawRotations)
-			}));
+			});
 		});
-		return hotspots;
 	}
 
 	/**
-	 * Creates a list of tour scene triggers under the specified element.
+	 * Retrieves an array of initialized tour scene triggers under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element.
-	 * @returns {TourSceneTrigger[]} The created tour scene triggers.
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourSceneTrigger[]} The initialized tour scene triggers.
 	 */
-	#initTourSceneTriggers(elem) {
-		let triggers = [];
-		const triggerElems = elem.querySelectorAll("[data-tour-scene-trigger]");
-		triggerElems.forEach((triggerElem) => {
-			const sceneId = triggerElem.getAttribute("data-tour-scene-trigger");
-			triggers.push(new TourSceneTrigger({
+	#getTourSceneTriggers(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-tour-scene-trigger]");
+		return Array.from(elems).map((elem) => {
+			const sceneId = elem.getAttribute("data-tour-scene-trigger");
+			return new TourSceneTrigger({
 				sceneId: sceneId,
-				trigger: triggerElem
-			}));
+				trigger: elem
+			});
 		});
-		return triggers;
 	}
 
 	/**
-	 * Creates a list of tour inventory triggers under the specified element.
+	 * Retrieves an array of initialized tour inventory triggers under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element.
-	 * @returns {TourInventoryTrigger[]} The created tour inventory triggers.
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourInventoryTrigger[]} The initialized tour inventory triggers.
 	 */
-	#initTourInventoryTriggers(elem) {
-		let triggers = [];
-		const triggerElems = elem.querySelectorAll("[data-tour-inventory-trigger]");
-		triggerElems.forEach((triggerElem) => {
-			const itemId = parseInt(triggerElem.getAttribute("data-tour-inventory-trigger"));
-			triggers.push(new TourInventoryTrigger({
-				trigger: triggerElem,
+	#getTourInventoryTriggers(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-tour-inventory-trigger]");
+		return Array.from(elems).map((elem) => {
+			const itemId = parseInt(elem.getAttribute("data-tour-inventory-trigger"));
+			return new TourInventoryTrigger({
+				trigger: elem,
 				itemId: itemId
-			}));
+			});
 		});
-		return triggers;
 	}
 
 	/**
-	 * Creates a list of tour popovers under the specified element.
+	 * Retrieves an array of initialized tour audio player triggers under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element.
-	 * @returns {TourPopover[]} The created tour popovers.
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourAudioPlayerTrigger[]} The initialized tour audio player triggers.
 	 */
-	#initTourPopovers(elem) {
-		let popovers = [];
-		const popoverElems = elem.querySelectorAll("[data-tour-popover]");
-		popoverElems.forEach((popoverElem) => {
-			popovers.push(new TourPopover({
-				wrapper: popoverElem
-			}));
+	#getTourAudioPlayerTriggers(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-tour-audio-player-trigger]");
+		return Array.from(elems).map((elem) => {
+			return new TourAudioPlayerTrigger({
+				trigger: elem,
+				source: elem.getAttribute("data-tour-audio-player-trigger")
+			});
 		});
-		return popovers;
+	}
+
+	/**
+	 * Retrieves an array of initialized tour popovers under the specified element.
+	 * 
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourPopover[]} The initialized tour popovers.
+	 */
+	#getTourPopovers(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-tour-popover]");
+		return Array.from(elems).map((elem) => {
+			return new TourPopover({
+				wrapper: elem,
+				closedCallback: ((tourPopover) => {
+					this.audioPlayers.forEach((audioPlayer) => {
+						if (tourPopover.wrapper.contains(audioPlayer.wrapper)) {
+							audioPlayer.stop();
+						}
+					});
+				})
+			});
+		});
 	}
 
 	/**
@@ -890,7 +961,7 @@ class App {
 	#initMemoryGames() {
 		const elems = document.querySelectorAll("[data-memory-game]");
 		elems.forEach((elem) => {
-			const cards = this.#initMemoryGameCards(elem);
+			const cards = this.#getMemoryGameCards(elem);
 			this.memoryGames.push(new MemoryGame({
 				wrapper: elem,
 				cardList: elem.querySelector("[data-memory-game-list]"),
@@ -929,34 +1000,32 @@ class App {
 	}
 
 	/**
-	 * Retrieves a list of memory game cards under the specified element.
+	 * Retrieves an array of initialized memory game cards under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element of the memory game.
-	 * @returns {MemoryGameCard[]} The created memory game cards.
+	 * @param {Element} wrapperElem - The wrapper element of the memory game.
+	 * @returns {MemoryGameCard[]} The initialized memory game cards.
 	 */
-	#initMemoryGameCards(elem) {
-		let cards = [];
-		const cardElems = elem.querySelectorAll("[data-memory-game-card]");
-		cardElems.forEach((cardElem) => {
-			cards.push(new MemoryGameCard({
-				id: cardElem.getAttribute("data-memory-game-card"),
-				trigger: cardElem,
-				frontView: cardElem.querySelector("[data-memory-game-card-front]"),
-				backView: cardElem.querySelector("[data-memory-game-card-back]")
-			}));
+	#getMemoryGameCards(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-memory-game-card]");
+		return Array.from(elems).map((elem) => {
+			return new MemoryGameCard({
+				id: elem.getAttribute("data-memory-game-card"),
+				trigger: elem,
+				frontView: elem.querySelector("[data-memory-game-card-front]"),
+				backView: elem.querySelector("[data-memory-game-card-back]")
+			});
 		});
-		return cards;
 	}
 
 	/**
-	 * Initializes the quizzes
+	 * Initializes the quizzes.
 	 * 
 	 * @returns {void}
 	 */
 	#initQuizzes() {
-		let elems = document.querySelectorAll("[data-quiz]");
+		const elems = document.querySelectorAll("[data-quiz]");
 		elems.forEach((elem) => {
-			let questions = this.#initQuizQuestions(elem);
+			let questions = this.#getQuizQuestions(elem);
 			this.quizzes.push(new Quiz({
 				wrapper: elem,
 				questions: questions,
@@ -988,45 +1057,41 @@ class App {
 	}
 
 	/**
-	 * Retrieves a list of quiz questions under the specified element.
+	 * Retrieves an array of initialized quiz questions under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element of the quiz.
-	 * @returns {QuizQuestion[]} The created quiz questions.
+	 * @param {Element} wrapperElem - The wrapper element of the quiz.
+	 * @returns {QuizQuestion[]} The initialized quiz questions.
 	 */
-	#initQuizQuestions(elem) {
-		let questions = [];
-		let questionElems = elem.querySelectorAll("[data-quiz-question]");
-		questionElems.forEach((questionElem) => {
-			let options = this.#initQuizQuestionOptions(questionElem);
-			let totalPoints = this.#getQuestionTotalPoints(questionElem);
-			questions.push(new QuizQuestion({
-				wrapper: questionElem,
+	#getQuizQuestions(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-quiz-question]");
+		return Array.from(elems).map((elem) => {
+			const options = this.#getQuizQuestionOptions(elem);
+			const totalPoints = this.#getQuestionTotalPoints(elem);
+			return new QuizQuestion({
+				wrapper: elem,
 				options: options,
 				minPoints: totalPoints
-			}));
+			});
 		});
-		return questions;
 	}
 
 	/**
-	 * Retrieves a list of quiz question options under the specified element.
+	 * Retrieves an array of initialized quiz question options under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element of the quiz question.
-	 * @returns {QuizQuestionOption[]} The created quiz question options.
+	 * @param {Element} wrapperElem - The wrapper element of the quiz question.
+	 * @returns {QuizQuestionOption[]} The initialized quiz question options.
 	 */
-	#initQuizQuestionOptions(elem) {
-		let options = [];
-		let optionElems = elem.querySelectorAll("[data-quiz-question-option]");
-		optionElems.forEach((optionElem) => {
-			options.push(new QuizQuestionOption({
-				input: optionElem,
-				isInvalid: optionElem.value === "0",
+	#getQuizQuestionOptions(wrapperElem) {
+		let elems = wrapperElem.querySelectorAll("[data-quiz-question-option]");
+		return Array.from(elems).map((elem) => {
+			return new QuizQuestionOption({
+				input: elem,
+				isInvalid: elem.value === "0",
 				checkCallback: (option) => {
 					this.audioManager.play("click");
 				}
-			}));
+			});
 		});
-		return options;
 	}
 
 	/**
@@ -1035,10 +1100,10 @@ class App {
 	 * @param {Element} elem - The wrapper element of the quiz question.
 	 * @returns {number} The total points of the options for the quiz question.
 	 */
-	#getQuestionTotalPoints(elem) {
-		let optionElems = elem.querySelectorAll("[data-quiz-question-option]");
-		return Array.from(optionElems).reduce((acc, optionElem) => {
-			return parseInt(optionElem.value) + acc;
+	#getQuestionTotalPoints(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-quiz-question-option]");
+		return Array.from(elems).reduce((acc, elem) => {
+			return parseInt(elem.value) + acc;
 		}, 0);
 	}
 
@@ -1048,9 +1113,9 @@ class App {
 	 * @returns {void}
 	 */
 	#initLiveFilters() {
-		let elems = document.querySelectorAll("[data-live-filter]");
+		const elems = document.querySelectorAll("[data-live-filter]");
 		elems.forEach((elem) => {
-			let items = this.#initLiveFilterItems(elem);
+			const items = this.#getLiveFilterItems(elem);
 			this.liveFilters.push(new LiveFilter({
 				wrapper: elem,
 				input: elem.querySelector("[data-live-filter-input]"),
@@ -1060,21 +1125,19 @@ class App {
 	}
 
 	/**
-	 * Retrieves a list of live filter items under the specified element.
+	 * Retrieves an array of initialized live filter items under the specified element.
 	 * 
-	 * @param {Element} elem - The wrapper element of the live filter.
-	 * @returns {LiveFilterItem[]} The created live filter items.
+	 * @param {Element} wrapperElem - The wrapper element of the live filter.
+	 * @returns {LiveFilterItem[]} The initialized live filter items.
 	 */
-	#initLiveFilterItems(elem) {
-		let items = [];
-		let itemElems = elem.querySelectorAll("[data-live-filter-item]");
-		itemElems.forEach((itemElem) => {
-			items.push(new LiveFilterItem({
-				wrapper: itemElem,
-				content: itemElem.innerText
-			}));
+	#getLiveFilterItems(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-live-filter-item]");
+		return Array.from(elems).map((elem) => {
+			return new LiveFilterItem({
+				wrapper: elem,
+				content: elem.innerText
+			});
 		});
-		return items;
 	}
 
 	/**
@@ -1083,7 +1146,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initCalendars() {
-		let elems = document.querySelectorAll("[data-calendar]");
+		const elems = document.querySelectorAll("[data-calendar]");
 		elems.forEach((elem) => {
 			const currentMonthTrigger = elem.querySelector("[data-calendar-current-month-trigger]");
 			this.calendars.push(new Calendar({
@@ -1100,7 +1163,8 @@ class App {
 						to: Temporal.Now.plainDateISO().add({ days: 365 }),
 						weekdays: [1, 2, 3, 4, 5, 6, 7]
 					})
-				]
+				],
+				selectCallback: (calendar, date) => console.log(date.toString())
 			}));
 			if (currentMonthTrigger !== null) {
 				const day = Temporal.Now.plainDateISO().day;
@@ -1115,7 +1179,7 @@ class App {
 	 * @returns {void}
 	 */
 	#initDateSelectors() {
-		let elems = document.querySelectorAll("[data-date-selector]");
+		const elems = document.querySelectorAll("[data-date-selector]");
 		elems.forEach((elem) => {
 			this.dateSelectors.push(new DateSelector({
 				yearSelector: elem.querySelector("[data-date-selector-year-selector]"),
@@ -1129,8 +1193,7 @@ class App {
 					})
 				],
 				excludedIntervals: [],
-				selectCallback: (date) => console.log(date.toString()),
-				resetCallback: () => console.log("resetCallback")
+				selectCallback: (dateSelector, date) => console.log(date.toString())
 			}));
 		});
 	}
@@ -1141,11 +1204,11 @@ class App {
 	 * @returns {void}
 	 */
 	#initSmoothScrolls() {
-		let elems = document.querySelectorAll("[data-smooth-scroll]");
+		const elems = document.querySelectorAll("[data-smooth-scroll]");
 		elems.forEach((elem) => {
 			elem.addEventListener("click", (event) => {
 				event.preventDefault();
-				let target = document.querySelector(elem.getAttribute("href"));
+				const target = document.querySelector(elem.getAttribute("href"));
 				if (target) {
 					target.scrollIntoView({
 						behavior: "smooth"
@@ -1156,13 +1219,49 @@ class App {
 	}
 
 	/**
+	 * Mutes or unmutes all background audio in the audio manager based on whether audio is being played by an audio player or dialog.
+	 * 
+	 * @returns {void}
+	 */
+	#toggleAllBackgroundAudio() {
+		const dialogTypes = ["video", "youtube"];
+		let hasPlayingAudioPlayer = this.audioPlayers.some((audioPlayer) => !audioPlayer.audio.paused);
+		let hasPlayingTourAudioPlayer = this.tours.some((tour) => tour.audioPlayer && !tour.audioPlayer.audio.paused);
+		let hasPlayingDialog = this.dialogs.some((dialog) => dialog.isOpened && dialogTypes.includes(dialog.type));
+		if (hasPlayingAudioPlayer || hasPlayingTourAudioPlayer || hasPlayingDialog) {
+			this.audioManager.muteAllBackgroundAudio();
+		} else {
+			this.audioManager.unmuteAllBackgroundAudio();
+		}
+	}
+
+	/**
+	 * Pauses all audio players except the specified one.
+	 * 
+	 * @param {AudioPlayer|null} enabledAudioPlayer - The audio player to keep playing, or `null` to pause all audio players.
+	 * @returns {void}
+	 */
+	pauseAllAudioPlayer(enabledAudioPlayer = null) {
+		this.tours.forEach((tour) => {
+			if (tour.audioPlayer && enabledAudioPlayer != tour.audioPlayer) {
+				tour.audioPlayer.pause();
+			}
+		});
+		this.audioPlayers.forEach((audioPlayer) => {
+			if (enabledAudioPlayer != audioPlayer) {
+				audioPlayer.pause();
+			}
+		});
+	}
+
+	/**
 	 * Detects immediate and event-driven changes in breakpoints.
 	 * 
 	 * @returns {void}
 	 */
 	#detectBreakpointChange() {
 		Object.entries(App.breakpoints).forEach(([name, query]) => {
-			let mediaQueryList = window.matchMedia(query);
+			const mediaQueryList = window.matchMedia(query);
 			this.#switchNavbarType(mediaQueryList);
 			mediaQueryList.addEventListener("change", (event) => {
 				this.#onBreakpointChange(event);

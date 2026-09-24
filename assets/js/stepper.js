@@ -45,7 +45,7 @@ class Stepper {
 	/**
 	 * Callback function that is called after the stepper has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Stepper):void|null}
 	 */
 	initCallback = null;
 
@@ -67,7 +67,7 @@ class Stepper {
 	 * @param {HTMLButtonElement} options.stepDownTrigger - The button that decrements the value.
 	 * @param {HTMLElement|null} options.indicator - The element that displays the formatted current value.
 	 * @param {function(number):string} options.formatter - Function that is called to format the numeric value for display.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the stepper has been initialized.
+	 * @param {function(Stepper):void|null} options.initCallback - Callback function that is called after the stepper has been initialized.
 	 * @returns {Stepper}
 	 */
 	constructor(options) {
@@ -98,7 +98,7 @@ class Stepper {
 		this.#addEvents();
 		this.input.value = this.inputValue;
 		this.#isInputChanged();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**

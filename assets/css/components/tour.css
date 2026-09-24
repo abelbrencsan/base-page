@@ -185,6 +185,13 @@ div.tour {
 					}
 				}
 			}
+
+			> div.tour-audio-player {
+				
+				&:not(.has-audio-source) {
+					display: none;
+				}
+			}
 		}
 	}
 
@@ -422,7 +429,7 @@ div.tour-scene {
 					}
 				}
 
-				&.is-active {
+				&.is-active, &.is-playing {
 					color: transparent;
 					background-color: var(--bg-color);
 
@@ -443,6 +450,10 @@ div.tour-scene {
 					&:after {
 						transform: translate3d(-50%, 0, 0) rotate3d(0, 0, 1, -45deg);
 					}
+				}
+
+				&.is-muted {
+					display: none;
 				}
 
 				@media (hover: hover) {
@@ -760,9 +771,6 @@ div.tour-scene {
 
 /* Tour popover component prototype */
 div.tour-popover[popover] {
-	--tour-popover-action-bg-color: var(--scheme-dark-translucent-bg-color);
-	--tour-popover-action-bg-hover-color: var(--scheme-dark-bg-color);
-	--tour-popover-action-fg-color: var(--scheme-dark-fg-color);
 	--tour-popover-action-size: 3rem;
 	--tour-popover-toggle-transition: var(--toggle-transition);
 	--tour-popover-width: 30rem;
@@ -799,9 +807,9 @@ div.tour-popover[popover] {
 			> a, > button {
 				align-items: center;
 				backdrop-filter: blur(2px);
-				background-color: var(--tour-popover-action-bg-color);
+				background-color: var(--scheme-dark-translucent-bg-color);
 				border-radius: calc(var(--tour-popover-action-size) * 0.5);
-				color: var(--tour-popover-action-fg-color);
+				color: var(--scheme-dark-fg-color);
 				display: flex;
 				height: var(--tour-popover-action-size);
 				justify-content: center;
@@ -825,7 +833,7 @@ div.tour-popover[popover] {
 				@media (hover: hover) {
 
 					&:hover, &:active {
-						background-color: var(--tour-popover-action-bg-hover-color);
+						background-color: var(--scheme-dark-bg-color);
 					}
 				}
 			}
@@ -841,6 +849,11 @@ div.tour-popover[popover] {
 				cursor: pointer;
 				padding: 0;
 				text-align: left;
+			}
+
+			> div.tour-audio-player {
+				--tour-audio-player-size: var(--tour-popover-action-size);
+				pointer-events: auto;
 			}
 
 			&:first-child {
@@ -926,7 +939,7 @@ div.tour-popover[popover] {
 	@media (max-width: 47em) {
 		border-radius: var(--border-radius) var(--border-radius) 0 0;
 		margin: auto auto 0 auto;
-		max-height: 95%;
+		/*max-height: 95%;*/
 		transition: transform var(--tour-popover-toggle-transition), opacity var(--tour-popover-toggle-transition);
 
 		> div.tour-popover-cta {
@@ -966,4 +979,156 @@ div.tour-popover[popover] {
 
 /* Tour popover component extensions */
 div.tour-popover[popover]:popover-open {
+}
+
+/* Tour audio player component prototype */
+div.tour-audio-player {
+	--tour-audio-player-size: var(--element-height);
+	align-items: center;
+	backdrop-filter: blur(2px);
+	background-color: var(--scheme-dark-translucent-bg-color);
+	border-radius: calc(var(--tour-audio-player-size) * 0.5);
+	color: var(--scheme-dark-fg-color);
+	display: flex;
+	flex-flow: row nowrap;
+	height: var(--tour-audio-player-size);
+
+	ul.tour-audio-player-control-list {
+		align-items: center;
+		display: flex;
+		list-style: none;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li {
+			padding-left: 0;
+
+			> button {
+				align-items: center;
+				background-color: transparent;
+				border-radius: 50%;
+				border: none;
+				color: inherit;
+				cursor: pointer;
+				display: flex;
+				height: var(--tour-audio-player-size);
+				justify-content: center;
+				padding: 0;
+				text-align: left;
+				width: var(--tour-audio-player-size);
+
+				svg.icon {
+
+					&:nth-of-type(2) {
+						display: none;
+					}
+				}
+
+				&.is-playing {
+
+					svg.icon {
+
+						&:first-child {
+							display: none;
+						}
+
+						&:nth-of-type(2) {
+							display: block;
+						}
+					}
+				}
+
+				&:disabled {
+					color: color-mix(in srgb, var(--scheme-dark-fg-color) 40%, var(--scheme-dark-translucent-bg-color) 60%);
+					cursor: not-allowed;
+
+					@media (hover: hover) {
+
+						&:hover, &:active {
+							background-color: transparent;
+						}
+					}
+				}
+
+				@media (hover: hover) {
+
+					&:hover, &:active {
+						background-color: var(--scheme-dark-bg-color);
+					}
+				}
+			}
+		}
+	}
+
+	input.tour-audio-player-seek-range {
+		-webkit-appearance: none;
+		background-color: transparent;
+		display: block;
+		height: var(--tour-audio-player-size);
+		max-width: 6rem;
+		padding: 0 1rem 0 0.5rem;
+		width: 100%;
+
+		&:focus {
+			outline: none;
+		}
+
+		&:focus-visible {
+
+			&::-webkit-slider-thumb {
+				box-shadow: inset 0 0 0 3px var(--focus-color);
+			}
+
+			&::-moz-range-thumb {
+				box-shadow: inset 0 0 0 3px var(--focus-color);
+			}
+		}
+	}
+
+	input.tour-audio-player-seek-range::-webkit-slider-runnable-track {
+		background-color: color-mix(in srgb, var(--scheme-dark-fg-color) 40%, var(--scheme-dark-bg-color) 60%);
+		border-radius: 0.25rem;
+		height: 0.5rem;
+	}
+
+	input.tour-audio-player-seek-range::-moz-range-track {
+		background-color: color-mix(in srgb, var(--scheme-dark-fg-color) 40%, var(--scheme-dark-bg-color) 60%);
+		border-radius: 0.25rem;
+		height: 0.5rem;
+	}
+
+	input.tour-audio-player-seek-range::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		background-color: var(--scheme-dark-fg-color);
+		border-radius: 50%;
+		border: 0;
+		box-shadow: none;
+		cursor: pointer;
+		height: calc(var(--tour-audio-player-size) * 0.5);
+		margin-top: calc(var(--tour-audio-player-size) * -0.125);
+		width: calc(var(--tour-audio-player-size) * 0.5);
+	}
+
+	input.tour-audio-player-seek-range::-moz-range-thumb {
+		background-color: var(--scheme-dark-fg-color);
+		border-radius: 50%;
+		border: 0;
+		cursor: pointer;
+		height: calc(var(--tour-audio-player-size) * 0.5);
+		width: calc(var(--tour-audio-player-size) * 0.5);
+	}
+
+	input.tour-audio-player-seek-range:disabled::-webkit-slider-thumb {
+		cursor: not-allowed;
+		background-color: color-mix(in srgb, var(--scheme-dark-fg-color) 60%, var(--scheme-dark-bg-color) 40%);
+	}
+
+	input.tour-audio-player-seek-range:disabled::-moz-range-thumb {
+		cursor: not-allowed;
+		background-color: color-mix(in srgb, var(--scheme-dark-fg-color) 60%, var(--scheme-dark-bg-color) 40%);
+	}
+}
+
+/* Tour audio player component extensions */
+div.tour-audio-player {
 }

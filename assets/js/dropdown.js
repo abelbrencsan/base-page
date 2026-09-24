@@ -52,21 +52,21 @@ class Dropdown {
 	/**
 	 * Callback function that is called after the dropdown has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dropdown):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the dropdown has been opened.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dropdown):void|null}
 	 */
 	openCallback = null;
 
 	/**
 	 * Callback function that is called after the dropdown has been closed.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Dropdown):void|null}
 	 */
 	closeCallback = null;
 
@@ -101,9 +101,9 @@ class Dropdown {
 	 * @param {string} options.isOpenedClass - The class that is added to the dropdown element after it has been opened.
 	 * @param {string} options.isActiveClass - The class that is added to the dropdown trigger after it has been opened.
 	 * @param {string} options.hasOpenedDropdownClass - The class that is added to the dropdown's parent element after it has been opened.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the dropdown has been initialized.
-	 * @param {function():void|null} options.openCallback - Callback function that is called after the dropdown has been opened.
-	 * @param {function():void|null} options.closeCallback - Callback function that is called after the dropdown has been closed.
+	 * @param {function(Dropdown):void|null} options.initCallback - Callback function that is called after the dropdown has been initialized.
+	 * @param {function(Dropdown):void|null} options.openCallback - Callback function that is called after the dropdown has been opened.
+	 * @param {function(Dropdown):void|null} options.closeCallback - Callback function that is called after the dropdown has been closed.
 	 * @returns {Dropdown}
 	 */
 	constructor(options) {
@@ -127,7 +127,7 @@ class Dropdown {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.#setClosedAttributes();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 		Dropdown.itemCount++;
 	}
 
@@ -154,7 +154,7 @@ class Dropdown {
 		this.#setOpenedAttributes();
 		this.isOpened = true;
 		this.#addToOpenedDropdowns();
-		if (typeof(this.openCallback) == "function") this.openCallback();
+		if (typeof(this.openCallback) == "function") this.openCallback(this);
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Dropdown {
 		if (this.element.contains(document.activeElement)) {
 			this.trigger.focus();
 		}
-		if (typeof(this.closeCallback) == "function") this.closeCallback();
+		if (typeof(this.closeCallback) == "function") this.closeCallback(this);
 	}
 
 	/**

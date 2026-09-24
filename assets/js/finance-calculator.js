@@ -115,14 +115,14 @@ class FinanceCalculator {
 	/**
 	 * Callback function that is called after the finance calculator has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(FinanceCalculator):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the finance calculator has been updated.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(FinanceCalculator):void|null}
 	 */
 	updateCallback = null;
 
@@ -254,8 +254,8 @@ class FinanceCalculator {
 	 * @param {HTMLElement|null} options.paymentPeriodsIndicator - The element where the number of payment periods is rendered.
 	 * @param {HTMLElement|null} options.airIndicator - The element where the annual interest rate (AIR) is rendered.
 	 * @param {HTMLElement|null} options.aprIndicator - The element where the annual percentage rate (APR) is rendered.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the finance calculator has been initialized.
-	 * @param {function():void|null} options.updateCallback - Callback function that is called after the finance calculator has been updated.
+	 * @param {function(FinanceCalculator):void|null} options.initCallback - Callback function that is called after the finance calculator has been initialized.
+	 * @param {function(FinanceCalculator):void|null} options.updateCallback - Callback function that is called after the finance calculator has been updated.
 	 * @returns {FinanceCalculator}
 	 */
 	constructor(options) {
@@ -285,7 +285,7 @@ class FinanceCalculator {
 		this.handleEvent = (event) => this.#handleEvents(event);
 		this.#addEvents();
 		this.update();
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -307,7 +307,7 @@ class FinanceCalculator {
 		this.#updatePaymentPeriodsIndicator(paymentPeriods);
 		this.#updateAIRIndicator(this.air);
 		this.#updateAPRIndicator(this.apr);
-		if (typeof(this.updateCallback) == "function") this.updateCallback();
+		if (typeof(this.updateCallback) == "function") this.updateCallback(this);
 	}
 
 	/**

@@ -115,21 +115,21 @@ class Glider {
 	/**
 	 * Callback function that is called after the glider has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Glider):void|null}
 	 */
 	initCallback = null;
 
 	/**
 	 * Callback function that is called after the autoplay has been started.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Glider):void|null}
 	 */
 	startAutoplayCallback = null;
 
 	/**
 	 * Callback function that is called after the autoplay has been stopped.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Glider):void|null}
 	 */
 	stopAutoplayCallback = null;
 
@@ -193,9 +193,9 @@ class Glider {
 	 * @param {string} options.isLastGlideClass - The class that is added to the wrapper element when the viewport reaches the last glide.
 	 * @param {string} options.hasAutoplayClass - The class that is added to the wrapper element when the autoplay is enabled.
 	 * @param {string} options.isAutoplayStoppedClass - The class that is added to the wrapper when the autoplay has been stopped.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the glider has been initialized.
-	 * @param {function():void|null} options.startAutoplayCallback - Callback function that is called after the autoplay has been started.
-	 * @param {function():void|null} options.stopAutoplayCallback - Callback function that is called after the autoplay has been stopped.
+	 * @param {function(Glider):void|null} options.initCallback - Callback function that is called after the glider has been initialized.
+	 * @param {function(Glider):void|null} options.startAutoplayCallback - Callback function that is called after the autoplay has been started.
+	 * @param {function(Glider):void|null} options.stopAutoplayCallback - Callback function that is called after the autoplay has been stopped.
 	 * @returns {Glider}
 	 */
 	constructor(options) {
@@ -236,7 +236,7 @@ class Glider {
 		this.items.forEach((item) => this.observer.observe(item));
 		this.startAutoplay();
 		this.wrapper.classList.toggle(this.hasAutoplayClass, this.autoplay);
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
@@ -280,7 +280,7 @@ class Glider {
 		if (this.intervalId || !this.autoplay) return;
 		this.#setAutoplayInterval();
 		this.wrapper.classList.remove(this.isAutoplayStoppedClass);
-		if (typeof(this.startAutoplayCallback) == "function") this.startAutoplayCallback();
+		if (typeof(this.startAutoplayCallback) == "function") this.startAutoplayCallback(this);
 	}
 
 	/**
@@ -293,7 +293,7 @@ class Glider {
 		clearInterval(this.intervalId);
 		this.intervalId = null;
 		this.wrapper.classList.add(this.isAutoplayStoppedClass);
-		if (typeof(this.stopAutoplayCallback) == "function") this.stopAutoplayCallback();
+		if (typeof(this.stopAutoplayCallback) == "function") this.stopAutoplayCallback(this);
 	}
 
 	/**

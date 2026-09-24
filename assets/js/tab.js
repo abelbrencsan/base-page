@@ -52,7 +52,7 @@ class Tab {
 	/**
 	 * Callback function that is called after the tab has been initialized.
 	 * 
-	 * @type {function():void|null}
+	 * @type {function(Tab):void|null}
 	 */
 	initCallback = null;
 
@@ -66,7 +66,7 @@ class Tab {
 	 * @param {number} options.index - The index of the selected tab item.
 	 * @param {string} options.isActiveClass - The class that is added to the selected tab trigger and panel.
 	 * @param {string} options.isInitializedClass - The class that is added to the wrapper after the tab has been initialized.
-	 * @param {function():void|null} options.initCallback - Callback function that is called after the tab has been initialized.
+	 * @param {function(Tab):void|null} options.initCallback - Callback function that is called after the tab has been initialized.
 	 * 
 	 * @returns {Tab}
 	 */
@@ -98,7 +98,7 @@ class Tab {
 		this.#addEvents();
 		this.select(this.index);
 		this.wrapper.classList.add(this.isInitializedClass);
-		if (typeof(this.initCallback) == "function") this.initCallback();
+		if (typeof(this.initCallback) == "function") this.initCallback(this);
 	}
 
 	/**
