@@ -256,13 +256,27 @@
 						</picture>
 					</li>
 				</ul>
-				<ul class="tour-scene-layer-list"></ul>
+				<ul class="tour-scene-layer-list">
+					<li>
+						<picture>
+							<img src="/images/tour/layers/01.png" loading="lazy" width="2500" height="5000" alt="Lorem ipsum">
+						</picture>
+					</li>
+					<li>
+						<picture>
+							<img src="/images/tour/layers/02.png" loading="lazy" width="2500" height="5000" alt="Lorem ipsum">
+						</picture>
+					</li>
+				</ul>
 				<ul class="tour-scene-hotspot-list">
 					<li data-tour-scene-hotspot="690,1455" data-tour-scene-hotspot-tooltip="Scene 2">
 						<button type="button" aria-label="Scene 2" data-tour-scene-trigger="scene-2"></button>
 					</li>
+					<li data-tour-scene-hotspot="640,1600" data-tour-scene-hotspot-tooltip="Scene 6">
+						<button type="button" aria-label="Scene 6" data-tour-scene-trigger="scene-6"></button>
+					</li>
 					<li data-tour-scene-hotspot="1650,870" data-tour-scene-hotspot-tooltip="Popover" data-tour-scene-hotspot-color="red" data-tour-scene-hotspot-required-item-ids="1">
-						<button type="button" popovertarget="demo-tour-popover" popovertargetaction="toggle" aria-label="Popover">
+						<button type="button" popovertarget="sample-tour-popover" popovertargetaction="toggle" aria-label="Popover">
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-information"></use>
 							</svg>
@@ -293,7 +307,7 @@
 					</li>
 				</ul>
 				<ul class="tour-scene-hotspot-list">
-					<li data-tour-scene-hotspot="600,2445" data-tour-scene-hotspot-tooltip="Scene 3" data-tour-scene-hotspot-rotation="65,0" data-tour-scene-hotspot-size="xsmall">
+					<li data-tour-scene-hotspot="600,2445" data-tour-scene-hotspot-tooltip="Scene 3" data-tour-scene-hotspot-rotation="65,0" data-tour-scene-hotspot-size="small">
 						<button type="button" aria-label="Scene 3" data-tour-scene-trigger="scene-3"></button>
 					</li>
 				</ul>
@@ -307,7 +321,7 @@
 					</li>
 				</ul>
 				<ul class="tour-scene-hotspot-list">
-					<li data-tour-scene-hotspot="600,2527" data-tour-scene-hotspot-tooltip="Scene 4" data-tour-scene-hotspot-rotation="65,0" data-tour-scene-hotspot-size="xsmall">
+					<li data-tour-scene-hotspot="600,2527" data-tour-scene-hotspot-tooltip="Scene 4" data-tour-scene-hotspot-rotation="65,0" data-tour-scene-hotspot-size="small">
 						<button type="button" aria-label="Scene 4" data-tour-scene-trigger="scene-4"></button>
 					</li>
 				</ul>
@@ -335,11 +349,8 @@
 					</li>
 				</ul>
 				<ul class="tour-scene-hotspot-list">
-					<li data-tour-scene-hotspot="640,3050" data-tour-scene-hotspot-tooltip="Scene 6" data-tour-scene-hotspot-rotation="65,0">
-						<button type="button" aria-label="Scene 6" data-tour-scene-trigger="scene-6"></button>
-					</li>
 					<li data-tour-scene-hotspot="560,1620" data-tour-scene-hotspot-tooltip="Demo popover" data-tour-scene-hotspot-rotation="0,0" data-tour-scene-hotspot-color="blue">
-						<button type="button" popovertarget="demo-tour-popover" popovertargetaction="toggle" aria-label="Demo popover">
+						<button type="button" popovertarget="sample-tour-popover" popovertargetaction="toggle" aria-label="Demo popover">
 							<svg class="icon" aria-hidden="true">
 								<use xlink:href="#icon-information"></use>
 							</svg>
@@ -400,21 +411,7 @@
 				</div>
 			</li>
 			<li>
-				<button type="button" aria-label="Back to map" title="Back to map" data-tour-back-to-root-trigger>
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-map"></use>
-					</svg>
-				</button>
-			</li>
-			<li>
-				<button type="button" aria-label="Go back" title="Go back" data-tour-back-trigger>
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-arrow-undo"></use>
-					</svg>
-				</button>
-			</li>
-			<li>
-				<button type="button" aria-label="Mute" title="Mute" data-audio-manager-mute-trigger>
+				<button type="button" aria-label="Ambient audio" title="Ambient audio" data-audio-manager-mute-trigger>
 					<svg class="icon" aria-hidden="true">
 						<use xlink:href="#icon-volume-high"></use>
 					</svg>
@@ -433,8 +430,31 @@
 					</svg>
 				</button>
 			</li>
+			<li>
+				<button type="button" aria-label="Overview" title="Overview" popovertarget="sample-tour-overview" popovertargetaction="toggle">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-layers"></use>
+					</svg>
+				</button>
+			</li>
 		</ul>
-		<div id="demo-tour-popover" class="tour-popover" popover="manual" data-tour-popover>
+		<ul class="tour-history-list">
+			<li>
+				<button type="button" aria-label="Go back" title="Go back" data-tour-back-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-arrow-undo"></use>
+					</svg>
+				</button>
+			</li>
+			<li>
+				<button type="button" aria-label="Back to map" title="Back to map" data-tour-back-to-root-trigger>
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-map-undo"></use>
+					</svg>
+				</button>
+			</li>
+		</ul>
+		<div id="sample-tour-popover" class="tour-popover" popover="manual" data-tour-popover>
 			<ul class="tour-popover-action-list">
 				<li>
 					<div class="tour-audio-player" data-audio-player="/assets/sounds/speech.ogg">
@@ -461,14 +481,7 @@
 					</div>
 				</li>
 				<li>
-					<button type="button" title="Like" aria-label="Like">
-						<svg class="icon" aria-hidden="true">
-							<use xlink:href="#icon-heart"></use>
-						</svg>
-					</button>
-				</li>
-				<li>
-					<button type="button" popovertarget="demo-tour-popover" popovertargetaction="hide" title="Close" aria-label="Close">
+					<button type="button" popovertarget="sample-tour-popover" popovertargetaction="hide" title="Close" aria-label="Close">
 						<svg class="icon" aria-hidden="true">
 							<use xlink:href="#icon-close"></use>
 						</svg>
@@ -517,9 +530,92 @@
 						<a href="#" class="button button--primary" role="button">Maecenas tempus</a>
 					</li>
 					<li>
-						<button type="button" class="button" popovertarget="demo-tour-popover" popovertargetaction="hide">Back to tour</button>
+						<button type="button" class="button" popovertarget="sample-tour-popover" popovertargetaction="hide">Back to tour</button>
 					</li>
 				</ul>
+			</div>
+		</div>
+		<div id="sample-tour-overview" class="tour-overview" popover data-tab data-tour-overview-popover>
+			<div class="tour-overview-triggers" role="tablist">
+				<div class="tour-overview-triggers-group">
+					<button type="button" aria-controls="sample-tour-overview-scenes" role="tab" title="Scenes" aria-label="Scenes" data-tab-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-trail-sign"></use>
+						</svg>
+					</button>
+					<button type="button" aria-controls="sample-tour-overview-pathways" role="tab" title="Pathways" aria-label="Pathways" data-tab-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-pathway"></use>
+						</svg>
+					</button>
+					<button type="button" aria-controls="sample-tour-overview-placemarks" role="tab" title="Inventory" aria-label="Inventory" data-tab-trigger>
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-briefcase"></use>
+						</svg>
+					</button>
+				</div>
+				<button type="button" popovertarget="sample-tour-overview" popovertargetaction="hide" title="Close" aria-label="Close">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-close"></use>
+					</svg>
+				</button>
+			</div>
+			<div id="sample-tour-overview-scenes" class="tour-overview-panel" role="tabpanel" data-tab-panel>
+				<h2>Scenes</h2>
+				<div class="tour-overview-filter" data-live-filter>
+					<input type="text" name="sceneSearch" id="sceneSearch" class="tour-overview-filter-input form-input" placeholder="Search" data-live-filter-input>
+					<ul class="tour-overview-filter-list tour-overview-scene-list">
+						<li data-live-filter-item>
+							<button type="button" class="is-root-scene" data-tour-scene-start-trigger="scene-1">
+								<picture>
+									<img src="/images/tour/maps/01-cover.jpg" loading="lazy" width="720" height="240" alt="Lorem ipsum">
+								</picture>
+								<span class="tour-overview-scene-list-item-label">Map</span>
+							</button>
+						</li>
+						<li data-live-filter-item>
+							<button type="button" data-tour-scene-start-trigger="scene-2">
+								<picture>
+									<img src="/images/tour/fields/001-cover.jpg" loading="lazy" width="720" height="240" alt="Lorem ipsum">
+								</picture>
+								<span class="tour-overview-scene-list-item-label">Scene 2</span>
+							</button>
+						</li>
+						<li data-live-filter-item>
+							<button type="button" data-tour-scene-start-trigger="scene-6">
+								<picture>
+									<img src="/images/tour/fields/005-cover.jpg" loading="lazy" width="720" height="240" alt="Lorem ipsum">
+								</picture>
+								<span class="tour-overview-scene-list-item-label">Scene 6</span>
+							</button>
+						</li>
+					</ul>
+					<div class="tour-overview-filter-empty-state tour-overview-empty-state">
+						<svg class="icon" aria-hidden="true">
+							<use xlink:href="#icon-trail-sign"></use>
+						</svg>
+						<span class="heading">No scene found</span>
+						<p>Maiores quaerat exercitationem provident et tempora</p>
+					</div>
+				</div>
+			</div>
+			<div id="sample-tour-overview-pathways" class="tour-overview-panel" role="tabpanel" data-tab-panel>
+				<div class="tour-overview-empty-state">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-pathway"></use>
+					</svg>
+					<span class="heading">No pathways</span>
+					<p>Maiores quaerat exercitationem provident et tempora</p>
+				</div>
+			</div>
+			<div id="sample-tour-overview-inventory" class="tour-overview-panel" role="tabpanel" data-tab-panel>
+				<div class="tour-overview-empty-state">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-briefcase"></use>
+					</svg>
+					<span class="heading">Empty inventory</span>
+					<p>Maiores quaerat exercitationem provident et tempora</p>
+				</div>
 			</div>
 		</div>
 	</div>

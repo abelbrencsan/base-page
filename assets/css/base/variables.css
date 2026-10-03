@@ -119,7 +119,7 @@
 	--scheme-dark-fg-color: #e7e7e8;
 	--scheme-dark-fg-light-color: #b6b8ba;
 	--scheme-dark-link-color: #65ceff;
-	--scheme-dark-translucent-bg-color: rgba(10, 16, 25, 0.75);
+	--scheme-dark-translucent-bg-color: rgba(10, 16, 25, 0.6);
 
 	/* Primary palette */
 	--palette-primary-bg-color: #0076ad;

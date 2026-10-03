@@ -7,6 +7,7 @@
 /* Side panel component prototype */
 aside.side-panel[popover]:popover-open {
 	--side-panel-toggle-transition: var(--toggle-transition);
+	--side-panel-width: 22rem;
 	background-color: var(--bg-color);
 	border: none;
 	bottom: auto;
@@ -19,7 +20,7 @@ aside.side-panel[popover]:popover-open {
 	top: 0;
 	transform: translate3d(0, 0, 0);
 	transition: transform var(--side-panel-toggle-transition), opacity var(--side-panel-toggle-transition);
-	width: 22rem;
+	width: var(--side-panel-width);
 
 	> h1, > h2, > h3, > h4, > h5, > h6, >.heading {
 		font-size: var(--heading-3-font-size);
@@ -28,21 +29,17 @@ aside.side-panel[popover]:popover-open {
 	}
 
 	div.side-panel-empty-state {
-		color: var(--fg-light-color);
 		margin-top: var(--element-margin);
 		text-align: center;
 
 		svg.icon {
-			background-color: var(--border-bg-color);
-			border-radius: 50%;
-			height: 72px;
-			margin-bottom: var(--block-margin);
-			padding: 16px;
-			width: 72px;
+			height: 40px;
+			width: 40px;
 		}
 
 		span.heading {
 			font-size: var(--large-font-size);
+			margin-bottom: var(--block-margin);
 		}
 
 		p {
@@ -87,17 +84,17 @@ aside.side-panel[popover]:popover-open {
 		width: 100%;
 	}
 
-	@media (prefers-reduced-motion) {
-		transition: none;
-	}
-
 	@starting-style {
 		opacity: 0;
 		transform: translate3d(3rem, 0, 0);
 	}
 
+	@media (prefers-reduced-motion) {
+		transition: none;
+	}
+
 	@media (max-width: 32em) {
-		width: 100%;
+		--side-panel-width: 100%;
 	}
 }
 

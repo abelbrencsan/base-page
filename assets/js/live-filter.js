@@ -43,6 +43,13 @@ class LiveFilter {
 	hasFilteredClass = "has-filtered-item";
 
 	/**
+	 * The class that is added to the wrapper when all item are filtered out.
+	 * 
+	 * @type {string}
+	 */
+	allFilteredClass = "all-filtered";
+
+	/**
 	 * Callback function that is called after the live filter has been initialized.
 	 * 
 	 * @type {function(LiveFilter):void|null}
@@ -58,6 +65,7 @@ class LiveFilter {
 	 * @param {LiveFilterItem[]} options.items - An array of items that can be filtered in real-time.
 	 * @param {string} options.isFilteredClass - The class that is added to the wrapper of the item when it is filtered out.
 	 * @param {string} options.hasFilteredClass - The class that is added to the wrapper when at least one item is filtered out.
+	 * @param {string} options.allFilteredClass - The class that is added to the wrapper when all item are filtered out.
 	 * @param {function(LiveFilter):void|null} options.initCallback - Callback function that is called after the live filter has been initialized.
 	 * @returns {LiveFilter}
 	 */
@@ -98,11 +106,14 @@ class LiveFilter {
 	filter() {
 		const value = this.input.value.toLowerCase();
 		this.wrapper.classList.remove(this.hasFilteredClass);
+		this.wrapper.classList.add(this.allFilteredClass);
 		this.items.forEach((item) => {
 			item.wrapper.classList.remove(this.isFilteredClass);
 			if (!item.content.toLowerCase().includes(value)) {
 				item.wrapper.classList.add(this.isFilteredClass);
 				this.wrapper.classList.add(this.hasFilteredClass);
+			} else {
+				this.wrapper.classList.remove(this.allFilteredClass);
 			}
 		});
 	}

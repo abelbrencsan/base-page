@@ -278,6 +278,7 @@ class App {
 		this.#initSortableTrees();
 		this.#initSteppers();
 		this.#initTours();
+		this.#initTourScrollToTriggers();
 		this.#initMemoryGames();
 		this.#initQuizzes();
 		this.#initLiveFilters();
@@ -702,7 +703,7 @@ class App {
 				}
 			}));
 		});
-	}
+	} 
 
 	/**
 	 * Initializes the tours.
@@ -715,6 +716,7 @@ class App {
 			const audioPlayer = this.#getTourAudioPlayer(elem);
 			const scenes = this.#getTourScenes(elem);
 			const sceneTriggers = this.#getTourSceneTriggers(elem);
+			const sceneStartTriggers = this.#getTourSceneStartTriggers(elem);
 			const inventoryTriggers = this.#getTourInventoryTriggers(elem);
 			const audioPlayerTriggers = this.#getTourAudioPlayerTriggers(elem);
 			const popovers = this.#getTourPopovers(elem);
@@ -725,7 +727,7 @@ class App {
 				backTrigger: elem.querySelector("[data-tour-back-trigger]"),
 				audioPlayer: audioPlayer,
 				scenes: scenes,
-				sceneTriggers: sceneTriggers,
+				sceneTriggers: sceneTriggers.concat(sceneStartTriggers),
 				inventoryTriggers: inventoryTriggers,
 				audioPlayerTriggers: audioPlayerTriggers,
 				popovers: popovers,
@@ -733,7 +735,11 @@ class App {
 				zoomOutTrigger: elem.querySelector("[data-tour-zoom-out-trigger]"),
 				backToRootTrigger: elem.querySelector("[data-tour-back-to-root-trigger]"),
 				fullscreenTrigger: elem.querySelector("[data-tour-fullscreen-trigger]"),
+				initCallback: (tour) => {
+					this.#initTourOverviewPopover(tour);
+				},
 				changeSceneCallback: (tour, scene) => {
+					this.#closeTourOverviewPopover(tour);
 					this.audioManager.play("click");
 					if (scene.id == "scene-1") {
 						this.audioManager.pauseBackgroundAudio("birdChirping");
@@ -742,19 +748,29 @@ class App {
 					}
 				},
 				popoverOpenedCallback: (tour, event) => {
-					this.audioManager.play("flip");
+					if (!tour.isSceneChanging) this.audioManager.play("flip");
 				},
 				popoverClosedCallback: (tour, event) => {
-					this.audioManager.play("flip");
+					if (!tour.isSceneChanging) this.audioManager.play("flip");
 				},
 				zoomCallback: (tour, scene, zoomLevel, isInitial) => {
-					if (!isInitial) this.audioManager.play("click");
+					if (!tour.isSceneChanging) this.audioManager.play("click");
 				},
 				inventoryTriggerClickCallback: (tour, event) => {
-					this.audioManager.play("achieve");
+					if (!tour.isSceneChanging) this.audioManager.play("click");
 				},
 				audioPlayerTriggerClickCallback: (tour, audioPlayerTrigger, event) => {
-					this.audioManager.play("click");
+					if (!tour.isSceneChanging) this.audioManager.play("click");
+				},
+				audioPlayerPlayCallback: (tour, audioPlayer, event) => {
+					this.pauseAllAudioPlayer(audioPlayer);
+					this.#toggleAllBackgroundAudio();
+				},
+				audioPlayerPauseCallback: (tour, audioPlayer, event) => {
+					this.#toggleAllBackgroundAudio();
+				},
+				audioPlayerAbortCallback: (tour, audioPlayer, event) => {
+					this.#toggleAllBackgroundAudio();
 				}
 			}));
 		});
@@ -773,17 +789,7 @@ class App {
 				wrapper: audioPlayerElem,
 				playTrigger: audioPlayerElem.querySelector("[data-tour-audio-player-play-trigger]"),
 				abortTrigger: audioPlayerElem.querySelector("[data-tour-audio-player-abort-trigger]"),
-				seekRange: audioPlayerElem.querySelector("[data-tour-audio-player-seek-range]"),
-				playCallback: (audioPlayer, event) => {
-					this.pauseAllAudioPlayer(audioPlayer);
-					this.#toggleAllBackgroundAudio();
-				},
-				pauseCallback: (audioPlayer, event) => {
-					this.#toggleAllBackgroundAudio();
-				},
-				abortCallback: (audioPlayer, event) => {
-					this.#toggleAllBackgroundAudio();
-				}
+				seekRange: audioPlayerElem.querySelector("[data-tour-audio-player-seek-range]")
 			})
 		} else {
 			return null;
@@ -884,6 +890,24 @@ class App {
 	}
 
 	/**
+	 * Retrieves an array of initialized tour scene triggers under the specified element that clear the history and then navigate from the root scene to the specified scene.
+	 * 
+	 * @param {Element} wrapperElem - The wrapper element.
+	 * @returns {TourSceneTrigger[]} The initialized tour scene triggers.
+	 */
+	#getTourSceneStartTriggers(wrapperElem) {
+		const elems = wrapperElem.querySelectorAll("[data-tour-scene-start-trigger]");
+		return Array.from(elems).map((elem) => {
+			const sceneId = elem.getAttribute("data-tour-scene-start-trigger");
+			return new TourSceneTrigger({
+				sceneId: sceneId,
+				trigger: elem,
+				clearHistory: true
+			});
+		});
+	}
+
+	/**
 	 * Retrieves an array of initialized tour inventory triggers under the specified element.
 	 * 
 	 * @param {Element} wrapperElem - The wrapper element.
@@ -951,6 +975,65 @@ class App {
 			topLeftCoordinate: TourSceneCoordinate.fromString(rawTopLeft),
 			bottomRightCoordinate: TourSceneCoordinate.fromString(rawBottomRight)
 		};
+	}
+
+	/**
+	 * Initializes triggers that navigate to the first scene and then scroll to the related hotspot within the tour.
+	 * 
+	 * @returns {void}
+	 */
+	#initTourScrollToTriggers() {
+		this.tours.forEach((tour) => {
+			const triggerElems = tour.wrapper.querySelectorAll("[data-tour-scroll-to-trigger]");
+			triggerElems.forEach((triggerElem) => {
+				const sceneId = triggerElem.getAttribute("data-tour-scroll-to-trigger");
+				const targetElem = tour.wrapper.querySelector(`[data-tour-scene-trigger="${sceneId}"]`)
+				if (targetElem) {
+					triggerElem.addEventListener("click", (event) => {
+						tour.goBackToRoot();
+						tour.scrollToElem(targetElem);
+						targetElem.focus({
+							focusVisible: true,
+							preventScroll: true
+						});
+					});
+				}
+			});
+		});
+	}
+
+	/**
+	 * Initializes the overview popover for the tour.
+	 * 
+	 * @param {Tour} tour - The tour whose overview popover is to be initialized.
+	 * @returns {void}
+	 */
+	#initTourOverviewPopover(tour) {
+		const overviewPopover = tour.wrapper.querySelector("[data-tour-overview-popover]");
+		if (overviewPopover && overviewPopover.popover) {
+			tour.meta.set("overviewPopover", overviewPopover);
+			overviewPopover.addEventListener("toggle", (event) => {
+				this.liveFilters.forEach((liveFilter) => {
+					if (overviewPopover.contains(liveFilter.wrapper)) {
+						liveFilter.input.value = "";
+						liveFilter.filter();
+					}
+				});
+			});
+		}
+	}
+
+	/**
+	 * Closes the overview popover of the specified tour.
+	 * 
+	 * @param {Tour} tour - The tour whose overview popover is to be closed.
+	 * @returns {void}
+	 */
+	#closeTourOverviewPopover(tour) {
+		const overviewPopover = tour.meta.get("overviewPopover");
+		if (overviewPopover) {
+			tour.meta.get("overviewPopover").hidePopover();
+		}
 	}
 
 	/**
@@ -1255,21 +1338,6 @@ class App {
 	}
 
 	/**
-	 * Detects immediate and event-driven changes in breakpoints.
-	 * 
-	 * @returns {void}
-	 */
-	#detectBreakpointChange() {
-		Object.entries(App.breakpoints).forEach(([name, query]) => {
-			const mediaQueryList = window.matchMedia(query);
-			this.#switchNavbarType(mediaQueryList);
-			mediaQueryList.addEventListener("change", (event) => {
-				this.#onBreakpointChange(event);
-			});
-		});
-	}
-
-	/**
 	 * Detects whether the user is offline and has no access to the network.
 	 * 
 	 * @returns {void}
@@ -1289,14 +1357,14 @@ class App {
 	}
 
 	/**
-	 * Switches between the offset and full navigation bar at the medium breakpoint.
+	 * Toggles between the offset and full navigation bar at the medium breakpoint.
 	 * 
 	 * @param {MediaQueryList} mediaQueryList - The media queries applied to the document. 
 	 * @returns {void}
 	 */
-	#switchNavbarType(mediaQueryList) {
+	#toggleNavbarType(mediaQueryList) {
 		if (mediaQueryList.media == App.breakpoints.medium) {
-			const navbarNav = document.getElementById('navbar-nav');
+			const navbarNav = document.getElementById("navbar-nav");
 			if (navbarNav) {
 				if (mediaQueryList.matches) {
 					navbarNav.popover = "auto";
@@ -1308,13 +1376,28 @@ class App {
 	}
 
 	/**
+	 * Detects immediate and event-driven changes in breakpoints.
+	 * 
+	 * @returns {void}
+	 */
+	#detectBreakpointChange() {
+		Object.entries(App.breakpoints).forEach(([name, query]) => {
+			const mediaQueryList = window.matchMedia(query);
+			this.#toggleNavbarType(mediaQueryList);
+			mediaQueryList.addEventListener("change", (event) => {
+				this.#onBreakpointChange(event);
+			});
+		});
+	}
+
+	/**
 	 * Executes after the breakpoint has changed.
 	 * 
 	 * @param {MediaQueryListEvent} event - The event to be handled.
 	 * @returns {void}
 	 */
 	#onBreakpointChange(event) {
-		this.#switchNavbarType(event.target);
+		this.#toggleNavbarType(event.target);
 		this.alertManager.updatePositions();
 		if (this.page) this.page.onBreakpointChange(event);
 	}

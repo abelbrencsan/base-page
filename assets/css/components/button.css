@@ -225,10 +225,6 @@ ul.button-subnav[popover] {
 		width: calc(var(--box-arrow) * 2);
 	}
 
-	&::backdrop {
-		display: none;
-	}
-
 	@media (prefers-reduced-motion) {
 		transition: none;
 	}

@@ -165,11 +165,18 @@ class Tour {
 	isAudioPlayingClass = "is-playing";
 
 	/**
-	 * The class that is added to the wrapper while audio is playing in the audio player.
+	 * The class that is added to the wrapper while the audio player has loaded audio.
 	 * 
 	 * @type {string}
 	 */
-	hasPlayingAudioPlayingClass = "has-playing-audio";
+	hasLoadedAudioPlayerClass = "has-loaded-audio";
+
+	/**
+	 * The name of the attribute added to the wrapper whose value contains the number of scenes within the history.
+	 * 
+	 * @type {string}
+	 */
+	historyCountAttribute = "data-tour-history-count";
 
 	/**
 	 * Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
@@ -184,6 +191,13 @@ class Tour {
 	 * @type {boolean}
 	 */
 	storeInventory = false;
+
+	/**
+	 * Custom metadata related to the tour.
+	 * 
+	 * @type {Map<string,any>}
+	 */
+	meta = new Map();
 
 	/**
 	 * Callback function that is called after the tour has been initialized.
@@ -270,6 +284,13 @@ class Tour {
 	sceneTriggerClickCallback = null;
 
 	/**
+	 * Callback function that is called after a scene trigger is checked whether its scene is active or included in the history.
+	 * 
+	 * @type {function(Tour,TourSceneTrigger,boolean,boolean):void|null}
+	 */
+	sceneTriggerToggleCallback = null;
+	
+	/**
 	 * Callback function that is called after an inventory trigger is clicked.
 	 * 
 	 * @type {function(Tour,TourInventoryTrigger,PointerEvent):void|null}
@@ -333,6 +354,34 @@ class Tour {
 	pinchEndCallback = null;
 
 	/**
+	 * Callback function that is called after the audio has started playing.
+	 * 
+	 * @type {function(Tour,AudioPlayer,Event):void|null}
+	 */
+	audioPlayerPlayCallback = null;
+
+	/**
+	 * Callback function that is called after the audio has been paused.
+	 * 
+	 * @type {function(Tour,AudioPlayer,Event):void|null}
+	 */
+	audioPlayerPauseCallback = null;
+
+	/**
+	 * Callback function that is called after the audio has been loaded.
+	 * 
+	 * @type {function(Tour,AudioPlayer,Event):void|null}
+	 */
+	audioPlayerLoadCallback = null;
+
+	/**
+	 * Callback function that is called after the audio has been aborted.
+	 * 
+	 * @type {function(Tour,AudioPlayer,Event):void|null}
+	 */
+	audioPlayerAbortCallback = null;
+
+	/**
 	 * The inventory that allows items to be collected within the tour.
 	 * 
 	 * @type {Wishlist}
@@ -375,6 +424,13 @@ class Tour {
 	#isWheelZoomLocked = false;
 
 	/**
+	 * The time of the last scene change in milliseconds since the epoch.
+	 * 
+	 * @type {number}
+	 */
+	#lastSceneChangeTime = 0;
+
+	/**
 	 * The selected scene.
 	 * 
 	 * @type {TourScene|null}
@@ -394,12 +450,30 @@ class Tour {
 
 	/**
 	 * The current zoom level of the selected scene.
-	 * 
+	 * f
 	 * @type {number}
 	 */
 	get currentZoomLevel() {
 		if (!(this.#selectedScene instanceof TourMapScene)) return 0;
 		return this.#selectedScene.currentZoomLevel;
+	}
+
+	/**
+	 * The time of the last scene change in milliseconds since the epoch.
+	 * 
+	 * @type {number}
+	 */
+	get lastSceneChangeTime() {
+		return this.#lastSceneChangeTime;
+	}
+
+	/**
+	 * Indicates whether the current scene is changing to the next one.
+	 * 
+	 * @type {boolean}
+	 */
+	get isSceneChanging() {
+		return Date.now() < this.#lastSceneChangeTime + 200;
 	}
 
 	/**
@@ -428,9 +502,11 @@ class Tour {
 	 * @param {string} options.hasFullscreenSupportClass - The class that is added to the wrapper when the fullscreen API is supported by the browser.
 	 * @param {string} options.hasOpenedPopoverClass - The class that is added to the wrapper while a popover is open.
 	 * @param {string} options.isAudioPlayingClass - The class that is added to the audio player trigger while its audio is playing.
-	 * @param {string} options.hasPlayingAudioPlayingClass - The class that is added to the wrapper while audio is playing in the audio player.
+	 * @param {string} options.hasLoadedAudioPlayerClass - The class that is added to the wrapper while the audio player has loaded audio.
+	 * @param {string} options.historyCountAttribute - The name of the attribute added to the wrapper whose value contains the number of scenes within the history.
 	 * @param {boolean} options.ctrlWheel - Indicates whether the wheel zoom is enabled only if the ctrl key is pressed.
 	 * @param {boolean} options.storeInventory - Indicates whether to store the inventory in local storage rather than in memory.
+	 * @param {Map<string,any>} options.meta - Custom metadata related to the tour.
 	 * @param {function(Tour):void|null} options.initCallback - Callback function that is called after the tour has been initialized.
 	 * @param {function(Tour,TourScene):void|null} options.goToSceneCallback - Callback function that is called after the next scene is selected.
 	 * @param {function(Tour,TourScene):void|null} options.goBackCallback - Callback function that is called after the previous scene is reverted.
@@ -443,6 +519,7 @@ class Tour {
 	 * @param {function(Tour,ToggleEvent):void|null} options.popoverOpenedCallback - Callback function that is called after a popover is opened.
 	 * @param {function(Tour,ToggleEvent):void|null} options.popoverClosedCallback - Callback function that is called after a popover is closed.
 	 * @param {function(Tour,TourSceneTrigger,PointerEvent):void|null} options.sceneTriggerClickCallback - Callback function that is called after a scene trigger is clicked.
+	 * @param {function(Tour,TourSceneTrigger,boolean,boolean):void|null} options.sceneTriggerToggleCallback - Callback function that is called after a scene trigger is checked whether its scene is active or included in the history.
 	 * @param {function(Tour,TourInventoryTrigger,PointerEvent):void|null} options.inventoryTriggerClickCallback - Callback function that is called after an inventory trigger is clicked.
 	 * @param {function(Tour,TourAudioPlayerTrigger,PointerEvent):void|null} options.audioPlayerTriggerClickCallback - Callback function that is called after an audio player trigger is clicked.
 	 * @param {function(Tour,TourScene,PointerEvent):void|null} options.panStartCallback - Callback function that is called after panning the selected scene has started.
@@ -452,6 +529,11 @@ class Tour {
 	 * @param {function(Tour,TourMapScene,number,boolean):void|null} options.zoomCallback - Callback function that is called after the selected scene is zoomed to a different zoom level.
 	 * @param {function(Tour,TourMapScene,TouchEvent):void|null} options.pinchStartCallback - Callback function that is called after pinching the selected scene has started.
 	 * @param {function(Tour,TourMapScene,TouchEvent):void|null} options.pinchEndCallback - Callback function that is called after pinching the selected scene has ended.
+	 * @param {function(Tour,AudioPlayer,Event):void|null} options.audioPlayerPlayCallback - Callback function that is called after the audio has started playing.
+	 * @param {function(Tour,AudioPlayer,Event):void|null} options.audioPlayerPauseCallback - Callback function that is called after the audio has been paused.
+	 * @param {function(Tour,AudioPlayer,Event):void|null} options.audioPlayerLoadCallback - Callback function that is called after the audio has been loaded.
+	 * @param {function(Tour,AudioPlayer,Event):void|null} options.audioPlayerAbortCallback - Callback function that is called after the audio has been aborted.
+	 * 
 	 * @returns {Tour}
 	 */
 	constructor(options) {
@@ -493,9 +575,11 @@ class Tour {
 		if ("hasFullscreenSupportClass" in options) this.hasFullscreenSupportClass = options.hasFullscreenSupportClass;
 		if ("hasOpenedPopoverClass" in options) this.hasOpenedPopoverClass = options.hasOpenedPopoverClass;
 		if ("isAudioPlayingClass" in options) this.isAudioPlayingClass = options.isAudioPlayingClass;
-		if ("hasPlayingAudioPlayingClass" in options) this.hasPlayingAudioPlayingClass = options.hasPlayingAudioPlayingClass;
+		if ("hasLoadedAudioPlayerClass" in options) this.hasLoadedAudioPlayerClass = options.hasLoadedAudioPlayerClass;
+		if ("historyCountAttribute" in options) this.historyCountAttribute = options.historyCountAttribute;
 		if ("ctrlWheel" in options) this.ctrlWheel = options.ctrlWheel;
 		if ("storeInventory" in options) this.storeInventory = options.storeInventory;
+		if ("meta" in options) this.meta = options.meta;
 		if ("initCallback" in options) this.initCallback = options.initCallback;
 		if ("goToSceneCallback" in options) this.goToSceneCallback = options.goToSceneCallback;
 		if ("goBackCallback" in options) this.goBackCallback = options.goBackCallback;
@@ -508,6 +592,7 @@ class Tour {
 		if ("popoverOpenedCallback" in options) this.popoverOpenedCallback = options.popoverOpenedCallback;
 		if ("popoverClosedCallback" in options) this.popoverClosedCallback = options.popoverClosedCallback;
 		if ("sceneTriggerClickCallback" in options) this.sceneTriggerClickCallback = options.sceneTriggerClickCallback;
+		if ("sceneTriggerToggleCallback" in options) this.sceneTriggerToggleCallback = options.sceneTriggerToggleCallback;
 		if ("inventoryTriggerClickCallback" in options) this.inventoryTriggerClickCallback = options.inventoryTriggerClickCallback;
 		if ("audioPlayerTriggerClickCallback" in options) this.audioPlayerTriggerClickCallback = options.audioPlayerTriggerClickCallback;
 		if ("panStartCallback" in options) this.panStartCallback = options.panStartCallback;
@@ -517,6 +602,10 @@ class Tour {
 		if ("zoomCallback" in options) this.zoomCallback = options.zoomCallback;
 		if ("pinchStartCallback" in options) this.pinchStartCallback = options.pinchStartCallback;
 		if ("pinchEndCallback" in options) this.pinchEndCallback = options.pinchEndCallback;
+		if ("audioPlayerPlayCallback" in options) this.audioPlayerPlayCallback = options.audioPlayerPlayCallback;
+		if ("audioPlayerPauseCallback" in options) this.audioPlayerPauseCallback = options.audioPlayerPauseCallback;
+		if ("audioPlayerLoadCallback" in options) this.audioPlayerLoadCallback = options.audioPlayerLoadCallback;
+		if ("audioPlayerAbortCallback" in options) this.audioPlayerAbortCallback = options.audioPlayerAbortCallback;
 
 		// Initialize the tour
 		this.handleEvent = (event) => this.#handleEvents(event);
@@ -533,11 +622,12 @@ class Tour {
 	 * Navigates to the specified scene.
 	 * 
 	 * @param {TourScene} scene - The scene to navigate to.
+	 * @param {boolean} addToHistory - Indicates whether to add the previous scene to the history.
 	 * @param {boolean} focus - Indicates whether to set focus to the viewport after the scene is selected.
 	 * @returns {void}
 	 */
-	goToScene(scene, focus = true) {
-		this.#changeScene(scene);
+	goToScene(scene, addToHistory = true, focus = true) {
+		this.#changeScene(scene, addToHistory);
 		if (focus) this.viewport.focus({ preventScroll: true });
 		if (typeof(this.goToSceneCallback) == "function") this.goToSceneCallback(this, scene);
 	}
@@ -546,12 +636,13 @@ class Tour {
 	 * Navigates to the scene with the specified ID.
 	 * 
 	 * @param {string} id - The ID of the scene to navigate to.
+	 * @param {boolean} addToHistory - Indicates whether to add the previous scene to the history.
 	 * @param {boolean} focus - Indicates whether to set focus to the viewport after the scene is selected.
 	 * @returns {void}
 	 */
-	goToSceneById(id, focus = true) {
+	goToSceneById(id, addToHistory = true, focus = true) {
 		const scene = this.getSceneById(id);
-		if (scene) this.goToScene(scene, focus);
+		if (scene) this.goToScene(scene, addToHistory, focus);
 	}
 
 	/**
@@ -700,6 +791,7 @@ class Tour {
 	 */
 	#changeScene(selectedScene, addToHistory = true, overrides = new Map()) {
 		if (this.#selectedScene === selectedScene) return;
+		this.#lastSceneChangeTime = Date.now();
 		this.popovers.forEach((popover) => popover.wrapper.hidePopover());
 		if (this.#selectedScene !== null) {
 			if (addToHistory) {
@@ -755,9 +847,11 @@ class Tour {
 	 * @returns {void}
 	 */
 	#toggleHistory() {
-		const hasHistory = this.#history.length;
+		const hasHistory = this.#history.length > 0;
+		this.wrapper.setAttribute(this.historyCountAttribute, this.#history.length);
 		this.wrapper.classList.toggle(this.hasHistoryClass, hasHistory);
 		this.backTrigger.toggleAttribute("disabled", !hasHistory);
+		if (this.backToRootTrigger) this.backToRootTrigger.toggleAttribute("disabled", !hasHistory);
 	}
 
 	/**
@@ -772,6 +866,7 @@ class Tour {
 			const isSelected = sceneTrigger.sceneId == this.#selectedScene.id;
 			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneInHistoryClass, isInHistory);
 			sceneTrigger.trigger.classList.toggle(sceneTrigger.isSceneSelectedClass, isSelected);
+			if (typeof(this.sceneTriggerToggleCallback) == "function") this.sceneTriggerToggleCallback(this, sceneTrigger, isInHistory, isSelected);
 		});
 	}
 
@@ -831,7 +926,18 @@ class Tour {
 		if (sceneTrigger.preferHistory && this.isHistoryIncludes(sceneTrigger.sceneId)) {
 			this.goBackToScene(sceneTrigger.sceneId);
 		} else {
-			this.goToSceneById(sceneTrigger.sceneId);
+			let addToHistory = true;
+			if (sceneTrigger.clearHistory) {
+				addToHistory = this.#history.length == 0;
+				if (this.history.length) {
+					if (this.history[0].scene.id == sceneTrigger.sceneId) {
+						this.#history = [];
+					} else {
+						this.#history = this.#history.slice(0, 1);
+					}
+				}
+			}
+			this.goToSceneById(sceneTrigger.sceneId, addToHistory);
 		}
 		if (typeof(this.sceneTriggerClickCallback) == "function") this.sceneTriggerClickCallback(this, sceneTrigger, event);
 	}
@@ -1020,6 +1126,28 @@ class Tour {
 	}
 
 	/**
+	 * Executes after the audio player has started playing.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isAudioPlayerPlaying(event) {
+		if (!this.audioPlayer) return;
+		if (typeof(this.audioPlayerPlayCallback) == "function") this.audioPlayerPlayCallback(this, this.audioPlayer, event);
+	}
+
+	/**
+	 * Executes after the audio player has paused.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isAudioPlayerPaused(event) {
+		if (!this.audioPlayer) return;
+		if (typeof(this.audioPlayerPauseCallback) == "function") this.audioPlayerPauseCallback(this, this.audioPlayer, event);
+	}
+
+	/**
 	 * Executes after the audio player has been loaded.
 	 * 
 	 * @param {Event} event - The event to be handled.
@@ -1028,7 +1156,8 @@ class Tour {
 	#isAudioPlayerLoaded(event) {
 		if (!this.audioPlayer) return;
 		this.audioPlayer.play();
-		this.wrapper.classList.add(this.hasPlayingAudioPlayingClass);
+		this.wrapper.classList.add(this.hasLoadedAudioPlayerClass);
+		if (typeof(this.audioPlayerLoadCallback) == "function") this.audioPlayerLoadCallback(this, this.audioPlayer, event);
 	}
 
 	/**
@@ -1038,10 +1167,11 @@ class Tour {
 	 * @returns {void}
 	 */
 	#isAudioPlayerAborted(event) {
-		this.wrapper.classList.remove(this.hasPlayingAudioPlayingClass);
+		this.wrapper.classList.remove(this.hasLoadedAudioPlayerClass);
 		this.audioPlayerTriggers.forEach((audioPlayerTrigger) => {
 			audioPlayerTrigger.trigger.classList.remove(this.isAudioPlayingClass);
 		});
+		if (typeof(this.audioPlayerAbortCallback) == "function") this.audioPlayerAbortCallback(this, event);
 	}
 
 	/**
@@ -1062,8 +1192,8 @@ class Tour {
 	 */
 	#addEvents() {
 		this.wrapper.addEventListener("click", this);
-		this.wrapper.addEventListener("wheel", this);
 		this.wrapper.addEventListener("fullscreenchange", this);
+		this.viewport.addEventListener("wheel", this);
 		this.viewport.addEventListener("pointerdown", this, { passive: true });
 		this.viewport.addEventListener("touchstart", this, { passive: true });
 		document.addEventListener("pointerup", this, { passive: true });
@@ -1075,6 +1205,8 @@ class Tour {
 			popover.wrapper.addEventListener("toggle", this);
 		});
 		if (this.audioPlayer) {
+			this.audioPlayer.audio.addEventListener("play", this);
+			this.audioPlayer.audio.addEventListener("pause", this);
 			this.audioPlayer.audio.addEventListener("loadedmetadata", this);
 			this.audioPlayer.audio.addEventListener("abort", this);
 			this.audioPlayer.audio.addEventListener("ended", this);
@@ -1091,33 +1223,33 @@ class Tour {
 		switch (event.type) {
 			case "click":
 				this.sceneTriggers.forEach((sceneTrigger) => {
-					if (sceneTrigger.trigger == event.target) {
+					if (sceneTrigger.trigger.contains(event.target)) {
 						this.#isSceneTriggerClicked(sceneTrigger, event);
 					}
 				});
 				this.inventoryTriggers.forEach((inventoryTrigger) => {
-					if (inventoryTrigger.trigger == event.target) {
+					if (inventoryTrigger.trigger.contains(event.target)) {
 						this.#isInventoryTriggerClicked(inventoryTrigger, event);
 					}
 				});
 				this.audioPlayerTriggers.forEach((audioPlayerTrigger) => {
-					if (audioPlayerTrigger.trigger == event.target) {
+					if (audioPlayerTrigger.trigger.contains(event.target)) {
 						this.#isAudioPlayerTriggerClicked(audioPlayerTrigger, event);
 					}
 				});
-				if (event.target == this.zoomInTrigger) {
+				if (this.zoomInTrigger.contains(event.target)) {
 					this.zoomIn();
 				}
-				if (event.target == this.zoomOutTrigger) {
+				if (this.zoomOutTrigger.contains(event.target)) {
 					this.zoomOut();
 				}
-				if (event.target == this.backTrigger) {
+				if (this.backTrigger.contains(event.target)) {
 					this.goBack();
 				}
-				if (event.target == this.backToRootTrigger) {
+				if (this.backToRootTrigger.contains(event.target)) {
 					this.goBackToRoot();
 				}
-				if (event.target == this.fullscreenTrigger) {
+				if (this.fullscreenTrigger.contains(event.target)) {
 					this.toggleFullscreen();
 				}
 				break;
@@ -1158,6 +1290,12 @@ class Tour {
 				} else {
 					this.#isPopoverClosed(event);
 				}
+				break;
+			case "play":
+				this.#isAudioPlayerPlaying(event);
+				break;
+			case "pause":
+				this.#isAudioPlayerPaused(event);
 				break;
 			case "loadedmetadata":
 				this.#isAudioPlayerLoaded(event);
@@ -1228,7 +1366,7 @@ class TourScene {
 	 * 
 	 * @type {string}
 	 */
-	aspectRatioCSSVariable = "--tour-scene-aspect-ratio";
+	aspectRatioCSSVariable = "--tour-scene-aspect-ratios";
 
 	/**
 	 * The class that is added to the wrapper when the scene is selected.
@@ -1638,7 +1776,7 @@ class TourMapScene extends TourScene {
 	 * 
 	 * @type {string}
 	 */
-	zoomLevelAttribute = "data-scene-tour-zoom-level";
+	zoomLevelAttribute = "data-tour-scene-zoom-level";
 
 	/**
 	 * Callback function that is called after the scene is zoomed to the next zoom level.
@@ -2333,6 +2471,13 @@ class TourSceneTrigger {
 	preferHistory = false;
 
 	/**
+	 * Indicates whether to clear the history when the trigger is clicked and keep only the first item. If preferHistory is true and the scene is included in the history, this setting is ignored.
+	 * 
+	 * @type {boolean}
+	 */
+	clearHistory = false;
+
+	/**
 	 * The class that is added to the trigger while its scene is included in the history.
 	 * 
 	 * @type {string}
@@ -2354,15 +2499,24 @@ class TourSceneTrigger {
 	initCallback = null;
 
 	/**
+	 * Callback function that is called after the trigger has been clicked.
+	 * 
+	 * @type {function(TourSceneTrigger,PointerEvent):void|null}
+	 */
+	clickCallback = null;
+
+	/**
 	 * Creates a tour scene trigger.
 	 * 
 	 * @param {Object} options
 	 * @param {string} options.sceneId - The ID of the target scene to navigate to when the trigger is clicked.
 	 * @param {HTMLButtonElement} options.trigger - The trigger that navigates to the target scene when clicked.
 	 * @param {boolean} options.preferHistory - Indicates whether to restore the scene from the history when it is already included; otherwise, navigates to the scene and adds the current scene to the history.
+	 * @param {boolean} options.clearHistory - Indicates whether to clear the history when the trigger is clicked and keep only the first item. If preferHistory is true and the scene is included in the history, this setting is ignored.
 	 * @param {string} options.isSceneInHistoryClass - The class that is added to the trigger while its scene is included in the history.
 	 * @param {string} options.isSceneSelectedClass - The class that is added to the trigger while its scene is selected.
 	 * @param {function(TourSceneTrigger):void|null} options.initCallback - Callback function that is called after the trigger has been initialized.
+	 * @param {function(TourSceneTrigger,PointerEvent):void|null} options.clickCallback - Callback function that is called after the trigger has been clicked.
 	 * @returns {TourSceneTrigger}
 	 */
 	constructor(options) {
@@ -2379,12 +2533,51 @@ class TourSceneTrigger {
 		this.sceneId = options.sceneId;
 		this.trigger = options.trigger;
 		if ("preferHistory" in options) this.preferHistory = options.preferHistory;
+		if ("clearHistory" in options) this.clearHistory = options.clearHistory;
 		if ("isSceneInHistoryClass" in options) this.isSceneInHistoryClass = options.isSceneInHistoryClass;
 		if ("isSceneSelectedClass" in options) this.isSceneSelectedClass = options.isSceneSelectedClass;
 		if ("initCallback" in options) this.initCallback = options.initCallback;
+		if ("clickCallback" in options) this.clickCallback = options.clickCallback;
 
 		// Initialize the tour scene trigger
+		this.handleEvent = (event) => this.#handleEvents(event);
+		this.#addEvents();
 		if (typeof(this.initCallback) == "function") this.initCallback(this);
+	}
+
+	/**
+	 * Executes after the trigger is clicked.
+	 * 
+	 * @param {PointerEvent} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#isTriggerClicked(event) {
+		if (typeof(this.clickCallback) == "function") this.clickCallback(this, event);
+	}
+
+	/**
+	 * Adds event listeners related to the tour scene trigger.
+	 * 
+	 * @returns {void}
+	 */
+	#addEvents() {
+		this.trigger.addEventListener("click", this);
+	}
+
+	/**
+	 * Handles events.
+	 * 
+	 * @param {Event} event - The event to be handled.
+	 * @returns {void}
+	 */
+	#handleEvents(event) {
+		switch (event.type) {
+			case "click":
+				if (this.trigger.contains(event.target)) {
+					this.#isTriggerClicked(event);
+				}
+				break;
+		}
 	}
 }
 
@@ -2691,6 +2884,15 @@ class TourPopover {
 	 * @type {HTMLButtonElement|null}
 	 */
 	#activeTrigger = null;
+
+	/**
+	 * Indicates whether the popover is opened.
+	 * 
+	 * @type {boolean}
+	 */
+	get isOpened() {
+		return this.wrapper.matches(":popover-open");
+	}
 
 	/**
 	 * Creates a tour popover.
